@@ -2,17 +2,17 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import Icon from '@/components//Icon';
-import UnstyledButton from '@/components/UnstyledButton';
+import Icon from '@/components/Icon';
+import Button from '@/components/Button';
 
 function ActionButtons() {
 	return (
 		<Wrapper>
-			<Button>
+			<Button variant='fill'>
 				<Icon id={'clipboard'} size={18} />
 				&nbsp;Paste
 			</Button>
-			<Button>
+			<Button variant='fill'>
 				<Icon id={'enter'} size={18} />
 				&nbsp;Enter
 			</Button>
@@ -27,18 +27,4 @@ var Wrapper = styled.div`
 	justify-content: flex-end;
 	margin-top: 12px;
 	gap: 12px;
-`;
-
-var Button = styled(UnstyledButton)`
-	display: flex;
-	align-items: center;
-	border-radius: 12px;
-	padding: 6px 10px;
-	background-color: var(--bg-tertiary);
-
-	@media (hover: hover) {
-		&:hover {
-			background-color: var(--bg-tertiary-hover);
-		}
-	}
 `;

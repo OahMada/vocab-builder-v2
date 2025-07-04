@@ -32,4 +32,7 @@ export default styled.button<{ display?: 'inline' | 'inline-block' | 'block' }>`
 		right: var(--tap-increment);
 		bottom: var(--tap-increment);
 	}
+
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
 `;

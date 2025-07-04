@@ -52,14 +52,21 @@ h1, h2, h3, h4, h5, h6 {
 html {
   --font-family: "Roboto", -apple-system, sans-serif;
   --bg-primary: hsl(0 0% 13%);
+  --bg-primary-hover: hsl(0 0% 18%);
   --bg-secondary: hsl(0 0% 20%);
+  --bd-secondary-hover: hsl(0 0% 23%);
   --bg-tertiary: hsl(0 0% 25%);
   --bg-tertiary-hover: hsl(0 0% 38%);
+  --bg-revert: hsl(0 0% 98%);
+  --bg-status-warning: hsl(25 85% 15%);
   --border-light: hsl(0 0% 100% / 5%);
   --border-medium: hsl(0 0% 100% / 15%);
+  --border-status-warning: hsl(25 85% 25%);
   --text-primary: hsl(0 0% 100%);
   --text-secondary: hsl(0 0% 95%);
   --text-tertiary: hsl(0 0% 60%);
+  --text-revert: hsl(0 0% 5%);
+  --text-status-warning: hsl(20 100% 70%);
 }
 
 body {

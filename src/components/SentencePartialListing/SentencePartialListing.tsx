@@ -8,7 +8,7 @@ import Icon from '@/components/Icon';
 function SentencePartialListing() {
 	return (
 		<Wrapper>
-			<Spacer size={32} />
+			<Spacer size={10} />
 			<PartialListing />
 			<Button variant='outline'>
 				<Icon id='forward' size={18} />

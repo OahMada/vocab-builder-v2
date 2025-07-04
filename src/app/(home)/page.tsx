@@ -1,4 +1,4 @@
-import Wrapper from './Wrapper';
+import Wrapper from '@/components/PageWrapper';
 import SentenceInput from '@/components/SentenceInput';
 import SentencePartialListing from '@/components/SentencePartialListing';
 import Title from './Title';

@@ -2,13 +2,18 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { Clipboard, CornerDownRight, XCircle, ArrowRight } from 'react-feather';
+import { Clipboard, CornerDownRight, XCircle, ArrowRight, Edit, FileText, X, Check, HelpCircle } from 'react-feather';
 
 const icons = {
 	clipboard: Clipboard,
 	enter: CornerDownRight,
 	clear: XCircle,
 	forward: ArrowRight,
+	edit: Edit,
+	note: FileText,
+	accept: Check,
+	cancel: X,
+	help: HelpCircle,
 };
 
 interface IconProps {
