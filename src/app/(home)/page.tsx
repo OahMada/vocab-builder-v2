@@ -5,7 +5,7 @@ import Title from './Title';
 
 export default function Home() {
 	return (
-		<Wrapper>
+		<Wrapper $position='center'>
 			<Title>Vocab Builder</Title>
 			<SentenceInput />
 			<SentencePartialListing />

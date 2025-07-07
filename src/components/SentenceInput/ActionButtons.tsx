@@ -9,11 +9,11 @@ function ActionButtons() {
 	return (
 		<Wrapper>
 			<Button variant='fill'>
-				<Icon id={'clipboard'} size={18} />
+				<Icon id={'clipboard'} />
 				&nbsp;Paste
 			</Button>
 			<Button variant='fill'>
-				<Icon id={'enter'} size={18} />
+				<Icon id={'enter'} />
 				&nbsp;Enter
 			</Button>
 		</Wrapper>

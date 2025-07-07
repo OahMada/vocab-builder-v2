@@ -11,14 +11,10 @@ function PhoneticSymbol({ word }: React.ComponentProps<'div'> & { word: string }
 export default PhoneticSymbol;
 
 var SymbolButton = styled(Button)`
-	border-radius: 4px;
+	border-radius: 8px;
 	font-style: italic;
 	border-style: dashed;
 	padding: 3px 6px;
 
-	@media (hover: hover) {
-		&:hover {
-			background-color: var(--bg-tertiary-hover);
-		}
-	}
+	--hover-bg-color: var(--bg-tertiary);
 `;

@@ -2,27 +2,28 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { Clipboard, CornerDownRight, XCircle, ArrowRight, Edit, FileText, X, Check, HelpCircle } from 'react-feather';
+import { Clipboard, CornerDownRight, ArrowRight, Edit, FileText, X, Check, HelpCircle, Loader, RefreshCw } from 'react-feather';
 
 const icons = {
 	clipboard: Clipboard,
 	enter: CornerDownRight,
-	clear: XCircle,
 	forward: ArrowRight,
 	edit: Edit,
 	note: FileText,
 	accept: Check,
-	cancel: X,
+	x: X,
 	help: HelpCircle,
+	load: Loader,
+	retry: RefreshCw,
 };
 
 interface IconProps {
 	id: keyof typeof icons;
-	size: number;
+	size?: number;
 	strokeWidth?: number;
 }
 
-const Icon = ({ id, size, strokeWidth = 1, ...delegated }: IconProps & React.ComponentProps<'div'>) => {
+const Icon = ({ id, size = 18, strokeWidth = 1, ...delegated }: IconProps & React.ComponentProps<'div'>) => {
 	const Component = icons[id];
 
 	if (!Component) {

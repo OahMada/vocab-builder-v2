@@ -51,6 +51,7 @@ h1, h2, h3, h4, h5, h6 {
 /* custom properties */
 html {
   --font-family: "Roboto", -apple-system, sans-serif;
+  --bg-modal:  hsl(0 0% 11%);
   --bg-primary: hsl(0 0% 13%);
   --bg-primary-hover: hsl(0 0% 18%);
   --bg-secondary: hsl(0 0% 20%);

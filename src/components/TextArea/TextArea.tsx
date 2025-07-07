@@ -4,9 +4,9 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import UnstyledButton from '@/components/UnstyledButton';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
+import Button from '@/components/Button';
 
 function Textarea({ ...delegated }) {
 	let [input, setInput] = React.useState('');
@@ -17,12 +17,13 @@ function Textarea({ ...delegated }) {
 			<Overlay aria-hidden='true'>{input + ' '}</Overlay>
 			{input && (
 				<ClearButton
+					variant='ghost'
 					onClick={() => {
 						setInput('');
 					}}
 					style={{ '--icon-size': '18px' } as React.CSSProperties}
 				>
-					<Icon id='clear' size={18} />
+					<Icon id='x' />
 					<VisuallyHidden>Clear Textarea</VisuallyHidden>
 				</ClearButton>
 			)}
@@ -50,17 +51,17 @@ var Base = styled.div`
 `;
 
 var InputArea = styled(Base)`
+	padding-right: 3rem;
 	border-radius: var(--border-radius);
 	resize: none;
 	border: none;
 	color: inherit;
 	background-color: inherit;
-	padding-right: 3rem;
 
 	&::placeholder {
 		font-size: 16px;
-		line-height: 1;
-		height: 16px;
+		line-height: 1.5;
+		height: 24px;
 		position: absolute;
 		top: 0;
 		bottom: 0;
@@ -69,23 +70,18 @@ var InputArea = styled(Base)`
 `;
 var Overlay = styled(Base)`
 	visibility: hidden;
+	/* color: red; */
 	white-space: pre-wrap;
 `;
 
-var ClearButton = styled(UnstyledButton)`
+var ClearButton = styled(Button)`
 	--padding: 6px;
+	--hover-bg-color: var(--bg-tertiary);
 	height: calc(var(--icon-size) + var(--padding) * 2);
 	position: absolute;
-	right: 7px;
+	right: 8px;
 	top: 0;
 	bottom: 0;
 	padding: var(--padding);
-	border-radius: 5px;
 	margin: auto;
-
-	@media (hover: hover) {
-		&:hover {
-			background-color: var(--bg-tertiary);
-		}
-	}
 `;
