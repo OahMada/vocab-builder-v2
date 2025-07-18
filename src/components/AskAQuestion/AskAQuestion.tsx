@@ -6,6 +6,7 @@ import BottomDrawer from '@/components/BottomDrawer';
 import Textarea from '@/components/Textarea';
 import Icon from '@/components/Icon';
 import Button from '@/components/Button';
+import VisuallyHidden from '@/components/VisuallyHidden';
 
 interface AskAQuestionProps {
 	isShowing: boolean;
@@ -33,6 +34,7 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 						}}
 					>
 						<Icon id='enter' />
+						<VisuallyHidden>Done editing</VisuallyHidden>
 					</QuestionButton>
 				) : (
 					<QuestionButton
@@ -43,12 +45,16 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 						}}
 					>
 						<Icon id='retry' />
+						<VisuallyHidden>Retry</VisuallyHidden>
 					</QuestionButton>
 				)}
 			</TextareaWrapper>
 			<SmallHeader>Answer:</SmallHeader>
 			<AnswerBox>
-				<LoadIcon id='load' />
+				<>
+					<LoadIcon id='load' />
+					<VisuallyHidden>Loading answer</VisuallyHidden>
+				</>
 			</AnswerBox>
 		</BottomDrawer>
 	);

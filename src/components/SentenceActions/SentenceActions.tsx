@@ -8,7 +8,7 @@ import Icon from '@/components/Icon';
 import AskAQuestion from '@/components/AskAQuestion';
 
 function SentenceActions() {
-	let [isShowing, setIsShowing] = React.useState(true);
+	let [isShowing, setIsShowing] = React.useState(false);
 
 	function dismissDrawer() {
 		setIsShowing(false);

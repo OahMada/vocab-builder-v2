@@ -2,7 +2,22 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { Clipboard, CornerDownRight, ArrowRight, Edit, FileText, X, Check, HelpCircle, Loader, RefreshCw } from 'react-feather';
+import {
+	Clipboard,
+	CornerDownRight,
+	ArrowRight,
+	Edit,
+	FileText,
+	X,
+	Check,
+	HelpCircle,
+	Loader,
+	RefreshCw,
+	Search,
+	Plus,
+	Minus,
+	Trash2,
+} from 'react-feather';
 
 const icons = {
 	clipboard: Clipboard,
@@ -15,6 +30,10 @@ const icons = {
 	help: HelpCircle,
 	load: Loader,
 	retry: RefreshCw,
+	search: Search,
+	plus: Plus,
+	minus: Minus,
+	delete: Trash2,
 };
 
 interface IconProps {

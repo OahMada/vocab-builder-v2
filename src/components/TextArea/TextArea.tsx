@@ -77,11 +77,10 @@ var Overlay = styled(Base)`
 var ClearButton = styled(Button)`
 	--padding: 6px;
 	--hover-bg-color: var(--bg-tertiary);
-	height: calc(var(--icon-size) + var(--padding) * 2);
+	--icon-dimension: calc(var(--icon-size) + var(--padding) * 2);
 	position: absolute;
 	right: 8px;
-	top: 0;
-	bottom: 0;
+	/* One line height minus the icon height, then divide the result by 2. */
+	top: calc((1rem * 1.5 + 20px - var(--icon-dimension)) / 2);
 	padding: var(--padding);
-	margin: auto;
 `;

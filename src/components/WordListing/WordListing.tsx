@@ -13,8 +13,10 @@ function WordListing({ title }: { title: React.ReactNode }) {
 	let segmentedSentence = segmentSentence(TempSentence);
 	return (
 		<>
-			{title}
-			<DescriptionText>Tap or click on the word to load its phonetic symbol. Tap or click on the phonetic symbol to dismiss it.</DescriptionText>
+			<TitleWrapper>
+				{title}
+				<DescriptionText>Tap or click on the word to load its phonetic symbol. Tap or click on the phonetic symbol to dismiss it.</DescriptionText>
+			</TitleWrapper>
 			<WordWrapper>
 				{segmentedSentence.map((item) => {
 					return <Word key={item.id} segment={item.segment} isWord={item.isWordLike} />;
@@ -26,9 +28,11 @@ function WordListing({ title }: { title: React.ReactNode }) {
 
 export default WordListing;
 
+var TitleWrapper = styled.div``;
+
 var WordWrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
-	gap: 6px;
+	gap: 5px;
 `;

@@ -70,6 +70,7 @@ var Description = styled(Modal.Description)`
 var Title = styled(Modal.Title)`
 	font-size: 1.5rem;
 	font-weight: 350;
+	line-height: 1;
 `;
 
 var TitleWrapper = styled.div`

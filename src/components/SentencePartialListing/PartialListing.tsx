@@ -19,7 +19,7 @@ var Wrapper = styled.div`
 	background-color: var(--bg-secondary);
 	color: var(--text-secondary);
 	padding: 12px;
-	border-radius: 12px;
+	border-radius: 24px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

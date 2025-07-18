@@ -64,7 +64,7 @@ html {
   --border-medium: hsl(0 0% 100% / 15%);
   --border-status-warning: hsl(25 85% 25%);
   --text-primary: hsl(0 0% 100%);
-  --text-secondary: hsl(0 0% 95%);
+  --text-secondary: hsl(0 0% 90%);
   --text-tertiary: hsl(0 0% 60%);
   --text-revert: hsl(0 0% 5%);
   --text-status-warning: hsl(20 100% 70%);
