@@ -6,6 +6,7 @@ import Note from '@/components/Note';
 import SentenceActions from '@/components/SentenceActions';
 import Title from './Title';
 import CardWrapper from './CardWrapper';
+import Spacer from '@/components/Spacer';
 
 export default function Sentence() {
 	return (
@@ -17,6 +18,7 @@ export default function Sentence() {
 				<Translation title={<Title>Translation</Title>} />
 			</CardWrapper>
 			<Note title={<Title>Note</Title>} />
+			<Spacer size={1} />
 			<SentenceActions />
 		</Wrapper>
 	);

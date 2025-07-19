@@ -3,12 +3,26 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import DescriptionText from '@/components/DescriptionText';
+import Icon from '@/components/Icon';
+import Button from '@/components/Button';
+import VisuallyHidden from '@/components/VisuallyHidden';
+import { PopoverTrigger, PopoverContent, Popover } from '@/components/Popover';
 
 function PartialListing() {
 	return (
 		<Wrapper>
 			<SecondaryTitle>No Content Yet</SecondaryTitle>
-			<DescriptionText>The sentences you recently collected would show up here.</DescriptionText>
+			<Popover>
+				<PopoverTrigger asChild={true}>
+					<InfoButton variant='ghost'>
+						<Icon id='info' size={14} />
+						<VisuallyHidden>Notice</VisuallyHidden>
+					</InfoButton>
+				</PopoverTrigger>
+				<PopoverContent>
+					<DescriptionText>The sentences you recently collected would show up here.</DescriptionText>{' '}
+				</PopoverContent>
+			</Popover>
 		</Wrapper>
 	);
 }
@@ -19,14 +33,19 @@ var Wrapper = styled.div`
 	background-color: var(--bg-secondary);
 	color: var(--text-secondary);
 	padding: 12px;
-	border-radius: 24px;
+	border-radius: 12px;
 	display: flex;
-	flex-direction: column;
 	align-items: center;
 	width: 100%;
+	justify-content: center;
+	gap: 5px;
 `;
 
 var SecondaryTitle = styled.h3`
 	font-size: 1rem;
 	font-weight: 400;
+`;
+
+var InfoButton = styled(Button)`
+	--hover-bg-color: var(--bg-tertiary);
 `;

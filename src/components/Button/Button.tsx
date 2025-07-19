@@ -4,7 +4,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 interface ButtonProps {
-	variant: 'fill' | 'outline' | 'ghost';
+	variant: 'fill' | 'outline' | 'ghost' | 'underlined';
 }
 
 function Button({ variant, children, ...delegated }: ButtonProps & React.ComponentProps<'button'>) {
@@ -15,6 +15,8 @@ function Button({ variant, children, ...delegated }: ButtonProps & React.Compone
 		Component = OutlineButton;
 	} else if (variant === 'ghost') {
 		Component = GhostButton;
+	} else if (variant === 'underlined') {
+		Component = UnderlinedButton;
 	} else {
 		throw new Error(`Unrecognized Button variant: ${variant}`);
 	}
@@ -88,6 +90,21 @@ var GhostButton = styled(Base)`
 	--hover-bg-color: var(--bg-primary-hover);
 	padding: 6px;
 	border-radius: 6px;
+	@media (hover: hover) {
+		&:hover {
+			background-color: var(--hover-bg-color);
+		}
+	}
+`;
+
+var UnderlinedButton = styled(Base)`
+	--hover-bg-color: var(--bg-tertiary);
+	padding: 5px 4px;
+	margin-right: 3px;
+	margin-left: 3px;
+	border-bottom: 1px dashed var(--border-medium);
+	border-radius: 5px;
+	line-height: 1;
 	@media (hover: hover) {
 		&:hover {
 			background-color: var(--hover-bg-color);

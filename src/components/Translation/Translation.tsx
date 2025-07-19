@@ -34,10 +34,7 @@ function Translation({ title }: { title: React.ReactNode }) {
 
 export default Translation;
 
-var TranslationText = styled.p`
-	/* for optical alignment */
-	margin-top: -4px;
-`;
+var TranslationText = styled.p``;
 
 var EditButton = styled(Button)`
 	--hover-bg-color: var(--bg-tertiary);

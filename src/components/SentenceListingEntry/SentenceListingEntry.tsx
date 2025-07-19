@@ -5,12 +5,13 @@ import styled from 'styled-components';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/Accordion';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
+import VisuallyHidden from '@/components/VisuallyHidden';
 
 interface SentenceListingEntryProps {
 	id: string;
 	index: number;
 	translation: string;
-	sentence: string;
+	sentence: React.ReactNode;
 	note?: string;
 }
 
@@ -18,13 +19,19 @@ function SentenceListingEntry({ id, index, translation, note, sentence }: Senten
 	return (
 		<AccordionItem id={id}>
 			<AccordionTrigger index={index}>
-				<p>{sentence}</p>
+				<SentenceWrapper>
+					{sentence}
+					<AudioButton variant='ghost'>
+						<Icon id='audio' size={16} />
+						<VisuallyHidden>play sentence audio</VisuallyHidden>
+					</AudioButton>
+				</SentenceWrapper>
 			</AccordionTrigger>
 			<AccordionContent asChild={true}>
 				<ContentWrapper>
 					<InnerWrapper>
 						<Title>Translation</Title>
-						<p>{translation} </p>
+						<p>{translation}</p>
 					</InnerWrapper>
 					{note && (
 						<InnerWrapper>
@@ -49,6 +56,19 @@ function SentenceListingEntry({ id, index, translation, note, sentence }: Senten
 }
 
 export default SentenceListingEntry;
+
+var SentenceWrapper = styled.p`
+	vertical-align: middle;
+`;
+
+var AudioButton = styled(Button)`
+	display: inline-block;
+	--hover-bg-color: var(--bg-secondary-hover);
+	position: relative;
+	top: 3px;
+	padding: 3px;
+	margin-left: 8px;
+`;
 
 var ContentWrapper = styled.div`
 	padding: 12px;

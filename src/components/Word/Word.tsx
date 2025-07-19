@@ -31,7 +31,7 @@ var Wrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: baseline;
-	gap: 5px;
+	gap: 3px;
 `;
 
 var WordButton = styled(Button)`
@@ -43,4 +43,5 @@ var InactiveWordButton = styled.span`
 	display: inline-block;
 	padding: 4px;
 	border-bottom: 1px dashed var(--border-medium);
+	line-height: 1;
 `;

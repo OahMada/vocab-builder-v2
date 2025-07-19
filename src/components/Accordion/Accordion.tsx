@@ -29,7 +29,7 @@ function AccordionTrigger({ index, children, ...delegated }: { index: number } &
 			<Index>{`${index + 1}.`}</Index>
 			{children}
 			<AccordionPrimitives.Trigger {...delegated} asChild={true} onClick={handleOnclick}>
-				<ExpandButton variant='ghost' aria-hidden={true}>
+				<ExpandButton variant='ghost'>
 					<VisuallyHidden>Expand Accordion</VisuallyHidden>
 					{isOpen ? <Icon id='minus' /> : <Icon id='plus' />}
 				</ExpandButton>
@@ -57,43 +57,34 @@ var Item = styled(AccordionPrimitives.Item)`
 
 var Header = styled(AccordionPrimitives.Header)`
 	--header-padding: 12px;
-	position: relative;
 	font-size: 1rem;
 	font-weight: 450;
 	color: var(--text-primary);
-
 	background-color: var(--bg-secondary);
 	padding: 12px;
-	padding-left: calc(12px + 1rem);
-	padding-right: calc(12px + 1rem);
+	padding-top: 8px;
 	text-wrap: pretty;
 	border-radius: 12px;
+	display: flex;
+	align-items: baseline;
+	gap: 5px;
 
 	&[data-state='open'] {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
-		border-bottom: 1px solid var(--bg-primary);
+		border-bottom: 2px solid var(--bg-tertiary);
 	}
 `;
 
 var Index = styled.span`
-	font-size: 0.8rem;
-	line-height: 1.5;
-	position: absolute;
-	left: var(--header-padding);
-	top: calc(var(--header-padding) + 0.2rem);
-	display: block;
+	font-size: 1rem;
+	font-weight: 300;
 	pointer-events: none;
 `;
 
 var ExpandButton = styled(Button)`
 	--hover-bg-color: var(--bg-tertiary);
-	--icon-padding: 6px;
-	--icon-size: 18px;
-	position: absolute;
-	right: var(--header-padding);
-	--icon-dimension: calc(var(--icon-size) + var(--icon-padding) * 2);
-
-	/* One line height minus the icon height, then divide the result by 2. */
-	top: calc((1rem * 1.5 + 2 * var(--header-padding) - var(--icon-dimension)) / 2);
+	margin-left: auto;
+	position: relative;
+	top: 3px;
 `;

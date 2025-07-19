@@ -25,6 +25,10 @@ function SentenceActions() {
 					<Icon id='help' />
 					<VisuallyHidden>Ask Any Questions</VisuallyHidden>
 				</HelpButton>
+				<AudioButton variant='outline'>
+					<Icon id='audio' />
+					<VisuallyHidden>Play sentence audio</VisuallyHidden>
+				</AudioButton>
 				<CancelButton variant='outline'>
 					<Icon id='x' />
 					&nbsp;Cancel
@@ -46,14 +50,18 @@ var Wrapper = styled.div`
 	gap: 8px;
 	width: 100%;
 	justify-content: flex-end;
+	margin-top: auto;
 `;
 
 var CancelButton = styled(Button)`
 	--text-color: var(--text-status-warning);
 `;
 
-var HelpButton = styled(Button)`
-	margin-right: auto;
-`;
+var HelpButton = styled(Button)``;
 
 var DoneButton = styled(Button)``;
+
+var AudioButton = styled(Button)`
+	/* align-self: center; */
+	/* --hover-bg-color: var(--bg-secondary-hover); */
+`;

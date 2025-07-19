@@ -17,6 +17,8 @@ import {
 	Plus,
 	Minus,
 	Trash2,
+	Info,
+	Volume2,
 } from 'react-feather';
 
 const icons = {
@@ -34,6 +36,8 @@ const icons = {
 	plus: Plus,
 	minus: Minus,
 	delete: Trash2,
+	info: Info,
+	audio: Volume2,
 };
 
 interface IconProps {

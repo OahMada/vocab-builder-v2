@@ -18,7 +18,7 @@ function Note({ title }: { title: React.ReactNode }) {
 			<TextareaActionButtons />
 		</CardWrapper>
 	) : (
-		<AddNoteButton variant='outline' onClick={() => setIsAddingNote(true)}>
+		<AddNoteButton variant='fill' onClick={() => setIsAddingNote(true)}>
 			<Icon id='note' />
 			&nbsp;Add Note
 		</AddNoteButton>
@@ -28,7 +28,6 @@ function Note({ title }: { title: React.ReactNode }) {
 export default Note;
 
 var AddNoteButton = styled(Button)`
-	align-self: flex-start;
-	margin-bottom: -5px;
-	margin-top: 8px;
+	--bg-color: var(--bg-secondary);
+	--hover-bg-color: var(--bg-secondary-hover);
 `;

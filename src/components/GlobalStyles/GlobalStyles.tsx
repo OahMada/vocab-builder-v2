@@ -53,9 +53,10 @@ html {
   --font-family: "Roboto", -apple-system, sans-serif;
   --bg-modal:  hsl(0 0% 11%);
   --bg-primary: hsl(0 0% 13%);
+  --bg-popover: hsl(0 0% 15%);
   --bg-primary-hover: hsl(0 0% 18%);
   --bg-secondary: hsl(0 0% 20%);
-  --bd-secondary-hover: hsl(0 0% 23%);
+  --bg-secondary-hover: hsl(0 0% 23%);
   --bg-tertiary: hsl(0 0% 25%);
   --bg-tertiary-hover: hsl(0 0% 38%);
   --bg-revert: hsl(0 0% 98%);
