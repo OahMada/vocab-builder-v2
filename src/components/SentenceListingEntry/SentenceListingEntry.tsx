@@ -6,6 +6,7 @@ import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent } from '@/components/AlertDialog';
 
 interface SentenceListingEntryProps {
 	id: string;
@@ -40,10 +41,15 @@ function SentenceListingEntry({ id, index, translation, note, sentence }: Senten
 						</InnerWrapper>
 					)}
 					<ActionWrapper>
-						<Button variant='fill'>
-							<Icon id='delete' />
-							&nbsp;Delete
-						</Button>
+						<AlertDialog>
+							<AlertDialogTrigger asChild={true}>
+								<Button variant='fill'>
+									<Icon id='delete' />
+									&nbsp;Delete
+								</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent />
+						</AlertDialog>
 						<Button variant='fill'>
 							<Icon id='edit' />
 							&nbsp;Edit

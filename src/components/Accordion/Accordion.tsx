@@ -51,8 +51,8 @@ var Root = styled(AccordionPrimitives.Root)`
 `;
 
 var Item = styled(AccordionPrimitives.Item)`
-	background-color: var(--bg-modal);
 	border-radius: 12px;
+	box-shadow: var(--shadow-elevation-low);
 `;
 
 var Header = styled(AccordionPrimitives.Header)`

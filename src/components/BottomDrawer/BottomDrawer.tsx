@@ -55,6 +55,7 @@ var Content = styled(Modal.Content)`
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
+	box-shadow: var(--shadow-elevation-high);
 `;
 
 var Description = styled(Modal.Description)`

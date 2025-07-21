@@ -39,6 +39,7 @@ var Wrapper = styled.div`
 	width: 100%;
 	justify-content: center;
 	gap: 5px;
+	box-shadow: var(--shadow-elevation-low);
 `;
 
 var SecondaryTitle = styled.h3`

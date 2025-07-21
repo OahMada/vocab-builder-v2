@@ -11,6 +11,7 @@ var CardWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
+	box-shadow: var(--shadow-elevation-low);
 `;
 
 export default CardWrapper;
