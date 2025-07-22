@@ -29,7 +29,7 @@ function AccordionTrigger({ index, children, ...delegated }: { index: number } &
 			<Index>{`${index + 1}.`}</Index>
 			{children}
 			<AccordionPrimitives.Trigger {...delegated} asChild={true} onClick={handleOnclick}>
-				<ExpandButton variant='ghost'>
+				<ExpandButton variant='icon'>
 					<VisuallyHidden>Expand Accordion</VisuallyHidden>
 					{isOpen ? <Icon id='minus' /> : <Icon id='plus' />}
 				</ExpandButton>
@@ -48,23 +48,24 @@ var Root = styled(AccordionPrimitives.Root)`
 	display: flex;
 	flex-direction: column;
 	gap: 6px;
+	--border-radius: 12px;
+	--overall-padding: 12px;
 `;
 
 var Item = styled(AccordionPrimitives.Item)`
-	border-radius: 12px;
+	border-radius: var(--border-radius);
 	box-shadow: var(--shadow-elevation-low);
 `;
 
 var Header = styled(AccordionPrimitives.Header)`
-	--header-padding: 12px;
 	font-size: 1rem;
 	font-weight: 450;
 	color: var(--text-primary);
 	background-color: var(--bg-secondary);
-	padding: 12px;
+	padding: var(--overall-padding);
 	padding-top: 8px;
 	text-wrap: pretty;
-	border-radius: 12px;
+	border-radius: var(--border-radius);
 	display: flex;
 	align-items: baseline;
 	gap: 5px;
@@ -85,6 +86,5 @@ var Index = styled.span`
 var ExpandButton = styled(Button)`
 	--hover-bg-color: var(--bg-tertiary);
 	margin-left: auto;
-	position: relative;
-	top: 3px;
+	transform: translateY(3px);
 `;

@@ -10,7 +10,7 @@ function SearchSentence() {
 	let [input, setInput] = React.useState('');
 
 	return (
-		<Wrapper>
+		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
 			<VisuallyHidden>search sentence</VisuallyHidden>
 			<label htmlFor='search'>
 				<IconWrapper>
@@ -19,7 +19,7 @@ function SearchSentence() {
 			</label>
 			<SearchBox id='search' value={input} onChange={(e) => setInput(e.target.value)} />
 			{input && (
-				<ClearButton variant='ghost' onClick={() => setInput('')}>
+				<ClearButton variant='icon' onClick={() => setInput('')}>
 					<Icon id='x' />
 					<VisuallyHidden>clear input</VisuallyHidden>
 				</ClearButton>
@@ -31,10 +31,10 @@ function SearchSentence() {
 export default SearchSentence;
 
 var Wrapper = styled.form`
-	--icon-size: 18px;
-	--icon-padding: 6px;
 	--icon-dimension: calc(var(--icon-size) + 2 * var(--icon-padding));
 	--border-radius: 12px;
+	--vertical-padding: 10px;
+	--horizontal-padding: 12px;
 	width: 100%;
 	color: var(--text-secondary);
 	position: relative;
@@ -49,11 +49,11 @@ var Wrapper = styled.form`
 var SearchBox = styled.input`
 	background-color: var(--bg-secondary);
 	border: 1px solid var(--border-medium);
-	border-radius: 12px;
+	border-radius: var(--border-radius);
 	width: 100%;
-	padding: 10px 0;
+	padding: var(--vertical-padding) var(--horizontal-padding);
+	padding-right: calc(var(--icon-dimension) + var(--horizontal-padding));
 	padding-left: var(--icon-dimension);
-	padding-right: var(--icon-dimension);
 	color: inherit;
 `;
 
@@ -72,7 +72,7 @@ var ClearButton = styled(Button)`
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	right: var(--icon-padding);
+	right: 8px;
 	height: var(--icon-dimension);
 	margin: auto 0;
 `;

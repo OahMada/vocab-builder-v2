@@ -4,7 +4,6 @@ import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import { roboto } from '@/helpers/getFont';
 import GlobalStyles from '@/components/GlobalStyles';
 import LayoutWrapper from './LayoutWrapper';
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -23,13 +22,11 @@ export default function RootLayout({
 			<body>
 				<StyledComponentsRegistry>
 					<GlobalStyles />
-					<MaxWidthWrapper>
-						<LayoutWrapper>
-							<Header />
-							{children}
-							<Footer />
-						</LayoutWrapper>
-					</MaxWidthWrapper>
+					<LayoutWrapper>
+						<Header />
+						{children}
+						<Footer />
+					</LayoutWrapper>
 				</StyledComponentsRegistry>
 			</body>
 		</html>

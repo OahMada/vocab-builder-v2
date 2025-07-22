@@ -8,6 +8,8 @@ import Textarea from '@/components/Textarea';
 import TextareaActionButtons from '@/components/TextareaActionButtons';
 import Button from '@/components/Button';
 
+// TODO match the position of translation text and textarea input text
+
 function Translation({ title }: { title: React.ReactNode }) {
 	let [isEditing, setIsEditing] = React.useState(false);
 
@@ -22,8 +24,8 @@ function Translation({ title }: { title: React.ReactNode }) {
 			) : (
 				<TranslationText>
 					如果时间是一条河，我愿永远在你微笑的河流中航行， 被你心中那温柔的引力所承载。
-					<EditButton variant='ghost' onClick={() => setIsEditing(true)}>
-						<Icon id='edit' />
+					<EditButton variant='icon' onClick={() => setIsEditing(true)} style={{ '--icon-size': '16px' } as React.CSSProperties}>
+						<Icon id='edit' size={16} />
 						<VisuallyHidden>Edit Translation Text</VisuallyHidden>
 					</EditButton>
 				</TranslationText>
@@ -40,8 +42,9 @@ var EditButton = styled(Button)`
 	--hover-bg-color: var(--bg-tertiary);
 	display: inline-block;
 	margin-left: 3px;
-
-	/* for optical alignment */
 	vertical-align: -2.5px;
-	padding-right: 5px;
+	/* to make sure the icon has the same height as the text */
+	padding: calc((1.5 * 16px - var(--icon-size)) / 2);
+	/* for optical alignment */
+	padding-right: 3px;
 `;

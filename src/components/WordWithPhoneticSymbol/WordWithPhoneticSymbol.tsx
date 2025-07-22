@@ -10,7 +10,7 @@ function WordWithPhoneticSymbol({ children, symbol }: { children: string; symbol
 		<Wrapper>
 			<Popover>
 				<PopoverTrigger asChild={true}>
-					<WordButton variant='underlined'>{children}</WordButton>
+					<WordButton variant='icon'>{children}</WordButton>
 				</PopoverTrigger>
 				<PopoverContent>
 					<SymbolWrapper>{symbol}</SymbolWrapper>
@@ -27,12 +27,16 @@ var Wrapper = styled.span`
 `;
 
 var WordButton = styled(Button)`
-	padding-top: 4px;
-	padding-bottom: 3px;
+	--hover-bg-color: var(--bg-tertiary);
+	padding: 4px 4px 2px;
+	margin-right: 3px;
+	margin-left: 3px;
+	border-bottom: 2px dashed var(--border-medium);
+	line-height: 1;
 `;
 
 var SymbolWrapper = styled.span`
-	display: inline-block;
+	display: block;
 	color: var(--text-secondary);
 	font-style: italic;
 	padding: 3px;

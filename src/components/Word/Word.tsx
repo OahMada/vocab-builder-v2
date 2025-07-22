@@ -30,13 +30,12 @@ var Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: baseline;
 	gap: 3px;
 `;
 
 var WordButton = styled(Button)`
 	padding: 3px 6px;
-	border-radius: 12px;
+	border-radius: 8px;
 `;
 
 var InactiveWordButton = styled.span`

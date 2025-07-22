@@ -8,20 +8,21 @@ import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Button from '@/components/Button';
 
+// TODO restrict the length of the inputted text
+
 function Textarea({ ...delegated }) {
 	let [input, setInput] = React.useState('');
 
 	return (
-		<Wrapper>
+		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
 			<InputArea as='textarea' {...delegated} value={input} onChange={(e) => setInput(e.target.value)} rows={1} autoFocus={true} />
 			<Overlay aria-hidden='true'>{input + ' '}</Overlay>
 			{input && (
 				<ClearButton
-					variant='ghost'
+					variant='icon'
 					onClick={() => {
 						setInput('');
 					}}
-					style={{ '--icon-size': '18px' } as React.CSSProperties}
 				>
 					<Icon id='x' />
 					<VisuallyHidden>Clear Textarea</VisuallyHidden>
@@ -35,6 +36,9 @@ export default Textarea;
 
 var Wrapper = styled.div`
 	--border-radius: 12px;
+	--icon-dimension: calc(var(--icon-size) + var(--icon-padding) * 2);
+	--vertical-padding: 10px;
+	--horizontal-padding: 12px;
 	display: grid;
 	border: 1px solid var(--border-medium);
 	border-radius: var(--border-radius);
@@ -42,16 +46,14 @@ var Wrapper = styled.div`
 `;
 
 var Base = styled.div`
-	font-size: 1rem;
-	line-height: 1.5;
-	padding: 10px 12px;
+	padding: var(--vertical-padding) var(--horizontal-padding);
 	width: 100%;
 	grid-area: 1 / 1 / 2 / 2;
 	margin: 0;
 `;
 
 var InputArea = styled(Base)`
-	padding-right: 3rem;
+	padding-right: calc(var(--icon-dimension) + var(--horizontal-padding));
 	border-radius: var(--border-radius);
 	resize: none;
 	border: none;
@@ -70,17 +72,14 @@ var InputArea = styled(Base)`
 `;
 var Overlay = styled(Base)`
 	visibility: hidden;
-	/* color: red; */
 	white-space: pre-wrap;
 `;
 
 var ClearButton = styled(Button)`
-	--padding: 6px;
 	--hover-bg-color: var(--bg-tertiary);
 	--icon-dimension: calc(var(--icon-size) + var(--padding) * 2);
 	position: absolute;
-	right: 8px;
-	/* One line height minus the icon height, then divide the result by 2. */
-	top: calc((1rem * 1.5 + 20px - var(--icon-dimension)) / 2);
-	padding: var(--padding);
+	/* One line height minus the icon button height, then divide the result by 2. */
+	right: calc((1rem * 1.5 + var(--vertical-padding) * 2 - var(--icon-dimension)) / 2);
+	top: calc((1rem * 1.5 + var(--vertical-padding) * 2 - var(--icon-dimension)) / 2);
 `;

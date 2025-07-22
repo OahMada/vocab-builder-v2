@@ -21,7 +21,7 @@ function WordListing({ title }: { title: React.ReactNode }) {
 				{title}
 				<Popover>
 					<PopoverTrigger asChild={true}>
-						<InfoButton variant='ghost'>
+						<InfoButton variant='icon'>
 							<Icon id='info' size={14} />
 							<VisuallyHidden>Notice</VisuallyHidden>
 						</InfoButton>

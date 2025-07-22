@@ -22,7 +22,7 @@ function SentenceListingEntry({ id, index, translation, note, sentence }: Senten
 			<AccordionTrigger index={index}>
 				<SentenceWrapper>
 					{sentence}
-					<AudioButton variant='ghost'>
+					<AudioButton variant='icon' style={{ '--icon-size': '16px' } as React.CSSProperties}>
 						<Icon id='audio' size={16} />
 						<VisuallyHidden>play sentence audio</VisuallyHidden>
 					</AudioButton>
@@ -63,24 +63,22 @@ function SentenceListingEntry({ id, index, translation, note, sentence }: Senten
 
 export default SentenceListingEntry;
 
-var SentenceWrapper = styled.p`
-	vertical-align: middle;
-`;
+var SentenceWrapper = styled.p``;
 
 var AudioButton = styled(Button)`
 	display: inline-block;
-	--hover-bg-color: var(--bg-secondary-hover);
-	position: relative;
-	top: 3px;
-	padding: 3px;
+	--hover-bg-color: var(--bg-tertiary);
 	margin-left: 8px;
+	vertical-align: -2.5px;
+	/* to make sure the icon has the same height as the text */
+	padding: calc((1.5 * 16px - var(--icon-size)) / 2);
 `;
 
 var ContentWrapper = styled.div`
-	padding: 12px;
+	padding: var(--overall-padding) 14px;
 	background-color: var(--bg-secondary);
-	border-bottom-left-radius: 12px;
-	border-bottom-right-radius: 12px;
+	border-bottom-left-radius: var(--border-radius);
+	border-bottom-right-radius: var(--border-radius);
 	color: var(--text-secondary);
 	display: flex;
 	flex-direction: column;

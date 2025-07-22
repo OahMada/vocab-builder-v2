@@ -5,6 +5,8 @@ import * as AlertDialogPrimitives from '@radix-ui/react-alert-dialog';
 import styled from 'styled-components';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
+import DescriptionText from '@/components/DescriptionText';
+import Spacer from '@/components/Spacer';
 
 export var AlertDialog = AlertDialogPrimitives.Root;
 export var AlertDialogTrigger = AlertDialogPrimitives.Trigger;
@@ -15,7 +17,10 @@ export function AlertDialogContent({ ...delegated }: React.ComponentProps<typeof
 			<Overlay />
 			<Content {...delegated}>
 				<Title>Confirm your action</Title>
-				<Description>This action cannot be undone.</Description>
+				<AlertDialogPrimitives.Description asChild={true}>
+					<DescriptionText>This action cannot be undone.</DescriptionText>
+				</AlertDialogPrimitives.Description>
+				<Spacer size={1} />
 				<ActionWrapper>
 					<AlertDialogPrimitives.Cancel asChild={true}>
 						<CancelButton variant='outline'>
@@ -26,7 +31,7 @@ export function AlertDialogContent({ ...delegated }: React.ComponentProps<typeof
 					<AlertDialogPrimitives.Action asChild={true}>
 						<Button variant='outline'>
 							<Icon id='enter' />
-							&nbsp;Confirm
+							&nbsp;I&apos;m sure
 						</Button>
 					</AlertDialogPrimitives.Action>
 				</ActionWrapper>
@@ -53,7 +58,7 @@ var Content = styled(AlertDialogPrimitives.Content)`
 	color: var(--text-primary);
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 5px;
 	--shadow-color: 0deg 0% 0%;
 	--shadow-elevation-high: 0px 0.7px 0.6px hsl(var(--shadow-color) / 0.43), 0px 1.8px 1.6px -0.6px hsl(var(--shadow-color) / 0.39),
 		0px 3.5px 3.2px -1.1px hsl(var(--shadow-color) / 0.35), 0px 6.6px 5.9px -1.7px hsl(var(--shadow-color) / 0.31),
@@ -66,18 +71,12 @@ var ActionWrapper = styled.div`
 	display: flex;
 	gap: 8px;
 	align-self: flex-end;
-	margin-top: 8px;
 `;
 
 var Title = styled(AlertDialogPrimitives.Title)`
 	font-size: 1.5rem;
-	font-weight: 400;
+	font-weight: 350;
 	line-height: 1;
-`;
-
-var Description = styled(AlertDialogPrimitives.Description)`
-	color: var(--text-secondary);
-	font-size: 0.8rem;
 `;
 
 var CancelButton = styled(Button)`

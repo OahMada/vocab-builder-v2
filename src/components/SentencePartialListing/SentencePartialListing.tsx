@@ -5,6 +5,8 @@ import Wrapper from './Wrapper';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 
+// TODO view all button only shows up when there's at least two
+
 function SentencePartialListing() {
 	return (
 		<Wrapper>

@@ -11,10 +11,10 @@ import { PopoverTrigger, PopoverContent, Popover } from '@/components/Popover';
 function PartialListing() {
 	return (
 		<Wrapper>
-			<SecondaryTitle>No Content Yet</SecondaryTitle>
+			<Heading>No Content Yet</Heading>
 			<Popover>
 				<PopoverTrigger asChild={true}>
-					<InfoButton variant='ghost'>
+					<InfoButton variant='icon'>
 						<Icon id='info' size={14} />
 						<VisuallyHidden>Notice</VisuallyHidden>
 					</InfoButton>
@@ -42,7 +42,7 @@ var Wrapper = styled.div`
 	box-shadow: var(--shadow-elevation-low);
 `;
 
-var SecondaryTitle = styled.h3`
+var Heading = styled.h3`
 	font-size: 1rem;
 	font-weight: 400;
 `;

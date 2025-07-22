@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import BottomDrawer from '@/components/BottomDrawer';
 import Textarea from '@/components/Textarea';
 import Icon from '@/components/Icon';
-import Button from '@/components/Button';
 import VisuallyHidden from '@/components/VisuallyHidden';
 
 interface AskAQuestionProps {
@@ -15,41 +14,13 @@ interface AskAQuestionProps {
 
 function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 	let [question, setQuestion] = React.useState('How are you doing today?');
-	let [isEditing, setIsEditing] = React.useState(true);
 	return (
 		<BottomDrawer isOpen={isShowing} onDismiss={onDismiss}>
-			<SmallHeader>Question:</SmallHeader>
+			<SmallHeading>Question:</SmallHeading>
 			<TextareaWrapper>
-				{question ? (
-					<QuestionText>{question}</QuestionText>
-				) : (
-					<Textarea question={question} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(e.target.value)} />
-				)}
-				{isEditing ? (
-					<QuestionButton
-						variant='fill'
-						onClick={() => {
-							setQuestion('How are you doing today?');
-							setIsEditing(false);
-						}}
-					>
-						<Icon id='enter' />
-						<VisuallyHidden>Done editing</VisuallyHidden>
-					</QuestionButton>
-				) : (
-					<QuestionButton
-						variant='fill'
-						onClick={() => {
-							setQuestion('');
-							setIsEditing(true);
-						}}
-					>
-						<Icon id='retry' />
-						<VisuallyHidden>Retry</VisuallyHidden>
-					</QuestionButton>
-				)}
+				<Textarea question={question} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(e.target.value)} />
 			</TextareaWrapper>
-			<SmallHeader>Answer:</SmallHeader>
+			<SmallHeading>Answer:</SmallHeading>
 			<AnswerBox>
 				<>
 					<LoadIcon id='load' />
@@ -62,7 +33,7 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 
 export default AskAQuestion;
 
-var SmallHeader = styled.h3`
+var SmallHeading = styled.h3`
 	font-size: 1.2rem;
 	font-weight: 300;
 	line-height: 1;
@@ -74,19 +45,6 @@ var TextareaWrapper = styled.div`
 	grid-template-columns: 1fr max-content;
 	gap: 6px;
 	align-items: stretch;
-`;
-
-var QuestionText = styled.p`
-	border-radius: 12px;
-	padding: 12px;
-	background-color: var(--bg-secondary);
-`;
-
-var QuestionButton = styled(Button)`
-	border-radius: 12px;
-	padding: 12px;
-	--bg-color: var(--bg-secondary);
-	--hover-bg-color: var(--bg-tertiary);
 `;
 
 var AnswerBox = styled.div`

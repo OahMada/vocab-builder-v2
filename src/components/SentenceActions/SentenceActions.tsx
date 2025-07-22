@@ -61,7 +61,4 @@ var HelpButton = styled(Button)``;
 
 var DoneButton = styled(Button)``;
 
-var AudioButton = styled(Button)`
-	/* align-self: center; */
-	/* --hover-bg-color: var(--bg-secondary-hover); */
-`;
+var AudioButton = styled(Button)``;

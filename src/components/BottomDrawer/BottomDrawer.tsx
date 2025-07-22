@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import Button from '@/components/Button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/Popover';
+import DescriptionText from '@/components/DescriptionText';
 
 interface BottomDrawerProps {
 	isOpen: boolean;
@@ -20,12 +22,32 @@ function BottomDrawer({ isOpen, onDismiss, children }: BottomDrawerProps & React
 				<Content>
 					<TitleWrapper>
 						<Title>Ask Anything</Title>
-						<Button variant='ghost' onClick={onDismiss}>
+						<Popover>
+							<PopoverTrigger asChild={true}>
+								<InfoButton variant='icon'>
+									<Icon id='info' size={16} />
+									<VisuallyHidden>Tip</VisuallyHidden>
+								</InfoButton>
+							</PopoverTrigger>
+							<PopoverContent
+								style={
+									{
+										'--shadow-color': '0deg 0% 3%',
+										'--shadow-elevation-medium': `0px 0.7px 0.6px hsl(var(--shadow-color) / 0.46),
+    0px 1.4px 1.3px -1.3px hsl(var(--shadow-color) / 0.37),
+    0px 4.3px 3.9px -2.7px hsl(var(--shadow-color) / 0.29),
+    -0.1px 11.8px 10.6px -4px hsl(var(--shadow-color) / 0.2)`,
+									} as React.CSSProperties
+								}
+							>
+								<DescriptionText>You don&apos;t have to repeat the sentence itself.</DescriptionText>
+							</PopoverContent>
+						</Popover>
+						<CloseButton variant='icon' onClick={onDismiss}>
 							<Icon id='x' />
 							<VisuallyHidden>Dismiss menu</VisuallyHidden>
-						</Button>
+						</CloseButton>
 					</TitleWrapper>
-					<Description>You don&apos;t have to repeat the sentence itself.</Description>
 					{children}
 				</Content>
 			</Modal.Portal>
@@ -58,14 +80,14 @@ var Content = styled(Modal.Content)`
 	box-shadow: var(--shadow-elevation-high);
 `;
 
-var Description = styled(Modal.Description)`
-	font-size: 12.8px;
-	color: var(--text-tertiary);
-	font-weight: 500;
-
+var InfoButton = styled(Button)`
+	position: relative;
 	/* optical alignment */
-	margin-top: -14px;
-	margin-bottom: 4px;
+	top: 1px;
+`;
+
+var CloseButton = styled(Button)`
+	margin-left: auto;
 `;
 
 var Title = styled(Modal.Title)`
@@ -76,6 +98,6 @@ var Title = styled(Modal.Title)`
 
 var TitleWrapper = styled.div`
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
+	gap: 5px;
 `;

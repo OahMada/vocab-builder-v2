@@ -9,11 +9,11 @@ function ActionButtons() {
 	return (
 		<Wrapper>
 			<Button variant='fill'>
-				<Icon id={'clipboard'} />
+				<Icon id='clipboard' />
 				&nbsp;Paste
 			</Button>
 			<Button variant='fill'>
-				<Icon id={'enter'} />
+				<Icon id='enter' />
 				&nbsp;Enter
 			</Button>
 		</Wrapper>
@@ -26,5 +26,5 @@ var Wrapper = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	margin-top: 12px;
-	gap: 12px;
+	gap: 8px;
 `;

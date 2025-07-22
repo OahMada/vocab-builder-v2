@@ -8,7 +8,7 @@ var Wrapper = styled.main<{ $position?: 'flex-start' | 'center' }>`
 	justify-content: ${({ $position }) => $position || 'center'};
 	align-items: center;
 	gap: 12px;
-	padding: 12px 0;
+	padding: 16px 0;
 `;
 
 export default Wrapper;

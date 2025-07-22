@@ -64,6 +64,7 @@ var Wrapper = styled.div`
 `;
 
 var NoticeText = styled(DescriptionText)`
+	/* optical alignment */
 	margin-left: 4px;
 `;
 

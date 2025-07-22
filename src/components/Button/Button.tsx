@@ -4,7 +4,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 interface ButtonProps {
-	variant: 'fill' | 'outline' | 'ghost' | 'underlined';
+	variant: 'fill' | 'outline' | 'icon';
 }
 
 function Button({ variant, children, ...delegated }: ButtonProps & React.ComponentProps<'button'>) {
@@ -13,10 +13,8 @@ function Button({ variant, children, ...delegated }: ButtonProps & React.Compone
 		Component = FillButton;
 	} else if (variant === 'outline') {
 		Component = OutlineButton;
-	} else if (variant === 'ghost') {
-		Component = GhostButton;
-	} else if (variant === 'underlined') {
-		Component = UnderlinedButton;
+	} else if (variant === 'icon') {
+		Component = IconButton;
 	} else {
 		throw new Error(`Unrecognized Button variant: ${variant}`);
 	}
@@ -45,7 +43,7 @@ var Base = styled.button`
 
 	// to make the target size a bit larger
 	&::after {
-		--tap-increment: -4px;
+		--tap-increment: -5px;
 		content: '';
 		position: absolute;
 		top: var(--tap-increment);
@@ -58,6 +56,7 @@ var Base = styled.button`
 	-webkit-tap-highlight-color: transparent;
 
 	--text-color: var(--text-primary);
+
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -86,25 +85,11 @@ var OutlineButton = styled(Base)`
 	}
 `;
 
-var GhostButton = styled(Base)`
+var IconButton = styled(Base)`
 	--hover-bg-color: var(--bg-primary-hover);
-	padding: 6px;
-	border-radius: 6px;
-	@media (hover: hover) {
-		&:hover {
-			background-color: var(--hover-bg-color);
-		}
-	}
-`;
-
-var UnderlinedButton = styled(Base)`
-	--hover-bg-color: var(--bg-tertiary);
-	padding: 5px 4px;
-	margin-right: 3px;
-	margin-left: 3px;
-	border-bottom: 1px dashed var(--border-medium);
-	border-radius: 5px;
-	line-height: 1;
+	--padding: 6px;
+	padding: var(--padding);
+	border-radius: 8px;
 	@media (hover: hover) {
 		&:hover {
 			background-color: var(--hover-bg-color);
