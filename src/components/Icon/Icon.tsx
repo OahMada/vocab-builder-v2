@@ -19,6 +19,11 @@ import {
 	Trash2,
 	Info,
 	Volume2,
+	Upload,
+	Download,
+	ChevronDown,
+	ChevronUp,
+	Save,
 } from 'react-feather';
 
 const icons = {
@@ -38,6 +43,11 @@ const icons = {
 	delete: Trash2,
 	info: Info,
 	audio: Volume2,
+	upload: Upload,
+	export: Download,
+	'chevron-down': ChevronDown,
+	'chevron-up': ChevronUp,
+	save: Save,
 };
 
 interface IconProps {

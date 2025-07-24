@@ -43,12 +43,12 @@ function SentenceListingEntry({ id, index, translation, note, sentence }: Senten
 					<ActionWrapper>
 						<AlertDialog>
 							<AlertDialogTrigger asChild={true}>
-								<Button variant='fill'>
+								<Button variant='fill' style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties}>
 									<Icon id='delete' />
 									&nbsp;Delete
 								</Button>
 							</AlertDialogTrigger>
-							<AlertDialogContent />
+							<AlertDialogContent description='This action cannot be undone.' />
 						</AlertDialog>
 						<Button variant='fill'>
 							<Icon id='edit' />
@@ -63,13 +63,16 @@ function SentenceListingEntry({ id, index, translation, note, sentence }: Senten
 
 export default SentenceListingEntry;
 
-var SentenceWrapper = styled.p``;
+var SentenceWrapper = styled.p`
+	font-size: 1.1rem;
+`;
 
 var AudioButton = styled(Button)`
 	display: inline-block;
 	--hover-bg-color: var(--bg-tertiary);
 	margin-left: 8px;
 	vertical-align: -2.5px;
+	vertical-align: -3px;
 	/* to make sure the icon has the same height as the text */
 	padding: calc((1.5 * 16px - var(--icon-size)) / 2);
 `;

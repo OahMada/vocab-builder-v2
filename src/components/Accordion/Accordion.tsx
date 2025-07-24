@@ -48,8 +48,8 @@ var Root = styled(AccordionPrimitives.Root)`
 	display: flex;
 	flex-direction: column;
 	gap: 6px;
-	--border-radius: 12px;
 	--overall-padding: 12px;
+	--border-radius: 12px;
 `;
 
 var Item = styled(AccordionPrimitives.Item)`
@@ -65,7 +65,7 @@ var Header = styled(AccordionPrimitives.Header)`
 	padding: var(--overall-padding);
 	padding-top: 8px;
 	text-wrap: pretty;
-	border-radius: var(--border-radius);
+	border-radius: inherit;
 	display: flex;
 	align-items: baseline;
 	gap: 5px;

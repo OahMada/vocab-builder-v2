@@ -3,27 +3,29 @@
 import VisuallyHidden from '@/components/VisuallyHidden';
 import * as React from 'react';
 import styled from 'styled-components';
-import Button from '@/components/Button';
 import Icon from '@/components/Icon';
+import InputBox from '@/components/InputBox';
 
 function SearchSentence() {
 	let [input, setInput] = React.useState('');
 
+	function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+		setInput(e.target.value);
+	}
+
+	function clearInput() {
+		setInput('');
+	}
+
 	return (
-		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
-			<VisuallyHidden>search sentence</VisuallyHidden>
-			<label htmlFor='search'>
+		<Wrapper style={{ '--icon-size': '18px' } as React.CSSProperties}>
+			<SearchInput input={input} onChange={onInputChange} clearInput={clearInput} id='search' />
+			<Label htmlFor='search'>
+				<VisuallyHidden>search sentence</VisuallyHidden>
 				<IconWrapper>
 					<Icon id='search' />
 				</IconWrapper>
-			</label>
-			<SearchBox id='search' value={input} onChange={(e) => setInput(e.target.value)} />
-			{input && (
-				<ClearButton variant='icon' onClick={() => setInput('')}>
-					<Icon id='x' />
-					<VisuallyHidden>clear input</VisuallyHidden>
-				</ClearButton>
-			)}
+			</Label>
 		</Wrapper>
 	);
 }
@@ -31,30 +33,13 @@ function SearchSentence() {
 export default SearchSentence;
 
 var Wrapper = styled.form`
-	--icon-dimension: calc(var(--icon-size) + 2 * var(--icon-padding));
-	--border-radius: 12px;
-	--vertical-padding: 10px;
-	--horizontal-padding: 12px;
+	--icon-padding: 6px;
 	width: 100%;
-	color: var(--text-secondary);
 	position: relative;
-
-	@media (hover: hover) {
-		&:hover {
-			color: var(--text-primary);
-		}
-	}
 `;
 
-var SearchBox = styled.input`
-	background-color: var(--bg-secondary);
-	border: 1px solid var(--border-medium);
-	border-radius: var(--border-radius);
-	width: 100%;
-	padding: var(--vertical-padding) var(--horizontal-padding);
-	padding-right: calc(var(--icon-dimension) + var(--horizontal-padding));
-	padding-left: var(--icon-dimension);
-	color: inherit;
+var Label = styled.label`
+	color: var(--text-primary);
 `;
 
 var IconWrapper = styled.div`
@@ -67,12 +52,6 @@ var IconWrapper = styled.div`
 	transform: translateX(2px);
 `;
 
-var ClearButton = styled(Button)`
-	--hover-bg-color: var(--bg-tertiary);
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 8px;
-	height: var(--icon-dimension);
-	margin: auto 0;
+var SearchInput = styled(InputBox)`
+	padding-left: calc(var(--icon-size) + 2 * var(--icon-padding));
 `;

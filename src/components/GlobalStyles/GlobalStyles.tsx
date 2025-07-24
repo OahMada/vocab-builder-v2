@@ -52,7 +52,7 @@ h1, h2, h3, h4, h5, h6 {
 html {
   --font-family: "Roboto", -apple-system, sans-serif;
   --bg-overlay: hsl(0 0% 0% / 70%);
-  --bg-modal:  hsl(0 0% 11%);
+	--bg-modal: hsl(0 0% 11%);
   --bg-primary: hsl(0 0% 13%);
   --bg-popover: hsl(0 0% 15%);
   --bg-primary-hover: hsl(0 0% 18%);

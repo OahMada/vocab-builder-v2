@@ -35,13 +35,12 @@ function Textarea({ ...delegated }) {
 export default Textarea;
 
 var Wrapper = styled.div`
-	--border-radius: 12px;
 	--icon-dimension: calc(var(--icon-size) + var(--icon-padding) * 2);
 	--vertical-padding: 10px;
 	--horizontal-padding: 12px;
 	display: grid;
 	border: 1px solid var(--border-medium);
-	border-radius: var(--border-radius);
+	border-radius: 12px;
 	position: relative;
 `;
 
@@ -54,7 +53,7 @@ var Base = styled.div`
 
 var InputArea = styled(Base)`
 	padding-right: calc(var(--icon-dimension) + var(--horizontal-padding));
-	border-radius: var(--border-radius);
+	border-radius: inherit;
 	resize: none;
 	border: none;
 	color: inherit;

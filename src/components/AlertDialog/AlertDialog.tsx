@@ -11,28 +11,33 @@ import Spacer from '@/components/Spacer';
 export var AlertDialog = AlertDialogPrimitives.Root;
 export var AlertDialogTrigger = AlertDialogPrimitives.Trigger;
 
-export function AlertDialogContent({ ...delegated }: React.ComponentProps<typeof AlertDialogPrimitives.Content>) {
+export function AlertDialogContent({
+	description,
+	children,
+	...delegated
+}: { description: string } & React.ComponentProps<typeof AlertDialogPrimitives.Content>) {
 	return (
 		<AlertDialogPrimitives.Portal>
 			<Overlay />
 			<Content {...delegated}>
 				<Title>Confirm your action</Title>
 				<AlertDialogPrimitives.Description asChild={true}>
-					<DescriptionText>This action cannot be undone.</DescriptionText>
+					<DescriptionText>{description}</DescriptionText>
 				</AlertDialogPrimitives.Description>
+				{children}
 				<Spacer size={1} />
 				<ActionWrapper>
 					<AlertDialogPrimitives.Cancel asChild={true}>
-						<CancelButton variant='outline'>
+						<Button variant='outline'>
 							<Icon id='x' />
 							&nbsp;Cancel
-						</CancelButton>
+						</Button>
 					</AlertDialogPrimitives.Cancel>
 					<AlertDialogPrimitives.Action asChild={true}>
-						<Button variant='outline'>
+						<ConfirmButton variant='outline'>
 							<Icon id='enter' />
 							&nbsp;I&apos;m sure
-						</Button>
+						</ConfirmButton>
 					</AlertDialogPrimitives.Action>
 				</ActionWrapper>
 			</Content>
@@ -79,6 +84,6 @@ var Title = styled(AlertDialogPrimitives.Title)`
 	line-height: 1;
 `;
 
-var CancelButton = styled(Button)`
+var ConfirmButton = styled(Button)`
 	--text-color: var(--text-status-warning);
 `;

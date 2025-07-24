@@ -2,10 +2,11 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import BottomDrawer from '@/components/BottomDrawer';
+import Modal from '@/components/Modal';
 import Textarea from '@/components/Textarea';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
+import ModalTitle from './ModalTitle';
 
 interface AskAQuestionProps {
 	isShowing: boolean;
@@ -15,7 +16,13 @@ interface AskAQuestionProps {
 function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 	let [question, setQuestion] = React.useState('How are you doing today?');
 	return (
-		<BottomDrawer isOpen={isShowing} onDismiss={onDismiss}>
+		<Modal
+			isOpen={isShowing}
+			onDismiss={onDismiss}
+			title={<ModalTitle />}
+			style={{ '--bg-overlay': 'transparent' } as React.CSSProperties}
+			contentPosition='bottom'
+		>
 			<SmallHeading>Question:</SmallHeading>
 			<TextareaWrapper>
 				<Textarea question={question} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(e.target.value)} />
@@ -27,7 +34,7 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 					<VisuallyHidden>Loading answer</VisuallyHidden>
 				</>
 			</AnswerBox>
-		</BottomDrawer>
+		</Modal>
 	);
 }
 

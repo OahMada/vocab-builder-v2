@@ -10,18 +10,18 @@ import AskAQuestion from '@/components/AskAQuestion';
 function SentenceActions() {
 	let [isShowing, setIsShowing] = React.useState(false);
 
-	function dismissDrawer() {
+	function dismissModal() {
 		setIsShowing(false);
 	}
 
-	function showDrawer() {
+	function showModal() {
 		setIsShowing(true);
 	}
 
 	return (
 		<>
 			<Wrapper>
-				<HelpButton variant='outline' onClick={showDrawer}>
+				<HelpButton variant='outline' onClick={showModal}>
 					<Icon id='help' />
 					<VisuallyHidden>Ask Any Questions</VisuallyHidden>
 				</HelpButton>
@@ -38,7 +38,7 @@ function SentenceActions() {
 					&nbsp;Done
 				</DoneButton>
 			</Wrapper>
-			{isShowing && <AskAQuestion isShowing={isShowing} onDismiss={dismissDrawer} />}
+			{isShowing && <AskAQuestion isShowing={isShowing} onDismiss={dismissModal} />}
 		</>
 	);
 }
