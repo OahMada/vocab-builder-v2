@@ -41,8 +41,8 @@ var Content = styled(SelectPrimitives.Content)`
 	overflow: hidden;
 	background-color: var(--bg-tertiary);
 	border-radius: 20px;
-	box-shadow: var(--shadow-elevation-medium);
 	color: var(--text-primary);
+	box-shadow: var(--shadow-elevation-medium);
 `;
 
 var Viewport = styled(SelectPrimitives.Viewport)`

@@ -23,11 +23,11 @@ function ModalTitle() {
 				<PopoverContent
 					style={
 						{
-							'--shadow-color': '0deg 0% 3%',
+							'--shadow-color': '0deg 0% 1%',
 							'--shadow-elevation-medium': `0px 0.7px 0.6px hsl(var(--shadow-color) / 0.46),
-    0px 1.4px 1.3px -1.3px hsl(var(--shadow-color) / 0.37),
-    0px 4.3px 3.9px -2.7px hsl(var(--shadow-color) / 0.29),
-    -0.1px 11.8px 10.6px -4px hsl(var(--shadow-color) / 0.2)`,
+              0px 1.5px 1.4px -1.3px hsl(var(--shadow-color) / 0.37),
+              0px 4.4px 4px -2.7px hsl(var(--shadow-color) / 0.29),
+              -0.1px 12px 10.8px -4px hsl(var(--shadow-color) / 0.2);`,
 						} as React.CSSProperties
 					}
 				>

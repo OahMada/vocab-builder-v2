@@ -64,11 +64,6 @@ var Content = styled(AlertDialogPrimitives.Content)`
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
-	--shadow-color: 0deg 0% 0%;
-	--shadow-elevation-high: 0px 0.7px 0.6px hsl(var(--shadow-color) / 0.43), 0px 1.8px 1.6px -0.6px hsl(var(--shadow-color) / 0.39),
-		0px 3.5px 3.2px -1.1px hsl(var(--shadow-color) / 0.35), 0px 6.6px 5.9px -1.7px hsl(var(--shadow-color) / 0.31),
-		-0.1px 12.2px 11px -2.3px hsl(var(--shadow-color) / 0.27), -0.1px 21.1px 19px -2.9px hsl(var(--shadow-color) / 0.23),
-		-0.2px 34.2px 30.8px -3.4px hsl(var(--shadow-color) / 0.19), -0.4px 52.5px 47.3px -4px hsl(var(--shadow-color) / 0.15);
 	box-shadow: var(--shadow-elevation-high);
 `;
 

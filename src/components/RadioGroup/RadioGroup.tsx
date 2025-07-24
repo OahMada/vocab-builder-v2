@@ -52,6 +52,6 @@ var Indicator = styled(RadioGroupPrimitives.Indicator)`
 		height: 7px;
 		border-radius: 50%;
 		background-color: var(--bg-revert);
-		opacity: 0.75;
+		opacity: 0.55;
 	}
 `;
