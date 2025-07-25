@@ -11,7 +11,7 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import Button from '@/components/Button';
 
 var TempSentence =
-	'Si le temps était une rivière, je voguerais pour toujours dans le courant de ton sourire, porté par la douce gravité de ton cœur.';
+	'Si le temps était une rivière, je voguerais pour toujours dans le courant de ton sourire, porté par la douce gravité de ton cœur. Si le temps était une rivière, je voguerais pour toujours dans le courant de ton sourire, porté par la douce gravité de ton cœur.';
 
 function WordListing({ title }: { title: React.ReactNode }) {
 	let segmentedSentence = segmentSentence(TempSentence);

@@ -3,13 +3,19 @@ import Wrapper from '@/components/PageWrapper';
 import Breadcrumb from './CustomBreadcrumb';
 import Search from '@/components/SearchSentence';
 import SentenceListing from '@/components/SentenceListing';
+import InnerWrapper from './InnerWrapper';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 
 export default function SentenceBrowse() {
 	return (
-		<Wrapper $position='flex-start'>
-			<Breadcrumb />
-			<Search />
-			<SentenceListing />
-		</Wrapper>
+		<MaxWidthWrapper>
+			<Wrapper $position='flex-start'>
+				<InnerWrapper>
+					<Breadcrumb />
+					<Search />
+				</InnerWrapper>
+				<SentenceListing />
+			</Wrapper>
+		</MaxWidthWrapper>
 	);
 }

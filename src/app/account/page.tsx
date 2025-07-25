@@ -9,23 +9,26 @@ import ChooseLanguage from '@/components/ChooseLanguage';
 import ChooseIPAFlavour from '@/components/ChooseIPAFlavour';
 import ExportData from '@/components/ExportData';
 import DeleteAccount from '@/components/DeleteAccount';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 
 export default function AccountPage() {
 	return (
-		<Wrapper $position='flex-start'>
-			<Breadcrumb />
-			<Spacer size={1} />
-			<UserPhoto />
-			<Spacer size={1} />
-			<UserInfo />
-			<Spacer size={1} />
-			<InnerWrapper>
-				<ChooseLanguage />
-				<ChooseIPAFlavour />
-			</InnerWrapper>
-			<Spacer size={1} />
-			<ExportData />
-			<DeleteAccount />
-		</Wrapper>
+		<MaxWidthWrapper>
+			<Wrapper $position='flex-start'>
+				<Breadcrumb />
+				<Spacer size={1} />
+				<UserPhoto />
+				<Spacer size={1} />
+				<UserInfo />
+				<Spacer size={1} />
+				<InnerWrapper>
+					<ChooseLanguage />
+					<ChooseIPAFlavour />
+				</InnerWrapper>
+				<Spacer size={1} />
+				<ExportData />
+				<DeleteAccount />
+			</Wrapper>
+		</MaxWidthWrapper>
 	);
 }

@@ -6,18 +6,23 @@ import Note from '@/components/Note';
 import SentenceActions from '@/components/SentenceActions';
 import Title from './Title';
 import CardWrapper from './CardWrapper';
+import Spacer from '@/components/Spacer';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 
 export default function Sentence() {
 	return (
-		<Wrapper $position='flex-start'>
-			<CardWrapper>
-				<WordListing title={<Title>Your Sentence</Title>} />
-			</CardWrapper>
-			<CardWrapper>
-				<Translation title={<Title>Translation</Title>} />
-			</CardWrapper>
-			<Note title={<Title>Note</Title>} />
-			<SentenceActions />
-		</Wrapper>
+		<MaxWidthWrapper>
+			<Wrapper $position='flex-start'>
+				<CardWrapper>
+					<WordListing title={<Title>Your Sentence</Title>} />
+				</CardWrapper>
+				<CardWrapper>
+					<Translation title={<Title>Translation</Title>} />
+				</CardWrapper>
+				<Note title={<Title>Note</Title>} />
+				<Spacer size={1} />
+				<SentenceActions />
+			</Wrapper>
+		</MaxWidthWrapper>
 	);
 }

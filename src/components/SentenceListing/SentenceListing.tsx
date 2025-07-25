@@ -57,10 +57,10 @@ export default SentenceListing;
 
 var Wrapper = styled.div`
 	color: var(--text-primary);
-	width: 100%;
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
+	isolation: isolate;
 `;
 
 var NoticeText = styled(DescriptionText)`
