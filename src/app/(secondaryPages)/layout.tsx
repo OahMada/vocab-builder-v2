@@ -4,8 +4,6 @@ import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import { roboto } from '@/helpers/getFont';
 import GlobalStyles from '@/components/GlobalStyles';
 import LayoutWrapper from './LayoutWrapper';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
 	title: 'Vocab Builder',
@@ -22,11 +20,7 @@ export default function RootLayout({
 			<body>
 				<StyledComponentsRegistry>
 					<GlobalStyles />
-					<LayoutWrapper>
-						<Header />
-						{children}
-						<Footer />
-					</LayoutWrapper>
+					<LayoutWrapper>{children}</LayoutWrapper>
 				</StyledComponentsRegistry>
 			</body>
 		</html>

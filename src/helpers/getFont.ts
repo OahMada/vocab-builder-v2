@@ -16,4 +16,11 @@ const roboto = localFont({
 	display: 'fallback',
 });
 
-export { roboto };
+const gaMaamli = localFont({
+	src: '../../public/font/ga-maamli.woff2',
+	display: 'fallback',
+	weight: '400',
+	style: 'normal',
+});
+
+export { roboto, gaMaamli };

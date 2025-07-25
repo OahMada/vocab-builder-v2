@@ -4,12 +4,18 @@ import * as React from 'react';
 import * as AvatarPrimitives from '@radix-ui/react-avatar';
 import styled from 'styled-components';
 
-function Avatar({ src }: { src: string }) {
+function Avatar({
+	src,
+	fallbackFontSize,
+	...delegated
+}: { src: string; fallbackFontSize: string } & React.ComponentProps<typeof AvatarPrimitives.Root>) {
 	return (
-		<Root>
-			<Image src={src} alt='Adam Hao' />
-			{/* <Image src='#' alt='Adam Hao' /> */}
-			<Fallback delayMs={100}>AH</Fallback>
+		<Root {...delegated}>
+			{/* <Image src={src} alt='Adam Hao' /> */}
+			<Image src='#' alt='Adam Hao' />
+			<Fallback delayMs={100} style={{ '--font-size': fallbackFontSize } as React.CSSProperties}>
+				AH
+			</Fallback>
 		</Root>
 	);
 }
@@ -32,13 +38,15 @@ var Image = styled(AvatarPrimitives.Image)`
 `;
 
 var Fallback = styled(AvatarPrimitives.Fallback)`
+	--font-size: 2rem;
 	width: 100%;
 	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	color: var(--text-primary);
-	font-size: 2rem;
+	font-size: var(--font-size);
 	background-color: var(--bg-tertiary);
 	font-weight: 500;
+	line-height: 1;
 `;

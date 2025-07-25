@@ -75,17 +75,20 @@ var Item = styled(SelectPrimitives.Item)`
 	padding-right: 30px;
 	font-size: 1rem;
 
+	/* replace outline with custom background color */
+	outline: none;
+
 	&[data-highlighted] {
-		background-color: var(--bg-tertiary-hover);
+		background-color: var(--bg-secondary);
 	}
 
 	@media (hover: hover) {
 		&:hover {
-			background-color: var(--bg-tertiary-hover);
+			background-color: var(--bg-secondary);
 		}
 	}
 	&:active {
-		background-color: var(--bg-tertiary-hover);
+		background-color: var(--bg-secondary);
 	}
 `;
 

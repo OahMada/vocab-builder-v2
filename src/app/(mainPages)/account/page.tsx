@@ -3,7 +3,7 @@ import Wrapper from '@/components/PageWrapper';
 import Breadcrumb from './CustomBreadcrumb';
 import UserInfo from '@/components/UserInfo';
 import Spacer from '@/components/Spacer';
-import UserPhoto from '@/components/UserPhoto';
+import AccountUser from '@/components/AccountUser';
 import InnerWrapper from './InnerWrapper';
 import ChooseLanguage from '@/components/ChooseLanguage';
 import ChooseIPAFlavour from '@/components/ChooseIPAFlavour';
@@ -14,18 +14,14 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 export default function AccountPage() {
 	return (
 		<MaxWidthWrapper>
-			<Wrapper $position='flex-start'>
+			<Wrapper $position='center'>
 				<Breadcrumb />
-				<Spacer size={1} />
-				<UserPhoto />
-				<Spacer size={1} />
+				<AccountUser />
 				<UserInfo />
-				<Spacer size={1} />
 				<InnerWrapper>
 					<ChooseLanguage />
 					<ChooseIPAFlavour />
 				</InnerWrapper>
-				<Spacer size={1} />
 				<ExportData />
 				<DeleteAccount />
 			</Wrapper>

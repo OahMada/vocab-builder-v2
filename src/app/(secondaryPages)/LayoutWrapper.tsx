@@ -5,8 +5,9 @@ import styled from 'styled-components';
 var LayoutWrapper = styled.div`
 	min-height: 100dvh;
 	isolation: isolate;
+	padding: 40px 0;
 	display: grid;
-	grid-template-rows: 3rem 1fr 3rem;
+	place-items: center;
 `;
 
 export default LayoutWrapper;

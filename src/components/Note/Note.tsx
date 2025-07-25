@@ -3,7 +3,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Textarea from '@/components/Textarea';
-import CardWrapper from '@/app/sentence/[id]/CardWrapper';
+import CardWrapper from '@/app/(secondaryPages)/sentence/[id]/CardWrapper';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import TextareaActionButtons from '@/components/TextareaActionButtons';

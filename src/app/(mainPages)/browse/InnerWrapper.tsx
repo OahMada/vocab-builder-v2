@@ -4,17 +4,13 @@ import styled from 'styled-components';
 
 var InnerWrapper = styled.div`
 	position: sticky;
-	top: 3rem;
+	top: 4rem;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
 	background-color: var(--bg-primary);
-	box-shadow: var(--shadow-elevation-medium);
-
-	/* nullish the PageWrapper top padding */
-	margin-top: -8px;
-	padding-top: 8px;
+	box-shadow: var(--shadow-elevation-low);
 
 	/* turn the parent flex gap into padding */
 	padding-bottom: 12px;

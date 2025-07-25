@@ -51,6 +51,7 @@ h1, h2, h3, h4, h5, h6 {
 /* custom properties */
 html {
   --font-family: "Roboto", -apple-system, sans-serif;
+  --font-logo:  'GaMaamli', -apple-system, sans-serif;
   --bg-overlay: hsl(0deg 0% 0% / 85%);
 	--bg-modal: hsl(0deg 0% 7%);
   --bg-primary: hsl(0deg 0% 0%);

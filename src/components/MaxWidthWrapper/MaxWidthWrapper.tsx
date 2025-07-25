@@ -10,6 +10,7 @@ var MaxWidthWrapper = styled.div`
 	padding-left: 16px;
 	padding-right: 16px;
 	width: 100%;
+	height: 100%;
 `;
 
 export default MaxWidthWrapper;

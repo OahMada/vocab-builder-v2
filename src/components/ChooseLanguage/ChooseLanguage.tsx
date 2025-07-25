@@ -53,13 +53,10 @@ var Label = styled.label`
 `;
 
 var LabelText = styled.span`
-	font-size: 1.2rem;
+	font-size: 1rem;
 	font-weight: 500;
 `;
 
 var InfoButton = styled(Button)`
 	--hover-bg-color: var(--bg-tertiary);
-	/* optical alignment */
-	position: relative;
-	top: 1px;
 `;

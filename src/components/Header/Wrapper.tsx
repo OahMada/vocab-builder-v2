@@ -10,8 +10,6 @@ var Wrapper = styled.div`
 	right: 0;
 	background-color: var(--bg-primary);
 	z-index: 10;
-	box-shadow: var(--shadow-elevation-medium);
-	width: 100dvw;
 `;
 
 export default Wrapper;
