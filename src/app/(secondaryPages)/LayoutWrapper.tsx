@@ -5,7 +5,7 @@ import styled from 'styled-components';
 var LayoutWrapper = styled.div`
 	min-height: 100dvh;
 	isolation: isolate;
-	padding: 40px 0;
+	padding: 20px 0;
 	display: grid;
 	place-items: center;
 `;

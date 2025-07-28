@@ -3,7 +3,7 @@ import Wrapper from './Wrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import StyledHeader from './StyledHeader';
 import Logo from '@/components/Logo';
-import HeaderUser from '@/components/HeaderUser';
+import MobileMenu from '@/components/MobileMenu';
 
 function Header() {
 	return (
@@ -11,7 +11,7 @@ function Header() {
 			<MaxWidthWrapper>
 				<StyledHeader>
 					<Logo />
-					<HeaderUser />
+					<MobileMenu />
 				</StyledHeader>
 			</MaxWidthWrapper>
 		</Wrapper>

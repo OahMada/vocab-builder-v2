@@ -25,7 +25,7 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 		>
 			<SmallHeading>Question:</SmallHeading>
 			<TextareaWrapper>
-				<Textarea question={question} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(e.target.value)} />
+				<Textarea onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(e.target.value)} />
 			</TextareaWrapper>
 			<SmallHeading>Answer:</SmallHeading>
 			<AnswerBox>

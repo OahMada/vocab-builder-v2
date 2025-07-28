@@ -2,32 +2,34 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 function Logo() {
+	let pathname = usePathname();
+
+	if (pathname === '/') {
+		return;
+	}
+
 	return (
-		<Wrapper>
-			<VSpan>V</VSpan>
-			<BSpan>B</BSpan>
+		<Wrapper href='/'>
+			<span>VOCAB</span>
+			<span>BUILDER</span>
 		</Wrapper>
 	);
 }
 
 export default Logo;
 
-var Wrapper = styled.span`
-	font-size: 1.5rem;
+var Wrapper = styled(Link)`
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1;
 	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 	font-family: var(--font-logo);
-	font-weight: 400;
-	font-style: normal;
-`;
-
-var VSpan = styled.span`
-	display: block;
-	transform: translateY(-3.5px);
-`;
-
-var BSpan = styled.span`
-	display: block;
-	transform: translate(-3px, 1.5px);
+	color: inherit;
 `;

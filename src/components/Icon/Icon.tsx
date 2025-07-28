@@ -24,6 +24,9 @@ import {
 	ChevronDown,
 	ChevronUp,
 	Save,
+	Menu,
+	User,
+	LogOut,
 } from 'react-feather';
 
 const icons = {
@@ -48,6 +51,9 @@ const icons = {
 	'chevron-down': ChevronDown,
 	'chevron-up': ChevronUp,
 	save: Save,
+	'mobile-menu': Menu,
+	account: User,
+	'log-out': LogOut,
 };
 
 interface IconProps {

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
-import { roboto, gaMaamli } from '@/helpers/getFont';
+import { roboto, inter } from '@/helpers/getFont';
 import GlobalStyles from '@/components/GlobalStyles';
 import LayoutWrapper from './LayoutWrapper';
 import Header from '@/components/Header';
@@ -18,7 +18,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang='en' className={`${roboto.className} ${gaMaamli.className}`}>
+		<html lang='en' className={`${roboto.className} ${inter.className}`}>
 			<body>
 				<StyledComponentsRegistry>
 					<GlobalStyles />

@@ -10,7 +10,7 @@ import Button from '@/components/Button';
 interface ModalProps {
 	title: React.ReactNode;
 	style?: React.CSSProperties;
-	contentPosition?: 'bottom' | 'middle';
+	contentPosition?: 'bottom' | 'middle' | 'full-screen';
 	onDismiss: () => void;
 	isOpen: boolean;
 }
@@ -36,14 +36,18 @@ function Modal({
 			<ModalPrimitives.Portal>
 				<Wrapper style={{ ...style } as React.CSSProperties}>
 					<OverLay />
-					<Content aria-describedby={undefined} $position={contentPosition}>
+					<Content $position={contentPosition}>
 						<TitleWrapper>
-							{title}
+							<ModalPrimitives.Title asChild={true}>{title}</ModalPrimitives.Title>
 							<CloseButton variant='icon' onClick={onDismiss}>
 								<Icon id='x' />
 								<VisuallyHidden>Dismiss menu</VisuallyHidden>
 							</CloseButton>
 						</TitleWrapper>
+						{/* to suppress the warning, because applying aria-describedby={undefined} to ModalContent couldn't solve the problem */}
+						<VisuallyHidden>
+							<ModalPrimitives.Description></ModalPrimitives.Description>
+						</VisuallyHidden>
 						{children}
 					</Content>
 				</Wrapper>
@@ -82,10 +86,14 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 				border-top-left-radius: 16px;
 				border-top-right-radius: 16px;
 			`;
+		} else if ($position === 'full-screen') {
+			return css`
+				inset: 0;
+			`;
 		}
 	}}
 	background: var(--bg-modal);
-	padding: 16px 28px;
+	padding: 16px;
 	color: var(--text-primary);
 	display: flex;
 	flex-direction: column;
