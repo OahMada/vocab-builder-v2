@@ -3,7 +3,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import Link from 'next/link';
+import NavLink from '@/components/NavLink';
 
 function Footer() {
 	return (
@@ -11,7 +11,7 @@ function Footer() {
 			<Wrapper>
 				<p>&copy; 2025-present Adam Hao. All rights reserved.</p>
 				<FooterNav>
-					<NavLink href='/intro'>Intro</NavLink> &middot; <NavLink href='/'>Home</NavLink> &middot; <NavLink href='/about'>About</NavLink>
+					<Link href='/intro'>Intro</Link> &middot; <Link href='/'>Home</Link> &middot; <Link href='/about'>About</Link>
 				</FooterNav>
 			</Wrapper>
 		</MaxWidthWrapper>
@@ -32,15 +32,7 @@ var Wrapper = styled.div`
 
 var FooterNav = styled.nav``;
 
-var NavLink = styled(Link)`
+var Link = styled(NavLink)`
 	color: var(--text-secondary);
 	font-size: 0.8rem;
-
-	text-decoration: none;
-
-	@media (hover: hover) {
-		&:hover {
-			text-decoration: revert;
-		}
-	}
 `;

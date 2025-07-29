@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import Link from 'next/link';
+import NavLink from '@/components/NavLink';
 
 var Breadcrumbs = ({ children, ...delegated }: { children: React.ReactNode }) => {
 	return (
@@ -52,14 +52,9 @@ const CrumbWrapper = styled.li`
 	}
 `;
 
-const CrumbLink = styled(Link)`
+const CrumbLink = styled(NavLink)`
 	color: var(--text-secondary);
-	text-decoration: none;
 	font-size: 0.8rem;
-
-	&:hover {
-		text-decoration: revert;
-	}
 `;
 
 export { Breadcrumbs, Crumb };
