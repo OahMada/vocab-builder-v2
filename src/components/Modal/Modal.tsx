@@ -10,7 +10,7 @@ import Button from '@/components/Button';
 interface ModalProps {
 	title: React.ReactNode;
 	style?: React.CSSProperties;
-	contentPosition?: 'bottom' | 'middle' | 'full-screen';
+	contentPosition?: 'bottom' | 'middle';
 	onDismiss: () => void;
 	isOpen: boolean;
 }
@@ -85,10 +85,6 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 				min-height: 55dvh;
 				border-top-left-radius: 16px;
 				border-top-right-radius: 16px;
-			`;
-		} else if ($position === 'full-screen') {
-			return css`
-				inset: 0;
 			`;
 		}
 	}}

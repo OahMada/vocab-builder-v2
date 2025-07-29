@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 var Breadcrumbs = ({ children, ...delegated }: { children: React.ReactNode }) => {
 	return (
@@ -51,7 +52,7 @@ const CrumbWrapper = styled.li`
 	}
 `;
 
-const CrumbLink = styled.a`
+const CrumbLink = styled(Link)`
 	color: var(--text-secondary);
 	text-decoration: none;
 	font-size: 0.8rem;

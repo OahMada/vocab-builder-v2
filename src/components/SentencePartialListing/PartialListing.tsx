@@ -31,7 +31,7 @@ export default PartialListing;
 
 var Wrapper = styled.div`
 	background-color: var(--bg-secondary);
-	color: var(--text-secondary);
+	color: var(--text-tertiary);
 	padding: 12px;
 	border-radius: 12px;
 	display: flex;

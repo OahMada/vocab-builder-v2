@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import * as React from 'react';
 import Wrapper from '@/components/PageWrapper';
 import WordListing from '@/components/WordListing';
@@ -8,6 +9,10 @@ import Title from './Title';
 import CardWrapper from './CardWrapper';
 import Spacer from '@/components/Spacer';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+
+export var metadata: Metadata = {
+	title: 'Sentence | Vocab Builder',
+};
 
 export default function Sentence() {
 	return (

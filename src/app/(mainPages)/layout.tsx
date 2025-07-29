@@ -7,9 +7,9 @@ import LayoutWrapper from './LayoutWrapper';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export const metadata: Metadata = {
+export var metadata: Metadata = {
 	title: 'Vocab Builder',
-	description: 'A tool for building your vocabulary when learning a foreign language',
+	description: 'A tool for building your vocabulary while learning a foreign language.',
 };
 
 export default function RootLayout({

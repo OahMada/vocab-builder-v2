@@ -2,18 +2,18 @@
 
 import * as React from 'react';
 import * as AvatarPrimitives from '@radix-ui/react-avatar';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 function Avatar({
 	src,
-	fallbackFontSize,
+	fallbackStyle,
 	...delegated
-}: { src: string; fallbackFontSize: string } & React.ComponentProps<typeof AvatarPrimitives.Root>) {
+}: { src: string; fallbackStyle: 'fill' | 'outline' } & React.ComponentProps<typeof AvatarPrimitives.Root>) {
 	return (
 		<Root {...delegated}>
-			{/* <Image src={src} alt='Adam Hao' /> */}
-			<Image src='#' alt='Adam Hao' />
-			<Fallback delayMs={100} style={{ '--font-size': fallbackFontSize } as React.CSSProperties}>
+			<Image src={src} alt='Adam Hao' />
+			{/* <Image src='#' alt='Adam Hao' /> */}
+			<Fallback delayMs={400} $style={fallbackStyle}>
 				AH
 			</Fallback>
 		</Root>
@@ -23,12 +23,15 @@ function Avatar({
 export default Avatar;
 
 var Root = styled(AvatarPrimitives.Root)`
+	--avatar-size: 100px;
+	--fallback-font-size: 2rem;
 	/* to keep a circular shape */
 	overflow: hidden;
-	width: 100%;
-	height: 100%;
+	width: var(--avatar-size);
+	height: var(--avatar-size);
 	border-radius: inherit;
 	display: block;
+	border: 1px solid var(--border-light);
 `;
 
 var Image = styled(AvatarPrimitives.Image)`
@@ -37,16 +40,27 @@ var Image = styled(AvatarPrimitives.Image)`
 	height: 100%;
 `;
 
-var Fallback = styled(AvatarPrimitives.Fallback)`
-	--font-size: 2rem;
+var Fallback = styled(AvatarPrimitives.Fallback)<{ $style: 'fill' | 'outline' }>`
 	width: 100%;
 	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	color: var(--text-primary);
-	font-size: var(--font-size);
-	background-color: var(--bg-tertiary);
+	font-size: var(--fallback-font-size);
+	user-select: none;
+
+	${({ $style }) => {
+		if ($style === 'fill') {
+			return css`
+				background-color: var(--bg-tertiary);
+			`;
+		} else if ($style === 'outline') {
+			return css`
+				background-color: transparent;
+			`;
+		}
+	}}
 	font-weight: 500;
 	line-height: 1;
 `;

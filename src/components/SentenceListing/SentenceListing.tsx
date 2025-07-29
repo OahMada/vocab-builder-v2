@@ -72,5 +72,5 @@ var Loading = styled.span`
 	align-self: center;
 	font-size: 0.8rem;
 	font-weight: 350;
-	color: var(--text-secondary);
+	color: var(--text-tertiary);
 `;

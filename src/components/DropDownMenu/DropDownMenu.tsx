@@ -27,7 +27,7 @@ export var DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
 	user-select: none;
 
 	&[data-highlighted] {
-		background-color: var(--bg-secondary);
+		background-color: var(--bg-tertiary);
 	}
 
 	/* replace with a custom background color */
@@ -35,7 +35,7 @@ export var DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
 `;
 
 var Content = styled(DropdownMenuPrimitive.Content)`
-	background-color: var(--bg-popover);
+	background-color: var(--bg-dropdown);
 	color: var(--text-primary);
 	box-shadow: var(--shadow-elevation-medium);
 	padding: 8px;
@@ -47,5 +47,5 @@ var Content = styled(DropdownMenuPrimitive.Content)`
 `;
 
 var Arrow = styled(DropdownMenuPrimitive.Arrow)`
-	fill: var(--bg-popover);
+	fill: var(--bg-dropdown);
 `;

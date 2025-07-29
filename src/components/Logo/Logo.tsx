@@ -24,7 +24,7 @@ export default Logo;
 
 var Wrapper = styled(Link)`
 	text-decoration: none;
-	font-size: 13px;
+	font-size: 10px;
 	font-weight: 600;
 	line-height: 1;
 	display: flex;

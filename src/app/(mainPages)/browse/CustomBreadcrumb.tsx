@@ -14,7 +14,7 @@ function Breadcrumb() {
 		<CustomBreadcrumbs>
 			<Crumb href='/'>Home</Crumb>
 			<Crumb href='/browse' isCurrentPage={true}>
-				Sentence Browse
+				Browse
 			</Crumb>
 		</CustomBreadcrumbs>
 	);
