@@ -60,7 +60,6 @@ var Item = styled(AccordionPrimitives.Item)`
 var Header = styled(AccordionPrimitives.Header)`
 	font-size: 1rem;
 	font-weight: 450;
-	color: var(--text-primary);
 	background-color: var(--bg-secondary);
 	padding: var(--overall-padding);
 	padding-top: 8px;

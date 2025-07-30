@@ -60,7 +60,6 @@ var Content = styled(AlertDialogPrimitives.Content)`
 	max-height: 85vh;
 	border-radius: 12px;
 	padding: 16px;
-	color: var(--text-primary);
 	display: flex;
 	flex-direction: column;
 	gap: 5px;

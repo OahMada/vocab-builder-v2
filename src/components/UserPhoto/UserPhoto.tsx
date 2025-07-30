@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 
-function AccountUser() {
+function UserPhoto() {
 	return (
 		<Wrapper>
 			<Avatar src='https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80' fallbackStyle='fill' />
@@ -18,14 +18,13 @@ function AccountUser() {
 	);
 }
 
-export default AccountUser;
+export default UserPhoto;
 
 var Wrapper = styled.div`
 	position: relative;
 	border-radius: 100%;
-	user-select: none;
 	background-color: var(--bg-secondary);
-	box-shadow: var(--shadow-elevation-low);
+	margin-bottom: 10px;
 `;
 
 var UploadButton = styled(Button)`
@@ -36,6 +35,6 @@ var UploadButton = styled(Button)`
 	left: 50%;
 	transform: translateX(-50%);
 	font-size: 0.8rem;
-	box-shadow: var(--shadow-elevation-medium);
+	box-shadow: var(--shadow-elevation-low);
 	backdrop-filter: blur(15px);
 `;

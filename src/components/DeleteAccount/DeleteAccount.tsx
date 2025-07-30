@@ -45,7 +45,6 @@ function DeleteAccount() {
 export default DeleteAccount;
 
 var Wrapper = styled.div`
-	position: relative;
 	padding: 8px 0;
 	display: flex;
 	flex-direction: column;

@@ -6,7 +6,6 @@ var InnerWrapper = styled.div`
 	width: 100%;
 	background-color: var(--bg-secondary);
 	border-radius: 12px;
-	color: var(--text-primary);
 	display: flex;
 	flex-direction: column;
 	gap: 18px;

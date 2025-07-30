@@ -56,7 +56,6 @@ function SentenceListing() {
 export default SentenceListing;
 
 var Wrapper = styled.div`
-	color: var(--text-primary);
 	display: flex;
 	flex-direction: column;
 	gap: 8px;

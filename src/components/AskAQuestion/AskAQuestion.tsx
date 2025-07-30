@@ -16,13 +16,7 @@ interface AskAQuestionProps {
 function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 	let [question, setQuestion] = React.useState('How are you doing today?');
 	return (
-		<Modal
-			isOpen={isShowing}
-			onDismiss={onDismiss}
-			title={<ModalTitle />}
-			style={{ '--bg-overlay': 'transparent' } as React.CSSProperties}
-			contentPosition='bottom'
-		>
+		<Modal isOpen={isShowing} onDismiss={onDismiss} title={<ModalTitle />} isOverlayTransparent={true} contentPosition='bottom'>
 			<SmallHeading>Question:</SmallHeading>
 			<TextareaWrapper>
 				<Textarea onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(e.target.value)} />

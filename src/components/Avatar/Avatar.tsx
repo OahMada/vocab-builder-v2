@@ -11,8 +11,8 @@ function Avatar({
 }: { src: string; fallbackStyle: 'fill' | 'outline' } & React.ComponentProps<typeof AvatarPrimitives.Root>) {
 	return (
 		<Root {...delegated}>
-			<Image src={src} alt='Adam Hao' />
-			{/* <Image src='#' alt='Adam Hao' /> */}
+			{/* <Image src={src} alt='Adam Hao' /> */}
+			<Image src='#' alt='Adam Hao' />
 			<Fallback delayMs={400} $style={fallbackStyle}>
 				AH
 			</Fallback>
@@ -25,19 +25,21 @@ export default Avatar;
 var Root = styled(AvatarPrimitives.Root)`
 	--avatar-size: 100px;
 	--fallback-font-size: 2rem;
+
 	/* to keep a circular shape */
 	overflow: hidden;
 	width: var(--avatar-size);
 	height: var(--avatar-size);
-	border-radius: inherit;
+	border-radius: 100%;
 	display: block;
-	border: 1px solid var(--border-light);
+	border: 1px solid var(--border-medium);
 `;
 
 var Image = styled(AvatarPrimitives.Image)`
 	object-fit: cover;
 	width: 100%;
 	height: 100%;
+	border-radius: 100%;
 `;
 
 var Fallback = styled(AvatarPrimitives.Fallback)<{ $style: 'fill' | 'outline' }>`
@@ -46,7 +48,6 @@ var Fallback = styled(AvatarPrimitives.Fallback)<{ $style: 'fill' | 'outline' }>
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: var(--text-primary);
 	font-size: var(--fallback-font-size);
 	user-select: none;
 
@@ -62,5 +63,4 @@ var Fallback = styled(AvatarPrimitives.Fallback)<{ $style: 'fill' | 'outline' }>
 		}
 	}}
 	font-weight: 500;
-	line-height: 1;
 `;

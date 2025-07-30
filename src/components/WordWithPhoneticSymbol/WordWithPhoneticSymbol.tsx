@@ -37,7 +37,6 @@ var WordButton = styled(Button)`
 
 var SymbolWrapper = styled.span`
 	display: block;
-	color: var(--text-primary);
 	font-style: italic;
 	padding: 3px;
 	font-weight: 300;

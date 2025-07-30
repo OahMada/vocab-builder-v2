@@ -7,6 +7,7 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/Popover';
 import DescriptionText from '@/components/DescriptionText';
+import VisuallyHidden from '@/components/VisuallyHidden';
 
 function ChooseIPAFlavour() {
 	return (
@@ -17,6 +18,7 @@ function ChooseIPAFlavour() {
 					<PopoverTrigger asChild={true}>
 						<InfoButton variant='icon'>
 							<Icon id='info' size={16} />
+							<VisuallyHidden>Notice</VisuallyHidden>
 						</InfoButton>
 					</PopoverTrigger>
 					<PopoverContent>
@@ -47,8 +49,8 @@ var Title = styled.label`
 `;
 
 var LabelText = styled.span`
-	font-size: 1rem;
 	font-weight: 500;
+	user-select: none;
 `;
 
 var InfoButton = styled(Button)`

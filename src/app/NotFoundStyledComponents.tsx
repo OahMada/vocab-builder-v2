@@ -3,7 +3,6 @@
 import styled from 'styled-components';
 
 var Wrapper = styled.div`
-	color: var(--text-primary);
 	display: grid;
 	place-items: center;
 	min-height: 100dvh;

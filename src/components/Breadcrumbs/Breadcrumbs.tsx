@@ -31,7 +31,6 @@ const BreadcrumbList = styled.ol`
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
-	color: var(--text-primary);
 `;
 
 const CrumbWrapper = styled.li`

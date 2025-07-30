@@ -38,9 +38,7 @@ var Wrapper = styled.form`
 	position: relative;
 `;
 
-var Label = styled.label`
-	color: var(--text-primary);
-`;
+var Label = styled.label``;
 
 var IconWrapper = styled.div`
 	position: absolute;

@@ -14,12 +14,12 @@ export var RadioGroup = styled(RadioGroupPrimitives.Root)`
 export function RadioGroupItem({ value }: { value: string }) {
 	return (
 		<Wrapper>
-			<RadioGroupPrimitives.Item value={value} id='r1' asChild={true}>
+			<RadioGroupPrimitives.Item value={value} id={value} asChild={true}>
 				<RadioButton variant='fill'>
 					<Indicator />
 				</RadioButton>
 			</RadioGroupPrimitives.Item>
-			<label htmlFor='r1'>{value}</label>
+			<label htmlFor={value}>{value}</label>
 		</Wrapper>
 	);
 }
@@ -33,7 +33,7 @@ var Wrapper = styled.div`
 var RadioButton = styled(Button)`
 	width: 20px;
 	height: 20px;
-	border-radius: 100%;
+	border-radius: 50%;
 	padding: 0;
 `;
 
@@ -41,16 +41,13 @@ var Indicator = styled(RadioGroupPrimitives.Indicator)`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 100%;
-	height: 100%;
-	position: relative;
 
 	&::after {
 		content: '';
 		display: block;
 		width: 7px;
 		height: 7px;
-		border-radius: 50%;
+		border-radius: 100%;
 		background-color: var(--bg-revert);
 		opacity: 0.55;
 	}

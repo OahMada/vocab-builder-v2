@@ -48,6 +48,7 @@ var Wrapper = styled.div`
 var AvatarWrapper = styled.div`
 	border-radius: 100%;
 	margin-left: auto;
+	padding-top: 3px;
 `;
 
 var Account = styled(Link)`

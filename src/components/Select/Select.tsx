@@ -20,15 +20,15 @@ export function Select({ id, children, ...props }: { id: string } & React.Compon
 			<SelectPrimitives.Portal>
 				<Content>
 					<SelectPrimitives.ScrollUpButton asChild={true}>
-						<Button variant='icon'>
+						<ScrollButton variant='icon'>
 							<Icon id='chevron-up' />
-						</Button>
+						</ScrollButton>
 					</SelectPrimitives.ScrollUpButton>
 					<Viewport>{children}</Viewport>
 					<SelectPrimitives.ScrollDownButton asChild={true}>
-						<Button variant='icon'>
+						<ScrollButton variant='icon'>
 							<Icon id='chevron-down' />
-						</Button>
+						</ScrollButton>
 					</SelectPrimitives.ScrollDownButton>
 				</Content>
 			</SelectPrimitives.Portal>
@@ -41,7 +41,6 @@ var Content = styled(SelectPrimitives.Content)`
 	overflow: hidden;
 	background-color: var(--bg-tertiary);
 	border-radius: 20px;
-	color: var(--text-primary);
 	box-shadow: var(--shadow-elevation-medium);
 `;
 
@@ -51,6 +50,11 @@ var Viewport = styled(SelectPrimitives.Viewport)`
 	flex-direction: column;
 	gap: 3px;
 	text-align: right;
+`;
+
+var ScrollButton = styled(Button)`
+	padding: 0;
+	--hover-bg-color: transparent;
 `;
 
 export function SelectItem({ children, ...props }: React.ComponentProps<typeof SelectPrimitives.Item>) {
@@ -73,7 +77,6 @@ var Item = styled(SelectPrimitives.Item)`
 	user-select: none;
 	padding: 6px 10px;
 	padding-right: 30px;
-	font-size: 1rem;
 
 	/* replace outline with custom background color */
 	outline: none;

@@ -40,7 +40,7 @@ var Wrapper = styled.div`
 
 	@media (hover: hover) {
 		&:hover {
-			color: var(--text-primary);
+			color: revert;
 		}
 	}
 `;

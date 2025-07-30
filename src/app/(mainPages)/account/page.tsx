@@ -3,7 +3,7 @@ import * as React from 'react';
 import Wrapper from '@/components/PageWrapper';
 import Breadcrumb from './CustomBreadcrumb';
 import UserInfo from '@/components/UserInfo';
-import AccountUser from '@/components/AccountUser';
+import UserPhoto from '@/components/UserPhoto';
 import InnerWrapper from './InnerWrapper';
 import ChooseLanguage from '@/components/ChooseLanguage';
 import ChooseIPAFlavour from '@/components/ChooseIPAFlavour';
@@ -20,7 +20,7 @@ export default function AccountPage() {
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>
 				<Breadcrumb />
-				<AccountUser />
+				<UserPhoto />
 				<UserInfo />
 				<InnerWrapper>
 					<ChooseLanguage />

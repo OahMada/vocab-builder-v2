@@ -9,7 +9,7 @@ import Button from '@/components/Button';
 
 interface ModalProps {
 	title: React.ReactNode;
-	style?: React.CSSProperties;
+	isOverlayTransparent?: boolean;
 	contentPosition?: 'bottom' | 'middle';
 	onDismiss: () => void;
 	isOpen: boolean;
@@ -26,7 +26,7 @@ export { Title };
 function Modal({
 	title,
 	children,
-	style,
+	isOverlayTransparent = false,
 	contentPosition = 'middle',
 	onDismiss,
 	isOpen,
@@ -34,23 +34,21 @@ function Modal({
 	return (
 		<ModalPrimitives.Root open={isOpen} onOpenChange={onDismiss}>
 			<ModalPrimitives.Portal>
-				<Wrapper style={{ ...style } as React.CSSProperties}>
-					<OverLay />
-					<Content $position={contentPosition}>
-						<TitleWrapper>
-							<ModalPrimitives.Title asChild={true}>{title}</ModalPrimitives.Title>
-							<CloseButton variant='icon' onClick={onDismiss}>
-								<Icon id='x' />
-								<VisuallyHidden>Dismiss menu</VisuallyHidden>
-							</CloseButton>
-						</TitleWrapper>
-						{/* to suppress the warning, because applying aria-describedby={undefined} to ModalContent couldn't solve the problem */}
-						<VisuallyHidden>
-							<ModalPrimitives.Description></ModalPrimitives.Description>
-						</VisuallyHidden>
-						{children}
-					</Content>
-				</Wrapper>
+				<OverLay $isOverlayTransparent={isOverlayTransparent} />
+				<Content $position={contentPosition}>
+					<TitleWrapper>
+						<ModalPrimitives.Title asChild={true}>{title}</ModalPrimitives.Title>
+						<CloseButton variant='icon' onClick={onDismiss}>
+							<Icon id='x' />
+							<VisuallyHidden>Dismiss menu</VisuallyHidden>
+						</CloseButton>
+					</TitleWrapper>
+					{/* to suppress the warning, because applying aria-describedby={undefined} to ModalContent couldn't solve the problem */}
+					<VisuallyHidden>
+						<ModalPrimitives.Description></ModalPrimitives.Description>
+					</VisuallyHidden>
+					{children}
+				</Content>
 			</ModalPrimitives.Portal>
 		</ModalPrimitives.Root>
 	);
@@ -58,12 +56,10 @@ function Modal({
 
 export default Modal;
 
-var Wrapper = styled.div``;
-
-var OverLay = styled(ModalPrimitives.Overlay)`
+var OverLay = styled(ModalPrimitives.Overlay)<{ $isOverlayTransparent: boolean }>`
 	position: fixed;
 	inset: 0;
-	background: var(--bg-overlay);
+	background: ${({ $isOverlayTransparent }) => ($isOverlayTransparent ? 'transparent' : 'var(--bg-overlay)')};
 `;
 
 var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
@@ -90,7 +86,6 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 	}}
 	background: var(--bg-modal);
 	padding: 16px;
-	color: var(--text-primary);
 	display: flex;
 	flex-direction: column;
 	gap: 12px;

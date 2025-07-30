@@ -3,7 +3,6 @@
 import styled from 'styled-components';
 
 var Wrapper = styled.div`
-	color: var(--text-primary);
 	position: sticky;
 	top: 0;
 	left: 0;
