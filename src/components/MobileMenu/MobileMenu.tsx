@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
-import Link from 'next/link';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/DropDownMenu';
 import Avatar from '@/components/Avatar';
 
@@ -27,11 +26,13 @@ function MobileMenu() {
 							fallbackStyle='outline'
 						/>
 					</AvatarWrapper>
-					<DropdownMenuItem>
-						<Account href='/account'>Account</Account>
+					<DropdownMenuItem asChild={true}>
+						<DropdownItemButton variant='icon' href='/account'>
+							Account
+						</DropdownItemButton>
 					</DropdownMenuItem>
-					<DropdownMenuItem>
-						<LogoutButton variant='icon'>Logout</LogoutButton>
+					<DropdownMenuItem asChild={true}>
+						<DropdownItemButton variant='icon'>Logout</DropdownItemButton>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
@@ -48,18 +49,9 @@ var Wrapper = styled.div`
 var AvatarWrapper = styled.div`
 	border-radius: 100%;
 	margin-left: auto;
-	padding-top: 3px;
 `;
 
-var Account = styled(Link)`
-	text-decoration: none;
-	display: flex;
-	align-items: center;
-	color: inherit;
-`;
-
-var LogoutButton = styled(Button)`
-	padding: 0;
+var DropdownItemButton = styled(Button)`
 	--hover-bg-color: transparent;
 	&::after {
 		--tap-increment: 0;

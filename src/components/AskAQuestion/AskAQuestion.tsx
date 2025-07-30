@@ -22,7 +22,7 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 				<Textarea onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(e.target.value)} />
 			</TextareaWrapper>
 			<SmallHeading>Answer:</SmallHeading>
-			<AnswerBox>
+			<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
 				<>
 					<LoadIcon id='load' />
 					<VisuallyHidden>Loading answer</VisuallyHidden>
@@ -54,6 +54,7 @@ var AnswerBox = styled.div`
 	background-color: var(--bg-secondary);
 	flex: 1;
 	position: relative;
+	min-height: calc(var(--icon-size) + 12px * 2);
 `;
 
 var LoadIcon = styled(Icon)`

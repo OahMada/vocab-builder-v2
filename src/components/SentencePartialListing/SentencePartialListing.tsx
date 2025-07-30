@@ -12,7 +12,7 @@ function SentencePartialListing() {
 		<Wrapper>
 			<Spacer size={10} />
 			<PartialListing />
-			<Button variant='outline'>
+			<Button variant='outline' href='/browse'>
 				<Icon id='forward' />
 				&nbsp;View All
 			</Button>

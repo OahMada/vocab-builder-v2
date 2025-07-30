@@ -23,10 +23,14 @@ export var DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
 	display: flex;
 	justify-content: flex-end;
 	border-radius: 4px;
-	padding: 3px 5px;
+	padding: 5px;
 	user-select: none;
 
 	&[data-highlighted] {
+		background-color: var(--bg-secondary);
+	}
+
+	&:active {
 		background-color: var(--bg-secondary);
 	}
 
@@ -42,7 +46,7 @@ var Content = styled(DropdownMenuPrimitive.Content)`
 	min-width: 100px;
 	display: flex;
 	flex-direction: column;
-	gap: 3px;
+	gap: 5px;
 `;
 
 var Arrow = styled(DropdownMenuPrimitive.Arrow)`

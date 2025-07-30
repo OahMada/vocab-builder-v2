@@ -64,6 +64,7 @@ var OverLay = styled(ModalPrimitives.Overlay)<{ $isOverlayTransparent: boolean }
 
 var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 	position: fixed;
+	padding: 16px;
 	${({ $position }) => {
 		if ($position === 'middle') {
 			return css`
@@ -78,14 +79,13 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 				bottom: 0;
 				right: 0;
 				width: 100%;
-				min-height: 55dvh;
 				border-top-left-radius: 16px;
 				border-top-right-radius: 16px;
+				padding-bottom: 30px;
 			`;
 		}
 	}}
 	background: var(--bg-modal);
-	padding: 16px;
 	display: flex;
 	flex-direction: column;
 	gap: 12px;

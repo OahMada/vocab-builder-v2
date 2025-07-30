@@ -50,7 +50,7 @@ function SentenceListingEntry({ id, index, translation, note, sentence }: Senten
 							</AlertDialogTrigger>
 							<AlertDialogContent description='This action cannot be undone.' />
 						</AlertDialog>
-						<Button variant='fill'>
+						<Button variant='fill' href='/sentence/id'>
 							<Icon id='edit' />
 							&nbsp;Edit
 						</Button>

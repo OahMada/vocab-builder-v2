@@ -2,12 +2,14 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import NavLink from '@/components/NavLink';
 
 interface ButtonProps {
 	variant: 'fill' | 'outline' | 'icon';
+	href?: string;
 }
 
-function Button({ variant, children, ...delegated }: ButtonProps & React.ComponentProps<'button'>) {
+function Button({ variant, href, children, ...delegated }: ButtonProps & React.ComponentProps<'button'>) {
 	let Component;
 	if (variant === 'fill') {
 		Component = FillButton;
@@ -19,7 +21,11 @@ function Button({ variant, children, ...delegated }: ButtonProps & React.Compone
 		throw new Error(`Unrecognized Button variant: ${variant}`);
 	}
 
-	return <Component {...delegated}>{children}</Component>;
+	return (
+		<Component {...delegated} as={href ? NavLink : 'button'} href={href}>
+			{children}
+		</Component>
+	);
 }
 
 export default Button;
@@ -39,6 +45,10 @@ var Base = styled.button`
 
 	&:focus:not(:focus-visible) {
 		outline: none;
+	}
+
+	&:hover {
+		text-decoration: none;
 	}
 
 	// to make the target size a bit larger
