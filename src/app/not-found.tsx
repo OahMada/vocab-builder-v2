@@ -1,9 +1,9 @@
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import * as React from 'react';
 import { Metadata } from 'next';
-import { InnerWrapper, NotFoundTitle, Wrapper } from './NotFoundStyledComponents';
-import NavLink from '@/components/NavLink';
-
-// TODO add auto jump and count down
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import { NotFoundTitle, Wrapper } from './NotFoundStyledComponents';
+import NotFoundRedirect from './NotFoundRedirect';
+import Spacer from '@/components/Spacer';
 
 export var metadata: Metadata = {
 	title: 'Not Found | Vocab Builder',
@@ -14,11 +14,10 @@ export default function NotFound() {
 	return (
 		<MaxWidthWrapper>
 			<Wrapper>
-				<InnerWrapper>
-					<NotFoundTitle>Not Found</NotFoundTitle>
-					<p>Could not find requested resource.</p>
-					<NavLink href='/'>Return Home</NavLink>
-				</InnerWrapper>
+				<NotFoundTitle>404 | Not Found</NotFoundTitle>
+				<p>Could not find requested resource.</p>
+				<Spacer size={12} />
+				<NotFoundRedirect />
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

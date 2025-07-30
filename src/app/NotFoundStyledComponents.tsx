@@ -3,16 +3,17 @@
 import styled from 'styled-components';
 
 var Wrapper = styled.div`
-	display: grid;
-	place-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	min-height: 100dvh;
+	text-align: center;
 `;
 
-var InnerWrapper = styled.div``;
-
 var NotFoundTitle = styled.h2`
-	font-weight: 450;
+	font-weight: 500;
 	font-size: 1.2rem;
 `;
 
-export { Wrapper, InnerWrapper, NotFoundTitle };
+export { Wrapper, NotFoundTitle };
