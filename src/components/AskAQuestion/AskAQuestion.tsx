@@ -17,10 +17,9 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 	let [question, setQuestion] = React.useState('How are you doing today?');
 	return (
 		<Modal isOpen={isShowing} onDismiss={onDismiss} title={<ModalTitle />} isOverlayTransparent={true} contentPosition='bottom'>
+			{/* TODO this should label */}
 			<SmallHeading>Question:</SmallHeading>
-			<TextareaWrapper>
-				<Textarea onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(e.target.value)} />
-			</TextareaWrapper>
+			<TextareaWrapper>{/* <Textarea onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(e.target.value)} /> */}</TextareaWrapper>
 			<SmallHeading>Answer:</SmallHeading>
 			<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
 				<>

@@ -9,7 +9,7 @@ var Wrapper = styled.main<{ $position?: 'flex-start' | 'center' }>`
 	align-items: center;
 	gap: 12px;
 	height: 100%;
-	padding-bottom: 20px;
+	padding-bottom: 16px;
 `;
 
 export default Wrapper;

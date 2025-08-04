@@ -10,20 +10,19 @@ import Button from '@/components/Button';
 
 // TODO restrict the length of the inputted text
 
-function Textarea({ ...delegated }) {
-	let [input, setInput] = React.useState('');
+interface TextAreaProps {
+	onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+	clearInput: () => void;
+	value: string;
+}
 
+function Textarea({ value, onChange, clearInput, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
 	return (
 		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
-			<InputArea as='textarea' {...delegated} value={input} onChange={(e) => setInput(e.target.value)} rows={1} autoFocus={true} />
-			<Overlay aria-hidden='true'>{input + ' '}</Overlay>
-			{input && (
-				<ClearButton
-					variant='icon'
-					onClick={() => {
-						setInput('');
-					}}
-				>
+			<InputArea as='textarea' {...delegated} onChange={onChange} rows={1} autoFocus={true} />
+			<Overlay aria-hidden='true'>{value + ' '}</Overlay>
+			{value && (
+				<ClearButton variant='icon' onClick={clearInput}>
 					<Icon id='x' />
 					<VisuallyHidden>Clear Textarea</VisuallyHidden>
 				</ClearButton>

@@ -42,7 +42,7 @@ var Wrapper = styled.div`
 	gap: 8px;
 `;
 
-var Title = styled.label`
+var Title = styled.div`
 	display: flex;
 	gap: 5px;
 	align-items: center;

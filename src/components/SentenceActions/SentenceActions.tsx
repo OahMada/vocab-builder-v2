@@ -2,12 +2,14 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/navigation';
 import Button from '@/components/Button';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import AskAQuestion from '@/components/AskAQuestion';
 
 function SentenceActions() {
+	let router = useRouter();
 	let [isShowing, setIsShowing] = React.useState(false);
 
 	function dismissModal() {
@@ -16,6 +18,10 @@ function SentenceActions() {
 
 	function showModal() {
 		setIsShowing(true);
+	}
+
+	function handleCancel() {
+		router.back();
 	}
 
 	return (
@@ -29,7 +35,7 @@ function SentenceActions() {
 					<Icon id='audio' />
 					<VisuallyHidden>Play sentence audio</VisuallyHidden>
 				</AudioButton>
-				<CancelButton variant='outline'>
+				<CancelButton variant='outline' onClick={handleCancel}>
 					<Icon id='x' />
 					&nbsp;Cancel
 				</CancelButton>

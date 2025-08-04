@@ -18,7 +18,7 @@ function Translation({ title }: { title: React.ReactNode }) {
 			{title}
 			{isEditing ? (
 				<>
-					<Textarea />
+					{/* <Textarea /> */}
 					<TextareaActionButtons />
 				</>
 			) : (

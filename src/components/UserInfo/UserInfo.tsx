@@ -22,7 +22,7 @@ function UserInfo() {
 				<Name>Adam Hao</Name>
 				<p>haozg44@gmail.com</p>
 				<Button variant='outline' onClick={showModal}>
-					<Icon id='edit' size={16} />
+					<EditIcon id='edit' size={16} />
 					&nbsp;Edit Info
 				</Button>
 			</Wrapper>
@@ -44,4 +44,10 @@ var Name = styled.h2`
 	line-height: 1;
 	font-weight: 450;
 	font-size: 1.2rem;
+`;
+
+var EditIcon = styled(Icon)`
+	/* optical alignment */
+	position: relative;
+	top: -1px;
 `;

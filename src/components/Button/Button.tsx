@@ -73,6 +73,10 @@ var Base = styled.button`
 	border-radius: 12px;
 	padding: 6px 10px;
 	color: var(--text-color);
+
+	&:disabled {
+		opacity: 0.6;
+	}
 `;
 
 var FillButton = styled(Base)`
@@ -83,6 +87,10 @@ var FillButton = styled(Base)`
 		&:hover {
 			background-color: var(--hover-bg-color);
 		}
+
+		&:disabled:hover {
+			--hover-bg-color: var(--bg-tertiary);
+		}
 	}
 `;
 var OutlineButton = styled(Base)`
@@ -91,6 +99,9 @@ var OutlineButton = styled(Base)`
 	@media (hover: hover) {
 		&:hover {
 			background-color: var(--hover-bg-color);
+		}
+		&:disabled:hover {
+			background-color: unset;
 		}
 	}
 `;
@@ -103,6 +114,10 @@ var IconButton = styled(Base)`
 	@media (hover: hover) {
 		&:hover {
 			background-color: var(--hover-bg-color);
+		}
+
+		&:disabled:hover {
+			background-color: unset;
 		}
 	}
 `;

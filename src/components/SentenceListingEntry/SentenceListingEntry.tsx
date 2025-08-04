@@ -51,7 +51,7 @@ function SentenceListingEntry({ id, index, translation, note, sentence }: Senten
 							<AlertDialogContent description='This action cannot be undone.' />
 						</AlertDialog>
 						<Button variant='fill' href='/sentence/id'>
-							<Icon id='edit' />
+							<EditIcon id='edit' />
 							&nbsp;Edit
 						</Button>
 					</ActionWrapper>
@@ -106,4 +106,10 @@ var ActionWrapper = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	gap: 8px;
+`;
+
+var EditIcon = styled(Icon)`
+	/* optical alignment */
+	position: relative;
+	top: -1px;
 `;
