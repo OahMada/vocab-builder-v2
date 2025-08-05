@@ -30,7 +30,7 @@ function WordListing({ title, sentence }: { title: React.ReactNode; sentence: st
 			</TitleWrapper>
 			<WordWrapper>
 				{segmentedSentence.map((item) => {
-					return <Word key={item.id} segment={item.segment} isWord={item.isWordLike} />;
+					return <Word key={item.id} segment={item.segment} isWord={item.isWordLike!} />;
 				})}
 			</WordWrapper>
 		</>

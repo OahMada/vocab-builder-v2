@@ -70,4 +70,7 @@ export var ToastViewport = styled(ToastPrimitives.Viewport)`
 	max-width: 100vw;
 	list-style: none;
 	outline: none;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
 `;

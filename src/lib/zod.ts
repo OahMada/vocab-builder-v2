@@ -14,9 +14,21 @@ export var UserInputSchema = z.object({
 					error: 'The sentence should be at least 5 characters long.',
 				})
 				.max(300, {
-					error: 'The sentence should be no longer than 500 characters long.',
+					error: 'The sentence should be no longer than 500 characters.',
 				})
 		),
 });
 
 export type UserInput = z.infer<typeof UserInputSchema>;
+
+export var WordSchema = z.object({
+	word: z
+		.string()
+		.trim()
+		.min(2, {
+			error: 'The word should be at least 2 characters long.',
+		})
+		.max(50, {
+			error: 'The word should be no longer than 50 characters.',
+		}),
+});

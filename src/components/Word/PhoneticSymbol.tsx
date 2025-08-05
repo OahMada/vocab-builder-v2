@@ -4,17 +4,28 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Button from '@/components/Button';
 
-function PhoneticSymbol({ word }: React.ComponentProps<'div'> & { word: string }) {
-	return <SymbolButton variant='outline'>{`/${word}word/`}</SymbolButton>;
+function PhoneticSymbol({ symbol, ...delegated }: React.ComponentProps<'button'> & { symbol: string }) {
+	if (!symbol.startsWith('/')) {
+		symbol = `/${symbol}`;
+	}
+	if (!symbol.endsWith('/')) {
+		symbol = `${symbol}/`;
+	}
+
+	return (
+		<SymbolButton variant='outline' {...delegated}>
+			{symbol}
+		</SymbolButton>
+	);
 }
 
 export default PhoneticSymbol;
 
 var SymbolButton = styled(Button)`
 	border-radius: 8px;
-	font-style: italic;
 	border-style: dashed;
 	padding: 3px 6px;
+	font-weight: 300;
 
 	--hover-bg-color: var(--bg-tertiary);
 `;

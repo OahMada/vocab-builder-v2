@@ -24,14 +24,18 @@
 		"@radix-ui/react-toast": "^1.2.14",
 		"@radix-ui/react-visually-hidden": "^1.2.3",
 		"@types/js-cookie": "^3.0.6",
+		"axios": "^1.11.0",
 		"js-cookie": "^3.0.5",
 		"new-component": "^6.0.0",
 		"next": "15.3.4",
+		"openai": "^5.11.0",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-feather": "^2.0.10",
 		"react-hook-form": "^7.61.1",
+		"server-only": "^0.0.1",
 		"styled-components": "^6.1.19",
+		"swr": "^2.3.4",
 		"zod": "^4.0.14"
 	},
 	"devDependencies": {
