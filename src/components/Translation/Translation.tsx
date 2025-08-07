@@ -2,33 +2,101 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
-import Textarea from '@/components/Textarea';
-import TextareaActionButtons from '@/components/TextareaActionButtons';
 import Button from '@/components/Button';
+import useSWRMutation from 'swr/mutation';
+import { postFetcher } from '@/lib';
+import { handleError } from '@/utils';
+import EditTranslation from '@/components/Translation/EditTranslation';
+import { useSentenceDataProvider } from '@/components/SentenceDataProvider';
 
-// TODO match the position of translation text and textarea input text
+interface TranslationResponse {
+	result: string;
+}
 
-function Translation({ title }: { title: React.ReactNode }) {
+interface TranslationArg {
+	sentence: string;
+}
+
+var url = '/api/translation';
+
+function Translation({ title, sentence }: { title: React.ReactNode; sentence: string }) {
+	// consume the context provider, get locally saved translation text
+	let {
+		isLocalDataLoading,
+		updateTranslation,
+		sentenceData: { translation: localTranslation },
+	} = useSentenceDataProvider();
+
+	// display translation text
+	let translationEle = React.useRef<React.ReactNode | null>(null);
+
+	// when there is no local translation text or you want to fetch new translation, fetch from api route
+	let { trigger, data, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, TranslationArg>(url, postFetcher);
+
+	if (localTranslation) {
+		translationEle.current = localTranslation;
+	} else {
+		if (isMutating || isLocalDataLoading) {
+			translationEle.current = <LoadingText>Loading...</LoadingText>;
+		} else {
+			if (data) {
+				translationEle.current = data.result;
+			} else if (error) {
+				translationEle.current = <ErrorText>{handleError(error)}</ErrorText>;
+			}
+		}
+	}
+
+	React.useEffect(() => {
+		async function activateTrigger() {
+			let data = await trigger({ sentence });
+			updateTranslation(data.result);
+		}
+
+		if (!localTranslation && !isLocalDataLoading) {
+			activateTrigger();
+		}
+	}, [sentence, trigger, updateTranslation, localTranslation, isLocalDataLoading]);
+
+	async function retryTranslate() {
+		reset();
+
+		// to let the loading indicator reappear
+		updateTranslation('');
+
+		let data = await trigger({ sentence });
+		updateTranslation(data.result);
+	}
+
+	// control the entering of editing state
 	let [isEditing, setIsEditing] = React.useState(false);
+	function cancelEditing() {
+		setIsEditing(false);
+	}
+
+	// pass to EditTranslation
+	let translationText = localTranslation ? localTranslation : data ? data.result : '';
 
 	return (
 		<>
 			{title}
 			{isEditing ? (
-				<>
-					{/* <Textarea /> */}
-					<TextareaActionButtons />
-				</>
+				<EditTranslation translationText={translationText} cancelEditing={cancelEditing} />
 			) : (
-				<TranslationText>
-					如果时间是一条河，我愿永远在你微笑的河流中航行， 被你心中那温柔的引力所承载。
-					<EditButton variant='icon' onClick={() => setIsEditing(true)} style={{ '--icon-size': '16px' } as React.CSSProperties}>
-						<Icon id='edit' size={16} />
-						<VisuallyHidden>Edit Translation Text</VisuallyHidden>
-					</EditButton>
-				</TranslationText>
+				<>
+					<TranslationText>{translationEle.current}</TranslationText>
+					<ButtonWrapper>
+						<Button variant='fill' onClick={() => setIsEditing(true)} disabled={isLocalDataLoading || isMutating}>
+							<EditIcon id='edit' size={16} />
+							&nbsp;Edit
+						</Button>
+						<Button variant='fill' onClick={retryTranslate} disabled={isLocalDataLoading || isMutating}>
+							<Icon id='retry' size={16} />
+							&nbsp;Retry
+						</Button>
+					</ButtonWrapper>
+				</>
 			)}
 		</>
 	);
@@ -37,14 +105,23 @@ function Translation({ title }: { title: React.ReactNode }) {
 export default Translation;
 
 var TranslationText = styled.p``;
+var ButtonWrapper = styled.span`
+	align-self: flex-end;
+	display: flex;
+	gap: 5px;
+`;
 
-var EditButton = styled(Button)`
-	--hover-bg-color: var(--bg-tertiary);
+var LoadingText = styled.span`
+	color: var(--text-tertiary);
+	transform: translateX(3px);
 	display: inline-block;
-	margin-left: 3px;
-	vertical-align: -2.5px;
-	/* to make sure the icon has the same height as the text */
-	padding: calc((1.5 * 16px - var(--icon-size)) / 2);
-	/* for optical alignment */
-	padding-right: 3px;
+	margin-right: 15px;
+`;
+var ErrorText = styled.span`
+	color: var(--text-status-warning);
+`;
+
+var EditIcon = styled(Icon)`
+	/* optical alignment */
+	transform: translateY(-0.5px);
 `;

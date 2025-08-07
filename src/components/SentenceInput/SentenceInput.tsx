@@ -17,7 +17,8 @@ import { useReadLocalStorage } from '@/hooks';
 // TODO input retains when canceling and navigating back
 
 function SentenceInput() {
-	let savedSentence = useReadLocalStorage('user-input');
+	let [savedSentence] = useReadLocalStorage<string>('user-input');
+	let router = useRouter();
 	let {
 		watch,
 		setValue,
@@ -29,12 +30,18 @@ function SentenceInput() {
 		resolver: zodResolver(UserInputSchema),
 		reValidateMode: 'onSubmit',
 		values: { 'user-input': savedSentence.current || '' },
+		shouldFocusError: false,
 	});
-	let router = useRouter();
 
 	let userInput = watch('user-input');
+	let { ref, ...rest } = register('user-input', {
+		onChange: () => {
+			clearErrors('user-input');
+		},
+	});
 
 	function clearInput() {
+		clearErrors('user-input');
 		setValue('user-input', '');
 		updateLocalStorage('delete', 'user-input');
 	}
@@ -53,16 +60,7 @@ function SentenceInput() {
 	return (
 		<Wrapper onSubmit={handleSubmit(onSubmit)}>
 			<Spacer size={4} />
-			<Textarea
-				placeholder='Enter or paste in a sentence.'
-				clearInput={clearInput}
-				{...register('user-input', {
-					onChange: () => {
-						clearErrors('user-input');
-					},
-				})}
-				value={userInput}
-			/>
+			<Textarea placeholder='Enter or paste in a sentence.' clearInput={clearInput} {...rest} ref={ref} value={userInput} />
 			<ActionButtons handlePaste={handlePaste} submitDisabled={!!errors['user-input']} />
 			{errors['user-input'] && <Toast content={errors['user-input'].message} />}
 		</Wrapper>

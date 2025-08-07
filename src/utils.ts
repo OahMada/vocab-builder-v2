@@ -1,4 +1,5 @@
 import axios from 'axios';
+import z, { ZodError } from 'zod';
 
 export function handleError(error: unknown): string {
 	let message: string;
@@ -25,4 +26,9 @@ export function handleAxiosError(error: unknown) {
 
 export async function delay(time: number) {
 	await new Promise((resolve) => setTimeout(resolve, time));
+}
+
+export function handleZodError<T>(error: ZodError<T>) {
+	let flattenedError = z.flattenError(error);
+	return flattenedError.fieldErrors;
 }

@@ -11,15 +11,14 @@ import Button from '@/components/Button';
 // TODO restrict the length of the inputted text
 
 interface TextAreaProps {
-	onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 	clearInput: () => void;
 	value: string;
 }
 
-function Textarea({ value, onChange, clearInput, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
+function Textarea({ value, clearInput, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
 	return (
 		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
-			<InputArea as='textarea' {...delegated} onChange={onChange} rows={1} autoFocus={true} />
+			<InputArea as='textarea' {...delegated} rows={1} autoFocus={true} />
 			<Overlay aria-hidden='true'>{value + ' '}</Overlay>
 			{value && (
 				<ClearButton variant='icon' onClick={clearInput}>
@@ -45,13 +44,13 @@ var Wrapper = styled.div`
 
 var Base = styled.div`
 	padding: var(--vertical-padding) var(--horizontal-padding);
+	padding-right: calc(var(--icon-dimension) + var(--horizontal-padding));
 	width: 100%;
 	grid-area: 1 / 1 / 2 / 2;
 	margin: 0;
 `;
 
 var InputArea = styled(Base)`
-	padding-right: calc(var(--icon-dimension) + var(--horizontal-padding));
 	border-radius: inherit;
 	resize: none;
 	border: none;

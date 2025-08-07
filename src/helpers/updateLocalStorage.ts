@@ -1,9 +1,8 @@
-export function updateLocalStorage(action: 'save', key: string, value: string): void;
+export function updateLocalStorage<T>(action: 'save', key: string, value: T): void;
 export function updateLocalStorage(action: 'delete', key: string): void;
-export function updateLocalStorage(action: 'save' | 'delete', key: string, value?: string) {
+export function updateLocalStorage<T>(action: 'save' | 'delete', key: string, value?: T) {
 	let raw = window.localStorage.getItem('vocab-builder');
 	let data = raw ? JSON.parse(raw) : {};
-	let returnValue: string | undefined;
 
 	switch (action) {
 		case 'save':
@@ -18,6 +17,4 @@ export function updateLocalStorage(action: 'save' | 'delete', key: string, value
 			}
 			break;
 	}
-
-	return returnValue;
 }

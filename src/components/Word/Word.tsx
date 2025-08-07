@@ -8,8 +8,6 @@ import PhoneticSymbol from './PhoneticSymbol';
 import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
 import Toast from '@/components/Toast';
-import Icon from '@/components/Icon';
-import VisuallyHidden from '@/components/VisuallyHidden';
 import Loading from '@/components/Loading';
 
 type WordProps = React.ComponentProps<'span'> & { segment: string; isWord: boolean };

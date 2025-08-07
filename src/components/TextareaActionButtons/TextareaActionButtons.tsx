@@ -6,14 +6,20 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import Button from '@/components/Button';
 
-function TextareaActionButtons() {
+function TextareaActionButtons({
+	handleCancel,
+	handleSubmit,
+}: {
+	handleCancel: () => void;
+	handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+}) {
 	return (
 		<Wrapper>
-			<CancelButton variant='outline'>
+			<CancelButton variant='outline' onClick={handleCancel}>
 				<Icon id='x' />
 				<VisuallyHidden>Cancel</VisuallyHidden>
 			</CancelButton>
-			<AcceptButton variant='outline'>
+			<AcceptButton variant='outline' onClick={handleSubmit}>
 				<Icon id='accept' />
 				<VisuallyHidden>Accept</VisuallyHidden>
 			</AcceptButton>
