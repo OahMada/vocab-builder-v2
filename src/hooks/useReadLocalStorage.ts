@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-export function useReadLocalStorage<T>(key: string): [React.RefObject<T | undefined>, React.RefObject<boolean>] {
-	let returnValueRef = React.useRef<T | undefined>(undefined);
-	let loadingRef = React.useRef(true);
+export function useReadLocalStorage<T>(key: string): [T | undefined, boolean] {
+	let [returnValue, setReturnValue] = React.useState<T | undefined>(undefined);
+	let [isLoading, setIsLoading] = React.useState(true);
 
 	React.useEffect(() => {
 		let raw = window.localStorage.getItem('vocab-builder');
 		let data = raw ? JSON.parse(raw) : {};
 
-		returnValueRef.current = key in data ? data[key] : undefined;
-		loadingRef.current = false;
+		setReturnValue(key in data ? data[key] : undefined);
+		setIsLoading(false);
 	}, [key]);
 
-	return [returnValueRef, loadingRef];
+	return [returnValue, isLoading];
 }

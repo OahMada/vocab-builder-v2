@@ -14,7 +14,7 @@ export var UserInputSchema = z.object({
 					error: 'The sentence should be at least 5 characters long.',
 				})
 				.max(300, {
-					error: 'The sentence should be no longer than 500 characters.',
+					error: 'The sentence should be no longer than 300 characters.',
 				})
 		),
 });
@@ -41,11 +41,19 @@ export var SentenceToTranslateSchema = z.object({
 			error: 'The sentence should be at least 5 characters long.',
 		})
 		.max(300, {
-			error: 'The sentence should be no longer than 500 characters.',
+			error: 'The sentence should be no longer than 300 characters.',
 		}),
 });
 
 export var TranslationTextSchema = z.object({
-	'translation-text': z.string().trim().min(1, { error: 'The translation text should be at least 1 character long.' }),
+	'translation-text': z.string().trim().min(5),
 });
-export type TranslationText = z.infer<typeof TranslationTextSchema>;
+export type TranslationType = z.infer<typeof TranslationTextSchema>;
+
+export var NoteSchema = z.object({
+	note: z.string().trim().max(500, {
+		error: 'The note text should be no longer than 500 characters.',
+	}),
+});
+
+export type NoteType = z.infer<typeof NoteSchema>;

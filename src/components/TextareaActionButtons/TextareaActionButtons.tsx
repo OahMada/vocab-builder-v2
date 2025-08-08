@@ -9,9 +9,11 @@ import Button from '@/components/Button';
 function TextareaActionButtons({
 	handleCancel,
 	handleSubmit,
+	submitDisabled,
 }: {
 	handleCancel: () => void;
 	handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+	submitDisabled: boolean;
 }) {
 	return (
 		<Wrapper>
@@ -19,7 +21,7 @@ function TextareaActionButtons({
 				<Icon id='x' />
 				<VisuallyHidden>Cancel</VisuallyHidden>
 			</CancelButton>
-			<AcceptButton variant='outline' onClick={handleSubmit}>
+			<AcceptButton variant='outline' onClick={handleSubmit} disabled={submitDisabled}>
 				<Icon id='accept' />
 				<VisuallyHidden>Accept</VisuallyHidden>
 			</AcceptButton>

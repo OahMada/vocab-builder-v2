@@ -8,7 +8,8 @@
 		"start": "next start",
 		"start:local": "next start -p 4000",
 		"analyze": "ANALYZE=true npm run build",
-		"lint": "next lint"
+		"lint": "next lint",
+		"ngrok": "ngrok http 3000"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.2.1",

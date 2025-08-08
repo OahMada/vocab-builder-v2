@@ -12,6 +12,8 @@ import Spacer from '@/components/Spacer';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import { getCookie } from '@/helpers/getCookie';
 import SentenceDataProvider from '@/components/SentenceDataProvider';
+import NoteTextProvider from '@/components/NoteTextProvider';
+import TranslationTextProvider from '@/components/TranslationTextProvider';
 
 export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',
@@ -35,20 +37,22 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 	}
 
 	return (
-		<SentenceDataProvider>
-			<MaxWidthWrapper>
-				<Wrapper $position='flex-start'>
-					<CardWrapper>
-						<WordListing title={<Title>Your Sentence</Title>} sentence={sentence} />
-					</CardWrapper>
-					<CardWrapper>
-						<Translation title={<Title>Translation</Title>} sentence={sentence} />
-					</CardWrapper>
-					<Note title={<Title>Note</Title>} />
-					<Spacer size={1} />
-					<SentenceActions />
-				</Wrapper>
-			</MaxWidthWrapper>
-		</SentenceDataProvider>
+		<TranslationTextProvider>
+			<NoteTextProvider>
+				<MaxWidthWrapper>
+					<Wrapper $position='flex-start'>
+						<CardWrapper>
+							<WordListing title={<Title>Your Sentence</Title>} sentence={sentence} />
+						</CardWrapper>
+						<CardWrapper>
+							<Translation title={<Title>Translation</Title>} sentence={sentence} />
+						</CardWrapper>
+						<Note title={<Title>Note</Title>} />
+						<Spacer size={1} />
+						<SentenceActions />
+					</Wrapper>
+				</MaxWidthWrapper>
+			</NoteTextProvider>
+		</TranslationTextProvider>
 	);
 }
