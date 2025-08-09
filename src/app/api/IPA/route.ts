@@ -14,6 +14,8 @@ export async function POST(request: NextRequest) {
 	}
 
 	// await delay(2000);
+	// return NextResponse.json({ error: 'Failed to generate IPA.' }, { status: 500 });
+
 	return NextResponse.json({ result: '/ˈmɔːrnɪŋ/' }, { status: 200 });
 
 	try {
@@ -25,6 +27,6 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ result: response.output_text });
 	} catch (error) {
 		handleOpenAIError(error);
-		return NextResponse.json({ error: 'Failed to generate response' }, { status: 500 });
+		return NextResponse.json({ error: 'Failed to generate IPA' }, { status: 500 });
 	}
 }

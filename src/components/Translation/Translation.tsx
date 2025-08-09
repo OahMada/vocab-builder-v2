@@ -22,42 +22,23 @@ var url = '/api/translation';
 
 function Translation({ title, sentence }: { title: React.ReactNode; sentence: string }) {
 	// consume the context provider, get locally saved translation text
-	let { isLocalDataLoading, updateTranslation, translation: localTranslation } = useTranslationTextContext();
-
-	// display translation text
-	let translationEle: React.ReactNode;
+	let { isLocalDataLoading, updateTranslation, translation } = useTranslationTextContext();
 
 	// when there is no local translation text or you want to fetch new translation, fetch from api route
-	let { trigger, data, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, TranslationArg>(url, postFetcher);
-
-	if (localTranslation) {
-		translationEle = localTranslation;
-	} else {
-		if (isMutating || isLocalDataLoading) {
-			translationEle = <LoadingText>Loading...</LoadingText>;
-		} else {
-			if (data) {
-				translationEle = data.result;
-			} else if (error) {
-				translationEle = <ErrorText>{handleError(error)}</ErrorText>;
-			}
-		}
-	}
+	let { trigger, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, TranslationArg>(url, postFetcher);
 
 	React.useEffect(() => {
 		async function activateTrigger() {
 			let data = await trigger({ sentence });
 			updateTranslation(data.result);
 		}
-
-		if (!localTranslation && !isLocalDataLoading) {
+		if (!translation && !isLocalDataLoading) {
 			activateTrigger();
 		}
-	}, [sentence, trigger, updateTranslation, localTranslation, isLocalDataLoading]);
+	}, [sentence, trigger, updateTranslation, translation, isLocalDataLoading]);
 
 	async function retryTranslate() {
 		reset();
-
 		// to let the loading indicator reappear
 		updateTranslation('');
 
@@ -73,14 +54,21 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 		setIsEditing(false);
 	}
 
-	// pass to EditTranslation
-	let translationText = localTranslation ? localTranslation : data ? data.result : '';
+	// display translation text
+	let translationEle: React.ReactNode;
+	if (translation) {
+		translationEle = translation;
+	} else if (isMutating || isLocalDataLoading) {
+		translationEle = <LoadingText>Loading...</LoadingText>;
+	} else if (error) {
+		translationEle = <ErrorText>{handleError(error)}</ErrorText>;
+	}
 
 	return (
 		<>
 			{title}
 			{isEditing ? (
-				<EditTranslation translationText={translationText} cancelEditing={cancelEditing} />
+				<EditTranslation translationText={translation ? translation : ''} cancelEditing={cancelEditing} />
 			) : (
 				<>
 					<TranslationText>{translationEle}</TranslationText>

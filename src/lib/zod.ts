@@ -46,7 +46,7 @@ export var SentenceToTranslateSchema = z.object({
 });
 
 export var TranslationTextSchema = z.object({
-	'translation-text': z.string().trim().min(5),
+	'translation-text': z.string().trim(),
 });
 export type TranslationType = z.infer<typeof TranslationTextSchema>;
 

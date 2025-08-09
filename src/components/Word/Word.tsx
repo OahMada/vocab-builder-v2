@@ -9,51 +9,60 @@ import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
 import Toast from '@/components/Toast';
 import Loading from '@/components/Loading';
+import { useWordsIPAContext } from '@/components/WordsIPAProvider';
 
-type WordProps = React.ComponentProps<'span'> & { segment: string; isWord: boolean };
+type WordComponentProps = React.ComponentProps<'span'> & { piece: string; isWord: boolean; IPA?: string };
 
 interface IPAResponse {
 	result: string;
 }
-
 interface IPAArg {
 	word: string;
 }
 
 var url = '/api/IPA';
 
-function Word({ segment, isWord }: WordProps) {
-	let { trigger, data, error, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher);
+function Word({ piece, isWord, IPA }: WordComponentProps) {
+	let { trigger, error, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher);
+	let { addIPA, removeIPA, isLoadingLocalData } = useWordsIPAContext();
 
-	if (segment === ' ') {
+	if (piece === ' ') {
 		return undefined;
 	}
 
 	async function triggerFetch() {
-		await trigger({ word: segment });
+		let data = await trigger({ word: piece });
+		if (data) {
+			addIPA(piece, data.result);
+		}
+	}
+
+	function handleRemoval() {
+		reset();
+		removeIPA(piece);
 	}
 
 	return isWord ? (
 		<Wrapper>
-			{data ? (
-				<InactiveWordButton>{segment}</InactiveWordButton>
+			{IPA ? (
+				<InactiveWordButton>{piece}</InactiveWordButton>
 			) : (
-				<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating}>
+				<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating || isLoadingLocalData}>
 					{isMutating ? (
 						<>
-							{segment}&nbsp;
-							<Loading description={`load IPA for word ${segment} `} size={14} />
+							{piece}&nbsp;
+							<Loading description={`load IPA for word ${piece} `} size={14} />
 						</>
 					) : (
-						segment
+						piece
 					)}
 				</WordButton>
 			)}
-			{data && <PhoneticSymbol symbol={data.result} onClick={reset} />}
+			{IPA && <PhoneticSymbol symbol={IPA} onClick={handleRemoval} />}
 			{error && <Toast content={handleError(error)} />}
 		</Wrapper>
 	) : (
-		segment
+		piece
 	);
 }
 

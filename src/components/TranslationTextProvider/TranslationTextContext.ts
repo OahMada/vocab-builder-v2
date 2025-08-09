@@ -1,6 +1,8 @@
+'use client';
+
 import * as React from 'react';
 
-export interface TranslationTextContextType {
+interface TranslationTextContextType {
 	translation: string;
 	isLocalDataLoading: boolean;
 	updateTranslation: (note: string) => void;

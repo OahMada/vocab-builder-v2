@@ -14,10 +14,7 @@ import Toast from '@/components/Toast';
 import { setCookie, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';
 
-// TODO input retains when canceling and navigating back
-
 function SentenceInput() {
-	let [savedSentence] = useReadLocalStorage<string>('user-input');
 	let router = useRouter();
 	let {
 		watch,
@@ -29,9 +26,14 @@ function SentenceInput() {
 	} = useForm<UserInput>({
 		resolver: zodResolver(UserInputSchema),
 		reValidateMode: 'onSubmit',
-		values: { 'user-input': savedSentence.current || '' },
 		shouldFocusError: false,
 	});
+
+	function updateInput(text: string) {
+		setValue('user-input', text);
+	}
+
+	useReadLocalStorage<string>('user-input', updateInput);
 
 	let userInput = watch('user-input');
 	let { ref, ...rest } = register('user-input', {
@@ -46,10 +48,6 @@ function SentenceInput() {
 		updateLocalStorage('delete', 'user-input');
 	}
 
-	function handlePaste(clipboard: string) {
-		setValue('user-input', clipboard);
-	}
-
 	function onSubmit(data: UserInput) {
 		// TODO check if sentence already exists
 		setCookie('user-input', data['user-input']);
@@ -61,7 +59,7 @@ function SentenceInput() {
 		<Wrapper onSubmit={handleSubmit(onSubmit)}>
 			<Spacer size={4} />
 			<Textarea placeholder='Enter or paste in a sentence.' clearInput={clearInput} {...rest} ref={ref} value={userInput} />
-			<ActionButtons handlePaste={handlePaste} submitDisabled={!!errors['user-input']} />
+			<ActionButtons handlePaste={updateInput} submitDisabled={!!errors['user-input']} />
 			{errors['user-input'] && <Toast content={errors['user-input'].message} />}
 		</Wrapper>
 	);

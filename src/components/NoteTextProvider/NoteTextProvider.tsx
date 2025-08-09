@@ -8,23 +8,16 @@ import { updateLocalStorage } from '@/helpers';
 function NoteTextProvider({ databaseNote, children }: { databaseNote?: string; children: React.ReactNode }) {
 	let [note, setNote] = React.useState(databaseNote || '');
 
-	let [savedNote] = useReadLocalStorage<string>('note-text');
+	let updateNote = React.useCallback(function updateNote(note: string) {
+		setNote(note);
+	}, []);
 
-	// load previously saved localStorage data
-	React.useEffect(() => {
-		if (savedNote) {
-			setNote(savedNote);
-		}
-	}, [savedNote]);
+	useReadLocalStorage<string>('note-text', updateNote);
 
 	// write changes to local storage
 	React.useEffect(() => {
 		updateLocalStorage<string>('save', 'note-text', note);
 	}, [note]);
-
-	let updateNote = React.useCallback(function (note: string) {
-		setNote(note);
-	}, []);
 
 	let value = React.useMemo(
 		() => ({
@@ -37,11 +30,3 @@ function NoteTextProvider({ databaseNote, children }: { databaseNote?: string; c
 	return <NoteTextContext.Provider value={value}>{children}</NoteTextContext.Provider>;
 }
 export default NoteTextProvider;
-
-export function useNoteTextContext() {
-	let result = React.useContext(NoteTextContext);
-	if (!result) {
-		throw new Error('useNoteTextContext has to be used within <NoteTextContext.Provider>');
-	}
-	return result;
-}

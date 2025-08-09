@@ -8,8 +8,6 @@ import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Button from '@/components/Button';
 
-// TODO restrict the length of the inputted text
-
 interface TextAreaProps {
 	clearInput: () => void;
 	value: string;

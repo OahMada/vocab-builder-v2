@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ error: errors.sentence![0] }, { status: 400 });
 	}
 	await delay(2000);
-	// return NextResponse.json({ error: 'Failed to generate response.' }, { status: 500 });
+	// return NextResponse.json({ error: 'Failed to generate translation text.' }, { status: 500 });
 	return NextResponse.json({ result: '默认情况下，SWR 库中的 useSWRMutation 不会在组件挂载时自动触发 mutation。' });
 
 	try {
@@ -28,6 +28,6 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ result: response.output_text });
 	} catch (error) {
 		handleOpenAIError(error);
-		return NextResponse.json({ error: 'Failed to generate response.' }, { status: 500 });
+		return NextResponse.json({ error: 'Failed to generate translation text.' }, { status: 500 });
 	}
 }

@@ -3,15 +3,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Word from '@/components/Word';
-import { segmentSentence } from '@/helpers';
 import DescriptionText from '@/components/DescriptionText';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/Popover';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Button from '@/components/Button';
+import { useWordsIPAContext } from '@/components/WordsIPAProvider';
 
-function WordListing({ title, sentence }: { title: React.ReactNode; sentence: string }) {
-	let segmentedSentence = segmentSentence(sentence);
+function WordListing({ title }: { title: React.ReactNode }) {
+	let { words } = useWordsIPAContext();
+
 	return (
 		<>
 			<TitleWrapper>
@@ -29,8 +30,8 @@ function WordListing({ title, sentence }: { title: React.ReactNode; sentence: st
 				</Popover>
 			</TitleWrapper>
 			<WordWrapper>
-				{segmentedSentence.map((item) => {
-					return <Word key={item.id} segment={item.segment} isWord={item.isWordLike!} />;
+				{words.map((item) => {
+					return <Word key={item.id} piece={item.piece} isWord={item.isWord} IPA={item.isWord ? item.IPA : undefined} />;
 				})}
 			</WordWrapper>
 		</>

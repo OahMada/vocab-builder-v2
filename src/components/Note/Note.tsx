@@ -15,7 +15,7 @@ import { useNoteTextContext } from '@/components/NoteTextProvider';
 
 function Note({ title }: { title: React.ReactNode }) {
 	let [isAddingNote, setIsAddingNote] = React.useState(false);
-	let { note: localNote, updateNote } = useNoteTextContext();
+	let { note, updateNote } = useNoteTextContext();
 
 	let {
 		register,
@@ -27,7 +27,7 @@ function Note({ title }: { title: React.ReactNode }) {
 	} = useForm<NoteType>({
 		resolver: zodResolver(NoteSchema),
 		reValidateMode: 'onSubmit',
-		values: { note: localNote },
+		values: { note },
 	});
 
 	let noteValue = watch('note');
@@ -69,10 +69,10 @@ function Note({ title }: { title: React.ReactNode }) {
 			</CardWrapper>
 			{errors.note && <Toast content={errors.note.message} />}
 		</>
-	) : localNote ? (
+	) : note ? (
 		<CardWrapper>
 			{title}
-			<NoteText>{localNote}</NoteText>
+			<NoteText>{note}</NoteText>
 			<EditButton variant='fill' onClick={startEditing}>
 				<EditIcon id='edit' size={16} />
 				&nbsp;Edit
@@ -93,7 +93,9 @@ var AddNoteButton = styled(Button)`
 	--hover-bg-color: var(--bg-secondary-hover);
 `;
 
-var NoteText = styled.p``;
+var NoteText = styled.p`
+	white-space: pre-wrap;
+`;
 
 var EditButton = styled(Button)`
 	align-self: flex-end;

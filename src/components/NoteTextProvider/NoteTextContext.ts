@@ -1,6 +1,8 @@
+'use client';
+
 import * as React from 'react';
 
-export interface NoteTextContextType {
+interface NoteTextContextType {
 	note: string;
 	updateNote: (note: string) => void;
 }
