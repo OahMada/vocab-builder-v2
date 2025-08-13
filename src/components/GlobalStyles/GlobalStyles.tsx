@@ -92,6 +92,21 @@ html {
     -0.1px 21.5px 19.4px -2.9px hsl(var(--shadow-color) / 0.23),
     -0.2px 34.8px 31.3px -3.4px hsl(var(--shadow-color) / 0.19),
     -0.4px 53.3px 48px -4px hsl(var(--shadow-color) / 0.15);
+
+    /* Official styles (Firefox) */
+  scrollbar-color:
+  var(--bg-tertiary)
+  transparent;
+  scrollbar-width: thin;
+  
+}
+
+/* Vendor prefix for other browsers */
+::-webkit-scrollbar {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--bg-tertiary);
 }
 
 body {

@@ -81,7 +81,7 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 				width: 100%;
 				border-top-left-radius: 16px;
 				border-top-right-radius: 16px;
-				padding-bottom: 30px;
+				padding-bottom: 20px;
 			`;
 		}
 	}}
@@ -90,6 +90,7 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 	flex-direction: column;
 	gap: 12px;
 	box-shadow: var(--shadow-elevation-high);
+	isolation: isolate;
 `;
 
 var CloseButton = styled(Button)`

@@ -54,6 +54,7 @@ var Wrapper = styled.div`
 var DeleteAccountButton = styled(Button)`
 	--text-color: var(--text-status-warning);
 	margin-top: auto;
+	margin-bottom: 16px;
 `;
 
 var Label = styled.label`

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import WordsIPAContext from './WordIPAContext';
-import { Action, WordsType } from './type';
+import { Action, WordsType } from './types';
 import { produce } from 'immer';
 import { segmentSentence, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';

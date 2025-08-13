@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { WordsIPAContextType } from './type';
+import { WordsIPAContextType } from './types';
 
 var WordsIPAContext = React.createContext<WordsIPAContextType | null>(null);
 

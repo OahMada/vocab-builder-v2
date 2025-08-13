@@ -8,6 +8,8 @@ if (!apiKey) {
 
 var openaiClient = new OpenAI({
 	apiKey,
+	timeout: 10000,
+	maxRetries: 1,
 });
 
 export default openaiClient;
@@ -18,6 +20,8 @@ export function handleOpenAIError(err: unknown) {
 		console.log(err.status); // 400
 		console.log(err.name); // BadRequestError
 		console.log(err.headers); // {server: 'nginx', ...}
+		console.log(err.message);
+		console.log(err.cause);
 	} else {
 		console.log(handleError(err));
 	}

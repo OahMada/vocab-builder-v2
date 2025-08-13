@@ -58,8 +58,8 @@ interface IconProps {
 	strokeWidth?: number;
 }
 
-const Icon = ({ id, size = 18, strokeWidth = 1, ...delegated }: IconProps & React.ComponentProps<'div'>) => {
-	const Component = icons[id];
+function Icon({ id, size = 18, strokeWidth = 1, ...delegated }: IconProps & React.ComponentProps<'div'>) {
+	let Component = icons[id];
 
 	if (!Component) {
 		throw new Error(`No icon found for ID: ${id}`);
@@ -78,9 +78,9 @@ const Icon = ({ id, size = 18, strokeWidth = 1, ...delegated }: IconProps & Reac
 			<Component color='currentColor' size={size} />
 		</Wrapper>
 	);
-};
+}
 
-const Wrapper = styled.div`
+var Wrapper = styled.div`
 	width: var(--size);
 	height: var(--size);
 

@@ -13,10 +13,10 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ error: errors.word![0] }, { status: 400 });
 	}
 
-	// await delay(2000);
-	// return NextResponse.json({ error: 'Failed to generate IPA.' }, { status: 500 });
+	await delay(2000);
+	return NextResponse.json({ error: 'Failed to generate IPA.' }, { status: 500 });
 
-	return NextResponse.json({ result: '/ˈmɔːrnɪŋ/' }, { status: 200 });
+	// return NextResponse.json({ result: '/ˈmɔːrnɪŋ/' }, { status: 200 });
 
 	try {
 		let response = await openaiClient.responses.create({

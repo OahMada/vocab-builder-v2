@@ -57,3 +57,11 @@ export var NoteSchema = z.object({
 });
 
 export type NoteType = z.infer<typeof NoteSchema>;
+
+export var QuestionTextSchema = z.object({
+	question: z.string().trim().min(3, {
+		error: 'The question text should be at least 3 characters long.',
+	}),
+});
+
+export type QuestionTextType = z.infer<typeof QuestionTextSchema>;

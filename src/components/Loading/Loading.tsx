@@ -5,10 +5,10 @@ import styled, { keyframes } from 'styled-components';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 
-function Loading({ description, size = 18 }: { description: string; size?: number }) {
+function Loading({ description, ...delegated }: { description: string; size?: number } & Omit<React.ComponentProps<typeof Icon>, 'id'>) {
 	return (
 		<>
-			<LoadingIcon size={size} id='load' />
+			<LoadingIcon id='load' {...delegated} />
 			<VisuallyHidden>{description}</VisuallyHidden>
 		</>
 	);
