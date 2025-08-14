@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SentenceToTranslateSchema } from '@/lib';
 import openaiClient, { handleOpenAIError } from '../openai';
-import { delay, handleError, handleZodError } from '@/utils';
+import { delay, handleZodError } from '@/utils';
 
 // TODO load language setting from user setting
 

@@ -26,12 +26,6 @@ export async function POST(request: NextRequest) {
 			system: `The user is gonna ask you a question about this specific sentence: ${sentenceResult.data.sentence}. Answer the question in the context of the sentence. You do not do anything else. Also don't repeat the sentence in your response.`,
 			prompt: questionResult.data.question,
 			abortSignal: request.signal,
-			onAbort: ({ steps }) => {
-				console.log('Stream aborted after', steps.length, 'steps');
-			},
-			onError: (error) => {
-				console.log('error', error);
-			},
 		});
 
 		return result.toUIMessageStreamResponse();

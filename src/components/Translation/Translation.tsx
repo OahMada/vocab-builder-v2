@@ -39,8 +39,6 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 
 	async function retryTranslate() {
 		reset();
-		// to let the loading indicator reappear
-		updateTranslation('');
 
 		let data = await trigger({ sentence });
 		if (data) {
@@ -71,7 +69,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 				<EditTranslation translationText={translation ? translation : ''} cancelEditing={cancelEditing} />
 			) : (
 				<>
-					<TranslationText>{translationEle}</TranslationText>
+					<TranslationText $isLoading={isMutating}>{translationEle}</TranslationText>
 					<ButtonWrapper>
 						<Button variant='fill' onClick={() => setIsEditing(true)} disabled={isLocalDataLoading || isMutating}>
 							<EditIcon id='edit' size={16} />
@@ -90,7 +88,9 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 
 export default React.memo(Translation);
 
-var TranslationText = styled.p``;
+var TranslationText = styled.p<{ $isLoading: boolean }>`
+	opacity: ${({ $isLoading }) => ($isLoading ? 0.6 : 1)};
+`;
 var ButtonWrapper = styled.span`
 	align-self: flex-end;
 	display: flex;

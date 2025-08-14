@@ -15,16 +15,16 @@ interface AskAQuestionProps {
 }
 
 function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
-	let scrollRef = React.useRef<HTMLDivElement>(null);
 	let [errorMsg, setErrorMsg] = React.useState('');
 	let { complete, isLoading, completion, setCompletion } = useCompletion({
 		api: '/api/ask-anything',
 		onError: (error) => {
+			// silence abort error
+			if (error.name === 'TypeError' && error.message === 'network error') return;
 			let msg = handleError(error);
 			setErrorMsg(msg);
 		},
 	});
-
 	function triggerComplete(text: string) {
 		if (errorMsg) {
 			setErrorMsg('');
@@ -39,7 +39,9 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 	}
 
 	function onClearInput() {
-		stop();
+		if (isLoading) {
+			stop();
+		}
 		setCompletion('');
 		setErrorMsg('');
 	}
@@ -50,9 +52,7 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 			<QuestionInput triggerComplete={triggerComplete} updateError={updateError} onClearInput={onClearInput} submitDisabled={isLoading} />
 			<SmallHeading>Answer:</SmallHeading>
 			<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
-				<AnswerText ref={scrollRef} id='scroll-container'>
-					{completion}
-				</AnswerText>
+				<AnswerText>{completion}</AnswerText>
 				{errorMsg && <ErrorText>{errorMsg}</ErrorText>}
 				{isLoading && <AnswerLoading description='loading answer to the question' />}
 			</AnswerBox>
@@ -77,7 +77,7 @@ var AnswerBox = styled.div`
 	padding: 12px;
 	overflow: auto;
 	max-height: 30dvh;
-	min-height: 5rem;
+	min-height: 30dvh;
 	scrollbar-gutter: stable;
 `;
 

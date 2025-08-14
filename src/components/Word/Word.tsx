@@ -11,7 +11,7 @@ import Toast from '@/components/Toast';
 import Loading from '@/components/Loading';
 import { useWordsIPAContext } from '@/components/WordsIPAProvider';
 
-type WordComponentProps = React.ComponentProps<'span'> & { piece: string; isWord: boolean; IPA?: string };
+type WordComponentProps = React.ComponentProps<'span'> & { piece: string; isWord: boolean; IPA?: string; id: string };
 
 interface IPAResponse {
 	result: string;
@@ -22,7 +22,7 @@ interface IPAArg {
 
 var url = '/api/IPA';
 
-function Word({ piece, isWord, IPA }: WordComponentProps) {
+function Word({ piece, isWord, IPA, id }: WordComponentProps) {
 	let { trigger, error, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher);
 	let { addIPA, removeIPA, isLoadingLocalData } = useWordsIPAContext();
 
@@ -33,13 +33,13 @@ function Word({ piece, isWord, IPA }: WordComponentProps) {
 	async function triggerFetch() {
 		let data = await trigger({ word: piece });
 		if (data) {
-			addIPA(piece, data.result);
+			addIPA({ text: piece, IPA: data.result, id });
 		}
 	}
 
 	function handleRemoval() {
 		reset();
-		removeIPA(piece);
+		removeIPA({ word: piece, id });
 	}
 
 	return isWord ? (

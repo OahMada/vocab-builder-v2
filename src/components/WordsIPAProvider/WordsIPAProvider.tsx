@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import WordsIPAContext from './WordIPAContext';
-import { Action, WordsType } from './types';
+import { Action, WordsType, RemoveIPAParams, AddIPAParams } from './types';
 import { produce } from 'immer';
 import { segmentSentence, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';
@@ -13,14 +13,15 @@ function reducer(state: WordsType, action: Action) {
 			case 'addIPA':
 				let { word, IPA } = action.payload;
 				for (let item of draft) {
-					if (item.piece === word && item.isWord) {
+					if (item.piece === word.text && item.id === word.id && item.isWord) {
 						item.IPA = IPA;
 					}
 				}
 				break;
 			case 'removeIPA':
 				for (let item of draft) {
-					if (item.piece === action.payload && item.isWord) {
+					let { word, id } = action.payload;
+					if (item.piece === word && item.isWord && item.id === id) {
 						item.IPA = '';
 					}
 				}
@@ -52,20 +53,26 @@ function WordsIPAProvider({ databaseWords, newSentence, children }: { databaseWo
 		updateLocalStorage<WordsType>('save', 'words', words);
 	}, [words]);
 
-	let addIPA = React.useCallback(function (word: string, IPA: string) {
+	let addIPA = React.useCallback(function ({ text, id, IPA }: AddIPAParams) {
 		dispatch({
 			type: 'addIPA',
 			payload: {
-				word,
+				word: {
+					text,
+					id,
+				},
 				IPA,
 			},
 		});
 	}, []);
 
-	let removeIPA = React.useCallback(function (word: string) {
+	let removeIPA = React.useCallback(function ({ word, id }: RemoveIPAParams) {
 		dispatch({
 			type: 'removeIPA',
-			payload: word,
+			payload: {
+				word,
+				id,
+			},
 		});
 	}, []);
 
