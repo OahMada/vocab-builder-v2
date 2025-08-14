@@ -9,6 +9,7 @@ import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
 import EditTranslation from '@/components/Translation/EditTranslation';
 import { useTranslationTextContext } from '@/components/TranslationTextProvider';
+import Toast from '@/components/Toast';
 
 interface TranslationResponse {
 	result: string;
@@ -52,6 +53,11 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 		setIsEditing(false);
 	}
 
+	function startEditing() {
+		reset();
+		setIsEditing(true);
+	}
+
 	// display translation text
 	let translationEle: React.ReactNode;
 	if (translation) {
@@ -71,7 +77,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 				<>
 					<TranslationText $isLoading={isMutating}>{translationEle}</TranslationText>
 					<ButtonWrapper>
-						<Button variant='fill' onClick={() => setIsEditing(true)} disabled={isLocalDataLoading || isMutating}>
+						<Button variant='fill' onClick={startEditing} disabled={isLocalDataLoading || isMutating}>
 							<EditIcon id='edit' size={16} />
 							&nbsp;Edit
 						</Button>
@@ -82,6 +88,8 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 					</ButtonWrapper>
 				</>
 			)}
+			{/* to show the retry errors */}
+			{translation && error && <Toast content={handleError(error)} />}
 		</>
 	);
 }

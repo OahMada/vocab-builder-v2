@@ -19,11 +19,12 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 	let { complete, isLoading, completion, setCompletion } = useCompletion({
 		api: '/api/ask-anything',
 		onError: (error) => {
-			// silence abort error. I could not find another way.
+			// to silence the active abort error
 			if (error.name === 'TypeError' && error.message === 'network error') return;
 			let msg = handleError(error);
 			setErrorMsg(msg);
 		},
+		experimental_throttle: 5,
 	});
 	function triggerComplete(text: string) {
 		if (errorMsg) {

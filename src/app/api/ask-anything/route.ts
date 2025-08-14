@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { QuestionTextSchema, SentenceToTranslateSchema } from '@/lib';
+import { openai } from '@ai-sdk/openai';
 import { streamText, simulateReadableStream } from 'ai';
 import { MockLanguageModelV2 } from 'ai/test';
 import { handleZodError } from '@/utils';
@@ -53,8 +54,9 @@ export async function POST(request: NextRequest) {
 		// let result = streamText({
 		// 	model: openai.responses('gpt-4.1'),
 		// 	system: `The user is gonna ask you a question about this specific sentence: ${sentenceResult.data.sentence}. Answer the question in the context of the sentence. You do not do anything else. Also don't repeat the sentence in your response.`,
+		// 	// system: `Answer the question you received.`,
 		// 	prompt: questionResult.data.question,
-		// 	abortSignal: request.signal,
+		// 	abortSignal: AbortSignal.any([AbortSignal.timeout(10000), request.signal]),
 		// });
 
 		return result.toUIMessageStreamResponse();
