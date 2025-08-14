@@ -19,7 +19,7 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 	let { complete, isLoading, completion, setCompletion } = useCompletion({
 		api: '/api/ask-anything',
 		onError: (error) => {
-			// silence abort error
+			// silence abort error. I could not find another way.
 			if (error.name === 'TypeError' && error.message === 'network error') return;
 			let msg = handleError(error);
 			setErrorMsg(msg);
@@ -77,8 +77,8 @@ var AnswerBox = styled.div`
 	padding: 12px;
 	overflow: auto;
 	max-height: 30dvh;
-	min-height: 30dvh;
-	scrollbar-gutter: stable;
+	min-height: 20dvh;
+	/* scrollbar-gutter: stable; */
 `;
 
 var AnswerLoading = styled(Loading)`

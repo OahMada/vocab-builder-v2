@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import * as React from 'react';
+import { redirect } from 'next/navigation';
 
 import Wrapper from '@/components/PageWrapper';
 import WordListing from '@/components/WordListing';
@@ -28,8 +29,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 	if (sentenceId === 'new') {
 		let data = await getCookie('user-input');
 		if (!data) {
-			// TODO need an error boundary? error.tsx in route segment
-			throw new Error('Could not access user-inputted sentence.');
+			redirect('/');
 		}
 		sentence = data;
 	} else {

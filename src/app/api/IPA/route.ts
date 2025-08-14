@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 	await delay(2000);
 	// return NextResponse.json({ error: 'Failed to generate IPA.' }, { status: 500 });
 
-	// return NextResponse.json({ result: '/ˈmɔːrnɪŋ/' }, { status: 200 });
+	return NextResponse.json({ result: '/ˈmɔːrnɪŋ/' }, { status: 200 });
 
 	try {
 		let response = await openaiClient.responses.create({
