@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { WordSchema } from '@/lib';
-import openaiClient, { handleOpenAIError } from '../openai';
 import { delay, handleZodError } from '@/utils';
+import { generateText } from 'ai';
+import { openai } from '@ai-sdk/openai';
 
 export async function POST(request: NextRequest) {
 	let body = await request.json();
@@ -19,14 +20,14 @@ export async function POST(request: NextRequest) {
 	return NextResponse.json({ result: '/ˈmɔːrnɪŋ/' }, { status: 200 });
 
 	try {
-		let response = await openaiClient.responses.create({
-			model: 'gpt-4.1',
-			instructions: 'Provide the IPA or phonetic transcription for each word you receive, and enclose the result in slashes (e.g., /ˈwɜːd/).',
-			input: result.data!.word,
+		let { text } = await generateText({
+			model: openai.responses('gpt-4.1'),
+			system: 'Provide the IPA or phonetic transcription for each word you receive, and enclose the result in slashes (e.g., /ˈwɜːd/).',
+			prompt: result.data?.word,
 		});
-		return NextResponse.json({ result: response.output_text });
+		return NextResponse.json({ result: text });
 	} catch (error) {
-		handleOpenAIError(error);
+		console.error('Generate IPA init error:', error);
 		return NextResponse.json({ error: 'Failed to generate IPA' }, { status: 500 });
 	}
 }

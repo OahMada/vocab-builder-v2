@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { QuestionTextSchema, SentenceToTranslateSchema } from '@/lib';
-import { openai } from '@ai-sdk/openai';
 import { streamText, simulateReadableStream } from 'ai';
 import { MockLanguageModelV2 } from 'ai/test';
 import { handleZodError } from '@/utils';
