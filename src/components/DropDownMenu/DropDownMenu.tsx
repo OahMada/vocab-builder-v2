@@ -27,11 +27,11 @@ export var DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
 	user-select: none;
 
 	&[data-highlighted] {
-		background-color: var(--bg-secondary);
+		background-color: var(--bg-tertiary);
 	}
 
 	&:active {
-		background-color: var(--bg-secondary);
+		background-color: var(--bg-tertiary);
 	}
 
 	/* replaced with a custom background color */
@@ -39,7 +39,7 @@ export var DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
 `;
 
 var Content = styled(DropdownMenuPrimitive.Content)`
-	background-color: var(--bg-popover);
+	background-color: var(--bg-dropdown);
 	box-shadow: var(--shadow-elevation-medium);
 	padding: 8px;
 	border-radius: 12px;
@@ -50,5 +50,5 @@ var Content = styled(DropdownMenuPrimitive.Content)`
 `;
 
 var Arrow = styled(DropdownMenuPrimitive.Arrow)`
-	fill: var(--bg-popover);
+	fill: var(--bg-dropdown);
 `;

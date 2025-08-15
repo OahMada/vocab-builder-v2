@@ -51,7 +51,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 						clearErrors('translation-text');
 					},
 				})}
-				placeholder='Input translation text here.'
+				placeholder='Input translation text here'
 			/>
 			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit)} submitDisabled={!!errors['translation-text']} />
 			{errors['translation-text'] && <Toast content={errors['translation-text'].message} />}

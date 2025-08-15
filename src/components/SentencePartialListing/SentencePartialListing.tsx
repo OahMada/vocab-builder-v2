@@ -1,4 +1,7 @@
+'use client';
+
 import * as React from 'react';
+import styled from 'styled-components';
 import PartialListing from './PartialListing';
 import Spacer from '@/components/Spacer';
 import Wrapper from './Wrapper';
@@ -12,12 +15,20 @@ function SentencePartialListing() {
 		<Wrapper>
 			<Spacer size={10} />
 			<PartialListing />
-			<Button variant='outline' href='/browse'>
+			<ViewAllButton variant='outline' href='/browse'>
 				<Icon id='forward' />
 				&nbsp;View All
-			</Button>
+			</ViewAllButton>
 		</Wrapper>
 	);
 }
 
 export default SentencePartialListing;
+
+var ViewAllButton = styled(Button)`
+	@media (hover: hover) {
+		&:hover {
+			text-decoration: none;
+		}
+	}
+`;

@@ -32,3 +32,12 @@ export function handleZodError<T>(error: ZodError<T>) {
 	let flattenedError = z.flattenError(error);
 	return flattenedError.fieldErrors;
 }
+
+export function isJSON(text: string) {
+	try {
+		JSON.parse(text);
+	} catch {
+		return false;
+	}
+	return true;
+}

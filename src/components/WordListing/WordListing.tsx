@@ -55,7 +55,4 @@ var WordWrapper = styled.div`
 
 var InfoButton = styled(Button)`
 	--hover-bg-color: var(--bg-tertiary);
-
-	/* optical alignment */
-	transform: translateY(1px);
 `;

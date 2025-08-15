@@ -3,10 +3,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useCompletion } from '@ai-sdk/react';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Modal from '@/components/Modal';
 import ModalTitle from './ModalTitle';
 import QuestionInput from './QuestionInput';
-import { handleError } from '@/utils';
+import { isJSON } from '@/utils';
 import Loading from '@/components/Loading';
 
 interface AskAQuestionProps {
@@ -16,12 +18,13 @@ interface AskAQuestionProps {
 
 function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 	let [errorMsg, setErrorMsg] = React.useState('');
-	let { complete, isLoading, completion, setCompletion } = useCompletion({
+	let { complete, isLoading, setCompletion, completion } = useCompletion({
 		api: '/api/ask-anything',
 		onError: (error) => {
 			// to silence the active abort error
 			if (error.name === 'TypeError' && error.message === 'network error') return;
-			let msg = handleError(error);
+
+			let msg = isJSON(error.message) ? JSON.parse(error.message).error : error.message;
 			setErrorMsg(msg);
 		},
 		experimental_throttle: 5,
@@ -53,7 +56,7 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 			<QuestionInput triggerComplete={triggerComplete} updateError={updateError} onClearInput={onClearInput} submitDisabled={isLoading} />
 			<SmallHeading>Answer:</SmallHeading>
 			<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
-				<AnswerText>{completion}</AnswerText>
+				<Markdown remarkPlugins={[remarkGfm]}>{completion}</Markdown>
 				{errorMsg && <ErrorText>{errorMsg}</ErrorText>}
 				{isLoading && <AnswerLoading description='loading answer to the question' />}
 			</AnswerBox>

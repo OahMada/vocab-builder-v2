@@ -55,7 +55,7 @@ export default function QuestionInput({
 		<Wrapper>
 			<Textarea
 				autoFocus={true}
-				placeholder='Input your question.'
+				placeholder='Input your question'
 				value={questionText}
 				{...register('question', {
 					onChange: () => {

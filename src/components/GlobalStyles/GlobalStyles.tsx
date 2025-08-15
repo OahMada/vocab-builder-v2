@@ -55,12 +55,13 @@ html {
   --bg-overlay: hsl(0deg 0% 0% / 85%);
 	--bg-modal: hsl(0deg 0% 7%);
   --bg-popover: hsl(0deg 0% 17%);
+  --bg-dropdown: hsl(0 0% 15%);
   --bg-primary: hsl(0deg 0% 0%);
   --bg-primary-hover: hsl(0deg 0% 9%);
-  --bg-secondary: hsl(0 0% 11%);
+  --bg-secondary: hsl(0 0% 12%);
   --bg-secondary-hover: hsl(0 0% 15%);
-  --bg-tertiary: hsl(0 0% 20%);
-  --bg-tertiary-hover: hsl(0 0% 25%);
+  --bg-tertiary: hsl(0 0% 25%);
+  --bg-tertiary-hover: hsl(0 0% 28%);
   --bg-revert: hsl(0 0% 98%);
   --bg-status-warning: hsl(25 85% 15%);
   --border-light: hsl(0 0% 100% / 5%);
@@ -68,7 +69,7 @@ html {
   --border-status-warning: hsl(25 85% 25%);
   --text-primary: hsl(0 0% 100%);
   --text-secondary: hsl(0 0% 90%);
-  --text-tertiary: hsl(0 0% 60%);
+  --text-tertiary: hsl(0 0% 58%);
   --text-revert: hsl(0 0% 5%);
   --text-status-warning: hsl(20 100% 70%);
 

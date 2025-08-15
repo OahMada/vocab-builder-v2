@@ -63,7 +63,7 @@ function Note({ title }: { title: React.ReactNode }) {
 					})}
 					value={noteValue}
 					clearInput={clearInput}
-					placeholder='Input note text here.'
+					placeholder='Input note text here'
 				/>
 				<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit)} submitDisabled={!!errors.note} />
 			</CardWrapper>
