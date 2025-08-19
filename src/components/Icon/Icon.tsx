@@ -25,6 +25,7 @@ import {
 	ChevronUp,
 	Save,
 	Menu,
+	Pause,
 } from 'react-feather';
 
 const icons = {
@@ -50,6 +51,7 @@ const icons = {
 	'chevron-up': ChevronUp,
 	save: Save,
 	'mobile-menu': Menu,
+	stop: Pause,
 };
 
 interface IconProps {

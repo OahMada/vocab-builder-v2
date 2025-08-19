@@ -7,6 +7,8 @@ import Button from '@/components/Button';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import AskAQuestion from '@/components/AskAQuestion';
+import SentenceAudio from '@/components/SentenceAudio';
+import { ToastProvider, ToastViewport } from '@/components/Toast';
 
 function SentenceActions() {
 	let router = useRouter();
@@ -31,10 +33,7 @@ function SentenceActions() {
 					<Icon id='help' />
 					<VisuallyHidden>Ask Any Questions</VisuallyHidden>
 				</HelpButton>
-				<AudioButton variant='outline'>
-					<Icon id='audio' />
-					<VisuallyHidden>Play sentence audio</VisuallyHidden>
-				</AudioButton>
+				<SentenceAudio />
 				<CancelButton variant='outline' onClick={handleCancel}>
 					<Icon id='x' />
 					&nbsp;Cancel

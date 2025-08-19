@@ -9,12 +9,14 @@ import Note from '@/components/Note';
 import SentenceActions from '@/components/SentenceActions';
 import Title from './Title';
 import CardWrapper from './CardWrapper';
-import Spacer from '@/components/Spacer';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import { getCookie } from '@/helpers/getCookie';
 import NoteTextProvider from '@/components/NoteTextProvider';
 import TranslationTextProvider from '@/components/TranslationTextProvider';
 import WordsIPAProvider from '@/components/WordsIPAProvider';
+import SentenceAudioProvider from '@/components/SentenceAudioProvider';
+import { ToastProvider, ToastViewport } from '@/components/Toast';
+import Spacer from '@/components/Spacer';
 
 export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',
@@ -37,11 +39,12 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 	}
 
 	return (
-		<WordsIPAProvider newSentence={sentence}>
-			<TranslationTextProvider>
-				<NoteTextProvider>
-					<MaxWidthWrapper>
+		<MaxWidthWrapper>
+			<WordsIPAProvider newSentence={sentence}>
+				<TranslationTextProvider>
+					<NoteTextProvider>
 						<Wrapper $position='flex-start'>
+							<Spacer size={0} />
 							<CardWrapper>
 								<WordListing title={<Title>Your Sentence</Title>} />
 							</CardWrapper>
@@ -49,12 +52,17 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 								<Translation title={<Title>Translation</Title>} sentence={sentence} />
 							</CardWrapper>
 							<Note title={<Title>Note</Title>} />
-							<Spacer size={1} />
-							<SentenceActions />
+							<SentenceAudioProvider>
+								<ToastProvider>
+									<ToastViewport $position='top' />
+									<SentenceActions />
+								</ToastProvider>
+							</SentenceAudioProvider>
+							<Spacer size={0} />
 						</Wrapper>
-					</MaxWidthWrapper>
-				</NoteTextProvider>
-			</TranslationTextProvider>
-		</WordsIPAProvider>
+					</NoteTextProvider>
+				</TranslationTextProvider>
+			</WordsIPAProvider>
+		</MaxWidthWrapper>
 	);
 }

@@ -8,7 +8,7 @@ import { updateLocalStorage } from '@/helpers';
 function TranslationTextProvider({ databaseTranslation, children }: { databaseTranslation?: string; children: React.ReactNode }) {
 	let [translation, setTranslation] = React.useState(databaseTranslation || '');
 
-	let updateTranslation = React.useCallback(function updateTranslation(translation: string) {
+	let updateTranslation = React.useCallback(function (translation: string) {
 		setTranslation(translation);
 	}, []);
 

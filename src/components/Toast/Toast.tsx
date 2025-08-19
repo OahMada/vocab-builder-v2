@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
@@ -62,9 +62,19 @@ var CloseButton = styled(Button)`
 `;
 
 export var ToastProvider = ToastPrimitives.Provider;
-export var ToastViewport = styled(ToastPrimitives.Viewport)`
+export var ToastViewport = styled(ToastPrimitives.Viewport)<{ $position: 'top' | 'bottom' }>`
 	position: fixed;
-	bottom: 0;
+	${({ $position }) => {
+		if ($position === 'top') {
+			return css`
+				top: 0;
+			`;
+		} else if ($position === 'bottom') {
+			return css`
+				bottom: 0;
+			`;
+		}
+	}}
 	right: 0;
 	padding: 16px;
 	width: 390px;

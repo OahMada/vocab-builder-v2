@@ -41,3 +41,8 @@ export function isJSON(text: string) {
 	}
 	return true;
 }
+
+export async function base64ToBlob(base64Blob: string) {
+	let audioBlob = await fetch(`data:audio/mpeg;base64,${base64Blob}`).then((r) => r.blob());
+	return audioBlob;
+}

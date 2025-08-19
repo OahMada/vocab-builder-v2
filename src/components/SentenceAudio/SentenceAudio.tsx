@@ -1,0 +1,81 @@
+'use client';
+
+import Button from '@/components/Button';
+import Icon from '@/components/Icon';
+import VisuallyHidden from '@/components/VisuallyHidden';
+import * as React from 'react';
+import styled from 'styled-components';
+import { postFetcher } from '@/lib';
+import useSWRMutation from 'swr/mutation';
+import { useSentenceAudioContext } from '@/components/SentenceAudioProvider';
+import Toast from '@/components/Toast';
+import { handleError, base64ToBlob } from '@/utils';
+import { useAudioPlay } from '@/hooks';
+
+interface TTSResponse {
+	result: string;
+}
+
+var url = '/api/tts';
+
+function SentenceAudio() {
+	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, void>(url, postFetcher);
+	let { isLocalDataLoading, blob, updateBlob } = useSentenceAudioContext();
+	let { isPlaying, playAudio, stopAudio, enableAutoPlay } = useAudioPlay(blob);
+
+	React.useEffect(() => {
+		async function activateTrigger() {
+			let data = await trigger();
+			if (data) {
+				let audioBlob = await base64ToBlob(data.result);
+				updateBlob(audioBlob);
+			}
+		}
+		if (!isLocalDataLoading && !blob) {
+			activateTrigger();
+		}
+	}, [blob, isLocalDataLoading, trigger, updateBlob]);
+
+	async function retryTTS() {
+		reset();
+		let data = await trigger();
+		if (data) {
+			let audioBlob = await base64ToBlob(data.result);
+			updateBlob(audioBlob);
+		}
+	}
+
+	return (
+		<>
+			{error ? (
+				<RetryButton
+					variant='outline'
+					onClick={async () => {
+						await retryTTS();
+						enableAutoPlay();
+					}}
+				>
+					<Icon id='retry' />
+					<VisuallyHidden>Retry generating speech</VisuallyHidden>
+				</RetryButton>
+			) : isPlaying ? (
+				<StopPlayButton variant='outline' onClick={stopAudio}>
+					<Icon id='stop' />
+					<VisuallyHidden>stop play audio </VisuallyHidden>
+				</StopPlayButton>
+			) : (
+				<AudioButton variant='outline' onClick={playAudio} disabled={!blob}>
+					<Icon id='audio' />
+					<VisuallyHidden>Play sentence audio</VisuallyHidden>
+				</AudioButton>
+			)}
+			{error && <Toast content={handleError(error)} />}
+		</>
+	);
+}
+
+export default SentenceAudio;
+
+var AudioButton = styled(Button)``;
+var RetryButton = styled(Button)``;
+var StopPlayButton = styled(Button)``;

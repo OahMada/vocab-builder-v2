@@ -22,7 +22,7 @@ export default function RootLayout({
 					<GlobalStyles />
 					<ToastProvider>
 						{children}
-						<ToastViewport />
+						<ToastViewport $position='bottom' />
 					</ToastProvider>
 				</StyledComponentsRegistry>
 			</body>

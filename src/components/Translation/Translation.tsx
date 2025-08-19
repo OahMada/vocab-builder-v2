@@ -15,10 +15,6 @@ interface TranslationResponse {
 	result: string;
 }
 
-interface TranslationArg {
-	sentence: string;
-}
-
 var url = '/api/translation';
 
 function Translation({ title, sentence }: { title: React.ReactNode; sentence: string }) {
@@ -26,12 +22,14 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 	let { isLocalDataLoading, updateTranslation, translation } = useTranslationTextContext();
 
 	// when there is no local translation text or you want to fetch new translation, fetch from api route
-	let { trigger, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, TranslationArg>(url, postFetcher);
+	let { trigger, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, void>(url, postFetcher);
 
 	React.useEffect(() => {
 		async function activateTrigger() {
-			let data = await trigger({ sentence });
-			updateTranslation(data.result);
+			let data = await trigger();
+			if (data) {
+				updateTranslation(data.result);
+			}
 		}
 		if (!translation && !isLocalDataLoading) {
 			activateTrigger();
@@ -41,7 +39,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 	async function retryTranslate() {
 		reset();
 
-		let data = await trigger({ sentence });
+		let data = await trigger();
 		if (data) {
 			updateTranslation(data.result);
 		}
