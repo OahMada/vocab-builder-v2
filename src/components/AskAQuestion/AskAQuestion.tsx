@@ -23,9 +23,7 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 		onError: (error) => {
 			// to silence the active abort error
 			if (error.name === 'TypeError' && error.message === 'network error') return;
-
-			let msg = isJSON(error.message) ? JSON.parse(error.message).error : error.message;
-			setErrorMsg(msg);
+			setErrorMsg(error.message);
 		},
 		experimental_throttle: 5,
 	});
@@ -96,8 +94,4 @@ var AnswerLoading = styled(Loading)`
 
 var ErrorText = styled.span`
 	color: var(--text-status-warning);
-`;
-
-var AnswerText = styled.p`
-	white-space: pre-wrap;
 `;

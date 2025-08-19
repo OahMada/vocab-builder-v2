@@ -92,7 +92,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 	);
 }
 
-export default React.memo(Translation);
+export default Translation;
 
 var TranslationText = styled.p<{ $isLoading: boolean }>`
 	opacity: ${({ $isLoading }) => ($isLoading ? 0.6 : 1)};

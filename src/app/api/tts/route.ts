@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getCookie } from '@/helpers/getCookie';
 import { SentenceToTranslateSchema } from '@/lib';
 import { handleZodError } from '@/utils';
-import { escapeForSSML } from '@/helpers';
+import { escapeForSSML } from '@/helpers/escapeForSsml';
 import { SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat } from 'microsoft-cognitiveservices-speech-sdk';
 
 export async function POST() {

@@ -5,20 +5,29 @@ import { streamText, simulateReadableStream } from 'ai';
 import { MockLanguageModelV2 } from 'ai/test';
 import { handleZodError } from '@/utils';
 import { getCookie } from '@/helpers/getCookie';
+import { toStream } from '@/helpers/toStream';
 
 export async function POST(request: NextRequest) {
 	let body = await request.json();
 	let questionResult = QuestionTextSchema.safeParse(body);
 	if (!questionResult.success) {
 		let errors = handleZodError(questionResult.error);
-		return NextResponse.json({ error: errors.question![0] }, { status: 400 });
+		let data = { type: 'error', errorText: errors.question![0] };
+		let stream = toStream(data);
+		return new NextResponse(stream, {
+			headers: { 'Content-Type': 'text/event-stream' },
+		});
 	}
 
 	let sentence = await getCookie('user-input');
 	let sentenceResult = SentenceToTranslateSchema.safeParse({ sentence });
 	if (!sentenceResult.success) {
 		let errors = handleZodError(sentenceResult.error);
-		return NextResponse.json({ error: errors.sentence![0] }, { status: 400 });
+		let data = { type: 'error', errorText: errors.sentence![0] };
+		let stream = toStream(data);
+		return new NextResponse(stream, {
+			headers: { 'Content-Type': 'text/event-stream' },
+		});
 	}
 
 	// Fake helper for test
@@ -51,16 +60,21 @@ export async function POST(request: NextRequest) {
 	// });
 
 	try {
+		// throw new Error('error');
 		let result = streamText({
 			model: openai.responses('gpt-4.1'),
 			system: `The user is gonna ask you a question about this specific sentence: ${sentenceResult.data.sentence}. Answer the question in detail and lean your explanation into grammar. Answer the question in the same language as the question. Structure the answer a bit for clarity. Don't repeat the sentence in your response.`,
 			prompt: questionResult.data.question,
-			abortSignal: AbortSignal.any([AbortSignal.timeout(10000), request.signal]),
+			abortSignal: AbortSignal.any([AbortSignal.timeout(5000), request.signal]),
 		});
 
 		return result.toUIMessageStreamResponse();
 	} catch (error) {
 		console.error('Stream init error:', error);
-		return NextResponse.json({ error: 'Failed to start stream.', details: String(error) }, { status: 500 });
+		let data = { type: 'error', errorText: 'Failed to start stream. Please try again later.' };
+		let stream = toStream(data);
+		return new NextResponse(stream, {
+			headers: { 'Content-Type': 'text/event-stream' },
+		});
 	}
 }
