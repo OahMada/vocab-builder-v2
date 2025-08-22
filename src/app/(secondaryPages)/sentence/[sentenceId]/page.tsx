@@ -11,18 +11,16 @@ import Title from './Title';
 import CardWrapper from './CardWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import { getCookie } from '@/helpers/getCookie';
-import NoteTextProvider from '@/components/NoteTextProvider';
-import TranslationTextProvider from '@/components/TranslationTextProvider';
-import WordsIPAProvider from '@/components/WordsIPAProvider';
-import SentenceAudioProvider from '@/components/SentenceAudioProvider';
+import NoteProvider from '@/components/NoteProvider';
+import TranslationProvider from '@/components/TranslationProvider';
+import WordsProvider from '@/components/WordsProvider';
+import AudioBlobProvider from '@/components/AudioBlobProvider';
 import { ToastProvider, ToastViewport } from '@/components/Toast';
 import Spacer from '@/components/Spacer';
 
 export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',
 };
-
-// TODO clear 'user-input' local storage when leaving this page
 
 export default async function Sentence({ params }: { params: Promise<{ sentenceId: string }> }) {
 	let { sentenceId } = await params;
@@ -40,9 +38,9 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 
 	return (
 		<MaxWidthWrapper>
-			<WordsIPAProvider newSentence={sentence}>
-				<TranslationTextProvider>
-					<NoteTextProvider>
+			<WordsProvider newSentence={sentence}>
+				<TranslationProvider>
+					<NoteProvider>
 						<Wrapper $position='flex-start'>
 							<Spacer size={0} />
 							<CardWrapper>
@@ -52,17 +50,17 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 								<Translation title={<Title>Translation</Title>} sentence={sentence} />
 							</CardWrapper>
 							<Note title={<Title>Note</Title>} />
-							<SentenceAudioProvider>
+							<AudioBlobProvider>
 								<ToastProvider>
 									<ToastViewport $position='top' />
-									<SentenceActions />
+									<SentenceActions sentence={sentence} />
 								</ToastProvider>
-							</SentenceAudioProvider>
+							</AudioBlobProvider>
 							<Spacer size={0} />
 						</Wrapper>
-					</NoteTextProvider>
-				</TranslationTextProvider>
-			</WordsIPAProvider>
+					</NoteProvider>
+				</TranslationProvider>
+			</WordsProvider>
 		</MaxWidthWrapper>
 	);
 }

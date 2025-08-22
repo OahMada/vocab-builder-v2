@@ -1,4 +1,7 @@
-export function toStream<T>(data: T) {
+import 'server-only';
+
+export function toErrorStream(errorText: string) {
+	let data = { type: 'error', errorText };
 	let encoder = new TextEncoder();
 	let stream = new ReadableStream({
 		start(controller) {

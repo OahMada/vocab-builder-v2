@@ -5,12 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import TextareaActionButtons from '@/components/TextareaActionButtons';
 import Textarea from '@/components/Textarea';
-import { TranslationTextSchema, TranslationType } from '@/lib';
+import { TranslationSchema, TranslationType } from '@/lib';
 import Toast from '@/components/Toast';
-import { useTranslationTextContext } from '@/components/TranslationTextProvider';
+import { useTranslationContext } from '@/components/TranslationProvider';
 
 export default function EditTranslation({ translationText, cancelEditing }: { translationText: string; cancelEditing: () => void }) {
-	let { updateTranslation } = useTranslationTextContext();
+	let { updateTranslation } = useTranslationContext();
 
 	let {
 		watch,
@@ -20,24 +20,24 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 		clearErrors,
 		formState: { errors },
 	} = useForm<TranslationType>({
-		resolver: zodResolver(TranslationTextSchema),
+		resolver: zodResolver(TranslationSchema),
 		reValidateMode: 'onSubmit',
-		values: { 'translation-text': translationText },
+		values: { translation: translationText },
 	});
 
-	let translationTextValue = watch('translation-text');
+	let translationTextValue = watch('translation');
 
 	function clearInput() {
-		clearErrors('translation-text');
-		setValue('translation-text', translationText);
+		clearErrors('translation');
+		setValue('translation', translationText);
 	}
 
 	function onSubmit(data: TranslationType) {
-		if (data['translation-text'].length === 0) {
+		if (data.translation.length === 0) {
 			// if the data is an empty string, submitting is the same as canceling
 			return cancelEditing();
 		}
-		updateTranslation(data['translation-text']);
+		updateTranslation(data.translation);
 		cancelEditing();
 	}
 
@@ -46,15 +46,15 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 			<Textarea
 				value={translationTextValue}
 				clearInput={clearInput}
-				{...register('translation-text', {
+				{...register('translation', {
 					onChange: () => {
-						clearErrors('translation-text');
+						clearErrors('translation');
 					},
 				})}
 				placeholder='Input translation text here'
 			/>
-			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit)} submitDisabled={!!errors['translation-text']} />
-			{errors['translation-text'] && <Toast content={errors['translation-text'].message} />}
+			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit)} submitDisabled={!!errors.translation} />
+			{errors.translation && <Toast content={errors.translation.message} />}
 		</>
 	);
 }

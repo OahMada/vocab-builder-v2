@@ -8,7 +8,7 @@ import useSWRMutation from 'swr/mutation';
 import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
 import EditTranslation from '@/components/Translation/EditTranslation';
-import { useTranslationTextContext } from '@/components/TranslationTextProvider';
+import { useTranslationContext } from '@/components/TranslationProvider';
 import Toast from '@/components/Toast';
 
 interface TranslationResponse {
@@ -19,10 +19,13 @@ var url = '/api/translation';
 
 function Translation({ title, sentence }: { title: React.ReactNode; sentence: string }) {
 	// consume the context provider, get locally saved translation text
-	let { isLocalDataLoading, updateTranslation, translation } = useTranslationTextContext();
+	let { isLocalDataLoading, updateTranslation, translation } = useTranslationContext();
 
 	// when there is no local translation text or you want to fetch new translation, fetch from api route
 	let { trigger, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, void>(url, postFetcher);
+
+	// control the entering of editing state
+	let [isEditing, setIsEditing] = React.useState(false);
 
 	React.useEffect(() => {
 		async function activateTrigger() {
@@ -31,10 +34,14 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 				updateTranslation(data.result);
 			}
 		}
-		if (!translation && !isLocalDataLoading) {
+
+		// loading data when
+		// - page first loads
+		// - there have been an error, then the user tried to edit translation, but canceled their action, thus, there is still no translation to show
+		if (!translation && !isLocalDataLoading && !isEditing) {
 			activateTrigger();
 		}
-	}, [sentence, trigger, updateTranslation, translation, isLocalDataLoading]);
+	}, [sentence, trigger, updateTranslation, translation, isLocalDataLoading, isEditing]);
 
 	async function retryTranslate() {
 		reset();
@@ -45,13 +52,12 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 		}
 	}
 
-	// control the entering of editing state
-	let [isEditing, setIsEditing] = React.useState(false);
-	function cancelEditing() {
+	async function cancelEditing() {
 		setIsEditing(false);
 	}
 
 	function startEditing() {
+		// reset error so it would not reappear after editing.
 		reset();
 		setIsEditing(true);
 	}

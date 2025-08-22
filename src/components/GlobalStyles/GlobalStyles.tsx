@@ -60,8 +60,8 @@ html {
   --bg-primary-hover: hsl(0deg 0% 9%);
   --bg-secondary: hsl(0 0% 12%);
   --bg-secondary-hover: hsl(0 0% 15%);
-  --bg-tertiary: hsl(0 0% 25%);
-  --bg-tertiary-hover: hsl(0 0% 28%);
+  --bg-tertiary: hsl(0 0% 20%);
+  --bg-tertiary-hover: hsl(0 0% 23%);
   --bg-revert: hsl(0 0% 98%);
   --bg-status-warning: hsl(25 85% 15%);
   --border-light: hsl(0 0% 100% / 5%);

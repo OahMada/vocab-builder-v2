@@ -1,16 +1,16 @@
 import { NextResponse } from 'next/server';
-import { getCookie } from '@/helpers/getCookie';
-import { SentenceToTranslateSchema } from '@/lib';
+import { SentenceSchema } from '@/lib';
 import { handleZodError } from '@/utils';
-import { escapeForSSML } from '@/helpers/escapeForSsml';
+import { getCookie } from '@/helpers/getCookie';
+import { escapeForSSML } from '@/helpers/escapeForSSML';
 import { SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat } from 'microsoft-cognitiveservices-speech-sdk';
 
 export async function POST() {
 	let sentence = await getCookie('user-input');
-	let sentenceResult = SentenceToTranslateSchema.safeParse({ sentence });
+	let sentenceResult = SentenceSchema.safeParse({ sentence });
 	if (!sentenceResult.success) {
 		let errors = handleZodError(sentenceResult.error);
-		return NextResponse.json({ error: errors.sentence![0] }, { status: 400 });
+		return NextResponse.json({ error: errors.fieldErrors.sentence![0] }, { status: 400 });
 	}
 
 	if (!process.env.AZURE_SPEECH_KEY || !process.env.AZURE_SPEECH_REGION) {

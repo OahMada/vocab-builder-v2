@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as React from 'react';
 import { FieldErrors, useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { QuestionTextSchema, QuestionTextType } from '@/lib';
+import { FetchAnswersSchema, FetchAnswersType } from '@/lib';
 import Textarea from '@/components/Textarea';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
@@ -28,8 +28,8 @@ export default function QuestionInput({
 		formState: { errors },
 		setValue,
 		handleSubmit,
-	} = useForm<QuestionTextType>({
-		resolver: zodResolver(QuestionTextSchema),
+	} = useForm<FetchAnswersType>({
+		resolver: zodResolver(FetchAnswersSchema),
 		reValidateMode: 'onSubmit',
 		shouldFocusError: false,
 	});
@@ -43,10 +43,10 @@ export default function QuestionInput({
 		onClearInput();
 	}
 
-	function onSubmit(data: QuestionTextType) {
+	function onSubmit(data: FetchAnswersType) {
 		triggerComplete(data.question);
 	}
-	function onError(errors: FieldErrors<QuestionTextType>) {
+	function onError(errors: FieldErrors<FetchAnswersType>) {
 		let msg = errors.question?.message as string;
 		updateError(msg);
 	}

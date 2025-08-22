@@ -8,21 +8,49 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import AskAQuestion from '@/components/AskAQuestion';
 import SentenceAudio from '@/components/SentenceAudio';
+import { saveSentenceData } from '@/app/actions/sentence';
+import { deleteLocalData } from '@/helpers/deleteLocalData';
+import Loading from '@/components/Loading';
+import { useSentenceData } from '@/hooks';
+import { handleError } from '@/utils';
+import { Toast } from '@/components/Toast';
 
-function SentenceActions() {
+function SentenceActions({ sentence }: { sentence: string }) {
+	let [errorMsg, setErrorMsg] = React.useState('');
 	let router = useRouter();
-	let [isShowing, setIsShowing] = React.useState(false);
+	let [isModalShowing, setIsModalShowing] = React.useState(false);
+	let [isLoading, startTransition] = React.useTransition();
+
+	let [sentenceDataReady, data] = useSentenceData();
+	let sentenceData = {
+		...data,
+		sentence,
+	};
 
 	function dismissModal() {
-		setIsShowing(false);
+		setIsModalShowing(false);
 	}
 
 	function showModal() {
-		setIsShowing(true);
+		setIsModalShowing(true);
 	}
 
 	function handleCancel() {
 		router.back();
+	}
+
+	async function handleSubmit() {
+		setErrorMsg('');
+		startTransition(async () => {
+			let result = await saveSentenceData(sentenceData);
+
+			if ('error' in result) {
+				setErrorMsg(handleError(result.error));
+				return;
+			}
+			deleteLocalData();
+			router.replace('/');
+		});
 	}
 
 	return (
@@ -37,12 +65,13 @@ function SentenceActions() {
 					<Icon id='x' />
 					&nbsp;Cancel
 				</CancelButton>
-				<DoneButton variant='outline'>
-					<Icon id='enter' />
+				<DoneButton variant='outline' disabled={!sentenceDataReady || isLoading} onClick={handleSubmit}>
+					{isLoading ? <Loading description='submitting data' /> : <Icon id='enter' />}
 					&nbsp;Done
 				</DoneButton>
 			</Wrapper>
-			{isShowing && <AskAQuestion isShowing={isShowing} onDismiss={dismissModal} />}
+			{isModalShowing && <AskAQuestion isShowing={isModalShowing} onDismiss={dismissModal} />}
+			{errorMsg && <Toast content={errorMsg} />}
 		</>
 	);
 }
@@ -64,5 +93,3 @@ var CancelButton = styled(Button)`
 var HelpButton = styled(Button)``;
 
 var DoneButton = styled(Button)``;
-
-var AudioButton = styled(Button)``;

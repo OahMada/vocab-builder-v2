@@ -7,7 +7,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { postFetcher } from '@/lib';
 import useSWRMutation from 'swr/mutation';
-import { useSentenceAudioContext } from '@/components/SentenceAudioProvider';
+import { useAudioBlobContext } from '@/components/AudioBlobProvider';
 import Toast from '@/components/Toast';
 import { handleError, base64ToBlob } from '@/utils';
 import { useAudioPlay } from '@/hooks';
@@ -20,8 +20,8 @@ var url = '/api/tts';
 
 function SentenceAudio() {
 	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, void>(url, postFetcher);
-	let { isLocalDataLoading, blob, updateBlob } = useSentenceAudioContext();
-	let { isPlaying, playAudio, stopAudio, enableAutoPlay } = useAudioPlay(blob);
+	let { isLocalDataLoading, audioBlob, updateBlob } = useAudioBlobContext();
+	let { isPlaying, playAudio, stopAudio, enableAutoPlay } = useAudioPlay(audioBlob);
 
 	React.useEffect(() => {
 		async function activateTrigger() {
@@ -31,10 +31,10 @@ function SentenceAudio() {
 				updateBlob(audioBlob);
 			}
 		}
-		if (!isLocalDataLoading && !blob) {
+		if (!isLocalDataLoading && !audioBlob) {
 			activateTrigger();
 		}
-	}, [blob, isLocalDataLoading, trigger, updateBlob]);
+	}, [audioBlob, isLocalDataLoading, trigger, updateBlob]);
 
 	async function retryTTS() {
 		reset();
@@ -64,7 +64,7 @@ function SentenceAudio() {
 					<VisuallyHidden>stop play audio </VisuallyHidden>
 				</StopPlayButton>
 			) : (
-				<AudioButton variant='outline' onClick={playAudio} disabled={!blob}>
+				<AudioButton variant='outline' onClick={playAudio} disabled={!audioBlob}>
 					<Icon id='audio' />
 					<VisuallyHidden>Play sentence audio</VisuallyHidden>
 				</AudioButton>

@@ -11,11 +11,11 @@ import Icon from '@/components/Icon';
 import TextareaActionButtons from '@/components/TextareaActionButtons';
 import { NoteSchema, NoteType } from '@/lib';
 import Toast from '@/components/Toast';
-import { useNoteTextContext } from '@/components/NoteTextProvider';
+import { useNoteContext } from '@/components/NoteProvider';
 
 function Note({ title }: { title: React.ReactNode }) {
 	let [isAddingNote, setIsAddingNote] = React.useState(false);
-	let { note, updateNote } = useNoteTextContext();
+	let { note, updateNote } = useNoteContext();
 
 	let {
 		register,
@@ -27,7 +27,7 @@ function Note({ title }: { title: React.ReactNode }) {
 	} = useForm<NoteType>({
 		resolver: zodResolver(NoteSchema),
 		reValidateMode: 'onSubmit',
-		values: { note },
+		values: { note: note || '' },
 	});
 
 	let noteValue = watch('note');

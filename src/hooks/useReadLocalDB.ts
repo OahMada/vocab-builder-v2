@@ -19,7 +19,7 @@ export function useReadLocalDB<T>(updater: (data: T) => void): boolean {
 					savedUpdater.current(data);
 				}
 			} catch (error) {
-				console.log('reading indexedDB acton failed', error);
+				console.error('reading indexedDB acton failed', error);
 			}
 			setIsLoading(false);
 		}

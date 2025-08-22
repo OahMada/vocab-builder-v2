@@ -3,7 +3,7 @@ export type Word =
 			id: string;
 			piece: string;
 			isWord: true;
-			IPA: string;
+			IPA: string | undefined;
 	  }
 	| {
 			id: string;
@@ -24,9 +24,9 @@ export interface RemoveIPAParams {
 	id: string;
 }
 
-export interface WordsIPAContextType {
+export interface WordsContextType {
 	words: WordsType;
-	isLoadingLocalData: boolean;
+	isLocalDataLoading: boolean;
 	addIPA: ({ text, IPA, id }: AddIPAParams) => void;
 	removeIPA: ({ word, id }: RemoveIPAParams) => void;
 }

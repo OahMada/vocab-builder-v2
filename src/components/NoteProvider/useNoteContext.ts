@@ -1,8 +1,8 @@
 import * as React from 'react';
-import NoteTextContext from './NoteTextContext';
+import NoteContext from './NoteContext';
 
-export function useNoteTextContext() {
-	let result = React.useContext(NoteTextContext);
+export function useNoteContext() {
+	let result = React.useContext(NoteContext);
 	if (!result) {
 		throw new Error('useNoteTextContext has to be used within <NoteTextContext.Provider>');
 	}

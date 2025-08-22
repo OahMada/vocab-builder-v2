@@ -3,10 +3,10 @@
 import * as React from 'react';
 import { updateLocalDB } from '@/helpers';
 import { useReadLocalDB } from '@/hooks';
-import SentenceAudioContext from './SentenceAudioContext';
+import AudioBlobContext from './AudioBlobContext';
 
-function SentenceAudioProvider({ children }: { children: React.ReactNode }) {
-	let [blob, setBlob] = React.useState<Blob | null>(null);
+function AudioBlobProvider({ children }: { children: React.ReactNode }) {
+	let [blob, setBlob] = React.useState<Blob | undefined>(undefined);
 
 	let updateBlob = React.useCallback(async function (audioBlob: Blob) {
 		setBlob(audioBlob);
@@ -20,7 +20,7 @@ function SentenceAudioProvider({ children }: { children: React.ReactNode }) {
 			try {
 				await updateLocalDB('set', blob!);
 			} catch (error) {
-				console.log('updating indexedDB acton failed', error);
+				console.error('updating indexedDB acton failed', error);
 			}
 		}
 		saveBlob();
@@ -30,12 +30,12 @@ function SentenceAudioProvider({ children }: { children: React.ReactNode }) {
 		() => ({
 			isLocalDataLoading: isLoading,
 			updateBlob,
-			blob,
+			audioBlob: blob,
 		}),
 		[blob, isLoading, updateBlob]
 	);
 
-	return <SentenceAudioContext.Provider value={value}>{children}</SentenceAudioContext.Provider>;
+	return <AudioBlobContext.Provider value={value}>{children}</AudioBlobContext.Provider>;
 }
 
-export default SentenceAudioProvider;
+export default AudioBlobProvider;

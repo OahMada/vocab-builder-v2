@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import WordsIPAContext from './WordIPAContext';
+import WordsContext from './WordContext';
 import { Action, WordsType, RemoveIPAParams, AddIPAParams } from './types';
 import { produce } from 'immer';
 import { segmentSentence, updateLocalStorage } from '@/helpers';
@@ -34,7 +34,7 @@ function reducer(state: WordsType, action: Action) {
 	});
 }
 
-function WordsIPAProvider({ databaseWords, newSentence, children }: { databaseWords?: WordsType; newSentence?: string; children: React.ReactNode }) {
+function WordsProvider({ databaseWords, newSentence, children }: { databaseWords?: WordsType; newSentence?: string; children: React.ReactNode }) {
 	let defaultState: WordsType = [];
 	if (newSentence) {
 		defaultState = segmentSentence(newSentence);
@@ -76,9 +76,9 @@ function WordsIPAProvider({ databaseWords, newSentence, children }: { databaseWo
 		});
 	}, []);
 
-	let value = React.useMemo(() => ({ isLoadingLocalData: isLoading, addIPA, removeIPA, words }), [addIPA, isLoading, removeIPA, words]);
+	let value = React.useMemo(() => ({ isLocalDataLoading: isLoading, addIPA, removeIPA, words }), [addIPA, isLoading, removeIPA, words]);
 
-	return <WordsIPAContext.Provider value={value}>{children}</WordsIPAContext.Provider>;
+	return <WordsContext.Provider value={value}>{children}</WordsContext.Provider>;
 }
 
-export default WordsIPAProvider;
+export default WordsProvider;

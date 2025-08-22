@@ -1,8 +1,8 @@
 import * as React from 'react';
-import TranslationTextContext from './TranslationTextContext';
+import TranslationContext from './TranslationContext';
 
-export function useTranslationTextContext() {
-	let result = React.useContext(TranslationTextContext);
+export function useTranslationContext() {
+	let result = React.useContext(TranslationContext);
 	if (!result) {
 		throw new Error('useTranslationTextContext has to be used within <TranslationTextContext.Provider>');
 	}

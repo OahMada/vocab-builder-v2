@@ -1,8 +1,8 @@
 import * as React from 'react';
-import SentenceAudioContext from './SentenceAudioContext';
+import AudioBlobContext from './AudioBlobContext';
 
-export function useSentenceAudioContext() {
-	let result = React.useContext(SentenceAudioContext);
+export function useAudioBlobContext() {
+	let result = React.useContext(AudioBlobContext);
 	if (!result) {
 		throw new Error('useSentenceAudioContext has to be used within <SentenceAudioContext.Provider>');
 	}

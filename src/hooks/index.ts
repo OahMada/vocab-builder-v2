@@ -4,3 +4,4 @@ export * from './useGetClipboard';
 export * from './useReadLocalStorage';
 export * from './useReadLocalDB';
 export * from './usePlayAudio';
+export * from './useSentenceData';

@@ -28,18 +28,15 @@ export async function delay(time: number) {
 	await new Promise((resolve) => setTimeout(resolve, time));
 }
 
-export function handleZodError<T>(error: ZodError<T>) {
-	let flattenedError = z.flattenError(error);
-	return flattenedError.fieldErrors;
-}
-
-export function isJSON(text: string) {
-	try {
-		JSON.parse(text);
-	} catch {
-		return false;
+export function handleZodError<T>(error: ZodError<T>, mode: 'prettify'): string;
+export function handleZodError<T>(error: ZodError<T>, mode?: 'flatten'): ReturnType<ZodError<T>['flatten']>;
+export function handleZodError<T>(error: ZodError<T>, mode: 'flatten' | 'prettify' = 'flatten'): string | ReturnType<z.ZodError['flatten']> {
+	if (mode === 'prettify') {
+		return z.prettifyError(error);
+	} else if (mode === 'flatten') {
+		return z.flattenError(error);
 	}
-	return true;
+	throw new Error('Unhandled mode');
 }
 
 export async function base64ToBlob(base64Blob: string) {

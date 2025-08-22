@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export function useAudioPlay(audioBlob: null | Blob) {
+export function useAudioPlay(audioBlob: undefined | Blob) {
 	let [isPlaying, setIsPlaying] = React.useState(false);
 	let audioEleRef = React.useRef<null | HTMLAudioElement>(null);
 	let autoPlayRef = React.useRef(false);

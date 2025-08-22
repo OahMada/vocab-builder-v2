@@ -33,7 +33,7 @@ export var WordSchema = z.object({
 		}),
 });
 
-export var SentenceToTranslateSchema = z.object({
+export var SentenceSchema = z.object({
 	sentence: z
 		.string()
 		.trim()
@@ -45,10 +45,10 @@ export var SentenceToTranslateSchema = z.object({
 		}),
 });
 
-export var TranslationTextSchema = z.object({
-	'translation-text': z.string().trim(),
+export var TranslationSchema = z.object({
+	translation: z.string().trim(),
 });
-export type TranslationType = z.infer<typeof TranslationTextSchema>;
+export type TranslationType = z.infer<typeof TranslationSchema>;
 
 export var NoteSchema = z.object({
 	note: z.string().trim().max(500, {
@@ -58,10 +58,25 @@ export var NoteSchema = z.object({
 
 export type NoteType = z.infer<typeof NoteSchema>;
 
-export var QuestionTextSchema = z.object({
+export var FetchAnswersSchema = z.object({
 	question: z.string().trim().min(3, {
 		error: 'The question text should be at least 3 characters long.',
 	}),
 });
 
-export type QuestionTextType = z.infer<typeof QuestionTextSchema>;
+export type FetchAnswersType = z.infer<typeof FetchAnswersSchema>;
+
+var WordDataSchema = z.object({
+	id: z.cuid(),
+	piece: z.string().min(1),
+	isWord: z.boolean(),
+	IPA: z.string().optional(),
+});
+
+export var SentenceDataSchema = z.object({
+	sentence: SentenceSchema.shape.sentence,
+	words: z.array(WordDataSchema),
+	translation: TranslationSchema.shape.translation.min(3),
+	note: NoteSchema.shape.note.optional(),
+	audioBlob: z.instanceof(Blob).refine((blob) => blob.type.startsWith('audio/'), { error: 'Must be an audio Blob.' }),
+});

@@ -8,10 +8,10 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/Popover';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Button from '@/components/Button';
-import { useWordsIPAContext } from '@/components/WordsIPAProvider';
+import { useWordsContext } from '@/components/WordsProvider';
 
 function WordListing({ title }: { title: React.ReactNode }) {
-	let { words } = useWordsIPAContext();
+	let { words } = useWordsContext();
 
 	return (
 		<>
@@ -31,7 +31,7 @@ function WordListing({ title }: { title: React.ReactNode }) {
 			</TitleWrapper>
 			<WordWrapper>
 				{words.map((item) => {
-					return <Word key={item.id} piece={item.piece} isWord={item.isWord} IPA={item.isWord ? item.IPA : undefined} id={item.id} />;
+					return <Word key={item.id} piece={item.piece} isWord={item.isWord} IPA={item.isWord ? item.IPA : null} id={item.id} />;
 				})}
 			</WordWrapper>
 		</>
