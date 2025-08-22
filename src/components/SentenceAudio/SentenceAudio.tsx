@@ -10,7 +10,7 @@ import useSWRMutation from 'swr/mutation';
 import { useAudioBlobContext } from '@/components/AudioBlobProvider';
 import Toast from '@/components/Toast';
 import { handleError, base64ToBlob } from '@/utils';
-import { useAudioPlay } from '@/hooks';
+import { usePlayAudio } from '@/hooks';
 
 interface TTSResponse {
 	result: string;
@@ -21,7 +21,7 @@ var url = '/api/tts';
 function SentenceAudio() {
 	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, void>(url, postFetcher);
 	let { isLocalDataLoading, audioBlob, updateBlob } = useAudioBlobContext();
-	let { isPlaying, playAudio, stopAudio, enableAutoPlay } = useAudioPlay(audioBlob);
+	let { isPlaying, playAudio, stopAudio, enableAutoPlay } = usePlayAudio(audioBlob);
 
 	React.useEffect(() => {
 		async function activateTrigger() {

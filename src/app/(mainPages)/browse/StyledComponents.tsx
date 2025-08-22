@@ -1,8 +1,9 @@
 'use client';
 
 import styled from 'styled-components';
+import DescriptionText from '@/components/DescriptionText';
 
-var InnerWrapper = styled.div`
+export var InnerWrapper = styled.div`
 	position: sticky;
 	top: 4rem;
 	width: 100%;
@@ -18,4 +19,8 @@ var InnerWrapper = styled.div`
 	z-index: 9;
 `;
 
-export default InnerWrapper;
+export var NoticeText = styled(DescriptionText)`
+	/* optical alignment */
+	margin-left: 4px;
+	align-self: flex-start;
+`;

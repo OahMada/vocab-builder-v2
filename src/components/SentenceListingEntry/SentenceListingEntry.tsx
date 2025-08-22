@@ -5,33 +5,47 @@ import styled from 'styled-components';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/Accordion';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
-import VisuallyHidden from '@/components/VisuallyHidden';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent } from '@/components/AlertDialog';
+import WordWithPhoneticSymbol from '@/components/WordWithPhoneticSymbol';
+import { SentenceWithPieces } from '../SentenceListing/sentenceSelect';
+import PlayAudioFromUrl from '@/components/PlayAudioFromUrl';
 
-interface SentenceListingEntryProps {
-	id: string;
+type SentenceListingEntryProps = {
 	index: number;
-	translation: string;
-	sentence: React.ReactNode;
-	note?: string;
-}
+} & SentenceWithPieces;
 
-function SentenceListingEntry({ id, index, translation, note, sentence }: SentenceListingEntryProps) {
+function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl, pieces }: SentenceListingEntryProps) {
+	let sentencePieces = pieces.map(({ IPA, isWord, piece, id }) => {
+		if (!isWord) {
+			return piece;
+		} else {
+			if (!IPA) {
+				return piece;
+			} else {
+				return (
+					<WordWithPhoneticSymbol symbol={IPA} key={id}>
+						{piece}
+					</WordWithPhoneticSymbol>
+				);
+			}
+		}
+	});
+
 	return (
 		<AccordionItem id={id}>
 			<AccordionTrigger index={index}>
 				<SentenceWrapper>
-					{sentence}
-					<AudioButton variant='icon' style={{ '--icon-size': '16px' } as React.CSSProperties}>
-						<Icon id='audio' size={16} />
-						<VisuallyHidden>play sentence audio</VisuallyHidden>
-					</AudioButton>
+					{sentencePieces}
+					<AudioButton
+						style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
+						audioUrl={audioUrl}
+					/>
 				</SentenceWrapper>
 			</AccordionTrigger>
 			<AccordionContent asChild={true}>
 				<ContentWrapper>
 					<InnerWrapper>
-						<Title>Translation</Title>
+						{note && <Title>Translation</Title>}
 						<p>{translation}</p>
 					</InnerWrapper>
 					{note && (
@@ -65,16 +79,17 @@ export default SentenceListingEntry;
 
 var SentenceWrapper = styled.p`
 	font-size: 1.1rem;
+	line-height: 1.6;
 `;
 
-var AudioButton = styled(Button)`
+var AudioButton = styled(PlayAudioFromUrl)`
 	display: inline-block;
 	--hover-bg-color: var(--bg-tertiary);
 	margin-left: 8px;
 	vertical-align: -2.5px;
-	vertical-align: -3px;
 	/* to make sure the icon has the same height as the text */
-	padding: calc((1.5 * 16px - var(--icon-size)) / 2);
+	padding: calc((var(--line-height) * var(--font-size) - var(--icon-size)) / 2);
+	padding: 4px;
 `;
 
 var ContentWrapper = styled.div`

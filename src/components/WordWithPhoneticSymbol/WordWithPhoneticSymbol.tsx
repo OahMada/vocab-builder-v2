@@ -28,11 +28,10 @@ var Wrapper = styled.span`
 
 var WordButton = styled(Button)`
 	--hover-bg-color: var(--bg-tertiary);
-	padding: 4px 4px 2px;
-	margin-right: 3px;
-	margin-left: 3px;
+	padding: 4px 2px 2px;
 	border-bottom: 2px dashed var(--border-medium);
 	line-height: 1;
+	border-radius: 4px;
 `;
 
 var SymbolWrapper = styled.span`

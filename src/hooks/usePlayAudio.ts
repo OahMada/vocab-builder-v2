@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export function useAudioPlay(audioBlob: undefined | Blob) {
+export function usePlayAudio(audioSource: (undefined | Blob) | string) {
 	let [isPlaying, setIsPlaying] = React.useState(false);
 	let audioEleRef = React.useRef<null | HTMLAudioElement>(null);
 	let autoPlayRef = React.useRef(false);
@@ -25,15 +25,21 @@ export function useAudioPlay(audioBlob: undefined | Blob) {
 	}, []);
 
 	React.useEffect(() => {
-		if (!audioBlob) return;
-		let audioUrl = URL.createObjectURL(audioBlob);
-		audioEleRef.current = new Audio(audioUrl);
+		let audioELe: HTMLAudioElement;
+		if (typeof audioSource === 'string') {
+			audioELe = new Audio(audioSource);
+		} else {
+			if (!audioSource) return;
+			let audioUrl = URL.createObjectURL(audioSource);
+			audioELe = new Audio(audioUrl);
+		}
+		audioEleRef.current = audioELe;
 
 		if (autoPlayRef.current) {
 			playAudio();
 			autoPlayRef.current = false;
 		}
-	}, [audioBlob, playAudio]);
+	}, [audioSource, playAudio]);
 
 	React.useEffect(() => {
 		if (!audioEleRef.current || !isPlaying) return;

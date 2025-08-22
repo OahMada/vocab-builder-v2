@@ -54,7 +54,7 @@ html {
   --font-logo:  'Inter', -apple-system, sans-serif;
   --bg-overlay: hsl(0deg 0% 0% / 85%);
 	--bg-modal: hsl(0deg 0% 7%);
-  --bg-popover: hsl(0deg 0% 17%);
+  --bg-popover: hsl(0deg 0% 19%);
   --bg-dropdown: hsl(0 0% 15%);
   --bg-primary: hsl(0deg 0% 0%);
   --bg-primary-hover: hsl(0deg 0% 9%);
