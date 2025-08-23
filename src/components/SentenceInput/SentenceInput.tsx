@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { UserInput, UserInputSchema } from '@/lib';
-import Textarea from '@/components/Textarea';
+import TextArea from '@/components/TextArea';
 import ActionButtons from './ActionButtons';
 import Spacer from '@/components/Spacer';
 import Toast from '@/components/Toast';
@@ -58,7 +58,7 @@ function SentenceInput() {
 	return (
 		<Wrapper onSubmit={handleSubmit(onSubmit)}>
 			<Spacer size={4} />
-			<Textarea placeholder='Enter or paste in a sentence.' clearInput={clearInput} {...rest} ref={ref} value={userInput} />
+			<TextArea placeholder='Enter or paste in a sentence.' clearInput={clearInput} {...rest} ref={ref} value={userInput} />
 			<ActionButtons handlePaste={updateInput} submitDisabled={!!errors['user-input']} />
 			{errors['user-input'] && <Toast content={errors['user-input'].message} />}
 		</Wrapper>

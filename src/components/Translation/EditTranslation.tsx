@@ -4,7 +4,7 @@ import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import TextareaActionButtons from '@/components/TextareaActionButtons';
-import Textarea from '@/components/Textarea';
+import TextArea from '@/components/TextArea';
 import { TranslationSchema, TranslationType } from '@/lib';
 import Toast from '@/components/Toast';
 import { useTranslationContext } from '@/components/TranslationProvider';
@@ -43,7 +43,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 
 	return (
 		<>
-			<Textarea
+			<TextArea
 				value={translationTextValue}
 				clearInput={clearInput}
 				{...register('translation', {

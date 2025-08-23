@@ -5,7 +5,7 @@ import * as React from 'react';
 import { FieldErrors, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { FetchAnswersSchema, FetchAnswersType } from '@/lib';
-import Textarea from '@/components/Textarea';
+import TextArea from '@/components/TextArea';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
@@ -53,7 +53,7 @@ export default function QuestionInput({
 
 	return (
 		<Wrapper>
-			<Textarea
+			<TextArea
 				autoFocus={true}
 				placeholder='Input your question'
 				value={questionText}
