@@ -11,7 +11,7 @@ import Toast from '@/components/Toast';
 import Loading from '@/components/Loading';
 import { useWordsContext } from '@/components/WordsProvider';
 
-type WordComponentProps = React.ComponentProps<'span'> & { piece: string; isWord: boolean; IPA: string | undefined | null; id: string };
+type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA: string | undefined | null; id: string };
 
 interface IPAResponse {
 	result: string;
@@ -22,9 +22,9 @@ interface IPAArg {
 
 var url = '/api/IPA';
 
-function Word({ piece, isWord, IPA, id }: WordComponentProps) {
+function Word({ piece, IPA, id }: WordComponentProps) {
 	let { trigger, error, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher);
-	let { addIPA, removeIPA, isLoadingLocalData } = useWordsContext();
+	let { addIPA, removeIPA, isLocalDataLoading } = useWordsContext();
 
 	if (piece === ' ') {
 		return undefined;
@@ -42,12 +42,12 @@ function Word({ piece, isWord, IPA, id }: WordComponentProps) {
 		removeIPA({ word: piece, id });
 	}
 
-	return isWord ? (
+	return (
 		<Wrapper>
 			{IPA ? (
 				<InactiveWordButton>{piece}</InactiveWordButton>
 			) : (
-				<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating || isLoadingLocalData}>
+				<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating || isLocalDataLoading}>
 					{isMutating ? (
 						<>
 							{piece}&nbsp;
@@ -61,8 +61,6 @@ function Word({ piece, isWord, IPA, id }: WordComponentProps) {
 			{IPA && <PhoneticSymbol symbol={IPA} onClick={handleRemoval} />}
 			{error && <Toast content={handleError(error)} />}
 		</Wrapper>
-	) : (
-		piece
 	);
 }
 

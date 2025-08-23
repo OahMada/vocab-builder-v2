@@ -15,7 +15,7 @@ function AccordionItem({ id, children }: { id: string; children: React.ReactNode
 	return <Item value={id}>{children}</Item>;
 }
 
-function AccordionTrigger({ index, children, ...delegated }: { index: number } & React.ComponentProps<typeof AccordionPrimitives.Trigger>) {
+function AccordionTrigger({ children, ...delegated }: React.ComponentProps<typeof AccordionPrimitives.Trigger>) {
 	let [isOpen, setIsOpen] = React.useState(false);
 
 	function handleOnclick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -26,7 +26,6 @@ function AccordionTrigger({ index, children, ...delegated }: { index: number } &
 
 	return (
 		<Header>
-			<Index>{`${index + 1}.`}</Index>
 			{children}
 			<AccordionPrimitives.Trigger {...delegated} asChild={true} onClick={handleOnclick}>
 				<ExpandButton variant='icon'>
@@ -74,12 +73,6 @@ var Header = styled(AccordionPrimitives.Header)`
 		border-bottom-right-radius: 0;
 		border-bottom: 2px solid var(--bg-tertiary);
 	}
-`;
-
-var Index = styled.span`
-	font-size: 1rem;
-	font-weight: 300;
-	pointer-events: none;
 `;
 
 var ExpandButton = styled(Button)`

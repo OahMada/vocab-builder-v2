@@ -28,7 +28,6 @@ model Sentence {
 model Piece {
   id         String   @id @default(cuid()) @map("_id")
   piece      String
-  isWord     Boolean
   IPA        String? // only if isWord = true
   sentence   Sentence @relation(fields: [sentenceId], references: [id])
   sentenceId String

@@ -18,7 +18,6 @@ var sentenceSelect = {
 		select: {
 			IPA: true,
 			piece: true,
-			isWord: true,
 		},
 	},
 } satisfies Prisma.SentenceSelect;
@@ -71,16 +70,18 @@ export async function saveSentenceData(data: unknown): Promise<{ error: string }
 	let [blockBlobClient, audioUrl] = getAudioUrl(blobName);
 
 	// prepare for saving to database
-	let createWords = words.map((item) => {
-		return { ...item, IPA: item.IPA ?? null };
-	});
+	let wordsCreate = words
+		.filter((item) => typeof item !== 'string')
+		.map((item) => {
+			return { ...item, IPA: item.IPA ?? null };
+		});
 	let sentenceCreate: Prisma.SentenceCreateInput = {
 		...rest,
 		id: sentenceId,
 		audioUrl,
 		note: note ?? null,
 		pieces: {
-			create: createWords,
+			create: wordsCreate,
 		},
 	};
 

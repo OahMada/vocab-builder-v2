@@ -3,7 +3,7 @@ import { AccordionRoot } from '@/components/Accordion';
 import SentenceListingEntry from '@/components/SentenceListingEntry';
 import { Loading, Wrapper } from './StyledComponents';
 import prisma from '@/lib/prisma';
-import { SentenceWithPieces, sentenceSelect } from './sentenceSelect';
+import { SentenceWithPieces, sentenceSelect } from '@/lib';
 import ErrorDisplay from './ErrorDisplay';
 import EmptyDisplay from './EmptyDisplay';
 
@@ -14,6 +14,7 @@ async function SentenceListing() {
 		// throw new Error('test');
 		sentences = await prisma.sentence.findMany({
 			select: sentenceSelect,
+			orderBy: { createdAt: 'desc' },
 		});
 	} catch (err) {
 		console.error(err);

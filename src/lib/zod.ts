@@ -66,12 +66,14 @@ export var FetchAnswersSchema = z.object({
 
 export type FetchAnswersType = z.infer<typeof FetchAnswersSchema>;
 
-var WordDataSchema = z.object({
-	id: z.cuid(),
-	piece: z.string().min(1),
-	isWord: z.boolean(),
-	IPA: z.string().optional(),
-});
+var WordDataSchema = z.union([
+	z.object({
+		id: z.cuid(),
+		piece: z.string().min(1),
+		IPA: z.string().optional(),
+	}),
+	z.string(),
+]);
 
 export var SentenceDataSchema = z.object({
 	sentence: SentenceSchema.shape.sentence,
@@ -80,3 +82,5 @@ export var SentenceDataSchema = z.object({
 	note: NoteSchema.shape.note.optional(),
 	audioBlob: z.instanceof(Blob).refine((blob) => blob.type.startsWith('audio/'), { error: 'Must be an audio Blob.' }),
 });
+
+export type SentenceDataType = z.infer<typeof SentenceDataSchema>;

@@ -6,35 +6,22 @@ import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent } from '@/components/AlertDialog';
-import WordWithPhoneticSymbol from '@/components/WordWithPhoneticSymbol';
-import { SentenceWithPieces } from '../SentenceListing/sentenceSelect';
+import { SentenceWithPieces } from '@/lib/sentenceReadSelect';
 import PlayAudioFromUrl from '@/components/PlayAudioFromUrl';
+import { useConstructedSentence } from '@/hooks';
 
 type SentenceListingEntryProps = {
 	index: number;
 } & SentenceWithPieces;
 
 function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl, pieces }: SentenceListingEntryProps) {
-	let sentencePieces = pieces.map(({ IPA, isWord, piece, id }) => {
-		if (!isWord) {
-			return piece;
-		} else {
-			if (!IPA) {
-				return piece;
-			} else {
-				return (
-					<WordWithPhoneticSymbol symbol={IPA} key={id}>
-						{piece}
-					</WordWithPhoneticSymbol>
-				);
-			}
-		}
-	});
+	let sentencePieces = useConstructedSentence(sentence, pieces);
 
 	return (
 		<AccordionItem id={id}>
-			<AccordionTrigger index={index}>
+			<AccordionTrigger>
 				<SentenceWrapper>
+					<Index>{`${index + 1}.`}</Index>&nbsp;
 					{sentencePieces}
 					<AudioButton
 						style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
@@ -45,12 +32,12 @@ function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl
 			<AccordionContent asChild={true}>
 				<ContentWrapper>
 					<InnerWrapper>
-						{note && <Title>Translation</Title>}
-						<p>{translation}</p>
+						{note && <Title>Translation:</Title>}
+						<Translation>{translation}</Translation>
 					</InnerWrapper>
 					{note && (
 						<InnerWrapper>
-							<NoteTitle>Note</NoteTitle>
+							<NoteTitle>Note:</NoteTitle>
 							<Note>{note}</Note>
 						</InnerWrapper>
 					)}
@@ -93,7 +80,7 @@ var AudioButton = styled(PlayAudioFromUrl)`
 `;
 
 var ContentWrapper = styled.div`
-	padding: var(--overall-padding) 14px;
+	padding: var(--overall-padding);
 	background-color: var(--bg-secondary);
 	border-bottom-left-radius: var(--border-radius);
 	border-bottom-right-radius: var(--border-radius);
@@ -103,19 +90,28 @@ var ContentWrapper = styled.div`
 	gap: 12px;
 `;
 
-var InnerWrapper = styled.div``;
+var InnerWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+`;
+
+var Translation = styled.p`
+	font-style: italic;
+`;
 
 var Note = styled.p`
-	font-style: italic;
+	white-space: pre-line;
+	background-color: var(--bg-tertiary);
+	padding: 5px 8px;
+	border-radius: 8px;
 `;
 
 var Title = styled.h4`
 	font-weight: 500;
 `;
 
-var NoteTitle = styled(Title)`
-	font-style: italic;
-`;
+var NoteTitle = styled(Title)``;
 
 var ActionWrapper = styled.div`
 	display: flex;
@@ -127,4 +123,10 @@ var EditIcon = styled(Icon)`
 	/* optical alignment */
 	position: relative;
 	top: -1px;
+`;
+
+var Index = styled.span`
+	font-size: 1rem;
+	font-weight: 300;
+	pointer-events: none;
 `;

@@ -13,7 +13,7 @@ function reducer(state: WordsType, action: Action) {
 			case 'addIPA':
 				let { word, IPA } = action.payload;
 				for (let item of draft) {
-					if (item.piece === word.text && item.id === word.id && item.isWord) {
+					if (typeof item !== 'string' && item.piece === word.text && item.id === word.id) {
 						item.IPA = IPA;
 					}
 				}
@@ -21,8 +21,8 @@ function reducer(state: WordsType, action: Action) {
 			case 'removeIPA':
 				for (let item of draft) {
 					let { word, id } = action.payload;
-					if (item.piece === word && item.isWord && item.id === id) {
-						item.IPA = '';
+					if (typeof item !== 'string' && item.piece === word && item.id === id) {
+						item.IPA = undefined;
 					}
 				}
 				break;

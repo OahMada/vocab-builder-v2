@@ -31,7 +31,10 @@ function WordListing({ title }: { title: React.ReactNode }) {
 			</TitleWrapper>
 			<WordWrapper>
 				{words.map((item) => {
-					return <Word key={item.id} piece={item.piece} isWord={item.isWord} IPA={item.isWord ? item.IPA : null} id={item.id} />;
+					if (typeof item === 'string') {
+						return item;
+					}
+					return <Word key={item.id} piece={item.piece} IPA={item.IPA ? item.IPA : null} id={item.id} />;
 				})}
 			</WordWrapper>
 		</>

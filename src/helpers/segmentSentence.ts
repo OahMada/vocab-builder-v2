@@ -8,15 +8,10 @@ function segmentSentence(sentence: string): WordsType {
 			return {
 				id: cuid(),
 				piece: item.segment,
-				isWord: true,
 				IPA: undefined,
 			};
 		} else {
-			return {
-				id: cuid(),
-				piece: item.segment,
-				isWord: false,
-			};
+			return item.segment;
 		}
 	});
 	return segmentedText;

@@ -2,14 +2,9 @@ export type Word =
 	| {
 			id: string;
 			piece: string;
-			isWord: true;
 			IPA: string | undefined;
 	  }
-	| {
-			id: string;
-			piece: string;
-			isWord: false;
-	  };
+	| string;
 
 export type WordsType = Word[];
 

@@ -1,2 +1,2 @@
-export * from './PlayAudioFromURL';
-export { default } from './PlayAudioFromURL';
+export * from './PlayAudioFromUrl';
+export { default } from './PlayAudioFromUrl';

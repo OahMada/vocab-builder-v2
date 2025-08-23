@@ -2,8 +2,9 @@ import { useTranslationContext } from '@/components/TranslationProvider';
 import { useWordsContext } from '@/components/WordsProvider';
 import { useNoteContext } from '@/components/NoteProvider';
 import { useAudioBlobContext } from '@/components/AudioBlobProvider';
+import { SentenceDataType } from '@/lib';
 
-export function useSentenceData() {
+export function useSentenceData(): [boolean, Omit<SentenceDataType, 'sentence'>] {
 	let { isLocalDataLoading: translationLoading, translation } = useTranslationContext();
 	let translationReady = !translationLoading && translation;
 	let { words } = useWordsContext();
@@ -11,7 +12,7 @@ export function useSentenceData() {
 	let noteReady = !noteLoading;
 	let { isLocalDataLoading: audioBlobLoading, audioBlob } = useAudioBlobContext();
 	let audioBlobReady = !audioBlobLoading && audioBlob;
-	let sentenceDataReady = translationReady && words && noteReady && audioBlobReady;
+	let sentenceDataReady = Boolean(translationReady && words && noteReady && audioBlobReady);
 
 	let sentenceData = {
 		translation: translation!,

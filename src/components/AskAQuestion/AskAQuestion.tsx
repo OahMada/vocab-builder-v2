@@ -77,7 +77,7 @@ var AnswerBox = styled.div`
 	position: relative;
 	padding: 12px;
 	overflow: auto;
-	max-height: 30dvh;
+	max-height: 70dvh;
 	min-height: 20dvh;
 	/* scrollbar-gutter: stable; */
 `;
