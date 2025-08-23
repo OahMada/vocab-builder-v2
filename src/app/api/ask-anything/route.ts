@@ -5,7 +5,18 @@ import { streamText, simulateReadableStream } from 'ai';
 import { MockLanguageModelV2 } from 'ai/test';
 import { handleZodError } from '@/utils';
 import { getCookie } from '@/helpers/getCookie';
-import { toErrorStream } from '@/helpers/toErrorStream';
+
+function toErrorStream(errorText: string) {
+	let data = { type: 'error', errorText };
+	let encoder = new TextEncoder();
+	let stream = new ReadableStream({
+		start(controller) {
+			controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+			controller.close();
+		},
+	});
+	return stream;
+}
 
 export async function POST(request: NextRequest) {
 	let body = await request.json();

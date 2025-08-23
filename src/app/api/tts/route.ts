@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server';
 import { SentenceSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { getCookie } from '@/helpers/getCookie';
-import { escapeForSSML } from '@/helpers/escapeForSSML';
 import { SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat } from 'microsoft-cognitiveservices-speech-sdk';
+
+function escapeForSSML(text: string) {
+	return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
 
 export async function POST() {
 	let sentence = await getCookie('user-input');
