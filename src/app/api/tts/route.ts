@@ -34,14 +34,14 @@ export async function POST() {
 		</voice>
 	</speak>`;
 	// https://github.com/vercel/next.js/issues/50572#issuecomment-1569775155
-	return new Promise((resolve) => {
+	return new Promise<NextResponse>((resolve) => {
 		synthesizer.speakSsmlAsync(
 			ssml,
 			(result) => {
 				// throw new Error('test');
 				let audioData = Buffer.from(result.audioData);
 				synthesizer.close();
-				resolve(resolve(NextResponse.json({ result: audioData.toString('base64') })));
+				resolve(NextResponse.json({ result: audioData.toString('base64') }));
 			},
 			(err) => {
 				console.error(err);
