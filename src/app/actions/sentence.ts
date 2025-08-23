@@ -4,7 +4,6 @@ import { Prisma } from '@prisma/client';
 
 import { createId } from '@paralleldrive/cuid2';
 import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
-import { DefaultAzureCredential } from '@azure/identity';
 import { SentenceDataSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import prisma from '@/lib/prisma';
@@ -26,9 +25,12 @@ type SentencePayload = Prisma.SentenceGetPayload<{ select: typeof sentenceSelect
 
 function getAudioUrl(blobName: string): [BlockBlobClient, string] {
 	let storageAccountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
-
-	if (!storageAccountName) throw new Error('Azure Storage accountName not found.');
-	let blobServiceClient = new BlobServiceClient(`https://${storageAccountName}.blob.core.windows.net`, new DefaultAzureCredential());
+	if (!storageAccountName) throw new Error('Azure Storage account name not found');
+	let storageAccountConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+	if (!storageAccountConnectionString) {
+		throw Error('Azure Storage Connection string not found');
+	}
+	let blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
 	let containerName = process.env.AZURE_STORAGE_AUDIO_CONTAINER_NAME;
 	if (!containerName) throw new Error('Azure Storage containerName not found.');
 	let containerClient = blobServiceClient.getContainerClient(containerName);
