@@ -1,7 +1,7 @@
 'use server';
 
 import { Prisma } from '@prisma/client';
-
+import { revalidateTag } from 'next/cache';
 import { createId } from '@paralleldrive/cuid2';
 import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
 import { SentenceDataSchema } from '@/lib';
@@ -116,5 +116,7 @@ export async function saveSentenceData(data: unknown): Promise<{ error: string }
 		}
 		return { error: 'Failed to save sentence.' };
 	}
+
+	revalidateTag('sentences');
 	return { data: dbResult.value };
 }
