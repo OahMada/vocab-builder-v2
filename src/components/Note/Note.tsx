@@ -4,7 +4,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Textarea from '@/components/Textarea';
+import Textarea from '@/components/Textarea/Textarea';
 import CardWrapper from '@/app/(secondaryPages)/sentence/[sentenceId]/CardWrapper';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';

@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { UserInput, UserInputSchema } from '@/lib';
-import Textarea from '@/components/Textarea';
+import Textarea from '@/components/Textarea/Textarea';
 import ActionButtons from './ActionButtons';
 import Spacer from '@/components/Spacer';
 import Toast from '@/components/Toast';

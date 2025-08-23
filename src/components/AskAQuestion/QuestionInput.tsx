@@ -5,7 +5,7 @@ import * as React from 'react';
 import { FieldErrors, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { FetchAnswersSchema, FetchAnswersType } from '@/lib';
-import Textarea from '@/components/Textarea';
+import Textarea from '@/components/Textarea/Textarea';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
