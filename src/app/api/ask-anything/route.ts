@@ -59,12 +59,12 @@ export async function POST(request: NextRequest) {
 
 	try {
 		// throw new Error('error');
-		// let result = streamText({
-		// 	model: openai.responses('gpt-4.1'),
-		// 	system: `The user is gonna ask you a question about this specific sentence: ${sentenceResult.data.sentence}. Answer the question in detail and lean your explanation into grammar. Answer the question in the same language as the question. Structure the answer a bit for clarity. Don't repeat the sentence in your response.`,
-		// 	prompt: questionResult.data.question,
-		// 	abortSignal: AbortSignal.any([AbortSignal.timeout(5000), request.signal]),
-		// });
+		let result = streamText({
+			model: openai.responses('gpt-4.1'),
+			system: `The user is gonna ask you a question about this specific sentence: ${sentenceResult.data.sentence}. Answer the question in detail and lean your explanation into grammar. Answer the question in the same language as the question. Structure the answer a bit for clarity. Don't repeat the sentence in your response.`,
+			prompt: questionResult.data.question,
+			abortSignal: AbortSignal.any([AbortSignal.timeout(20000), request.signal]),
+		});
 
 		return result.toUIMessageStreamResponse();
 	} catch (error) {
