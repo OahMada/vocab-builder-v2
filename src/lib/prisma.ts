@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { PrismaClient } from '../../generated/prisma/client.js';
+import { PrismaClient } from '@prisma/client';
 
 let globalForPrisma = global as unknown as {
 	prisma: PrismaClient;

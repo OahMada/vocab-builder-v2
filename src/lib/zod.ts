@@ -68,7 +68,7 @@ export type FetchAnswersType = z.infer<typeof FetchAnswersSchema>;
 
 var WordDataSchema = z.union([
 	z.object({
-		id: z.cuid(),
+		id: z.cuid2(),
 		piece: z.string().min(1),
 		IPA: z.string().optional(),
 	}),

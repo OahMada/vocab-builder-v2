@@ -2,7 +2,7 @@
 
 import { Prisma } from '@prisma/client';
 
-import cuid from 'cuid';
+import { createId } from '@paralleldrive/cuid2';
 import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
 import { DefaultAzureCredential } from '@azure/identity';
 import { SentenceDataSchema } from '@/lib';
@@ -55,7 +55,7 @@ async function createDatabaseEntry(data: Prisma.SentenceCreateInput) {
 }
 
 export async function saveSentenceData(data: unknown): Promise<{ error: string } | { data: SentencePayload }> {
-	let sentenceId = cuid();
+	let sentenceId = createId();
 	let result = SentenceDataSchema.safeParse(data);
 	if (!result.success) {
 		let errors = handleZodError(result.error, 'prettify');
