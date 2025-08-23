@@ -8,12 +8,12 @@ import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Button from '@/components/Button';
 
-interface TextAreaProps {
+interface TextareaProps {
 	clearInput: () => void;
 	value: string;
 }
 
-function Textarea({ value, clearInput, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
+function Textarea({ value, clearInput, ...delegated }: TextareaProps & React.ComponentProps<'textarea'>) {
 	return (
 		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
 			<InputArea as='textarea' {...delegated} rows={1} autoFocus={true} />
