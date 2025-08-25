@@ -3,7 +3,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useForm, FieldErrors } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { UserInput, UserInputSchema } from '@/lib';
@@ -13,17 +13,13 @@ import Spacer from '@/components/Spacer';
 import Toast from '@/components/Toast';
 import { setCookie, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';
+import checkForSentenceUniqueness from '@/app/actions/checkSentenceUniqueness';
 
 function SentenceInput() {
+	let [isLoading, startTransition] = React.useTransition();
+	let [errMsg, setErrMsg] = React.useState('');
 	let router = useRouter();
-	let {
-		watch,
-		setValue,
-		register,
-		handleSubmit,
-		clearErrors,
-		formState: { errors },
-	} = useForm<UserInput>({
+	let { watch, setValue, register, handleSubmit } = useForm<UserInput>({
 		resolver: zodResolver(UserInputSchema),
 		reValidateMode: 'onSubmit',
 		shouldFocusError: false,
@@ -38,29 +34,43 @@ function SentenceInput() {
 	let userInput = watch('user-input');
 	let { ref, ...rest } = register('user-input', {
 		onChange: () => {
-			clearErrors('user-input');
+			setErrMsg('');
 		},
 	});
 
 	function clearInput() {
-		clearErrors('user-input');
+		setErrMsg('');
 		setValue('user-input', '');
 		updateLocalStorage('delete', 'user-input');
 	}
 
-	function onSubmit(data: UserInput) {
-		// TODO check if sentence already exists
-		setCookie('user-input', data['user-input']);
-		updateLocalStorage('save', 'user-input', data['user-input']);
-		router.push('/sentence/new');
+	async function onSubmit(data: UserInput) {
+		startTransition(async () => {
+			let result = await checkForSentenceUniqueness(data['user-input']);
+			if ('error' in result) {
+				setErrMsg(result.error);
+				return;
+			} else if ('data' in result && result.data) {
+				setErrMsg('The exact sentence is already existed in database. You should edit the existing one.');
+				return;
+			}
+			setCookie('user-input', data['user-input']);
+			updateLocalStorage('save', 'user-input', data['user-input']);
+			router.push('/sentence/new');
+		});
+	}
+
+	function onError(errors: FieldErrors<UserInput>) {
+		let msg = errors['user-input']!.message as string;
+		setErrMsg(msg);
 	}
 
 	return (
-		<Wrapper onSubmit={handleSubmit(onSubmit)}>
+		<Wrapper onSubmit={handleSubmit(onSubmit, onError)}>
 			<Spacer size={4} />
 			<TextArea placeholder='Enter or paste in a sentence.' clearInput={clearInput} {...rest} ref={ref} value={userInput} />
-			<ActionButtons handlePaste={updateInput} submitDisabled={!!errors['user-input']} />
-			{errors['user-input'] && <Toast content={errors['user-input'].message} />}
+			<ActionButtons handlePaste={updateInput} submitDisabled={!!errMsg || isLoading} />
+			{errMsg && <Toast content={errMsg} />}
 		</Wrapper>
 	);
 }

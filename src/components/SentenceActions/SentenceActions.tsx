@@ -8,7 +8,7 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import AskAQuestion from '@/components/AskAQuestion';
 import SentenceAudio from '@/components/SentenceAudio';
-import { saveSentenceData } from '@/app/actions/sentence';
+import createSentenceData from '@/app/actions/createSentence';
 import { deleteLocalData } from '@/helpers/deleteLocalData';
 import Loading from '@/components/Loading';
 import { useSentenceData } from '@/hooks';
@@ -37,18 +37,19 @@ function SentenceActions({ sentence }: { sentence: string }) {
 
 	function handleCancel() {
 		router.back();
+		deleteLocalData();
 	}
 
 	async function handleSubmit() {
 		setErrorMsg('');
 		startTransition(async () => {
-			let result = await saveSentenceData(sentenceData);
+			let result = await createSentenceData(sentenceData);
 
 			if ('error' in result) {
 				setErrorMsg(handleError(result.error));
 				return;
 			}
-			deleteLocalData();
+			deleteLocalData(true);
 			router.replace('/');
 		});
 	}
@@ -56,12 +57,12 @@ function SentenceActions({ sentence }: { sentence: string }) {
 	return (
 		<>
 			<Wrapper>
-				<HelpButton variant='outline' onClick={showModal}>
+				<HelpButton variant='outline' onClick={showModal} disabled={isLoading}>
 					<Icon id='help' />
 					<VisuallyHidden>Ask Any Questions</VisuallyHidden>
 				</HelpButton>
-				<SentenceAudio />
-				<CancelButton variant='outline' onClick={handleCancel}>
+				<SentenceAudio isSubmitting={isLoading} />
+				<CancelButton variant='outline' onClick={handleCancel} disabled={isLoading}>
 					<Icon id='x' />
 					&nbsp;Cancel
 				</CancelButton>

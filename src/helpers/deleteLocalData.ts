@@ -1,6 +1,13 @@
 import { updateLocalDB } from './updateLocalDB';
+import { updateLocalStorage } from '@/helpers/updateLocalStorage';
 
-export function deleteLocalData() {
-	window.localStorage.removeItem('vocab-builder');
-	updateLocalDB('delete');
+export async function deleteLocalData(includeSentence: boolean = false) {
+	if (includeSentence) {
+		updateLocalStorage('delete', 'user-input');
+	}
+	updateLocalStorage('delete', 'translation');
+	updateLocalStorage('delete', 'words');
+	updateLocalStorage('delete', 'note');
+
+	await updateLocalDB('delete');
 }

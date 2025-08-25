@@ -47,7 +47,7 @@ export default function QuestionInput({
 		triggerComplete(data.question);
 	}
 	function onError(errors: FieldErrors<FetchAnswersType>) {
-		let msg = errors.question?.message as string;
+		let msg = errors.question!.message as string;
 		updateError(msg);
 	}
 

@@ -18,7 +18,7 @@ interface TTSResponse {
 
 var url = '/api/tts';
 
-function SentenceAudio() {
+function SentenceAudio({ isSubmitting }: { isSubmitting: boolean }) {
 	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, void>(url, postFetcher);
 	let { isLocalDataLoading, audioBlob, updateBlob } = useAudioBlobContext();
 	let { isPlaying, playAudio, stopAudio, enableAutoPlay } = usePlayAudio(audioBlob);
@@ -35,6 +35,12 @@ function SentenceAudio() {
 			activateTrigger();
 		}
 	}, [audioBlob, isLocalDataLoading, trigger, updateBlob]);
+
+	React.useEffect(() => {
+		if (isSubmitting) {
+			stopAudio();
+		}
+	}, [isSubmitting, stopAudio]);
 
 	async function retryTTS() {
 		reset();
@@ -64,7 +70,7 @@ function SentenceAudio() {
 					<VisuallyHidden>stop play audio </VisuallyHidden>
 				</StopPlayButton>
 			) : (
-				<AudioButton variant='outline' onClick={playAudio} disabled={!audioBlob}>
+				<AudioButton variant='outline' onClick={playAudio} disabled={!audioBlob || isSubmitting}>
 					<Icon id='audio' />
 					<VisuallyHidden>Play sentence audio</VisuallyHidden>
 				</AudioButton>

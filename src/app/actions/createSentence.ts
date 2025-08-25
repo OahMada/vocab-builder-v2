@@ -2,6 +2,7 @@
 
 import { Prisma } from '@prisma/client';
 import { revalidateTag } from 'next/cache';
+import { cookies } from 'next/headers';
 import { createId } from '@paralleldrive/cuid2';
 import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
 import { SentenceDataSchema } from '@/lib';
@@ -56,7 +57,7 @@ async function createDatabaseEntry(data: Prisma.SentenceCreateInput) {
 	return createdSentence;
 }
 
-export async function saveSentenceData(data: unknown): Promise<{ error: string } | { data: SentencePayload }> {
+export default async function createSentenceData(data: unknown): Promise<{ error: string } | { data: SentencePayload }> {
 	let sentenceId = createId();
 	let result = SentenceDataSchema.safeParse(data);
 	if (!result.success) {
@@ -118,5 +119,6 @@ export async function saveSentenceData(data: unknown): Promise<{ error: string }
 	}
 
 	revalidateTag('sentences');
+	(await cookies()).delete('user-input');
 	return { data: dbResult.value };
 }
