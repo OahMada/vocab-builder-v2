@@ -53,9 +53,25 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 			<QuestionInput triggerComplete={triggerComplete} updateError={updateError} onClearInput={onClearInput} submitDisabled={isLoading} />
 			<SmallHeading>Answer:</SmallHeading>
 			<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
-				<Markdown remarkPlugins={[remarkGfm]}>{completion}</Markdown>
+				<Markdown
+					remarkPlugins={[remarkGfm]}
+					components={{
+						table: (props) => (
+							<TableWrapper>
+								<table {...props} />
+							</TableWrapper>
+						),
+					}}
+				>
+					{completion}
+				</Markdown>
 				{errorMsg && <ErrorText>{errorMsg}</ErrorText>}
-				{isLoading && <AnswerLoading description='loading answer to the question' />}
+				{isLoading && (
+					<AnswerLoading
+						description='loading answer to the question'
+						style={{ '--modal-padding': '16px', '--answer-box-padding': '12px' } as React.CSSProperties}
+					/>
+				)}
 			</AnswerBox>
 		</Modal>
 	);
@@ -74,7 +90,6 @@ var AnswerBox = styled.div`
 	border-radius: 12px;
 	background-color: var(--bg-secondary);
 	flex: 1;
-	position: relative;
 	padding: 12px;
 	overflow: auto;
 	max-height: 70dvh;
@@ -83,14 +98,16 @@ var AnswerBox = styled.div`
 `;
 
 var AnswerLoading = styled(Loading)`
-	position: absolute;
-	/* TODO change values in different breakpoints */
-	/* bottom: 24px;
-	right: 8px; */
-	bottom: 12px;
-	right: 12px;
+	position: fixed;
+	bottom: calc(var(--modal-padding) + var(--answer-box-padding));
+	right: calc(var(--modal-padding) + var(--answer-box-padding));
 `;
 
 var ErrorText = styled.span`
 	color: var(--text-status-warning);
+`;
+
+var TableWrapper = styled.div`
+	overflow-x: auto;
+	margin: 10px 0;
 `;
