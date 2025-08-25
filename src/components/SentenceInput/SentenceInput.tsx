@@ -3,7 +3,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
-import { useForm, FieldErrors } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { UserInput, UserInputSchema } from '@/lib';
@@ -17,9 +17,19 @@ import checkForSentenceUniqueness from '@/app/actions/sentence/checkSentenceUniq
 
 function SentenceInput() {
 	let [isLoading, startTransition] = React.useTransition();
+
+	// handle server action error only. this kind of error doesn't stop user from re-submitting
 	let [errMsg, setErrMsg] = React.useState('');
+
 	let router = useRouter();
-	let { watch, setValue, register, handleSubmit } = useForm<UserInput>({
+	let {
+		watch,
+		setValue,
+		register,
+		handleSubmit,
+		formState: { errors },
+		clearErrors,
+	} = useForm<UserInput>({
 		resolver: zodResolver(UserInputSchema),
 		reValidateMode: 'onSubmit',
 		shouldFocusError: false,
@@ -34,17 +44,19 @@ function SentenceInput() {
 	let userInput = watch('user-input');
 	let { ref, ...rest } = register('user-input', {
 		onChange: () => {
-			setErrMsg('');
+			clearErrors('user-input');
 		},
 	});
 
 	function clearInput() {
 		setErrMsg('');
+		clearErrors('user-input');
 		setValue('user-input', '');
 		updateLocalStorage('delete', 'user-input');
 	}
 
 	async function onSubmit(data: UserInput) {
+		setErrMsg('');
 		startTransition(async () => {
 			let result = await checkForSentenceUniqueness(data['user-input']);
 			if ('error' in result) {
@@ -60,17 +72,13 @@ function SentenceInput() {
 		});
 	}
 
-	function onError(errors: FieldErrors<UserInput>) {
-		let msg = errors['user-input']!.message as string;
-		setErrMsg(msg);
-	}
-
 	return (
-		<Wrapper onSubmit={handleSubmit(onSubmit, onError)}>
+		<Wrapper onSubmit={handleSubmit(onSubmit)}>
 			<Spacer size={4} />
 			<TextArea placeholder='Enter or paste in a sentence.' clearInput={clearInput} {...rest} ref={ref} value={userInput} />
-			<ActionButtons handlePaste={updateInput} submitDisabled={!!errMsg || isLoading} />
+			<ActionButtons handlePaste={updateInput} submitDisabled={!!errors['user-input'] || isLoading} isLoading={isLoading} />
 			{errMsg && <Toast content={errMsg} />}
+			{errors['user-input'] && <Toast content={errors['user-input'].message} />}
 		</Wrapper>
 	);
 }

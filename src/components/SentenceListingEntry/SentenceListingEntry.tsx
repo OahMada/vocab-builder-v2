@@ -11,12 +11,14 @@ import { useConstructedSentence } from '@/hooks';
 import deleteSentence from '@/app/actions/sentence/deleteSentence';
 import AlertDialog from '@/components/AlertDialog';
 import Toast from '@/components/Toast';
+import OptimisticAction from '@/components/OptimisticSentenceListing/OptimisticActionType';
 
 type SentenceListingEntryProps = {
 	index: number;
+	mutateSentences: (action: OptimisticAction) => void;
 } & SentenceWithPieces;
 
-function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl, pieces }: SentenceListingEntryProps) {
+function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl, pieces, mutateSentences }: SentenceListingEntryProps) {
 	let sentencePieces = useConstructedSentence(sentence, pieces);
 	let [isLoading, setIsLoading] = React.useState(false);
 	let [errorMsg, setErrorMsg] = React.useState('');
@@ -27,6 +29,9 @@ function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl
 		if ('error' in result) {
 			setErrorMsg(result.error);
 		}
+		React.startTransition(() => {
+			mutateSentences({ type: 'delete', id });
+		});
 		setIsLoading(false);
 	}
 	return (

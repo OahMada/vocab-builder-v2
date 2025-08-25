@@ -5,13 +5,15 @@ import styled from 'styled-components';
 import Icon from '@/components/Icon';
 import Button from '@/components/Button';
 import { useGetClipboard } from '@/hooks';
+import Loading from '@/components/Loading';
 
 interface ActionButtonProps {
 	handlePaste: (clipboard: string) => void;
 	submitDisabled: boolean;
+	isLoading: boolean;
 }
 
-function ActionButtons({ handlePaste, submitDisabled }: ActionButtonProps) {
+function ActionButtons({ handlePaste, submitDisabled, isLoading }: ActionButtonProps) {
 	let [isClipboardDisabled, getClipboard] = useGetClipboard();
 	async function handleClickPaste() {
 		if (getClipboard.current) {
@@ -27,7 +29,7 @@ function ActionButtons({ handlePaste, submitDisabled }: ActionButtonProps) {
 				&nbsp;Paste
 			</Button>
 			<Button variant='fill' type='submit' disabled={submitDisabled}>
-				<Icon id='enter' />
+				{isLoading ? <Loading description='submitting sentence' /> : <Icon id='enter' />}
 				&nbsp;Enter
 			</Button>
 		</Wrapper>

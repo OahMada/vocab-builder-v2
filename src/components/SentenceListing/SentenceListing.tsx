@@ -1,12 +1,9 @@
 import * as React from 'react';
 import { unstable_cache } from 'next/cache';
-import { AccordionRoot } from '@/components/Accordion';
-import SentenceListingEntry from '@/components/SentenceListingEntry';
-import { Loading, Wrapper } from './StyledComponents';
 import prisma from '@/lib/prisma';
 import { SentenceWithPieces, sentenceReadSelect } from '@/lib';
 import ErrorDisplay from './ErrorDisplay';
-import EmptyDisplay from './EmptyDisplay';
+import OptimisticSentenceListing from '@/components/OptimisticSentenceListing';
 
 // TODO put a suspense boundary around this element
 
@@ -31,20 +28,7 @@ async function SentenceListing() {
 		return <ErrorDisplay />;
 	}
 
-	if (sentences.length === 0) {
-		return <EmptyDisplay />;
-	}
-
-	return (
-		<Wrapper>
-			<AccordionRoot>
-				{sentences.map(({ id, ...rest }, index) => {
-					return <SentenceListingEntry key={id} index={index} id={id} {...rest} />;
-				})}
-			</AccordionRoot>
-			<Loading>Loading...</Loading>
-		</Wrapper>
-	);
+	return <OptimisticSentenceListing sentences={sentences} />;
 }
 
 export default SentenceListing;
