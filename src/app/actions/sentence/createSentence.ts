@@ -5,24 +5,9 @@ import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { createId } from '@paralleldrive/cuid2';
 import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
-import { SentenceDataSchema } from '@/lib';
+import { SentenceDataSchema, sentenceReadSelect, SentenceWithPieces } from '@/lib';
 import { handleZodError } from '@/utils';
 import prisma from '@/lib/prisma';
-
-var sentenceSelect = {
-	note: true,
-	sentence: true,
-	translation: true,
-	audioUrl: true,
-	pieces: {
-		select: {
-			IPA: true,
-			piece: true,
-		},
-	},
-} satisfies Prisma.SentenceSelect;
-
-type SentencePayload = Prisma.SentenceGetPayload<{ select: typeof sentenceSelect }>;
 
 function getAudioUrl(blobName: string): [BlockBlobClient, string] {
 	let storageAccountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
@@ -52,12 +37,12 @@ async function saveToBlobStorage(blockBlobClient: BlockBlobClient, audioBlob: Bl
 async function createDatabaseEntry(data: Prisma.SentenceCreateInput) {
 	let createdSentence = await prisma.sentence.create({
 		data,
-		select: sentenceSelect,
+		select: sentenceReadSelect,
 	});
 	return createdSentence;
 }
 
-export default async function createSentenceData(data: unknown): Promise<{ error: string } | { data: SentencePayload }> {
+export default async function createSentenceData(data: unknown): Promise<{ error: string } | { data: SentenceWithPieces }> {
 	let sentenceId = createId();
 	let result = SentenceDataSchema.safeParse(data);
 	if (!result.success) {

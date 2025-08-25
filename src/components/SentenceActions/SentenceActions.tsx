@@ -8,7 +8,7 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import AskAQuestion from '@/components/AskAQuestion';
 import SentenceAudio from '@/components/SentenceAudio';
-import createSentenceData from '@/app/actions/createSentence';
+import createSentenceData from '@/app/actions/sentence/createSentence';
 import { deleteLocalData } from '@/helpers/deleteLocalData';
 import Loading from '@/components/Loading';
 import { useSentenceData } from '@/hooks';
@@ -41,8 +41,8 @@ function SentenceActions({ sentence }: { sentence: string }) {
 	}
 
 	async function handleSubmit() {
-		setErrorMsg('');
 		startTransition(async () => {
+			setErrorMsg('');
 			let result = await createSentenceData(sentenceData);
 
 			if ('error' in result) {

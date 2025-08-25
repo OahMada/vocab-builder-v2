@@ -84,3 +84,5 @@ export var SentenceDataSchema = z.object({
 });
 
 export type SentenceDataType = z.infer<typeof SentenceDataSchema>;
+
+export var IdSchema = z.cuid2();

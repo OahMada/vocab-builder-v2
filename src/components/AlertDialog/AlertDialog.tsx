@@ -7,41 +7,57 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import DescriptionText from '@/components/DescriptionText';
 import Spacer from '@/components/Spacer';
+import Loading from '@/components/Loading';
 
-export var AlertDialog = AlertDialogPrimitives.Root;
-export var AlertDialogTrigger = AlertDialogPrimitives.Trigger;
-
-export function AlertDialogContent({
+export default function AlertDialog({
 	description,
+	handleDeleteAction,
+	isDeleting,
+	extra,
 	children,
 	...delegated
-}: { description: string } & React.ComponentProps<typeof AlertDialogPrimitives.Content>) {
+}: {
+	description: string;
+	handleDeleteAction: () => Promise<void>;
+	isDeleting: boolean;
+	extra?: React.ReactNode;
+} & React.ComponentProps<typeof AlertDialogPrimitives.Content>) {
+	let [open, setOpen] = React.useState(false);
 	return (
-		<AlertDialogPrimitives.Portal>
-			<Overlay />
-			<Content {...delegated}>
-				<Title>Confirm your action</Title>
-				<AlertDialogPrimitives.Description asChild={true}>
-					<DescriptionText>{description}</DescriptionText>
-				</AlertDialogPrimitives.Description>
-				{children}
-				<Spacer size={1} />
-				<ActionWrapper>
-					<AlertDialogPrimitives.Cancel asChild={true}>
-						<Button variant='outline'>
-							<Icon id='x' />
-							&nbsp;Cancel
-						</Button>
-					</AlertDialogPrimitives.Cancel>
-					<AlertDialogPrimitives.Action asChild={true}>
-						<ConfirmButton variant='outline'>
-							<Icon id='enter' />
+		<AlertDialogPrimitives.Root open={open} onOpenChange={setOpen}>
+			<AlertDialogPrimitives.Trigger asChild={true}>{children}</AlertDialogPrimitives.Trigger>
+			<AlertDialogPrimitives.Portal>
+				<Overlay />
+				<Content {...delegated}>
+					<Title>Confirm your action</Title>
+					<AlertDialogPrimitives.Description asChild={true}>
+						<DescriptionText>{description}</DescriptionText>
+					</AlertDialogPrimitives.Description>
+					{extra}
+					<Spacer size={1} />
+					<ActionWrapper>
+						<AlertDialogPrimitives.Cancel asChild={true}>
+							<Button variant='outline' disabled={isDeleting}>
+								<Icon id='x' />
+								&nbsp;Cancel
+							</Button>
+						</AlertDialogPrimitives.Cancel>
+						<ConfirmButton
+							type='button'
+							variant='outline'
+							onClick={async () => {
+								await handleDeleteAction();
+								setOpen(false);
+							}}
+							disabled={isDeleting}
+						>
+							{isDeleting ? <Loading description='action ongoing' /> : <Icon id='enter' />}
 							&nbsp;I&apos;m sure
 						</ConfirmButton>
-					</AlertDialogPrimitives.Action>
-				</ActionWrapper>
-			</Content>
-		</AlertDialogPrimitives.Portal>
+					</ActionWrapper>
+				</Content>
+			</AlertDialogPrimitives.Portal>
+		</AlertDialogPrimitives.Root>
 	);
 }
 

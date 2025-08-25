@@ -4,10 +4,11 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
-import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '@/components/AlertDialog';
+import AlertDialog from '@/components/AlertDialog';
 import InputBox from '@/components/InputBox';
 
 function DeleteAccount() {
+	let [isLoading, startTransition] = React.useTransition();
 	let [email, setEmail] = React.useState('');
 
 	function clearEmail() {
@@ -18,26 +19,32 @@ function DeleteAccount() {
 		setEmail(e.target.value);
 	}
 
+	function handleDeleteAction() {}
+
+	let extra = (
+		<Wrapper>
+			<Label htmlFor='email'>Email:</Label>
+			<InputBox
+				input={email}
+				clearInput={clearEmail}
+				onChange={onEmailChange}
+				id='email'
+				style={{ '--bg-color': 'transparent' } as React.CSSProperties}
+			/>
+		</Wrapper>
+	);
+
 	return (
-		<AlertDialog>
-			<AlertDialogTrigger asChild={true}>
-				<DeleteAccountButton variant='outline'>
-					<Icon id='delete' />
-					&nbsp; Delete Account
-				</DeleteAccountButton>
-			</AlertDialogTrigger>
-			<AlertDialogContent description='This action cannot be undone. Your data will be deleted and can not be restored. Enter your email address to continue.'>
-				<Wrapper>
-					<Label htmlFor='email'>Email:</Label>
-					<InputBox
-						input={email}
-						clearInput={clearEmail}
-						onChange={onEmailChange}
-						id='email'
-						style={{ '--bg-color': 'transparent' } as React.CSSProperties}
-					/>
-				</Wrapper>
-			</AlertDialogContent>
+		<AlertDialog
+			description='This action cannot be undone. Your data will be deleted and can not be restored. Enter your email address to continue.'
+			extra={extra}
+			handleDeleteAction={handleDeleteAction}
+			isDeleting={isLoading}
+		>
+			<DeleteAccountButton variant='outline'>
+				<Icon id='delete' />
+				&nbsp; Delete Account
+			</DeleteAccountButton>
 		</AlertDialog>
 	);
 }

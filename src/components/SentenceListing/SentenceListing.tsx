@@ -4,7 +4,7 @@ import { AccordionRoot } from '@/components/Accordion';
 import SentenceListingEntry from '@/components/SentenceListingEntry';
 import { Loading, Wrapper } from './StyledComponents';
 import prisma from '@/lib/prisma';
-import { SentenceWithPieces, sentenceSelect } from '@/lib';
+import { SentenceWithPieces, sentenceReadSelect } from '@/lib';
 import ErrorDisplay from './ErrorDisplay';
 import EmptyDisplay from './EmptyDisplay';
 
@@ -13,12 +13,12 @@ import EmptyDisplay from './EmptyDisplay';
 const getCachedSentences = unstable_cache(
 	async () => {
 		return await prisma.sentence.findMany({
-			select: sentenceSelect,
+			select: sentenceReadSelect,
 			orderBy: { createdAt: 'desc' },
 		});
 	},
-	['sentences'],
-	{ revalidate: 3600, tags: ['posts'] }
+	[],
+	{ revalidate: 3600, tags: ['sentences'] }
 );
 
 async function SentenceListing() {

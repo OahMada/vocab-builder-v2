@@ -13,7 +13,7 @@ import Spacer from '@/components/Spacer';
 import Toast from '@/components/Toast';
 import { setCookie, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';
-import checkForSentenceUniqueness from '@/app/actions/checkSentenceUniqueness';
+import checkForSentenceUniqueness from '@/app/actions/sentence/checkSentenceUniqueness';
 
 function SentenceInput() {
 	let [isLoading, startTransition] = React.useTransition();

@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 
-export var sentenceSelect = {
+export var sentenceReadSelect = {
 	id: true,
 	note: true,
 	sentence: true,
@@ -15,4 +15,4 @@ export var sentenceSelect = {
 	},
 } satisfies Prisma.SentenceSelect;
 
-export type SentenceWithPieces = Prisma.SentenceGetPayload<{ select: typeof sentenceSelect }>;
+export type SentenceWithPieces = Prisma.SentenceGetPayload<{ select: typeof sentenceReadSelect }>;

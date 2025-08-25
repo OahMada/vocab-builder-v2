@@ -5,10 +5,12 @@ import styled from 'styled-components';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/Accordion';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent } from '@/components/AlertDialog';
 import { SentenceWithPieces } from '@/lib/sentenceReadSelect';
 import PlayAudioFromUrl from '@/components/PlayAudioFromUrl';
 import { useConstructedSentence } from '@/hooks';
+import deleteSentence from '@/app/actions/sentence/deleteSentence';
+import AlertDialog from '@/components/AlertDialog';
+import Toast from '@/components/Toast';
 
 type SentenceListingEntryProps = {
 	index: number;
@@ -16,49 +18,59 @@ type SentenceListingEntryProps = {
 
 function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl, pieces }: SentenceListingEntryProps) {
 	let sentencePieces = useConstructedSentence(sentence, pieces);
+	let [isLoading, setIsLoading] = React.useState(false);
+	let [errorMsg, setErrorMsg] = React.useState('');
 
+	async function handleDeleteAction() {
+		setIsLoading(true);
+		let result = await deleteSentence(id);
+		if ('error' in result) {
+			setErrorMsg(result.error);
+		}
+		setIsLoading(false);
+	}
 	return (
-		<AccordionItem id={id}>
-			<AccordionTrigger>
-				<SentenceWrapper>
-					<Index>{`${index + 1}.`}</Index>&nbsp;
-					{sentencePieces}
-					<AudioButton
-						style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
-						audioUrl={audioUrl}
-					/>
-				</SentenceWrapper>
-			</AccordionTrigger>
-			<AccordionContent asChild={true}>
-				<ContentWrapper>
-					<InnerWrapper>
-						{note && <Title>Translation:</Title>}
-						<Translation>{translation}</Translation>
-					</InnerWrapper>
-					{note && (
+		<>
+			<AccordionItem id={id}>
+				<AccordionTrigger>
+					<SentenceWrapper>
+						<Index>{`${index + 1}.`}</Index>&nbsp;
+						{sentencePieces}
+						<AudioButton
+							style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
+							audioUrl={audioUrl}
+						/>
+					</SentenceWrapper>
+				</AccordionTrigger>
+				<AccordionContent asChild={true}>
+					<ContentWrapper>
 						<InnerWrapper>
-							<NoteTitle>Note:</NoteTitle>
-							<Note>{note}</Note>
+							{note && <Title>Translation:</Title>}
+							<Translation>{translation}</Translation>
 						</InnerWrapper>
-					)}
-					<ActionWrapper>
-						<AlertDialog>
-							<AlertDialogTrigger asChild={true}>
+						{note && (
+							<InnerWrapper>
+								<NoteTitle>Note:</NoteTitle>
+								<Note>{note}</Note>
+							</InnerWrapper>
+						)}
+						<ActionWrapper>
+							<AlertDialog description='This action cannot be undone.' handleDeleteAction={handleDeleteAction} isDeleting={isLoading}>
 								<Button variant='fill' style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties}>
 									<Icon id='delete' />
 									&nbsp;Delete
 								</Button>
-							</AlertDialogTrigger>
-							<AlertDialogContent description='This action cannot be undone.' />
-						</AlertDialog>
-						<Button variant='fill' href='/sentence/id'>
-							<EditIcon id='edit' />
-							&nbsp;Edit
-						</Button>
-					</ActionWrapper>
-				</ContentWrapper>
-			</AccordionContent>
-		</AccordionItem>
+							</AlertDialog>
+							<Button variant='fill' href='/sentence/id' disabled={isLoading}>
+								<EditIcon id='edit' />
+								&nbsp;Edit
+							</Button>
+						</ActionWrapper>
+					</ContentWrapper>
+				</AccordionContent>
+			</AccordionItem>
+			{errorMsg && <Toast content={errorMsg} />}
+		</>
 	);
 }
 
