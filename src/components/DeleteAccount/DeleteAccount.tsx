@@ -19,7 +19,7 @@ function DeleteAccount() {
 		setEmail(e.target.value);
 	}
 
-	function handleDeleteAction() {}
+	async function handleDeleteAction() {}
 
 	let extra = (
 		<Wrapper>
