@@ -12,14 +12,14 @@ function TranslationProvider({ databaseTranslation, children }: { databaseTransl
 		setTranslation(translation);
 	}, []);
 
-	let isLoading = useReadLocalStorage<string>('translation', updateTranslation);
-
 	// write changes to local storage
 	React.useEffect(() => {
 		if (translation) {
 			updateLocalStorage<string>('save', 'translation', translation);
 		}
 	}, [translation]);
+
+	let isLoading = useReadLocalStorage<string>('translation', updateTranslation);
 
 	let value = React.useMemo(
 		() => ({

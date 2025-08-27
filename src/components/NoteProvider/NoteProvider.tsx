@@ -12,14 +12,13 @@ function NoteProvider({ databaseNote, children }: { databaseNote?: string; child
 		setNote(note);
 	}, []);
 
-	let isLoading = useReadLocalStorage<string>('note', updateNote);
-
 	// write changes to local storage
 	React.useEffect(() => {
 		if (note) {
 			updateLocalStorage<string>('save', 'note', note);
 		}
 	}, [note]);
+	let isLoading = useReadLocalStorage<string>('note', updateNote);
 
 	let value = React.useMemo(
 		() => ({

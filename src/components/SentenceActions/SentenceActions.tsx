@@ -49,7 +49,12 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 
 	function handleCancel() {
 		router.back();
-		deleteLocalData();
+
+		if (sentenceId) {
+			deleteLocalData(true);
+		} else {
+			deleteLocalData();
+		}
 	}
 
 	async function handleSubmit() {
