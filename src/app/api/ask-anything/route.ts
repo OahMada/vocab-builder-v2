@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { FetchAnswersSchema, SentenceSchema } from '@/lib';
+import { FetchAnswersDataSchema } from '@/lib';
 import { openai } from '@ai-sdk/openai';
 import { streamText, simulateReadableStream } from 'ai';
 import { MockLanguageModelV2 } from 'ai/test';
 import { handleZodError } from '@/utils';
-import { getCookie } from '@/helpers/getCookie';
 
 function toErrorStream(errorText: string) {
 	let data = { type: 'error', errorText };
@@ -20,20 +19,10 @@ function toErrorStream(errorText: string) {
 
 export async function POST(request: NextRequest) {
 	let body = await request.json();
-	let questionResult = FetchAnswersSchema.safeParse(body);
-	if (!questionResult.success) {
-		let errors = handleZodError(questionResult.error);
-		let stream = toErrorStream(errors.fieldErrors.question![0] as string);
-		return new NextResponse(stream, {
-			headers: { 'Content-Type': 'text/event-stream' },
-		});
-	}
-
-	let sentence = await getCookie('user-input');
-	let sentenceResult = SentenceSchema.safeParse({ sentence });
-	if (!sentenceResult.success) {
-		let errors = handleZodError(sentenceResult.error);
-		let stream = toErrorStream(errors.fieldErrors.sentence![0] as string);
+	let parseResult = FetchAnswersDataSchema.safeParse(body);
+	if (!parseResult.success) {
+		let error = handleZodError(parseResult.error, 'prettify');
+		let stream = toErrorStream(error);
 		return new NextResponse(stream, {
 			headers: { 'Content-Type': 'text/event-stream' },
 		});
@@ -72,8 +61,8 @@ export async function POST(request: NextRequest) {
 		// throw new Error('error');
 		let result = streamText({
 			model: openai.responses('gpt-4.1'),
-			system: `The user is gonna ask you a question about this specific sentence: ${sentenceResult.data.sentence}. Answer the question in detail and lean your explanation into grammar. Answer the question in the same language as the question. Structure the answer a bit for clarity. Don't repeat the sentence in your response.`,
-			prompt: questionResult.data.question,
+			system: `The user is gonna ask you a question about this specific sentence: ${parseResult.data.sentence}. Answer the question in detail and lean your explanation into grammar. Answer the question in the same language as the question. Structure the answer a bit for clarity. Don't repeat the sentence in your response.`,
+			prompt: parseResult.data.question,
 			abortSignal: AbortSignal.any([AbortSignal.timeout(20000), request.signal]),
 		});
 

@@ -14,8 +14,10 @@ import Loading from '@/components/Loading';
 import { useSentenceData } from '@/hooks';
 import { handleError } from '@/utils';
 import { Toast } from '@/components/Toast';
+import { SentenceUpdateDataSchemaType, SentenceWithPieces } from '@/lib';
+import updateSentence from '@/app/actions/sentence/updateSentence';
 
-function SentenceActions({ sentence }: { sentence: string }) {
+function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceId?: string }) {
 	let [errorMsg, setErrorMsg] = React.useState('');
 	let router = useRouter();
 	let [isModalShowing, setIsModalShowing] = React.useState(false);
@@ -26,6 +28,14 @@ function SentenceActions({ sentence }: { sentence: string }) {
 		...data,
 		sentence,
 	};
+
+	let sentenceUpdateData: SentenceUpdateDataSchemaType;
+	if (sentenceId) {
+		sentenceUpdateData = {
+			...data,
+			id: sentenceId,
+		};
+	}
 
 	function dismissModal() {
 		setIsModalShowing(false);
@@ -43,7 +53,13 @@ function SentenceActions({ sentence }: { sentence: string }) {
 	async function handleSubmit() {
 		startTransition(async () => {
 			setErrorMsg('');
-			let result = await createSentenceData(sentenceData);
+
+			let result: { error: string } | { data: SentenceWithPieces };
+			if (sentenceId) {
+				result = await updateSentence(sentenceUpdateData);
+			} else {
+				result = await createSentenceData(sentenceData);
+			}
 
 			if ('error' in result) {
 				setErrorMsg(handleError(result.error));
@@ -61,7 +77,7 @@ function SentenceActions({ sentence }: { sentence: string }) {
 					<Icon id='help' />
 					<VisuallyHidden>Ask Any Questions</VisuallyHidden>
 				</HelpButton>
-				<SentenceAudio isSubmitting={isLoading} />
+				<SentenceAudio isSubmitting={isLoading} sentence={sentence} />
 				<CancelButton variant='outline' onClick={handleCancel} disabled={isLoading}>
 					<Icon id='x' />
 					&nbsp;Cancel
@@ -71,7 +87,7 @@ function SentenceActions({ sentence }: { sentence: string }) {
 					&nbsp;Done
 				</DoneButton>
 			</Wrapper>
-			{isModalShowing && <AskAQuestion isShowing={isModalShowing} onDismiss={dismissModal} />}
+			{isModalShowing && <AskAQuestion isShowing={isModalShowing} onDismiss={dismissModal} sentence={sentence} />}
 			{errorMsg && <Toast content={errorMsg} />}
 		</>
 	);

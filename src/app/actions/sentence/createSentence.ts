@@ -46,19 +46,19 @@ export default async function createSentenceData(data: unknown): Promise<{ error
 	let sentenceId = createId();
 	let result = SentenceDataSchema.safeParse(data);
 	if (!result.success) {
-		let errors = handleZodError(result.error, 'prettify');
-		return { error: errors };
+		let error = handleZodError(result.error, 'prettify');
+		return { error: error };
 	}
 
 	// TODO put userId in the blob name for later batch delete userId/cuid.mp3
-	let { audioBlob, note, words, ...rest } = result.data;
+	let { audioBlob, note, pieces, ...rest } = result.data;
 
 	// prepare for saving to blob storage
 	let blobName = sentenceId + '.mp3';
 	let [blockBlobClient, audioUrl] = getAudioUrl(blobName);
 
 	// prepare for saving to database
-	let wordsCreate = words
+	let piecesCreate = pieces
 		.filter((item) => typeof item !== 'string')
 		.map((item) => {
 			return { ...item, IPA: item.IPA ?? null };
@@ -69,7 +69,7 @@ export default async function createSentenceData(data: unknown): Promise<{ error
 		audioUrl,
 		note: note ?? null,
 		pieces: {
-			create: wordsCreate,
+			create: piecesCreate,
 		},
 	};
 
@@ -104,6 +104,6 @@ export default async function createSentenceData(data: unknown): Promise<{ error
 	}
 
 	revalidateTag('sentences');
-	(await cookies()).delete('user-input');
+	(await cookies()).delete('sentence');
 	return { data: dbResult.value };
 }

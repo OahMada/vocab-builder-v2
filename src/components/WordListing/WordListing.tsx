@@ -11,7 +11,7 @@ import Button from '@/components/Button';
 import { useWordsContext } from '@/components/WordsProvider';
 
 function WordListing({ title }: { title: React.ReactNode }) {
-	let { words } = useWordsContext();
+	let { pieces } = useWordsContext();
 
 	return (
 		<>
@@ -30,7 +30,7 @@ function WordListing({ title }: { title: React.ReactNode }) {
 				</Popover>
 			</TitleWrapper>
 			<WordWrapper>
-				{words.map((item) => {
+				{pieces.map((item) => {
 					if (typeof item === 'string') {
 						return item;
 					}

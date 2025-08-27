@@ -9,17 +9,18 @@ import TextArea from '@/components/TextArea';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import Loading from '@/components/Loading';
 
 export default function QuestionInput({
 	triggerComplete,
 	updateError,
 	onClearInput,
-	submitDisabled,
+	isLoading,
 }: {
 	triggerComplete: (text: string) => void;
 	updateError: (msg: string) => void;
 	onClearInput: () => void;
-	submitDisabled: boolean;
+	isLoading: boolean;
 }) {
 	let {
 		register,
@@ -68,11 +69,17 @@ export default function QuestionInput({
 			<EnterButton
 				variant='fill'
 				onClick={handleSubmit(onSubmit, onError)}
-				disabled={!!errors.question || submitDisabled}
+				disabled={!!errors.question || isLoading}
 				style={{ '--textarea-padding': '10px' } as React.CSSProperties}
 			>
-				<Icon id='enter' />
-				<VisuallyHidden>submit question</VisuallyHidden>
+				{isLoading ? (
+					<Loading description='answer is loading' />
+				) : (
+					<>
+						<Icon id='enter' />
+						<VisuallyHidden>submit question</VisuallyHidden>
+					</>
+				)}
 			</EnterButton>
 		</Wrapper>
 	);

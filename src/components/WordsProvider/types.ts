@@ -1,12 +1,12 @@
-export type Word =
+export type Piece =
 	| {
 			id: string;
 			piece: string;
-			IPA: string | undefined;
+			IPA?: string | undefined;
 	  }
 	| string;
 
-export type WordsType = Word[];
+export type PiecesType = Piece[];
 
 export interface AddIPAParams {
 	text: string;
@@ -20,7 +20,7 @@ export interface RemoveIPAParams {
 }
 
 export interface WordsContextType {
-	words: WordsType;
+	pieces: PiecesType;
 	isLocalDataLoading: boolean;
 	addIPA: ({ text, IPA, id }: AddIPAParams) => void;
 	removeIPA: ({ word, id }: RemoveIPAParams) => void;
@@ -44,4 +44,4 @@ export type Action =
 				id: string;
 			};
 	  }
-	| { type: 'loadFromStorage'; payload: WordsType };
+	| { type: 'loadFromStorage'; payload: PiecesType };

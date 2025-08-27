@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Metadata } from 'next';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import { NotFoundTitle, Wrapper } from './NotFoundStyledComponents';
-import NotFoundRedirect from './NotFoundRedirect';
+import NotFoundRedirect, { NotFoundTitle, Wrapper } from '@/components/NotFoundComponents';
 import Spacer from '@/components/Spacer';
 
 export var metadata: Metadata = {

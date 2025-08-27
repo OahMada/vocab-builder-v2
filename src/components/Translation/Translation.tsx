@@ -10,9 +10,14 @@ import { handleError } from '@/utils';
 import EditTranslation from '@/components/Translation/EditTranslation';
 import { useTranslationContext } from '@/components/TranslationProvider';
 import Toast from '@/components/Toast';
+import Loading from '@/components/Loading';
 
 interface TranslationResponse {
 	result: string;
+}
+
+interface TranslationArg {
+	sentence: string;
 }
 
 var url = '/api/translation';
@@ -22,14 +27,14 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 	let { isLocalDataLoading, updateTranslation, translation } = useTranslationContext();
 
 	// when there is no local translation text or you want to fetch new translation, fetch from api route
-	let { trigger, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, void>(url, postFetcher);
+	let { trigger, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, TranslationArg>(url, postFetcher);
 
 	// control the entering of editing state
 	let [isEditing, setIsEditing] = React.useState(false);
 
 	React.useEffect(() => {
 		async function activateTrigger() {
-			let data = await trigger();
+			let data = await trigger({ sentence });
 			if (data) {
 				updateTranslation(data.result);
 			}
@@ -46,7 +51,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 	async function retryTranslate() {
 		reset();
 
-		let data = await trigger();
+		let data = await trigger({ sentence });
 		if (data) {
 			updateTranslation(data.result);
 		}
@@ -86,7 +91,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 							&nbsp;Edit
 						</Button>
 						<Button variant='fill' onClick={retryTranslate} disabled={isLocalDataLoading || isMutating}>
-							<Icon id='retry' size={16} />
+							{translation && isMutating ? <Loading description='retrying translation' /> : <Icon id='retry' size={16} />}
 							&nbsp;Retry
 						</Button>
 					</ButtonWrapper>

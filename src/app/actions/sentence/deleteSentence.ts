@@ -17,7 +17,6 @@ export default async function deleteSentence(sentenceId: unknown): Promise<{ err
 			prisma.piece.deleteMany({ where: { sentenceId: idResult.data } }),
 			prisma.sentence.delete({ where: { id: idResult.data }, select: sentenceReadSelect }),
 		]);
-
 		revalidateTag('sentences');
 		return { data: deletedSentence[1] };
 	} catch (error) {

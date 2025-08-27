@@ -2,12 +2,12 @@
 
 import * as React from 'react';
 import WordsContext from './WordContext';
-import { Action, WordsType, RemoveIPAParams, AddIPAParams } from './types';
+import { Action, PiecesType, RemoveIPAParams, AddIPAParams } from './types';
 import { produce } from 'immer';
 import { segmentSentence, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';
 
-function reducer(state: WordsType, action: Action) {
+function reducer(state: PiecesType, action: Action) {
 	return produce(state, (draft) => {
 		switch (action.type) {
 			case 'addIPA':
@@ -29,29 +29,36 @@ function reducer(state: WordsType, action: Action) {
 
 			case 'loadFromStorage':
 				return action.payload;
-				break;
 		}
 	});
 }
 
-function WordsProvider({ databaseWords, newSentence, children }: { databaseWords?: WordsType; newSentence?: string; children: React.ReactNode }) {
-	let defaultState: WordsType = [];
+function WordsProvider({
+	databaseWords,
+	newSentence,
+	children,
+}: {
+	databaseWords?: Extract<PiecesType, object>;
+	newSentence?: string;
+	children: React.ReactNode;
+}) {
+	let defaultState: PiecesType = [];
 	if (newSentence) {
 		defaultState = segmentSentence(newSentence);
 	}
 
-	let [words, dispatch] = React.useReducer(reducer, databaseWords || defaultState);
+	let [pieces, dispatch] = React.useReducer(reducer, databaseWords || defaultState);
 
-	function loadLocalWordsData(data: WordsType) {
+	function loadLocalWordsData(data: PiecesType) {
 		dispatch({ type: 'loadFromStorage', payload: data });
 	}
 
-	let isLoading = useReadLocalStorage<WordsType>('words', loadLocalWordsData);
+	let isLoading = useReadLocalStorage<PiecesType>('pieces', loadLocalWordsData);
 
 	// write changes to local storage
 	React.useEffect(() => {
-		updateLocalStorage<WordsType>('save', 'words', words);
-	}, [words]);
+		updateLocalStorage<PiecesType>('save', 'pieces', pieces);
+	}, [pieces]);
 
 	let addIPA = React.useCallback(function ({ text, id, IPA }: AddIPAParams) {
 		dispatch({
@@ -76,7 +83,7 @@ function WordsProvider({ databaseWords, newSentence, children }: { databaseWords
 		});
 	}, []);
 
-	let value = React.useMemo(() => ({ isLocalDataLoading: isLoading, addIPA, removeIPA, words }), [addIPA, isLoading, removeIPA, words]);
+	let value = React.useMemo(() => ({ isLocalDataLoading: isLoading, addIPA, removeIPA, pieces }), [addIPA, isLoading, removeIPA, pieces]);
 
 	return <WordsContext.Provider value={value}>{children}</WordsContext.Provider>;
 }

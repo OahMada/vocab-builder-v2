@@ -11,7 +11,7 @@ export default function EmptyDisplay() {
 		<>
 			<Spacer size={100} />
 			<MessageWrapper>
-				<p>No data available.</p>
+				<Text>No data available.</Text>
 				<InnerWrapper>
 					<Icon id='forward' size={14} />
 					&nbsp;
@@ -25,5 +25,8 @@ export default function EmptyDisplay() {
 var InnerWrapper = styled.div`
 	display: flex;
 	align-items: center;
-	font-size: 0.8rem;
+`;
+
+var Text = styled.p`
+	font-size: 0.9rem;
 `;

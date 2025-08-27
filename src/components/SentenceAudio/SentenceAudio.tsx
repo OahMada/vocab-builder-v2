@@ -7,7 +7,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { postFetcher } from '@/lib';
 import useSWRMutation from 'swr/mutation';
-import { useAudioBlobContext } from '@/components/AudioBlobProvider';
+import { useAudioDataContext } from '@/components/AudioDataProvider';
 import Toast from '@/components/Toast';
 import { handleError, base64ToBlob } from '@/utils';
 import { usePlayAudio } from '@/hooks';
@@ -16,25 +16,29 @@ interface TTSResponse {
 	result: string;
 }
 
+interface TTSArg {
+	sentence: string;
+}
+
 var url = '/api/tts';
 
-function SentenceAudio({ isSubmitting }: { isSubmitting: boolean }) {
-	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, void>(url, postFetcher);
-	let { isLocalDataLoading, audioBlob, updateBlob } = useAudioBlobContext();
-	let { isPlaying, playAudio, stopAudio, enableAutoPlay } = usePlayAudio(audioBlob);
+function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sentence: string }) {
+	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, TTSArg>(url, postFetcher);
+	let { isLocalDataLoading, audioBlob, updateBlob, audioUrl } = useAudioDataContext();
+	let { isPlaying, playAudio, stopAudio, enableAutoPlay } = usePlayAudio(audioUrl || audioBlob);
 
 	React.useEffect(() => {
 		async function activateTrigger() {
-			let data = await trigger();
+			let data = await trigger({ sentence });
 			if (data) {
 				let audioBlob = await base64ToBlob(data.result);
 				updateBlob(audioBlob);
 			}
 		}
-		if (!isLocalDataLoading && !audioBlob) {
+		if (!isLocalDataLoading && !audioBlob && !audioUrl) {
 			activateTrigger();
 		}
-	}, [audioBlob, isLocalDataLoading, trigger, updateBlob]);
+	}, [audioBlob, audioUrl, isLocalDataLoading, sentence, trigger, updateBlob]);
 
 	React.useEffect(() => {
 		if (isSubmitting) {
@@ -44,7 +48,7 @@ function SentenceAudio({ isSubmitting }: { isSubmitting: boolean }) {
 
 	async function retryTTS() {
 		reset();
-		let data = await trigger();
+		let data = await trigger({ sentence });
 		if (data) {
 			let audioBlob = await base64ToBlob(data.result);
 			updateBlob(audioBlob);
@@ -70,7 +74,7 @@ function SentenceAudio({ isSubmitting }: { isSubmitting: boolean }) {
 					<VisuallyHidden>stop play audio </VisuallyHidden>
 				</StopPlayButton>
 			) : (
-				<AudioButton variant='outline' onClick={playAudio} disabled={!audioBlob || isSubmitting}>
+				<AudioButton variant='outline' onClick={playAudio} disabled={(!audioBlob && !audioUrl) || isSubmitting}>
 					<Icon id='audio' />
 					<VisuallyHidden>Play sentence audio</VisuallyHidden>
 				</AudioButton>

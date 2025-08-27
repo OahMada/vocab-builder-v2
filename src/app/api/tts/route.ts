@@ -1,16 +1,15 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { SentenceSchema } from '@/lib';
 import { handleZodError } from '@/utils';
-import { getCookie } from '@/helpers/getCookie';
 import { SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat } from 'microsoft-cognitiveservices-speech-sdk';
 
 function escapeForSSML(text: string) {
 	return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 }
 
-export async function POST() {
-	let sentence = await getCookie('user-input');
-	let sentenceResult = SentenceSchema.safeParse({ sentence });
+export async function POST(request: NextRequest) {
+	let body = await request.json();
+	let sentenceResult = SentenceSchema.safeParse(body);
 	if (!sentenceResult.success) {
 		let errors = handleZodError(sentenceResult.error);
 		return NextResponse.json({ error: errors.fieldErrors.sentence![0] }, { status: 400 });

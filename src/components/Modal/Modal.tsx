@@ -81,7 +81,7 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 				width: 100%;
 				border-top-left-radius: 16px;
 				border-top-right-radius: 16px;
-				padding-bottom: 20px;
+				padding-bottom: 32px;
 			`;
 		}
 	}}

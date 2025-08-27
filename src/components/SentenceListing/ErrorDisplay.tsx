@@ -2,7 +2,6 @@
 
 import styled from 'styled-components';
 import Button from '@/components/Button';
-import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import Spacer from '@/components/Spacer';
 import { useRouter } from 'next/navigation';
@@ -21,10 +20,9 @@ export default function ErrorDisplay() {
 			<MessageWrapper>
 				<ErrorMessage>Failed to load sentences.</ErrorMessage>
 				<InnerWrapper>
-					Try refresh page&nbsp;
-					<RefreshButton variant='icon' onClick={refreshPage}>
+					<RefreshButton variant='outline' onClick={refreshPage}>
 						<Icon id='retry' size={14} />
-						<VisuallyHidden>refresh page</VisuallyHidden>
+						&nbsp;Refresh
 					</RefreshButton>
 				</InnerWrapper>
 			</MessageWrapper>
@@ -34,14 +32,12 @@ export default function ErrorDisplay() {
 
 var ErrorMessage = styled.p`
 	color: var(--text-status-warning);
+	font-size: 0.9rem;
 `;
 
-var InnerWrapper = styled.p`
-	font-size: 0.8rem;
-`;
+var InnerWrapper = styled.p``;
 
 var RefreshButton = styled(Button)`
 	color: inherit;
-	display: inline-block;
 	vertical-align: -2.5px;
 `;

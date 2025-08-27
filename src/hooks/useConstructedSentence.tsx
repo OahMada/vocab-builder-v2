@@ -3,9 +3,9 @@ import { SentenceWithPieces } from '@/lib';
 import { segmentSentence } from '@/helpers';
 import WordWithPhoneticSymbol from '@/components/WordWithPhoneticSymbol';
 
-export function useConstructedSentence(wholeSentence: string, words: SentenceWithPieces['pieces']) {
+export function useConstructedSentence(wholeSentence: string, pieces: SentenceWithPieces['pieces']) {
 	let result = segmentSentence(wholeSentence);
-	let wordsMap = new Map(words.map((item) => [item.piece, item]));
+	let piecesMap = new Map(pieces.map((item) => [item.piece, item]));
 
 	let constructedSentence: React.ReactNode[] = [];
 
@@ -13,7 +13,7 @@ export function useConstructedSentence(wholeSentence: string, words: SentenceWit
 		if (typeof item === 'string') {
 			constructedSentence.push(item);
 		} else {
-			let match = wordsMap.get(item.piece);
+			let match = piecesMap.get(item.piece);
 			if (match) {
 				if (!match.IPA) {
 					constructedSentence.push(item.piece);

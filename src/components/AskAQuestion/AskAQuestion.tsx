@@ -13,9 +13,10 @@ import Loading from '@/components/Loading';
 interface AskAQuestionProps {
 	isShowing: boolean;
 	onDismiss: () => void;
+	sentence: string;
 }
 
-function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
+function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	let [errorMsg, setErrorMsg] = React.useState('');
 	let { complete, isLoading, setCompletion, completion } = useCompletion({
 		api: '/api/ask-anything',
@@ -31,7 +32,7 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 			setErrorMsg('');
 		}
 		complete('', {
-			body: { question: text }, // send custom body
+			body: { question: text, sentence }, // send custom body
 		});
 	}
 
@@ -49,30 +50,28 @@ function AskAQuestion({ isShowing, onDismiss }: AskAQuestionProps) {
 
 	return (
 		<Modal isOpen={isShowing} onDismiss={onDismiss} title={<ModalTitle />} isOverlayTransparent={true} contentPosition='bottom'>
+			{completion && (
+				<>
+					<SmallHeading>Answer:</SmallHeading>
+					<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
+						<Markdown
+							remarkPlugins={[remarkGfm]}
+							components={{
+								table: (props) => (
+									<TableWrapper>
+										<table {...props} />
+									</TableWrapper>
+								),
+							}}
+						>
+							{completion}
+						</Markdown>
+						{errorMsg && <ErrorText>{errorMsg}</ErrorText>}
+					</AnswerBox>
+				</>
+			)}
 			<SmallHeading>Question:</SmallHeading>
-			<QuestionInput triggerComplete={triggerComplete} updateError={updateError} onClearInput={onClearInput} submitDisabled={isLoading} />
-			<SmallHeading>Answer:</SmallHeading>
-			<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
-				<Markdown
-					remarkPlugins={[remarkGfm]}
-					components={{
-						table: (props) => (
-							<TableWrapper>
-								<table {...props} />
-							</TableWrapper>
-						),
-					}}
-				>
-					{completion}
-				</Markdown>
-				{errorMsg && <ErrorText>{errorMsg}</ErrorText>}
-				{isLoading && (
-					<AnswerLoading
-						description='loading answer to the question'
-						style={{ '--modal-padding': '16px', '--answer-box-padding': '12px' } as React.CSSProperties}
-					/>
-				)}
-			</AnswerBox>
+			<QuestionInput triggerComplete={triggerComplete} updateError={updateError} onClearInput={onClearInput} isLoading={isLoading} />
 		</Modal>
 	);
 }
@@ -92,15 +91,8 @@ var AnswerBox = styled.div`
 	flex: 1;
 	padding: 12px;
 	overflow: auto;
-	max-height: 70dvh;
-	min-height: 20dvh;
+	max-height: 65dvh;
 	/* scrollbar-gutter: stable; */
-`;
-
-var AnswerLoading = styled(Loading)`
-	position: fixed;
-	bottom: calc(var(--modal-padding) + var(--answer-box-padding));
-	right: calc(var(--modal-padding) + var(--answer-box-padding));
 `;
 
 var ErrorText = styled.span`

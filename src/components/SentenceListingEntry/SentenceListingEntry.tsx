@@ -66,7 +66,7 @@ function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl
 									&nbsp;Delete
 								</Button>
 							</AlertDialog>
-							<Button variant='fill' href='/sentence/id' disabled={isLoading}>
+							<Button variant='fill' href={`/sentence/${id}`} disabled={isLoading}>
 								<EditIcon id='edit' />
 								&nbsp;Edit
 							</Button>

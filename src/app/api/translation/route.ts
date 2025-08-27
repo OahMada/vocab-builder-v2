@@ -1,15 +1,14 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { SentenceSchema } from '@/lib';
 import { delay, handleZodError } from '@/utils';
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
-import { getCookie } from '@/helpers/getCookie';
 
 // TODO load language setting from user setting
 
-export async function POST() {
-	let sentence = await getCookie('user-input');
-	let result = SentenceSchema.safeParse({ sentence });
+export async function POST(request: NextRequest) {
+	let body = await request.json();
+	let result = SentenceSchema.safeParse(body);
 	if (!result.success) {
 		let errors = handleZodError(result.error);
 		return NextResponse.json({ error: errors.fieldErrors.sentence![0] }, { status: 400 });

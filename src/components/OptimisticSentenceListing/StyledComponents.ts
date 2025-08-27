@@ -20,11 +20,9 @@ export var Loading = styled.span`
 
 export var MessageWrapper = styled.div`
 	align-self: center;
-	font-size: 1rem;
 	color: var(--text-secondary);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	font-size: 0.9rem;
 	gap: 5px;
 `;

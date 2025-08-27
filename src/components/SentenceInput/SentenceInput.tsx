@@ -66,7 +66,7 @@ function SentenceInput() {
 				setErrMsg('The exact sentence is already existed in database. You should edit the existing one.');
 				return;
 			}
-			setCookie('user-input', data['user-input']);
+			setCookie('sentence', data['user-input']);
 			updateLocalStorage('save', 'user-input', data['user-input']);
 			router.push('/sentence/new');
 		});

@@ -14,8 +14,7 @@ interface ToastProps {
 
 export function Toast({ title, content, ...props }: ToastProps & React.ComponentProps<typeof ToastPrimitives.Root>) {
 	return (
-		// TODO delete custom duration on production
-		<Root {...props} duration={100000}>
+		<Root {...props}>
 			{title && <Title>{title}</Title>}
 			<Description>{content}</Description>
 			<ToastPrimitives.Close asChild={true}>

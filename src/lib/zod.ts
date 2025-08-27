@@ -64,20 +64,21 @@ export var FetchAnswersSchema = z.object({
 	}),
 });
 
+export var FetchAnswersDataSchema = FetchAnswersSchema.extend({ sentence: SentenceSchema.shape.sentence });
+
 export type FetchAnswersType = z.infer<typeof FetchAnswersSchema>;
 
-var WordDataSchema = z.union([
-	z.object({
-		id: z.cuid2(),
-		piece: z.string().min(1),
-		IPA: z.string().optional(),
-	}),
-	z.string(),
-]);
+var PieceSchema = z.object({
+	id: z.cuid2(),
+	piece: z.string().min(1),
+	IPA: z.string().optional(),
+});
+
+var PiecesDataSchema = z.union([PieceSchema, z.string()]);
 
 export var SentenceDataSchema = z.object({
 	sentence: SentenceSchema.shape.sentence,
-	words: z.array(WordDataSchema),
+	pieces: z.array(PiecesDataSchema),
 	translation: TranslationSchema.shape.translation.min(3),
 	note: NoteSchema.shape.note.optional(),
 	audioBlob: z.instanceof(Blob).refine((blob) => blob.type.startsWith('audio/'), { error: 'Must be an audio Blob.' }),
@@ -86,3 +87,12 @@ export var SentenceDataSchema = z.object({
 export type SentenceDataType = z.infer<typeof SentenceDataSchema>;
 
 export var IdSchema = z.cuid2();
+
+export var SentenceUpdateDataSchema = z.object({
+	id: IdSchema,
+	translation: SentenceDataSchema.shape.translation,
+	note: SentenceDataSchema.shape.note,
+	pieces: z.array(PiecesDataSchema),
+});
+
+export type SentenceUpdateDataSchemaType = z.infer<typeof SentenceUpdateDataSchema>;

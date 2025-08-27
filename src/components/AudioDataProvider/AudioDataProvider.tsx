@@ -3,9 +3,9 @@
 import * as React from 'react';
 import { updateLocalDB } from '@/helpers';
 import { useReadLocalDB } from '@/hooks';
-import AudioBlobContext from './AudioBlobContext';
+import AudioDataContext from './AudioDataContext';
 
-function AudioBlobProvider({ children }: { children: React.ReactNode }) {
+function AudioDataProvider({ audioUrl, children }: { audioUrl: string | undefined; children: React.ReactNode }) {
 	let [blob, setBlob] = React.useState<Blob | undefined>(undefined);
 
 	let updateBlob = React.useCallback(async function (audioBlob: Blob) {
@@ -28,14 +28,15 @@ function AudioBlobProvider({ children }: { children: React.ReactNode }) {
 
 	let value = React.useMemo(
 		() => ({
+			audioUrl,
 			isLocalDataLoading: isLoading,
 			updateBlob,
 			audioBlob: blob,
 		}),
-		[blob, isLoading, updateBlob]
+		[audioUrl, blob, isLoading, updateBlob]
 	);
 
-	return <AudioBlobContext.Provider value={value}>{children}</AudioBlobContext.Provider>;
+	return <AudioDataContext.Provider value={value}>{children}</AudioDataContext.Provider>;
 }
 
-export default AudioBlobProvider;
+export default AudioDataProvider;

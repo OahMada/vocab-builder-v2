@@ -1,25 +1,38 @@
 import { useTranslationContext } from '@/components/TranslationProvider';
 import { useWordsContext } from '@/components/WordsProvider';
 import { useNoteContext } from '@/components/NoteProvider';
-import { useAudioBlobContext } from '@/components/AudioBlobProvider';
+import { useAudioDataContext } from '@/components/AudioDataProvider';
 import { SentenceDataType } from '@/lib';
 
-export function useSentenceData(): [boolean, Omit<SentenceDataType, 'sentence'>] {
+type SentenceData = Omit<SentenceDataType, 'sentence'> | Omit<SentenceDataType, 'sentence' | 'audioBlob'>;
+type UseSentenceDataReturnType = [boolean, SentenceData];
+
+export function useSentenceData(): UseSentenceDataReturnType {
 	let { isLocalDataLoading: translationLoading, translation } = useTranslationContext();
 	let translationReady = !translationLoading && translation;
-	let { words } = useWordsContext();
+	let { pieces } = useWordsContext();
 	let { isLocalDataLoading: noteLoading, note } = useNoteContext();
 	let noteReady = !noteLoading;
-	let { isLocalDataLoading: audioBlobLoading, audioBlob } = useAudioBlobContext();
-	let audioBlobReady = !audioBlobLoading && audioBlob;
-	let sentenceDataReady = Boolean(translationReady && words && noteReady && audioBlobReady);
+	let { isLocalDataLoading: audioBlobLoading, audioBlob, audioUrl } = useAudioDataContext();
+	let audioBlobReady = !audioBlobLoading && (audioBlob || audioUrl);
+	let sentenceDataReady = Boolean(translationReady && pieces && noteReady && audioBlobReady);
 
-	let sentenceData = {
-		translation: translation!,
-		note,
-		audioBlob: audioBlob!,
-		words,
-	};
+	let sentenceData: SentenceData;
+
+	if (audioBlob) {
+		sentenceData = {
+			translation: translation!,
+			note,
+			audioBlob,
+			pieces,
+		};
+	} else {
+		sentenceData = {
+			translation: translation!,
+			note,
+			pieces,
+		};
+	}
 
 	return [sentenceDataReady, sentenceData];
 }
