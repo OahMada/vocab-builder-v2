@@ -1,16 +1,16 @@
 import { useTranslationContext } from '@/components/TranslationProvider';
-import { useWordsContext } from '@/components/WordsProvider';
+import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 import { useNoteContext } from '@/components/NoteProvider';
 import { useAudioDataContext } from '@/components/AudioDataProvider';
-import { SentenceDataType } from '@/lib';
+import { SentenceCreateInputType, SentenceUpdateInputType } from '@/lib';
 
-type SentenceData = Omit<SentenceDataType, 'sentence'> | Omit<SentenceDataType, 'sentence' | 'audioBlob'>;
+type SentenceData = Omit<SentenceCreateInputType, 'sentence'> | Omit<SentenceUpdateInputType, 'id'>;
 type UseSentenceDataReturnType = [boolean, SentenceData];
 
 export function useSentenceData(): UseSentenceDataReturnType {
 	let { isLocalDataLoading: translationLoading, translation } = useTranslationContext();
 	let translationReady = !translationLoading && translation;
-	let { pieces } = useWordsContext();
+	let { pieces } = useSentencePiecesContext();
 	let { isLocalDataLoading: noteLoading, note } = useNoteContext();
 	let noteReady = !noteLoading;
 	let { isLocalDataLoading: audioBlobLoading, audioBlob, audioUrl } = useAudioDataContext();

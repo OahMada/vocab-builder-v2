@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { FetchAnswersDataSchema } from '@/lib';
+import { FetchAnswerInputSchema } from '@/lib';
 import { openai } from '@ai-sdk/openai';
 import { streamText, simulateReadableStream } from 'ai';
 import { MockLanguageModelV2 } from 'ai/test';
@@ -19,7 +19,7 @@ function toErrorStream(errorText: string) {
 
 export async function POST(request: NextRequest) {
 	let body = await request.json();
-	let parseResult = FetchAnswersDataSchema.safeParse(body);
+	let parseResult = FetchAnswerInputSchema.safeParse(body);
 	if (!parseResult.success) {
 		let error = handleZodError(parseResult.error, 'prettify');
 		let stream = toErrorStream(error);

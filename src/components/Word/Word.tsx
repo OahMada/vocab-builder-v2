@@ -9,9 +9,9 @@ import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
 import Toast from '@/components/Toast';
 import Loading from '@/components/Loading';
-import { useWordsContext } from '@/components/WordsProvider';
+import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 
-type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA: string | undefined | null; id: string };
+type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA?: string | null; id: string };
 
 interface IPAResponse {
 	result: string;
@@ -24,7 +24,7 @@ var url = '/api/IPA';
 
 function Word({ piece, IPA, id }: WordComponentProps) {
 	let { trigger, error, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher);
-	let { addIPA, removeIPA, isLocalDataLoading } = useWordsContext();
+	let { addIPA, removeIPA, isLocalDataLoading } = useSentencePiecesContext();
 
 	if (piece === ' ') {
 		return undefined;

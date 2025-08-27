@@ -8,10 +8,10 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/Popover';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Button from '@/components/Button';
-import { useWordsContext } from '@/components/WordsProvider';
+import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 
 function WordListing({ title }: { title: React.ReactNode }) {
-	let { pieces } = useWordsContext();
+	let { pieces } = useSentencePiecesContext();
 
 	return (
 		<>
@@ -34,7 +34,7 @@ function WordListing({ title }: { title: React.ReactNode }) {
 					if (typeof item === 'string') {
 						return item;
 					}
-					return <Word key={item.id} piece={item.piece} IPA={item.IPA ? item.IPA : null} id={item.id} />;
+					return <Word key={item.id} piece={item.word} IPA={item.IPA ? item.IPA : null} id={item.id} />;
 				})}
 			</WordWrapper>
 		</>

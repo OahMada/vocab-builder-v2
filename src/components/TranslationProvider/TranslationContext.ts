@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 interface TranslationContextType {
-	translation: string | undefined;
+	translation?: string;
 	isLocalDataLoading: boolean;
 	updateTranslation: (note: string) => void;
 }

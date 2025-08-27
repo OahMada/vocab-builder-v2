@@ -1,10 +1,10 @@
-import { PiecesType } from '@/components/WordsProvider/types';
+import { PiecesType } from '@/components/SentencePiecesProvider/types';
 import { segmentSentence } from './segmentSentence';
 import { SentenceWithPieces } from '@/lib';
 
 export function constructSentencePiecesData(wholeSentence: string, pieces: SentenceWithPieces['pieces']) {
 	let result = segmentSentence(wholeSentence);
-	let piecesMap = new Map(pieces.map((item) => [item.piece, item]));
+	let piecesMap = new Map(pieces.map((item) => [item.word, item]));
 
 	let constructedSentencePiecesData: PiecesType = [];
 
@@ -12,7 +12,7 @@ export function constructSentencePiecesData(wholeSentence: string, pieces: Sente
 		if (typeof item === 'string') {
 			constructedSentencePiecesData.push(item);
 		} else {
-			let match = piecesMap.get(item.piece);
+			let match = piecesMap.get(item.word);
 			if (match) {
 				if (!match.IPA) {
 					constructedSentencePiecesData.push(item);

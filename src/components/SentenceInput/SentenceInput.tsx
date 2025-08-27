@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { UserInput, UserInputSchema } from '@/lib';
+import { UserInputType, UserInputSchema } from '@/lib';
 import TextArea from '@/components/TextArea';
 import ActionButtons from './ActionButtons';
 import Spacer from '@/components/Spacer';
@@ -29,7 +29,7 @@ function SentenceInput() {
 		handleSubmit,
 		formState: { errors },
 		clearErrors,
-	} = useForm<UserInput>({
+	} = useForm<UserInputType>({
 		resolver: zodResolver(UserInputSchema),
 		reValidateMode: 'onSubmit',
 		shouldFocusError: false,
@@ -55,7 +55,7 @@ function SentenceInput() {
 		updateLocalStorage('delete', 'user-input');
 	}
 
-	async function onSubmit(data: UserInput) {
+	async function onSubmit(data: UserInputType) {
 		setErrMsg('');
 		startTransition(async () => {
 			let result = await checkForSentenceUniqueness(data['user-input']);

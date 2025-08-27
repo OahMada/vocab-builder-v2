@@ -6,7 +6,7 @@ export async function deleteLocalData(includeSentence: boolean = false) {
 		updateLocalStorage('delete', 'user-input');
 	}
 	updateLocalStorage('delete', 'translation');
-	updateLocalStorage('delete', 'words');
+	updateLocalStorage('delete', 'pieces');
 	updateLocalStorage('delete', 'note');
 
 	await updateLocalDB('delete');

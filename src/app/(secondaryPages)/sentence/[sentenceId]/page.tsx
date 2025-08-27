@@ -13,19 +13,19 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import { getCookie } from '@/helpers/getCookie';
 import NoteProvider from '@/components/NoteProvider';
 import TranslationProvider from '@/components/TranslationProvider';
-import WordsProvider from '@/components/WordsProvider';
+import SentencePiecesProvider from '@/components/SentencePiecesProvider';
 import AudioDataProvider from '@/components/AudioDataProvider';
 import { ToastProvider, ToastViewport } from '@/components/Toast';
 import Spacer from '@/components/Spacer';
 import readOneSentence from '@/app/actions/sentence/readOneSentence';
-import { SentenceDataType } from '@/lib';
+import { SentenceCreateInputType } from '@/lib';
 import { constructSentencePiecesData } from '@/helpers';
 
 export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',
 };
 
-type ClientSentenceData = (Omit<SentenceDataType, 'audioBlob'> & { audioUrl: string; id: string }) | null;
+type ClientSentenceData = (Omit<SentenceCreateInputType, 'audioBlob'> & { audioUrl: string; id: string }) | null;
 
 export default async function Sentence({ params }: { params: Promise<{ sentenceId: string }> }) {
 	let { sentenceId } = await params;
@@ -46,17 +46,17 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 			notFound();
 		}
 		// convert null to undefined to better suit client code
-		let clientWordsData = constructSentencePiecesData(result.data.sentence, result.data.pieces);
+		let sentencePiecesData = constructSentencePiecesData(result.data.sentence, result.data.pieces);
 		sentenceData = {
 			...result.data,
 			note: result.data.note ?? undefined,
-			pieces: clientWordsData,
+			pieces: sentencePiecesData,
 		};
 	}
 
 	return (
 		<MaxWidthWrapper>
-			<WordsProvider newSentence={sentence ?? undefined} databaseWords={sentenceData?.pieces}>
+			<SentencePiecesProvider newSentence={sentence} databasePieces={sentenceData?.pieces}>
 				<TranslationProvider databaseTranslation={sentenceData?.translation}>
 					<NoteProvider databaseNote={sentenceData?.note}>
 						<Wrapper $position='flex-start'>
@@ -78,7 +78,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 						</Wrapper>
 					</NoteProvider>
 				</TranslationProvider>
-			</WordsProvider>
+			</SentencePiecesProvider>
 		</MaxWidthWrapper>
 	);
 }

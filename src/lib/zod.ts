@@ -19,7 +19,7 @@ export var UserInputSchema = z.object({
 		),
 });
 
-export type UserInput = z.infer<typeof UserInputSchema>;
+export type UserInputType = z.infer<typeof UserInputSchema>;
 
 export var WordSchema = z.object({
 	word: z
@@ -58,41 +58,40 @@ export var NoteSchema = z.object({
 
 export type NoteType = z.infer<typeof NoteSchema>;
 
-export var FetchAnswersSchema = z.object({
+export var QuestionInputSchema = z.object({
 	question: z.string().trim().min(3, {
 		error: 'The question text should be at least 3 characters long.',
 	}),
 });
+export type QuestionInputType = z.infer<typeof QuestionInputSchema>;
 
-export var FetchAnswersDataSchema = FetchAnswersSchema.extend({ sentence: SentenceSchema.shape.sentence });
-
-export type FetchAnswersType = z.infer<typeof FetchAnswersSchema>;
+export var FetchAnswerInputSchema = QuestionInputSchema.extend({ sentence: SentenceSchema.shape.sentence });
 
 var PieceSchema = z.object({
 	id: z.cuid2(),
-	piece: z.string().min(1),
+	word: z.string().min(1),
 	IPA: z.string().optional(),
 });
 
-var PiecesDataSchema = z.union([PieceSchema, z.string()]);
+var PiecesCreateInputSchema = z.union([PieceSchema, z.string()]);
 
-export var SentenceDataSchema = z.object({
+export var SentenceCreateInputSchema = z.object({
 	sentence: SentenceSchema.shape.sentence,
-	pieces: z.array(PiecesDataSchema),
+	pieces: z.array(PiecesCreateInputSchema),
 	translation: TranslationSchema.shape.translation.min(3),
 	note: NoteSchema.shape.note.optional(),
 	audioBlob: z.instanceof(Blob).refine((blob) => blob.type.startsWith('audio/'), { error: 'Must be an audio Blob.' }),
 });
 
-export type SentenceDataType = z.infer<typeof SentenceDataSchema>;
+export type SentenceCreateInputType = z.infer<typeof SentenceCreateInputSchema>;
 
 export var IdSchema = z.cuid2();
 
-export var SentenceUpdateDataSchema = z.object({
+export var SentenceUpdateInputSchema = z.object({
 	id: IdSchema,
-	translation: SentenceDataSchema.shape.translation,
-	note: SentenceDataSchema.shape.note,
-	pieces: z.array(PiecesDataSchema),
+	translation: SentenceCreateInputSchema.shape.translation,
+	note: SentenceCreateInputSchema.shape.note,
+	pieces: z.array(PiecesCreateInputSchema),
 });
 
-export type SentenceUpdateDataSchemaType = z.infer<typeof SentenceUpdateDataSchema>;
+export type SentenceUpdateInputType = z.infer<typeof SentenceUpdateInputSchema>;

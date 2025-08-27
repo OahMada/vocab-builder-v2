@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import WordsContext from './WordContext';
+import SentencePiecesContext from './SentencePiecesContext';
 import { Action, PiecesType, RemoveIPAParams, AddIPAParams } from './types';
 import { produce } from 'immer';
 import { segmentSentence, updateLocalStorage } from '@/helpers';
@@ -13,7 +13,7 @@ function reducer(state: PiecesType, action: Action) {
 			case 'addIPA':
 				let { word, IPA } = action.payload;
 				for (let item of draft) {
-					if (typeof item !== 'string' && item.piece === word.text && item.id === word.id) {
+					if (typeof item !== 'string' && item.word === word.text && item.id === word.id) {
 						item.IPA = IPA;
 					}
 				}
@@ -21,7 +21,7 @@ function reducer(state: PiecesType, action: Action) {
 			case 'removeIPA':
 				for (let item of draft) {
 					let { word, id } = action.payload;
-					if (typeof item !== 'string' && item.piece === word && item.id === id) {
+					if (typeof item !== 'string' && item.word === word && item.id === id) {
 						item.IPA = undefined;
 					}
 				}
@@ -33,12 +33,12 @@ function reducer(state: PiecesType, action: Action) {
 	});
 }
 
-function WordsProvider({
-	databaseWords,
+function SentencePiecesProvider({
+	databasePieces,
 	newSentence,
 	children,
 }: {
-	databaseWords?: Extract<PiecesType, object>;
+	databasePieces?: PiecesType;
 	newSentence?: string;
 	children: React.ReactNode;
 }) {
@@ -47,13 +47,13 @@ function WordsProvider({
 		defaultState = segmentSentence(newSentence);
 	}
 
-	let [pieces, dispatch] = React.useReducer(reducer, databaseWords || defaultState);
+	let [pieces, dispatch] = React.useReducer(reducer, databasePieces || defaultState);
 
-	function loadLocalWordsData(data: PiecesType) {
+	function loadLocalPiecesData(data: PiecesType) {
 		dispatch({ type: 'loadFromStorage', payload: data });
 	}
 
-	let isLoading = useReadLocalStorage<PiecesType>('pieces', loadLocalWordsData);
+	let isLoading = useReadLocalStorage<PiecesType>('pieces', loadLocalPiecesData);
 
 	// write changes to local storage
 	React.useEffect(() => {
@@ -85,7 +85,7 @@ function WordsProvider({
 
 	let value = React.useMemo(() => ({ isLocalDataLoading: isLoading, addIPA, removeIPA, pieces }), [addIPA, isLoading, removeIPA, pieces]);
 
-	return <WordsContext.Provider value={value}>{children}</WordsContext.Provider>;
+	return <SentencePiecesContext.Provider value={value}>{children}</SentencePiecesContext.Provider>;
 }
 
-export default WordsProvider;
+export default SentencePiecesProvider;

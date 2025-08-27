@@ -1,8 +1,8 @@
 export type Piece =
 	| {
 			id: string;
-			piece: string;
-			IPA?: string | undefined;
+			word: string;
+			IPA?: string;
 	  }
 	| string;
 
@@ -19,7 +19,7 @@ export interface RemoveIPAParams {
 	id: string;
 }
 
-export interface WordsContextType {
+export interface SentencePiecesContextType {
 	pieces: PiecesType;
 	isLocalDataLoading: boolean;
 	addIPA: ({ text, IPA, id }: AddIPAParams) => void;

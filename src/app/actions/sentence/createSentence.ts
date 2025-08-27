@@ -5,7 +5,7 @@ import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { createId } from '@paralleldrive/cuid2';
 import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
-import { SentenceDataSchema, sentenceReadSelect, SentenceWithPieces } from '@/lib';
+import { SentenceCreateInputSchema, sentenceReadSelect, SentenceWithPieces } from '@/lib';
 import { handleZodError } from '@/utils';
 import prisma from '@/lib/prisma';
 
@@ -42,9 +42,9 @@ async function createDatabaseEntry(data: Prisma.SentenceCreateInput) {
 	return createdSentence;
 }
 
-export default async function createSentenceData(data: unknown): Promise<{ error: string } | { data: SentenceWithPieces }> {
+export default async function createSentence(data: unknown): Promise<{ error: string } | { data: SentenceWithPieces }> {
 	let sentenceId = createId();
-	let result = SentenceDataSchema.safeParse(data);
+	let result = SentenceCreateInputSchema.safeParse(data);
 	if (!result.success) {
 		let error = handleZodError(result.error, 'prettify');
 		return { error: error };
@@ -58,25 +58,25 @@ export default async function createSentenceData(data: unknown): Promise<{ error
 	let [blockBlobClient, audioUrl] = getAudioUrl(blobName);
 
 	// prepare for saving to database
-	let piecesCreate = pieces
+	let piecesCreateInput = pieces
 		.filter((item) => typeof item !== 'string')
 		.map((item) => {
 			return { ...item, IPA: item.IPA ?? null };
 		});
-	let sentenceCreate: Prisma.SentenceCreateInput = {
+	let sentenceCreateInput: Prisma.SentenceCreateInput = {
 		...rest,
 		id: sentenceId,
 		audioUrl,
 		note: note ?? null,
 		pieces: {
-			create: piecesCreate,
+			create: piecesCreateInput,
 		},
 	};
 
 	// return { error: 'test error' };
 
 	// handle saving logics
-	let [blobResult, dbResult] = await Promise.allSettled([saveToBlobStorage(blockBlobClient, audioBlob), createDatabaseEntry(sentenceCreate)]);
+	let [blobResult, dbResult] = await Promise.allSettled([saveToBlobStorage(blockBlobClient, audioBlob), createDatabaseEntry(sentenceCreateInput)]);
 	if (blobResult.status === 'rejected' || dbResult.status === 'rejected') {
 		if (blobResult.status === 'rejected' && dbResult.status === 'fulfilled') {
 			console.error('Azure Blob upload error:', blobResult.reason);

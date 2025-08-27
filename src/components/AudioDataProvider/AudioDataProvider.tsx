@@ -5,7 +5,7 @@ import { updateLocalDB } from '@/helpers';
 import { useReadLocalDB } from '@/hooks';
 import AudioDataContext from './AudioDataContext';
 
-function AudioDataProvider({ audioUrl, children }: { audioUrl: string | undefined; children: React.ReactNode }) {
+function AudioDataProvider({ audioUrl, children }: { audioUrl?: string; children: React.ReactNode }) {
 	let [blob, setBlob] = React.useState<Blob | undefined>(undefined);
 
 	let updateBlob = React.useCallback(async function (audioBlob: Blob) {

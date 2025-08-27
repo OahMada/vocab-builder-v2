@@ -10,7 +10,7 @@ export var sentenceReadSelect = {
 		select: {
 			id: true,
 			IPA: true,
-			piece: true,
+			word: true,
 		},
 	},
 } satisfies Prisma.SentenceSelect;

@@ -6,7 +6,7 @@ interface AudioDataContextType {
 	updateBlob: (audioBlob: Blob) => void;
 	isLocalDataLoading: boolean;
 	audioBlob: Blob | undefined;
-	audioUrl: string | undefined;
+	audioUrl?: string;
 }
 
 var AudioDataContext = React.createContext<AudioDataContextType | null>(null);

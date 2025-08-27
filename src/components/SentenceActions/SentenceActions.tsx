@@ -8,13 +8,13 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import AskAQuestion from '@/components/AskAQuestion';
 import SentenceAudio from '@/components/SentenceAudio';
-import createSentenceData from '@/app/actions/sentence/createSentence';
+import createSentence from '@/app/actions/sentence/createSentence';
 import { deleteLocalData } from '@/helpers/deleteLocalData';
 import Loading from '@/components/Loading';
 import { useSentenceData } from '@/hooks';
 import { handleError } from '@/utils';
 import { Toast } from '@/components/Toast';
-import { SentenceUpdateDataSchemaType, SentenceWithPieces } from '@/lib';
+import { SentenceCreateInputType, SentenceUpdateInputType, SentenceWithPieces } from '@/lib';
 import updateSentence from '@/app/actions/sentence/updateSentence';
 
 function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceId?: string }) {
@@ -24,16 +24,18 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	let [isLoading, startTransition] = React.useTransition();
 
 	let [sentenceDataReady, data] = useSentenceData();
-	let sentenceData = {
-		...data,
-		sentence,
-	};
 
-	let sentenceUpdateData: SentenceUpdateDataSchemaType;
+	let sentenceCreateInput: SentenceCreateInputType;
+	let sentenceUpdateInput: SentenceUpdateInputType;
 	if (sentenceId) {
-		sentenceUpdateData = {
-			...data,
+		sentenceUpdateInput = {
+			...(data as Omit<SentenceUpdateInputType, 'id'>),
 			id: sentenceId,
+		};
+	} else {
+		sentenceCreateInput = {
+			...(data as Omit<SentenceCreateInputType, 'sentence'>),
+			sentence,
 		};
 	}
 
@@ -56,9 +58,9 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 
 			let result: { error: string } | { data: SentenceWithPieces };
 			if (sentenceId) {
-				result = await updateSentence(sentenceUpdateData);
+				result = await updateSentence(sentenceUpdateInput);
 			} else {
-				result = await createSentenceData(sentenceData);
+				result = await createSentence(sentenceCreateInput);
 			}
 
 			if ('error' in result) {
@@ -66,7 +68,11 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				return;
 			}
 			deleteLocalData(true);
-			router.replace('/');
+			if (sentenceId) {
+				router.back();
+			} else {
+				router.replace('/');
+			}
 		});
 	}
 

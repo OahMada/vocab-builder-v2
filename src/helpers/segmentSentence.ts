@@ -1,4 +1,4 @@
-import { PiecesType, Piece } from '@/components/WordsProvider';
+import { PiecesType, Piece } from '@/components/SentencePiecesProvider';
 import { createId } from '@paralleldrive/cuid2';
 
 function segmentSentence(sentence: string): PiecesType {
@@ -7,7 +7,7 @@ function segmentSentence(sentence: string): PiecesType {
 		if (item.isWordLike) {
 			return {
 				id: createId(),
-				piece: item.segment,
+				word: item.segment,
 				IPA: undefined,
 			};
 		} else {
