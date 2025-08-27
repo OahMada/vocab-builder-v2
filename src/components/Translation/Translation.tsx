@@ -43,6 +43,9 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 		// loading data when
 		// - page first loads
 		// - there have been an error, then the user tried to edit translation, but canceled their action, thus, there is still no translation to show
+
+		console.log('!translation, !isLocalDataLoading, !isEditing', !translation, !isLocalDataLoading, !isEditing);
+
 		if (!translation && !isLocalDataLoading && !isEditing) {
 			activateTrigger();
 		}

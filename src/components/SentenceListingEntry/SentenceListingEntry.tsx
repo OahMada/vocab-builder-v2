@@ -11,11 +11,10 @@ import { useConstructedSentence } from '@/hooks';
 import deleteSentence from '@/app/actions/sentence/deleteSentence';
 import AlertDialog from '@/components/AlertDialog';
 import Toast from '@/components/Toast';
-import OptimisticAction from '@/components/OptimisticSentenceListing/OptimisticActionType';
 
 type SentenceListingEntryProps = {
 	index: number;
-	mutateSentences: (action: OptimisticAction) => void;
+	mutateSentences: (id: string) => void;
 } & SentenceWithPieces;
 
 function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl, pieces, mutateSentences }: SentenceListingEntryProps) {
@@ -30,7 +29,7 @@ function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl
 			setErrorMsg(result.error);
 		}
 		React.startTransition(() => {
-			mutateSentences({ type: 'delete', id });
+			mutateSentences(id);
 		});
 		setIsLoading(false);
 	}
@@ -118,10 +117,10 @@ var Translation = styled.p`
 `;
 
 var Note = styled.p`
-	white-space: pre-line;
 	background-color: var(--bg-tertiary);
 	padding: 5px 8px;
 	border-radius: 8px;
+	white-space: pre-wrap;
 `;
 
 var Title = styled.h4`
