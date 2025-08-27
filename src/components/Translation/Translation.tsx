@@ -24,13 +24,10 @@ var url = '/api/translation';
 
 function Translation({ title, sentence }: { title: React.ReactNode; sentence: string }) {
 	// consume the context provider, get locally saved translation text
-	let { isLocalDataLoading, updateTranslation, translation } = useTranslationContext();
+	let { isLocalDataLoading, updateTranslation, translation, isEditing, updateEditingStatus } = useTranslationContext();
 
 	// when there is no local translation text or you want to fetch new translation, fetch from api route
 	let { trigger, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, TranslationArg>(url, postFetcher);
-
-	// control the entering of editing state
-	let [isEditing, setIsEditing] = React.useState(false);
 
 	React.useEffect(() => {
 		async function activateTrigger() {
@@ -59,13 +56,13 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 	}
 
 	async function cancelEditing() {
-		setIsEditing(false);
+		updateEditingStatus(false);
 	}
 
 	function startEditing() {
 		// reset error so it would not reappear after editing.
 		reset();
-		setIsEditing(true);
+		updateEditingStatus(true);
 	}
 
 	// display translation text

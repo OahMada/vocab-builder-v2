@@ -14,8 +14,7 @@ import Toast from '@/components/Toast';
 import { useNoteContext } from '@/components/NoteProvider';
 
 function Note({ title }: { title: React.ReactNode }) {
-	let [isAddingNote, setIsAddingNote] = React.useState(false);
-	let { note, updateNote } = useNoteContext();
+	let { note, updateNote, isEditing, updateEditingStatus } = useNoteContext();
 
 	let {
 		register,
@@ -38,11 +37,11 @@ function Note({ title }: { title: React.ReactNode }) {
 	}
 
 	function cancelEditing() {
-		setIsAddingNote(false);
+		updateEditingStatus(false);
 	}
 
 	function startEditing() {
-		setIsAddingNote(true);
+		updateEditingStatus(true);
 	}
 
 	function onSubmit(data: NoteType) {
@@ -50,7 +49,7 @@ function Note({ title }: { title: React.ReactNode }) {
 		cancelEditing();
 	}
 
-	return isAddingNote ? (
+	return isEditing ? (
 		<>
 			<CardWrapper>
 				{title}

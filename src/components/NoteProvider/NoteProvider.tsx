@@ -7,6 +7,11 @@ import { updateLocalStorage } from '@/helpers';
 
 function NoteProvider({ databaseNote, children }: { databaseNote?: string; children: React.ReactNode }) {
 	let [note, setNote] = React.useState(databaseNote || undefined);
+	let [isEditing, setIsEditing] = React.useState(false);
+
+	let updateEditingStatus = React.useCallback(function (status: boolean) {
+		setIsEditing(status);
+	}, []);
 
 	let updateNote = React.useCallback(function updateNote(note: string) {
 		setNote(note);
@@ -22,11 +27,13 @@ function NoteProvider({ databaseNote, children }: { databaseNote?: string; child
 
 	let value = React.useMemo(
 		() => ({
+			isEditing,
+			updateEditingStatus,
 			isLocalDataLoading: isLoading,
 			note,
 			updateNote,
 		}),
-		[isLoading, note, updateNote]
+		[isEditing, isLoading, note, updateEditingStatus, updateNote]
 	);
 
 	return <NoteContext.Provider value={value}>{children}</NoteContext.Provider>;

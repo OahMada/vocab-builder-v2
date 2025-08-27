@@ -8,11 +8,11 @@ type SentenceData = Omit<SentenceCreateInputType, 'sentence'> | Omit<SentenceUpd
 type UseSentenceDataReturnType = [boolean, SentenceData];
 
 export function useSentenceData(): UseSentenceDataReturnType {
-	let { isLocalDataLoading: translationLoading, translation } = useTranslationContext();
-	let translationReady = !translationLoading && translation;
+	let { isLocalDataLoading: translationLoading, translation, isEditing: isTranslationEditing } = useTranslationContext();
+	let translationReady = !translationLoading && translation && !isTranslationEditing;
 	let { pieces } = useSentencePiecesContext();
-	let { isLocalDataLoading: noteLoading, note } = useNoteContext();
-	let noteReady = !noteLoading;
+	let { isLocalDataLoading: noteLoading, note, isEditing: isNoteEditing } = useNoteContext();
+	let noteReady = !noteLoading && !isNoteEditing;
 	let { isLocalDataLoading: audioBlobLoading, audioBlob, audioUrl } = useAudioDataContext();
 	let audioBlobReady = !audioBlobLoading && (audioBlob || audioUrl);
 	let sentenceDataReady = Boolean(translationReady && pieces && noteReady && audioBlobReady);

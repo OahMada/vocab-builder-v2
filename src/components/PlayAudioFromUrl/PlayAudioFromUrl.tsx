@@ -4,11 +4,13 @@ import * as React from 'react';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Button from '@/components/Button';
-import { usePlayAudio } from '@/hooks';
 
-function PlayAudioFromUrl({ audioUrl, ...delegated }: { audioUrl: string } & Omit<React.ComponentProps<typeof Button>, 'variant'>) {
-	let { isPlaying, playAudio, stopAudio } = usePlayAudio(audioUrl);
-
+function PlayAudioFromUrl({
+	isPlaying,
+	playAudio,
+	stopAudio,
+	...delegated
+}: { isPlaying: boolean; playAudio: () => void; stopAudio: () => void } & Omit<React.ComponentProps<typeof Button>, 'variant'>) {
 	return isPlaying ? (
 		<Button onClick={stopAudio} variant='icon' {...delegated}>
 			<Icon id='stop' size={16} />

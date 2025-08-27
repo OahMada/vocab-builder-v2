@@ -52,7 +52,7 @@ h1, h2, h3, h4, h5, h6 {
 html {
   --font-family: "Roboto", -apple-system, sans-serif;
   --font-logo:  'Inter', -apple-system, sans-serif;
-  --bg-overlay: hsl(0deg 0% 0% / 85%);
+  --bg-overlay: hsl(0deg 0% 0% / 93%);
 	--bg-modal: hsl(0deg 0% 7%);
   --bg-popover: hsl(0deg 0% 19%);
   --bg-dropdown: hsl(0 0% 15%);
