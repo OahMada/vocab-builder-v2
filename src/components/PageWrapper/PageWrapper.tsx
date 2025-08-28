@@ -9,6 +9,7 @@ var Wrapper = styled.main<{ $position?: 'flex-start' | 'center' }>`
 	align-items: center;
 	gap: 12px;
 	height: 100%;
+	position: relative;
 `;
 
 export default Wrapper;
