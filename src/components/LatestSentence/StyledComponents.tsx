@@ -12,6 +12,7 @@ export var Wrapper = styled.div`
 	bottom: 0;
 	color: var(--text-secondary);
 	width: 100%;
+	justify-content: space-between;
 `;
 
 export var InnerWrapper = styled.div`
