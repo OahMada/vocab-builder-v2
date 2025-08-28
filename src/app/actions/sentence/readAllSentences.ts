@@ -1,3 +1,5 @@
+'use server';
+
 import { sentenceReadSelect, SentenceWithPieces } from '@/lib';
 import prisma from '@/lib/prisma';
 

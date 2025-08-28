@@ -8,7 +8,6 @@ import remarkGfm from 'remark-gfm';
 import Modal from '@/components/Modal';
 import ModalTitle from './ModalTitle';
 import QuestionInput from './QuestionInput';
-import Loading from '@/components/Loading';
 
 interface AskAQuestionProps {
 	isShowing: boolean;
