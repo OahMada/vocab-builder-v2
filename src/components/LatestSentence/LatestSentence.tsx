@@ -1,6 +1,4 @@
 import * as React from 'react';
-import PartialListing from './PartialListing';
-import Spacer from '@/components/Spacer';
 import Icon from '@/components/Icon';
 import { ViewAllButton, Wrapper, InnerWrapper, SmallTitle, ErrorText } from './StyledComponents';
 import readLatestSentence from '@/app/actions/sentence/readLatestSentence';
@@ -28,7 +26,6 @@ async function LatestSentence() {
 
 	return (
 		<Wrapper>
-			{/* <PartialListing /> */}
 			<InnerWrapper>
 				<SmallTitle>Latest Sentence</SmallTitle>
 				<CompactSentenceListingEntry pieces={pieces} audioUrl={audioUrl} sentence={sentence} />

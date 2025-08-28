@@ -8,6 +8,8 @@ import Button from '@/components/Button';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import { PopoverTrigger, PopoverContent, Popover } from '@/components/Popover';
 
+// TODO to decide if this is useful
+
 function PartialListing() {
 	return (
 		<Wrapper>
