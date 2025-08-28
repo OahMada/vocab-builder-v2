@@ -1,19 +1,25 @@
 import * as React from 'react';
+import { unstable_cache } from 'next/cache';
 import Icon from '@/components/Icon';
-import { ViewAllButton, Wrapper, InnerWrapper, SmallTitle, ErrorText } from './StyledComponents';
+import { ViewAllButton, InnerWrapper, SmallTitle, ErrorText, Sentence, Wrapper } from './StyledComponents';
 import readLatestSentence from '@/app/actions/sentence/readLatestSentence';
-import { CompactSentenceListingEntry } from '@/components/SentenceListingEntry';
 
-// TODO view all button only shows up when there's at least two
+var getCachedSentence = unstable_cache(
+	async () => {
+		return await readLatestSentence();
+	},
+	[],
+	{ revalidate: 3600, tags: ['latest'] }
+);
 
 async function LatestSentence() {
-	let result = await readLatestSentence();
+	let result = await getCachedSentence();
 
 	if ('error' in result) {
 		return (
-			<Wrapper>
+			<InnerWrapper>
 				<ErrorText>{result.error}</ErrorText>
-			</Wrapper>
+			</InnerWrapper>
 		);
 	}
 
@@ -22,17 +28,17 @@ async function LatestSentence() {
 		return;
 	}
 
-	let { pieces, audioUrl, sentence } = latestSentence;
+	let { sentence } = latestSentence;
 
 	return (
 		<Wrapper>
 			<InnerWrapper>
-				<SmallTitle>Latest Sentence</SmallTitle>
-				<CompactSentenceListingEntry pieces={pieces} audioUrl={audioUrl} sentence={sentence} />
+				<SmallTitle>Latest</SmallTitle>
+				<Sentence>{sentence}</Sentence>
 			</InnerWrapper>
-			<ViewAllButton variant='outline' href='/browse'>
-				<Icon id='forward' />
-				&nbsp;View All
+			<ViewAllButton variant='fill' href='/browse'>
+				<Icon id='forward' size={14} />
+				&nbsp;Browse
 			</ViewAllButton>
 		</Wrapper>
 	);

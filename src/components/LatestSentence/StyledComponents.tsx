@@ -3,7 +3,25 @@
 import Button from '@/components/Button';
 import styled from 'styled-components';
 
+export var Wrapper = styled.div`
+	background-color: var(--bg-secondary);
+	padding: 10px 16px;
+	display: flex;
+	gap: 5px;
+	position: absolute;
+	bottom: 0;
+	color: var(--text-secondary);
+`;
+
+export var InnerWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+`;
+
 export var ViewAllButton = styled(Button)`
+	font-size: 14px;
+	align-self: center;
 	@media (hover: hover) {
 		&:hover {
 			text-decoration: none;
@@ -11,32 +29,23 @@ export var ViewAllButton = styled(Button)`
 	}
 `;
 
-export var Wrapper = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	align-items: center;
-	width: min(100%, 40rem);
-`;
-
-export var InnerWrapper = styled.div`
-	background-color: var(--bg-secondary);
-	padding: 12px 14px;
-	border-radius: 24px;
-	display: flex;
-	flex-direction: column;
-	font-size: ${14 / 16}rem;
-	color: var(--text-secondary);
-	gap: 3px;
-`;
-
 export var SmallTitle = styled.h2`
-	font-size: 1rem;
-	font-weight: 450;
-	color: var(--text-primary);
+	font-size: 0.6rem;
+	font-weight: 600;
+	line-height: 1;
+`;
+
+export var Sentence = styled.p`
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	/* hide text that are more than two lines */
+	overflow: hidden;
+	font-size: 0.8rem;
+	line-height: 1.3;
 `;
 
 export var ErrorText = styled.p`
 	color: var(--text-status-warning);
-	font-size: 14px;
+	font-size: 0.8rem;
 `;

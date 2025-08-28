@@ -104,6 +104,7 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 	}
 
 	revalidateTag('sentences');
+	revalidateTag('latest');
 	(await cookies()).delete('sentence');
 	return { data: dbResult.value };
 }

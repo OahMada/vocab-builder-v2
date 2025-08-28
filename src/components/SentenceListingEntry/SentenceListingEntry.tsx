@@ -102,7 +102,7 @@ var SentenceWrapper = styled.p`
 	line-height: 1.6;
 `;
 
-export var AudioButton = styled(PlayAudioFromUrl)`
+var AudioButton = styled(PlayAudioFromUrl)`
 	display: inline-block;
 	--hover-bg-color: var(--bg-tertiary);
 	margin-left: 8px;

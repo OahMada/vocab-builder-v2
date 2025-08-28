@@ -7,7 +7,7 @@ import readAllSentences from '@/app/actions/sentence/readAllSentences';
 
 // TODO put a suspense boundary around this element
 
-const getCachedSentences = unstable_cache(
+var getCachedSentences = unstable_cache(
 	async () => {
 		return await readAllSentences();
 	},
