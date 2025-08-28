@@ -12,6 +12,7 @@ export default function Home() {
 				<Title>Vocab Builder</Title>
 				<Spacer size={0} />
 				<SentenceInput />
+				<Spacer size={0} />
 				<LatestSentence />
 			</Wrapper>
 		</MaxWidthWrapper>

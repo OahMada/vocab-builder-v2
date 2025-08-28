@@ -33,12 +33,12 @@ async function LatestSentence() {
 	return (
 		<Wrapper>
 			<InnerWrapper>
-				<SmallTitle>Latest</SmallTitle>
+				<SmallTitle>LATEST SENTENCE</SmallTitle>
 				<Sentence>{sentence}</Sentence>
 			</InnerWrapper>
-			<ViewAllButton variant='fill' href='/browse'>
-				<Icon id='forward' size={14} />
-				&nbsp;Browse
+			<ViewAllButton variant='outline' href='/browse'>
+				<Icon id='forward' />
+				&nbsp;View All
 			</ViewAllButton>
 		</Wrapper>
 	);
