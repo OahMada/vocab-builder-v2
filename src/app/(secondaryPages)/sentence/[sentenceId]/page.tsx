@@ -17,7 +17,7 @@ import SentencePiecesProvider from '@/components/SentencePiecesProvider';
 import AudioDataProvider from '@/components/AudioDataProvider';
 import { ToastProvider, ToastViewport } from '@/components/Toast';
 import Spacer from '@/components/Spacer';
-import readOneSentence from '@/app/actions/sentence/readOneSentence';
+import readOneSentenceById from '@/app/actions/sentence/readOneSentenceById';
 import { SentenceCreateInputType } from '@/lib';
 import { constructSentencePiecesData } from '@/helpers';
 
@@ -39,7 +39,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 		}
 		sentence = data;
 	} else {
-		let result = await readOneSentence(sentenceId);
+		let result = await readOneSentenceById(sentenceId);
 		if ('error' in result) {
 			throw result.error;
 		} else if (!result.data) {

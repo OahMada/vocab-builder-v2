@@ -34,12 +34,13 @@ function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl
 		});
 		setIsLoading(false);
 	}
+
 	return (
 		<>
 			<AccordionItem id={id}>
 				<AccordionTrigger>
 					<SentenceWrapper>
-						<Index>{`${index + 1}.`}</Index>&nbsp;
+						<Index>{`${index + 1}. `}</Index>
 						{sentencePieces}
 						<AudioButton
 							style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
@@ -101,7 +102,7 @@ var SentenceWrapper = styled.p`
 	line-height: 1.6;
 `;
 
-var AudioButton = styled(PlayAudioFromUrl)`
+export var AudioButton = styled(PlayAudioFromUrl)`
 	display: inline-block;
 	--hover-bg-color: var(--bg-tertiary);
 	margin-left: 8px;
@@ -128,9 +129,7 @@ var InnerWrapper = styled.div`
 	gap: 3px;
 `;
 
-var Translation = styled.p`
-	font-style: italic;
-`;
+var Translation = styled.p``;
 
 var Note = styled.p`
 	background-color: var(--bg-tertiary);

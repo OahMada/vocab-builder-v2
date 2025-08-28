@@ -1,18 +1,19 @@
 import Wrapper from '@/components/PageWrapper';
 import SentenceInput from '@/components/SentenceInput';
-import SentencePartialListing from '@/components/SentencePartialListing';
+import LatestSentence from '@/components/LatestSentence';
 import Title from './Title';
-import Spacer from '@/components/Spacer';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import Spacer from '@/components/Spacer';
 
 export default function Home() {
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>
 				<Title>Vocab Builder</Title>
-				<Spacer size={20} />
+				<Spacer size={0} />
 				<SentenceInput />
-				<SentencePartialListing />
+				<Spacer size={0} />
+				<LatestSentence />
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

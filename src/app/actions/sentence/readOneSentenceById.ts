@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 import { IdSchema, sentenceReadSelect, SentenceWithPieces } from '@/lib';
 import { handleZodError } from '@/utils';
 
-export default async function readOneSentence(data: unknown): Promise<{ error: string } | { data: null | SentenceWithPieces }> {
+export default async function readOneSentenceById(data: unknown): Promise<{ error: string } | { data: null | SentenceWithPieces }> {
 	let idResult = IdSchema.safeParse(data);
 	if (!idResult.success) {
 		let errors = handleZodError(idResult.error);

@@ -1,18 +1,15 @@
 import * as React from 'react';
 import { unstable_cache } from 'next/cache';
-import prisma from '@/lib/prisma';
-import { SentenceWithPieces, sentenceReadSelect } from '@/lib';
+import { SentenceWithPieces } from '@/lib';
 import ErrorDisplay from './ErrorDisplay';
 import OptimisticSentenceListing from '@/components/OptimisticSentenceListing';
+import readAllSentences from '@/app/actions/sentence/readAllSentences';
 
 // TODO put a suspense boundary around this element
 
 const getCachedSentences = unstable_cache(
 	async () => {
-		return await prisma.sentence.findMany({
-			select: sentenceReadSelect,
-			orderBy: { createdAt: 'desc' },
-		});
+		return await readAllSentences();
 	},
 	[],
 	{ revalidate: 3600, tags: ['sentences'] }
@@ -20,14 +17,12 @@ const getCachedSentences = unstable_cache(
 
 async function SentenceListing() {
 	let sentences: SentenceWithPieces[];
-	try {
-		// throw new Error('test');
-		sentences = await getCachedSentences();
-	} catch (err) {
-		console.error(err);
+	// throw new Error('test');
+	let result = await getCachedSentences();
+	if ('error' in result) {
 		return <ErrorDisplay />;
 	}
-
+	sentences = result.data;
 	return <OptimisticSentenceListing sentences={sentences} />;
 }
 

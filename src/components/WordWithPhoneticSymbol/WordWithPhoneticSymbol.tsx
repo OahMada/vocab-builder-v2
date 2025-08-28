@@ -32,6 +32,7 @@ var WordButton = styled(Button)`
 	border-bottom: 2px dashed var(--border-medium);
 	line-height: 1;
 	border-radius: 4px;
+	color: inherit;
 `;
 
 var SymbolWrapper = styled.span`
