@@ -23,7 +23,7 @@ async function LatestSentence() {
 		);
 	}
 
-	let latestSentence = result?.data;
+	let latestSentence = result.data;
 	if (!latestSentence) {
 		return;
 	}

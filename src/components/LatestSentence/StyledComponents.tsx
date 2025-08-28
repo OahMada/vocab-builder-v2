@@ -11,6 +11,7 @@ export var Wrapper = styled.div`
 	position: absolute;
 	bottom: 0;
 	color: var(--text-secondary);
+	width: 100%;
 `;
 
 export var InnerWrapper = styled.div`
