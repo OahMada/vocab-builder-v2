@@ -17,7 +17,7 @@ import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import { TOAST_ID, INPUT_NAME, LOCAL_STORAGE_KEY, COOKIE_KEY } from '@/constants';
 
 function SentenceInput() {
-	let { addToToast, resetToast } = useGlobalToastContext();
+	let { addToToast, removeFromToast } = useGlobalToastContext();
 	let [isLoading, startTransition] = React.useTransition();
 
 	let router = useRouter();
@@ -44,19 +44,19 @@ function SentenceInput() {
 	let { ref, ...rest } = register(INPUT_NAME.SENTENCE, {
 		onChange: () => {
 			clearErrors(INPUT_NAME.SENTENCE);
-			resetToast(TOAST_ID.SENTENCE);
+			removeFromToast(TOAST_ID.SENTENCE);
 		},
 	});
 
 	function clearInput() {
-		resetToast(TOAST_ID.SENTENCE);
+		removeFromToast(TOAST_ID.SENTENCE);
 		clearErrors(INPUT_NAME.SENTENCE);
 		setValue(INPUT_NAME.SENTENCE, '');
 		updateLocalStorage('delete', LOCAL_STORAGE_KEY.SENTENCE);
 	}
 
 	async function onSubmit(data: UserInputType) {
-		resetToast(TOAST_ID.SENTENCE);
+		removeFromToast(TOAST_ID.SENTENCE);
 		startTransition(async () => {
 			let result = await checkForSentenceUniqueness(data[INPUT_NAME.SENTENCE]);
 			if ('error' in result) {

@@ -20,7 +20,7 @@ import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import { TOAST_ID } from '@/constants';
 
 function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceId?: string }) {
-	let { addToToast } = useGlobalToastContext();
+	let { addToToast, removeFromToast } = useGlobalToastContext();
 	let [errorMsg, setErrorMsg] = React.useState('');
 	let router = useRouter();
 	let [isModalShowing, setIsModalShowing] = React.useState(false);
@@ -62,6 +62,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 
 	async function handleSubmit() {
 		setErrorMsg('');
+		removeFromToast(TOAST_ID.SENTENCE_CREATION);
 		startTransition(async () => {
 			let result: { error: string } | { data: SentenceWithPieces };
 			if (sentenceId) {
@@ -75,7 +76,12 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				return;
 			}
 			deleteLocalData(true);
-			addToToast({ id: TOAST_ID.SENTENCE_CREATION, contentType: 'notice', content: `Sentence Created: ${sentence}` });
+			addToToast({
+				id: TOAST_ID.SENTENCE_CREATION,
+				contentType: 'notice',
+				content: sentence,
+				title: 'Sentence Created',
+			});
 			if (sentenceId) {
 				router.back();
 			} else {

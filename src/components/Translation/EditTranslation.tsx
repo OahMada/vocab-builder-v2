@@ -11,7 +11,7 @@ import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import { TOAST_ID, INPUT_NAME } from '@/constants';
 
 export default function EditTranslation({ translationText, cancelEditing }: { translationText: string; cancelEditing: () => void }) {
-	let { addToToast, resetToast } = useGlobalToastContext();
+	let { addToToast, removeFromToast } = useGlobalToastContext();
 	let { updateTranslation } = useTranslationContext();
 
 	let {
@@ -30,7 +30,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 	let translationTextValue = watch(INPUT_NAME.TRANSLATION);
 
 	function clearInput() {
-		resetToast(TOAST_ID.TRANSLATION_EDITING);
+		removeFromToast(TOAST_ID.TRANSLATION_EDITING);
 		clearErrors(INPUT_NAME.TRANSLATION);
 		setValue(INPUT_NAME.TRANSLATION, translationText);
 	}
@@ -59,7 +59,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 				clearInput={clearInput}
 				{...register(INPUT_NAME.TRANSLATION, {
 					onChange: () => {
-						resetToast(TOAST_ID.TRANSLATION_EDITING);
+						removeFromToast(TOAST_ID.TRANSLATION_EDITING);
 						clearErrors(INPUT_NAME.TRANSLATION);
 					},
 				})}

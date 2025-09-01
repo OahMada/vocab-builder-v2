@@ -24,7 +24,7 @@ interface TranslationArg {
 var url = '/api/translation';
 
 function Translation({ title, sentence }: { title: React.ReactNode; sentence: string }) {
-	let { addToToast, resetToast } = useGlobalToastContext();
+	let { addToToast, removeFromToast } = useGlobalToastContext();
 
 	// consume the context provider, get locally saved translation text
 	let { isLocalDataLoading, updateTranslation, translation, isEditing, updateEditingStatus } = useTranslationContext();
@@ -62,7 +62,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 
 	async function retryTranslate() {
 		reset();
-		resetToast(TOAST_ID.TRANSLATION_FETCHING);
+		removeFromToast(TOAST_ID.TRANSLATION_FETCHING);
 		let data = await trigger({ sentence });
 		if (data) {
 			updateTranslation(data.result);

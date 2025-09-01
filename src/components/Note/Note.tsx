@@ -16,7 +16,7 @@ import { TOAST_ID, INPUT_NAME } from '@/constants';
 
 function Note({ title }: { title: React.ReactNode }) {
 	let { note, updateNote, isEditing, updateEditingStatus } = useNoteContext();
-	let { addToToast, resetToast } = useGlobalToastContext();
+	let { addToToast, removeFromToast } = useGlobalToastContext();
 
 	let {
 		register,
@@ -35,7 +35,7 @@ function Note({ title }: { title: React.ReactNode }) {
 
 	function clearInput() {
 		clearErrors(INPUT_NAME.NOTE);
-		resetToast(TOAST_ID.NOTE);
+		removeFromToast(TOAST_ID.NOTE);
 		setValue(INPUT_NAME.NOTE, '');
 	}
 
@@ -70,7 +70,7 @@ function Note({ title }: { title: React.ReactNode }) {
 					{...register(INPUT_NAME.NOTE, {
 						onChange: () => {
 							clearErrors(INPUT_NAME.NOTE);
-							resetToast(TOAST_ID.NOTE);
+							removeFromToast(TOAST_ID.NOTE);
 						},
 					})}
 					value={noteValue}

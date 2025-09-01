@@ -77,7 +77,6 @@ export const LOCAL_STORAGE_KEY = {
 
 export const LOCAL_STORAGE_OBJ = 'vocab-builder';
 
-// getCookie
 export const COOKIE_KEY = 'sentence';
 
 export const LOCAL_DB_KEY = 'audio';

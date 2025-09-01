@@ -6,33 +6,34 @@ import GlobalToastContext from './GlobalToastContext';
 import { ToastMsgs, ToastMsg } from './types';
 
 function GlobalToastProvider({ children }: { children: React.ReactNode }) {
-	let [toastMsgs, setToastMsgs] = React.useState<ToastMsgs>([]);
+	let [toasts, setToasts] = React.useState<ToastMsgs>([]);
 
-	let resetToast = React.useCallback((id: string) => {
-		setToastMsgs((prevState) => [...prevState.filter((item) => item.id !== id)]);
+	let removeFromToast = React.useCallback((id: string) => {
+		setToasts((prevState) => [...prevState.filter((item) => item.id !== id)]);
 	}, []);
 
 	let addToToast = React.useCallback(
 		(toastMsg: ToastMsg) => {
-			resetToast(toastMsg.id);
-			setToastMsgs((prevState) => [...prevState, toastMsg]);
+			// just in case, prevent more than one toasts with the same id in toasts
+			removeFromToast(toastMsg.id);
+			setToasts((prevState) => [...prevState, toastMsg]);
 		},
-		[resetToast]
+		[removeFromToast]
 	);
 
 	let value = React.useMemo(
 		() => ({
 			addToToast,
-			resetToast,
+			removeFromToast,
 		}),
-		[addToToast, resetToast]
+		[addToToast, removeFromToast]
 	);
 
 	return (
 		<ToastProvider>
 			<GlobalToastContext.Provider value={value}>{children}</GlobalToastContext.Provider>
-			{toastMsgs.map(({ id, contentType, content, ...rest }) => (
-				<Toast key={id} contentType={contentType} content={content} {...rest} />
+			{toasts.map(({ id, ...rest }) => (
+				<Toast key={id} {...rest} />
 			))}
 			<ToastViewport $position='bottom' />
 		</ToastProvider>

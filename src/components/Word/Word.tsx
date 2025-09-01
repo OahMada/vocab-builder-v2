@@ -24,7 +24,7 @@ interface IPAArg {
 var url = '/api/IPA';
 
 function Word({ piece, IPA, id }: WordComponentProps) {
-	let { addToToast, resetToast } = useGlobalToastContext();
+	let { addToToast, removeFromToast } = useGlobalToastContext();
 
 	let { trigger, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher, {
 		onError: (err) => {
@@ -42,7 +42,7 @@ function Word({ piece, IPA, id }: WordComponentProps) {
 	}
 
 	async function triggerFetch() {
-		resetToast(`${TOAST_ID.IPA_FETCHING}${piece}`);
+		removeFromToast(`${TOAST_ID.IPA_FETCHING}${piece}`);
 		let data = await trigger({ word: piece });
 		if (data) {
 			addIPA({ text: piece, IPA: data.result, id });

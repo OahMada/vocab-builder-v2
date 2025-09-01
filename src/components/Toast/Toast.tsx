@@ -56,10 +56,15 @@ var Description = styled(ToastPrimitives.Description)<{ $contentType: 'error' | 
 			`;
 		} else if ($contentType === 'notice') {
 			return css`
-				color: inherit;
+				color: var(--text-secondary);
 			`;
 		}
 	}}
+
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	/* hide text that are more than one lines */
+	overflow: hidden;
 `;
 
 var CloseButton = styled(Button)`
@@ -77,11 +82,11 @@ export var ToastViewport = styled(ToastPrimitives.Viewport)<{ $position: 'top' |
 	${({ $position }) => {
 		if ($position === 'top') {
 			return css`
-				top: 0;
+				top: 20px;
 			`;
 		} else if ($position === 'bottom') {
 			return css`
-				bottom: 0;
+				bottom: 20px;
 			`;
 		}
 	}}

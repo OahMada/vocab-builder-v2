@@ -7,8 +7,7 @@ export function usePlayAudio(audioSource: (undefined | Blob) | string) {
 	let [isPlaying, setIsPlaying] = React.useState(false);
 	let audioEleRef = React.useRef<null | HTMLAudioElement>(null);
 	let autoPlayRef = React.useRef(false);
-	// let [error, setError] = React.useState<string | undefined>(undefined);
-	let { addToToast, resetToast } = useGlobalToastContext();
+	let { addToToast, removeFromToast } = useGlobalToastContext();
 
 	let stopAudio = React.useCallback(function () {
 		if (audioEleRef.current) {
@@ -20,13 +19,12 @@ export function usePlayAudio(audioSource: (undefined | Blob) | string) {
 
 	let playAudio = React.useCallback(
 		async function () {
-			resetToast(TOAST_ID.AUDIO_PLAYING);
+			removeFromToast(TOAST_ID.AUDIO_PLAYING);
 			if (audioEleRef.current) {
 				setIsPlaying(true);
 				try {
 					await audioEleRef.current.play();
 				} catch (error) {
-					// setError(handleError(error));
 					addToToast({
 						id: TOAST_ID.AUDIO_PLAYING,
 						contentType: 'error',
@@ -36,7 +34,7 @@ export function usePlayAudio(audioSource: (undefined | Blob) | string) {
 				}
 			}
 		},
-		[addToToast, resetToast, stopAudio]
+		[addToToast, removeFromToast, stopAudio]
 	);
 
 	let enableAutoPlay = React.useCallback(() => {

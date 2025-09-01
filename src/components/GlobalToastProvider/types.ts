@@ -9,5 +9,5 @@ export type ToastMsg = { id: ToastId } & React.ComponentProps<typeof Toast>;
 export type ToastMsgs = ToastMsg[];
 export interface GlobalToastContextType {
 	addToToast: (toastMsg: ToastMsg) => void;
-	resetToast: (id: ToastId) => void;
+	removeFromToast: (id: ToastId) => void;
 }

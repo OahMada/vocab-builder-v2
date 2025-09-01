@@ -19,14 +19,14 @@ type SentenceListingEntryProps = {
 } & SentenceWithPieces;
 
 function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl, pieces, mutateSentences }: SentenceListingEntryProps) {
-	let { addToToast, resetToast } = useGlobalToastContext();
+	let { addToToast, removeFromToast } = useGlobalToastContext();
 	let sentencePieces = useConstructedSentence(sentence, pieces);
 	let [isLoading, setIsLoading] = React.useState(false);
 	let { isPlaying, playAudio, stopAudio } = usePlayAudio(audioUrl);
 
 	async function handleDeleteAction() {
 		setIsLoading(true);
-		resetToast(TOAST_ID.SENTENCE_DELETION);
+		removeFromToast(TOAST_ID.SENTENCE_DELETION);
 		let result = await deleteSentence(id);
 		if ('error' in result) {
 			setIsLoading(false);
