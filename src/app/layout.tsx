@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import { roboto, inter } from '@/helpers/getFont';
 import GlobalStyles from '@/components/GlobalStyles';
-import { ToastProvider, ToastViewport } from '@/components/Toast';
+import GlobalToastProvider from '@/components/GlobalToastProvider';
 
 export var metadata: Metadata = {
 	title: 'Vocab Builder',
@@ -20,10 +20,7 @@ export default function RootLayout({
 			<body>
 				<StyledComponentsRegistry>
 					<GlobalStyles />
-					<ToastProvider>
-						{children}
-						<ToastViewport $position='bottom' />
-					</ToastProvider>
+					<GlobalToastProvider>{children}</GlobalToastProvider>
 				</StyledComponentsRegistry>
 			</body>
 		</html>

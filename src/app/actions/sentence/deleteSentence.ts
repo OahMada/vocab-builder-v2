@@ -13,6 +13,7 @@ export default async function deleteSentence(sentenceId: unknown): Promise<{ err
 	}
 
 	try {
+		// throw new Error('');
 		let deletedSentence = await prisma.$transaction([
 			prisma.piece.deleteMany({ where: { sentenceId: idResult.data } }),
 			prisma.sentence.delete({ where: { id: idResult.data }, select: sentenceReadSelect }),

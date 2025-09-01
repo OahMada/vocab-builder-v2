@@ -3,23 +3,21 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { FieldErrors, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { UserInputType, UserInputSchema } from '@/lib';
 import TextArea from '@/components/TextArea';
 import ActionButtons from './ActionButtons';
 import Spacer from '@/components/Spacer';
-import Toast from '@/components/Toast';
 import { setCookie, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';
 import checkForSentenceUniqueness from '@/app/actions/sentence/checkSentenceUniqueness';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 function SentenceInput() {
+	let { addToToast, resetToast } = useGlobalToastContext();
 	let [isLoading, startTransition] = React.useTransition();
-
-	// handle server action error only. this kind of error doesn't stop user from re-submitting
-	let [errMsg, setErrMsg] = React.useState('');
 
 	let router = useRouter();
 	let {
@@ -45,25 +43,34 @@ function SentenceInput() {
 	let { ref, ...rest } = register('user-input', {
 		onChange: () => {
 			clearErrors('user-input');
+			resetToast('sentence');
 		},
 	});
 
 	function clearInput() {
-		setErrMsg('');
+		resetToast('sentence');
 		clearErrors('user-input');
 		setValue('user-input', '');
 		updateLocalStorage('delete', 'user-input');
 	}
 
 	async function onSubmit(data: UserInputType) {
-		setErrMsg('');
+		resetToast('sentence');
 		startTransition(async () => {
 			let result = await checkForSentenceUniqueness(data['user-input']);
 			if ('error' in result) {
-				setErrMsg(result.error);
+				addToToast({
+					contentType: 'error',
+					content: result.error,
+					id: 'sentence',
+				});
 				return;
 			} else if ('data' in result && result.data) {
-				setErrMsg('The exact sentence is already existed in database. You should edit the existing one.');
+				addToToast({
+					contentType: 'error',
+					content: 'The exact sentence is already existed in database. You should edit the existing one.',
+					id: 'sentence',
+				});
 				return;
 			}
 			setCookie('sentence', data['user-input']);
@@ -72,13 +79,20 @@ function SentenceInput() {
 		});
 	}
 
+	function onError(errors: FieldErrors<UserInputType>) {
+		let msg = errors['user-input']!.message as string;
+		addToToast({
+			contentType: 'error',
+			content: msg,
+			id: 'sentence',
+		});
+	}
+
 	return (
-		<Wrapper onSubmit={handleSubmit(onSubmit)}>
+		<Wrapper onSubmit={handleSubmit(onSubmit, onError)}>
 			<Spacer size={4} />
 			<TextArea placeholder='Enter or paste in a sentence.' clearInput={clearInput} {...rest} ref={ref} value={userInput} />
 			<ActionButtons handlePaste={updateInput} submitDisabled={!!errors['user-input'] || isLoading} isLoading={isLoading} />
-			{errMsg && <Toast content={errMsg} />}
-			{errors['user-input'] && <Toast content={errors['user-input'].message} />}
 		</Wrapper>
 	);
 }

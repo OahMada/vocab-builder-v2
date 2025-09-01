@@ -79,7 +79,7 @@ function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sent
 					<VisuallyHidden>Play sentence audio</VisuallyHidden>
 				</AudioButton>
 			)}
-			{error && <Toast content={handleError(error)} />}
+			{error && <Toast content={handleError(error)} contentType='error' />}
 		</>
 	);
 }

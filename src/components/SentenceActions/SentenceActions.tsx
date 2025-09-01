@@ -16,8 +16,10 @@ import { handleError } from '@/utils';
 import { Toast } from '@/components/Toast';
 import { SentenceCreateInputType, SentenceUpdateInputType, SentenceWithPieces } from '@/lib';
 import updateSentence from '@/app/actions/sentence/updateSentence';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceId?: string }) {
+	let { addToToast } = useGlobalToastContext();
 	let [errorMsg, setErrorMsg] = React.useState('');
 	let router = useRouter();
 	let [isModalShowing, setIsModalShowing] = React.useState(false);
@@ -58,9 +60,8 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	}
 
 	async function handleSubmit() {
+		setErrorMsg('');
 		startTransition(async () => {
-			setErrorMsg('');
-
 			let result: { error: string } | { data: SentenceWithPieces };
 			if (sentenceId) {
 				result = await updateSentence(sentenceUpdateInput);
@@ -73,6 +74,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				return;
 			}
 			deleteLocalData(true);
+			addToToast({ id: 'sentenceCreate', contentType: 'notice', content: `Sentence Created: ${sentence}` });
 			if (sentenceId) {
 				router.back();
 			} else {
@@ -99,7 +101,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				</DoneButton>
 			</Wrapper>
 			{isModalShowing && <AskAQuestion isShowing={isModalShowing} onDismiss={dismissModal} sentence={sentence} />}
-			{errorMsg && <Toast content={errorMsg} />}
+			{errorMsg && <Toast content={errorMsg} contentType='error' />}
 		</>
 	);
 }

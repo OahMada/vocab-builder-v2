@@ -2,14 +2,15 @@
 
 import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { FieldErrors, useForm } from 'react-hook-form';
 import TextareaActionButtons from '@/components/TextareaActionButtons';
 import TextArea from '@/components/TextArea';
 import { TranslationSchema, TranslationType } from '@/lib';
-import Toast from '@/components/Toast';
 import { useTranslationContext } from '@/components/TranslationProvider';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 export default function EditTranslation({ translationText, cancelEditing }: { translationText: string; cancelEditing: () => void }) {
+	let { addToToast, resetToast } = useGlobalToastContext();
 	let { updateTranslation } = useTranslationContext();
 
 	let {
@@ -28,6 +29,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 	let translationTextValue = watch('translation');
 
 	function clearInput() {
+		resetToast('translation');
 		clearErrors('translation');
 		setValue('translation', translationText);
 	}
@@ -41,6 +43,14 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 		cancelEditing();
 	}
 
+	function onError(errors: FieldErrors<TranslationType>) {
+		addToToast({
+			id: 'translation',
+			contentType: 'error',
+			content: errors.translation!.message,
+		});
+	}
+
 	return (
 		<>
 			<TextArea
@@ -48,13 +58,13 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 				clearInput={clearInput}
 				{...register('translation', {
 					onChange: () => {
+						resetToast('translation');
 						clearErrors('translation');
 					},
 				})}
 				placeholder='Input translation text here'
 			/>
-			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit)} submitDisabled={!!errors.translation} />
-			{errors.translation && <Toast content={errors.translation.message} />}
+			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit, onError)} submitDisabled={!!errors.translation} />
 		</>
 	);
 }

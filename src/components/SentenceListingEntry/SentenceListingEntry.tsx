@@ -10,7 +10,7 @@ import PlayAudioFromUrl from '@/components/PlayAudioFromUrl';
 import { useConstructedSentence, usePlayAudio } from '@/hooks';
 import deleteSentence from '@/app/actions/sentence/deleteSentence';
 import AlertDialog from '@/components/AlertDialog';
-import Toast from '@/components/Toast';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 type SentenceListingEntryProps = {
 	index: number;
@@ -18,16 +18,23 @@ type SentenceListingEntryProps = {
 } & SentenceWithPieces;
 
 function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl, pieces, mutateSentences }: SentenceListingEntryProps) {
+	let { addToToast, resetToast } = useGlobalToastContext();
 	let sentencePieces = useConstructedSentence(sentence, pieces);
 	let [isLoading, setIsLoading] = React.useState(false);
-	let [errorMsg, setErrorMsg] = React.useState('');
 	let { isPlaying, playAudio, stopAudio } = usePlayAudio(audioUrl);
 
 	async function handleDeleteAction() {
 		setIsLoading(true);
+		resetToast('sentenceDeletion');
 		let result = await deleteSentence(id);
 		if ('error' in result) {
-			setErrorMsg(result.error);
+			setIsLoading(false);
+			addToToast({
+				id: 'sentenceDeletion',
+				contentType: 'error',
+				content: result.error,
+			});
+			return;
 		}
 		React.startTransition(() => {
 			mutateSentences(id);
@@ -90,7 +97,6 @@ function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl
 					</ContentWrapper>
 				</AccordionContent>
 			</AccordionItem>
-			{errorMsg && <Toast content={errorMsg} />}
 		</>
 	);
 }

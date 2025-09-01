@@ -1,16 +1,13 @@
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import { handleError } from '@/utils';
 import * as React from 'react';
 
 export function usePlayAudio(audioSource: (undefined | Blob) | string) {
 	let [isPlaying, setIsPlaying] = React.useState(false);
 	let audioEleRef = React.useRef<null | HTMLAudioElement>(null);
 	let autoPlayRef = React.useRef(false);
-
-	let playAudio = React.useCallback(function () {
-		if (audioEleRef.current) {
-			setIsPlaying(true);
-			audioEleRef.current.play();
-		}
-	}, []);
+	// let [error, setError] = React.useState<string | undefined>(undefined);
+	let { addToToast, resetToast } = useGlobalToastContext();
 
 	let stopAudio = React.useCallback(function () {
 		if (audioEleRef.current) {
@@ -19,6 +16,27 @@ export function usePlayAudio(audioSource: (undefined | Blob) | string) {
 			audioEleRef.current.currentTime = 0;
 		}
 	}, []);
+
+	let playAudio = React.useCallback(
+		async function () {
+			resetToast('audio');
+			if (audioEleRef.current) {
+				setIsPlaying(true);
+				try {
+					await audioEleRef.current.play();
+				} catch (error) {
+					// setError(handleError(error));
+					addToToast({
+						id: 'audio',
+						contentType: 'error',
+						content: handleError(error),
+					});
+					stopAudio();
+				}
+			}
+		},
+		[addToToast, resetToast, stopAudio]
+	);
 
 	let enableAutoPlay = React.useCallback(() => {
 		autoPlayRef.current = true;

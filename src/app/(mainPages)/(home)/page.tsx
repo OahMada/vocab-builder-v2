@@ -1,9 +1,9 @@
 import Wrapper from '@/components/PageWrapper';
 import SentenceInput from '@/components/SentenceInput';
-import LatestSentence from '@/components/LatestSentence';
-import Title from './Title';
+import { Title, BrowseButton } from './StyledComponents';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Spacer from '@/components/Spacer';
+import Icon from '@/components/Icon';
 
 export default function Home() {
 	return (
@@ -13,7 +13,10 @@ export default function Home() {
 				<Spacer size={0} />
 				<SentenceInput />
 				<Spacer size={0} />
-				<LatestSentence />
+				<BrowseButton variant='outline' href='/browse'>
+					<Icon id='forward' />
+					&nbsp;Browse
+				</BrowseButton>
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

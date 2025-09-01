@@ -9,8 +9,8 @@ import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
 import EditTranslation from '@/components/Translation/EditTranslation';
 import { useTranslationContext } from '@/components/TranslationProvider';
-import Toast from '@/components/Toast';
 import Loading from '@/components/Loading';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 interface TranslationResponse {
 	result: string;
@@ -23,11 +23,24 @@ interface TranslationArg {
 var url = '/api/translation';
 
 function Translation({ title, sentence }: { title: React.ReactNode; sentence: string }) {
+	let { addToToast, resetToast } = useGlobalToastContext();
+
 	// consume the context provider, get locally saved translation text
 	let { isLocalDataLoading, updateTranslation, translation, isEditing, updateEditingStatus } = useTranslationContext();
 
 	// when there is no local translation text or you want to fetch new translation, fetch from api route
-	let { trigger, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, TranslationArg>(url, postFetcher);
+	let { trigger, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, TranslationArg>(url, postFetcher, {
+		onError: (err) => {
+			/* to show the retry errors */
+			if (translation) {
+				addToToast({
+					id: 'translation',
+					contentType: 'error',
+					content: handleError(err),
+				});
+			}
+		},
+	});
 
 	React.useEffect(() => {
 		async function activateTrigger() {
@@ -48,7 +61,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 
 	async function retryTranslate() {
 		reset();
-
+		resetToast('translation');
 		let data = await trigger({ sentence });
 		if (data) {
 			updateTranslation(data.result);
@@ -95,8 +108,6 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 					</ButtonWrapper>
 				</>
 			)}
-			{/* to show the retry errors */}
-			{translation && error && <Toast content={handleError(error)} />}
 		</>
 	);
 }

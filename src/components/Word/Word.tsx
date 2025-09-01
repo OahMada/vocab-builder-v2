@@ -7,9 +7,9 @@ import Button from '@/components/Button';
 import PhoneticSymbol from './PhoneticSymbol';
 import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
-import Toast from '@/components/Toast';
 import Loading from '@/components/Loading';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA?: string | null; id: string };
 
@@ -23,7 +23,17 @@ interface IPAArg {
 var url = '/api/IPA';
 
 function Word({ piece, IPA, id }: WordComponentProps) {
-	let { trigger, error, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher);
+	let { addToToast, resetToast } = useGlobalToastContext();
+
+	let { trigger, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher, {
+		onError: (err) => {
+			addToToast({
+				id: `IPA_${piece}`,
+				contentType: 'error',
+				content: handleError(err),
+			});
+		},
+	});
 	let { addIPA, removeIPA, isLocalDataLoading } = useSentencePiecesContext();
 
 	if (piece === ' ') {
@@ -31,6 +41,7 @@ function Word({ piece, IPA, id }: WordComponentProps) {
 	}
 
 	async function triggerFetch() {
+		resetToast(`IPA_${piece}`);
 		let data = await trigger({ word: piece });
 		if (data) {
 			addIPA({ text: piece, IPA: data.result, id });
@@ -59,7 +70,6 @@ function Word({ piece, IPA, id }: WordComponentProps) {
 				</WordButton>
 			)}
 			{IPA && <PhoneticSymbol symbol={IPA} onClick={handleRemoval} />}
-			{error && <Toast content={handleError(error)} />}
 		</Wrapper>
 	);
 }

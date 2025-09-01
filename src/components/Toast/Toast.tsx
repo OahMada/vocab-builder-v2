@@ -7,16 +7,17 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
-interface ToastProps {
-	title?: string;
+type ToastProps = {
+	contentType: 'error' | 'notice';
 	content: React.ReactNode;
-}
+	title?: string;
+} & React.ComponentProps<typeof ToastPrimitives.Root>;
 
-export function Toast({ title, content, ...props }: ToastProps & React.ComponentProps<typeof ToastPrimitives.Root>) {
+export function Toast({ title, content, contentType, ...props }: ToastProps) {
 	return (
-		<Root {...props}>
+		<Root {...props} duration={3000}>
 			{title && <Title>{title}</Title>}
-			<Description>{content}</Description>
+			<Description $contentType={contentType}>{content}</Description>
 			<ToastPrimitives.Close asChild={true}>
 				<CloseButton variant='icon' style={{ '--icon-size': '16px' } as React.CSSProperties}>
 					<Icon id='x' size={16} />
@@ -38,7 +39,6 @@ var Root = styled(ToastPrimitives.Root)`
 	padding-right: 50px;
 	display: flex;
 	flex-direction: column;
-	color: var(--text-status-warning);
 	position: relative;
 `;
 
@@ -47,8 +47,19 @@ var Title = styled(ToastPrimitives.Title)`
 	font-weight: 500;
 `;
 
-var Description = styled(ToastPrimitives.Description)`
+var Description = styled(ToastPrimitives.Description)<{ $contentType: 'error' | 'notice' }>`
 	font-size: 13px;
+	${({ $contentType }) => {
+		if ($contentType === 'error') {
+			return css`
+				color: var(--text-status-warning);
+			`;
+		} else if ($contentType === 'notice') {
+			return css`
+				color: inherit;
+			`;
+		}
+	}}
 `;
 
 var CloseButton = styled(Button)`

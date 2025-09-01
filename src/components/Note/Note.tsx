@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
+import { FieldErrors, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextArea from '@/components/TextArea';
 import CardWrapper from '@/app/(secondaryPages)/sentence/[sentenceId]/CardWrapper';
@@ -10,11 +10,12 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import TextareaActionButtons from '@/components/TextareaActionButtons';
 import { NoteSchema, NoteType } from '@/lib';
-import Toast from '@/components/Toast';
 import { useNoteContext } from '@/components/NoteProvider';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 function Note({ title }: { title: React.ReactNode }) {
 	let { note, updateNote, isEditing, updateEditingStatus } = useNoteContext();
+	let { addToToast, resetToast } = useGlobalToastContext();
 
 	let {
 		register,
@@ -33,6 +34,7 @@ function Note({ title }: { title: React.ReactNode }) {
 
 	function clearInput() {
 		clearErrors('note');
+		resetToast('note');
 		setValue('note', '');
 	}
 
@@ -49,6 +51,15 @@ function Note({ title }: { title: React.ReactNode }) {
 		cancelEditing();
 	}
 
+	function onError(errors: FieldErrors<NoteType>) {
+		let msg = errors.note!.message as string;
+		addToToast({
+			contentType: 'error',
+			content: msg,
+			id: 'note',
+		});
+	}
+
 	return isEditing ? (
 		<>
 			<CardWrapper>
@@ -58,15 +69,15 @@ function Note({ title }: { title: React.ReactNode }) {
 					{...register('note', {
 						onChange: () => {
 							clearErrors('note');
+							resetToast('note');
 						},
 					})}
 					value={noteValue}
 					clearInput={clearInput}
 					placeholder='Input note text here'
 				/>
-				<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit)} submitDisabled={!!errors.note} />
+				<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit, onError)} submitDisabled={!!errors.note} />
 			</CardWrapper>
-			{errors.note && <Toast content={errors.note.message} />}
 		</>
 	) : note ? (
 		<CardWrapper>
