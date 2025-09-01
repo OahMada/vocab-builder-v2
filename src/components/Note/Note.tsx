@@ -12,6 +12,7 @@ import TextareaActionButtons from '@/components/TextareaActionButtons';
 import { NoteSchema, NoteType } from '@/lib';
 import { useNoteContext } from '@/components/NoteProvider';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import { TOAST_ID, INPUT_NAME } from '@/constants';
 
 function Note({ title }: { title: React.ReactNode }) {
 	let { note, updateNote, isEditing, updateEditingStatus } = useNoteContext();
@@ -30,12 +31,12 @@ function Note({ title }: { title: React.ReactNode }) {
 		values: { note: note || '' },
 	});
 
-	let noteValue = watch('note');
+	let noteValue = watch(INPUT_NAME.NOTE);
 
 	function clearInput() {
-		clearErrors('note');
-		resetToast('note');
-		setValue('note', '');
+		clearErrors(INPUT_NAME.NOTE);
+		resetToast(TOAST_ID.NOTE);
+		setValue(INPUT_NAME.NOTE, '');
 	}
 
 	function cancelEditing() {
@@ -56,7 +57,7 @@ function Note({ title }: { title: React.ReactNode }) {
 		addToToast({
 			contentType: 'error',
 			content: msg,
-			id: 'note',
+			id: TOAST_ID.NOTE,
 		});
 	}
 
@@ -66,10 +67,10 @@ function Note({ title }: { title: React.ReactNode }) {
 				{title}
 
 				<TextArea
-					{...register('note', {
+					{...register(INPUT_NAME.NOTE, {
 						onChange: () => {
-							clearErrors('note');
-							resetToast('note');
+							clearErrors(INPUT_NAME.NOTE);
+							resetToast(TOAST_ID.NOTE);
 						},
 					})}
 					value={noteValue}

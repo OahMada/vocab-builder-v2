@@ -1,3 +1,4 @@
+import { LOCAL_DB_KEY } from '@/constants';
 import { set, del } from 'idb-keyval';
 
 export async function updateLocalDB(action: 'set', val: Blob): Promise<void>;
@@ -6,10 +7,10 @@ export async function updateLocalDB(action: 'set' | 'delete', val?: Blob): Promi
 	try {
 		switch (action) {
 			case 'set':
-				await set('audio', val);
+				await set(LOCAL_DB_KEY, val);
 				break;
 			case 'delete':
-				await del('audio');
+				await del(LOCAL_DB_KEY);
 				break;
 		}
 	} catch (error) {

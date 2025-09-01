@@ -11,6 +11,7 @@ import { useConstructedSentence, usePlayAudio } from '@/hooks';
 import deleteSentence from '@/app/actions/sentence/deleteSentence';
 import AlertDialog from '@/components/AlertDialog';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import { TOAST_ID } from '@/constants';
 
 type SentenceListingEntryProps = {
 	index: number;
@@ -25,12 +26,12 @@ function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl
 
 	async function handleDeleteAction() {
 		setIsLoading(true);
-		resetToast('sentenceDeletion');
+		resetToast(TOAST_ID.SENTENCE_DELETION);
 		let result = await deleteSentence(id);
 		if ('error' in result) {
 			setIsLoading(false);
 			addToToast({
-				id: 'sentenceDeletion',
+				id: TOAST_ID.SENTENCE_DELETION,
 				contentType: 'error',
 				content: result.error,
 			});

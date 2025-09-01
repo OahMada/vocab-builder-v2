@@ -8,6 +8,7 @@ import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
 import { SentenceCreateInputSchema, sentenceReadSelect, SentenceWithPieces } from '@/lib';
 import { handleZodError } from '@/utils';
 import prisma from '@/lib/prisma';
+import { UNSTABLE_CACHE_TAG } from '@/constants';
 
 function getAudioUrl(blobName: string): [BlockBlobClient, string] {
 	let storageAccountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
@@ -103,8 +104,7 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 		return { error: 'Failed to save sentence.' };
 	}
 
-	revalidateTag('sentences');
-	revalidateTag('latest');
+	revalidateTag(UNSTABLE_CACHE_TAG);
 	(await cookies()).delete('sentence');
 	return { data: dbResult.value };
 }

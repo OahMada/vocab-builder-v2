@@ -10,6 +10,7 @@ import { handleError } from '@/utils';
 import Loading from '@/components/Loading';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import { TOAST_ID } from '@/constants';
 
 type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA?: string | null; id: string };
 
@@ -28,7 +29,7 @@ function Word({ piece, IPA, id }: WordComponentProps) {
 	let { trigger, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher, {
 		onError: (err) => {
 			addToToast({
-				id: `IPA_${piece}`,
+				id: `${TOAST_ID.IPA_FETCHING}${piece}`,
 				contentType: 'error',
 				content: handleError(err),
 			});
@@ -41,7 +42,7 @@ function Word({ piece, IPA, id }: WordComponentProps) {
 	}
 
 	async function triggerFetch() {
-		resetToast(`IPA_${piece}`);
+		resetToast(`${TOAST_ID.IPA_FETCHING}${piece}`);
 		let data = await trigger({ word: piece });
 		if (data) {
 			addIPA({ text: piece, IPA: data.result, id });

@@ -20,6 +20,7 @@ import Spacer from '@/components/Spacer';
 import readOneSentenceById from '@/app/actions/sentence/readOneSentenceById';
 import { SentenceCreateInputType } from '@/lib';
 import { constructSentencePiecesData } from '@/helpers';
+import { COOKIE_KEY } from '@/constants';
 
 export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',
@@ -33,7 +34,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 	let sentence: string | undefined = undefined;
 	let sentenceData: ClientSentenceData = null;
 	if (sentenceId === 'new') {
-		let data = await getCookie('sentence');
+		let data = await getCookie(COOKIE_KEY);
 		if (!data) {
 			redirect('/');
 		}

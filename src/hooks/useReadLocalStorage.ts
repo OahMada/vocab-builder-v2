@@ -1,6 +1,9 @@
+import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_OBJ } from '@/constants';
 import * as React from 'react';
 
-export function useReadLocalStorage<T>(key: string, updater: (data: T) => void): boolean {
+type LocalStorageKey = (typeof LOCAL_STORAGE_KEY)[keyof typeof LOCAL_STORAGE_KEY];
+
+export function useReadLocalStorage<T>(key: LocalStorageKey, updater: (data: T) => void): boolean {
 	// useful for when the consuming component would fetch new data in absence of the local storage data
 	let [isLoading, setIsLoading] = React.useState(true);
 
@@ -11,7 +14,7 @@ export function useReadLocalStorage<T>(key: string, updater: (data: T) => void):
 	}, [updater]);
 
 	React.useEffect(() => {
-		let raw = window.localStorage.getItem('vocab-builder');
+		let raw = window.localStorage.getItem(LOCAL_STORAGE_OBJ);
 		let data = raw ? JSON.parse(raw) : {};
 
 		savedUpdater.current(key in data ? data[key] : undefined);

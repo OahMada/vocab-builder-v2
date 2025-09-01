@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { get } from 'idb-keyval';
+import { LOCAL_DB_KEY } from '@/constants';
 
 export function useReadLocalDB<T>(updater: (data: T) => void): boolean {
 	// useful for when the consuming component would fetch new data in absence of the local storage data
@@ -14,7 +15,7 @@ export function useReadLocalDB<T>(updater: (data: T) => void): boolean {
 	React.useEffect(() => {
 		async function getBlob() {
 			try {
-				let data = await get<T>('audio');
+				let data = await get<T>(LOCAL_DB_KEY);
 				if (data) {
 					savedUpdater.current(data);
 				}

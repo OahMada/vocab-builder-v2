@@ -11,6 +11,7 @@ import EditTranslation from '@/components/Translation/EditTranslation';
 import { useTranslationContext } from '@/components/TranslationProvider';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import { TOAST_ID } from '@/constants';
 
 interface TranslationResponse {
 	result: string;
@@ -34,7 +35,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 			/* to show the retry errors */
 			if (translation) {
 				addToToast({
-					id: 'translation',
+					id: TOAST_ID.TRANSLATION_FETCHING,
 					contentType: 'error',
 					content: handleError(err),
 				});
@@ -61,7 +62,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 
 	async function retryTranslate() {
 		reset();
-		resetToast('translation');
+		resetToast(TOAST_ID.TRANSLATION_FETCHING);
 		let data = await trigger({ sentence });
 		if (data) {
 			updateTranslation(data.result);

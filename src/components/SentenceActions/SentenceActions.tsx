@@ -17,6 +17,7 @@ import { Toast } from '@/components/Toast';
 import { SentenceCreateInputType, SentenceUpdateInputType, SentenceWithPieces } from '@/lib';
 import updateSentence from '@/app/actions/sentence/updateSentence';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import { TOAST_ID } from '@/constants';
 
 function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceId?: string }) {
 	let { addToToast } = useGlobalToastContext();
@@ -74,7 +75,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				return;
 			}
 			deleteLocalData(true);
-			addToToast({ id: 'sentenceCreate', contentType: 'notice', content: `Sentence Created: ${sentence}` });
+			addToToast({ id: TOAST_ID.SENTENCE_CREATION, contentType: 'notice', content: `Sentence Created: ${sentence}` });
 			if (sentenceId) {
 				router.back();
 			} else {

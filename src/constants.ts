@@ -1,4 +1,4 @@
-export const ENGLISHIPA = [
+export const ENGLISH_IPA = [
 	// Consonants
 	'p',
 	'b',
@@ -50,3 +50,38 @@ export const ENGLISHIPA = [
 	'eə',
 	'ʊə',
 ];
+export const TOAST_ID = {
+	NOTE: 'note',
+	SENTENCE_CREATION: 'sentence_creation',
+	SENTENCE: 'sentence',
+	SENTENCE_DELETION: 'sentence_deletion',
+	TRANSLATION_EDITING: 'translation_editing',
+	TRANSLATION_FETCHING: 'translation_fetching',
+	IPA_FETCHING: 'IPA_',
+	AUDIO_PLAYING: 'audio_playing',
+} as const;
+
+export const INPUT_NAME = {
+	SENTENCE: 'sentence',
+	TRANSLATION: 'translation',
+	NOTE: 'note',
+	QUESTION: 'question',
+} as const;
+
+export const LOCAL_STORAGE_KEY = {
+	NOTE: INPUT_NAME.NOTE,
+	SENTENCE: INPUT_NAME.SENTENCE,
+	PIECES: 'pieces',
+	TRANSLATION: INPUT_NAME.TRANSLATION,
+} as const;
+
+export const LOCAL_STORAGE_OBJ = 'vocab-builder';
+
+// getCookie
+export const COOKIE_KEY = 'sentence';
+
+export const LOCAL_DB_KEY = 'audio';
+
+// export const LANGUAGE_OPTIONS =
+
+export const UNSTABLE_CACHE_TAG = 'sentences';

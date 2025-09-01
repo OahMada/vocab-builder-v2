@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import { createId } from '@paralleldrive/cuid2';
 import { segmentSentence } from '../src/helpers/segmentSentence';
-import { ENGLISHIPA } from '../src/constants';
+import { ENGLISH_IPA } from '../src/constants';
 
 type DataType = Prisma.SentenceCreateInput;
 
@@ -18,7 +18,7 @@ var uniqueSentences = faker.helpers.uniqueArray(() => {
 for (let pair of uniqueSentences) {
 	let words = segmentSentence(pair.sentence)
 		.filter((item) => typeof item !== 'string')
-		.map((item) => ({ ...item, IPA: Math.random() < 0.2 ? faker.string.fromCharacters(ENGLISHIPA, { min: 5, max: 10 }) : null }));
+		.map((item) => ({ ...item, IPA: Math.random() < 0.2 ? faker.string.fromCharacters(ENGLISH_IPA, { min: 5, max: 10 }) : null }));
 
 	let data: DataType = {
 		id: createId(),

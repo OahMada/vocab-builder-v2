@@ -1,4 +1,5 @@
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import { TOAST_ID } from '@/constants';
 import { handleError } from '@/utils';
 import * as React from 'react';
 
@@ -19,7 +20,7 @@ export function usePlayAudio(audioSource: (undefined | Blob) | string) {
 
 	let playAudio = React.useCallback(
 		async function () {
-			resetToast('audio');
+			resetToast(TOAST_ID.AUDIO_PLAYING);
 			if (audioEleRef.current) {
 				setIsPlaying(true);
 				try {
@@ -27,7 +28,7 @@ export function usePlayAudio(audioSource: (undefined | Blob) | string) {
 				} catch (error) {
 					// setError(handleError(error));
 					addToToast({
-						id: 'audio',
+						id: TOAST_ID.AUDIO_PLAYING,
 						contentType: 'error',
 						content: handleError(error),
 					});

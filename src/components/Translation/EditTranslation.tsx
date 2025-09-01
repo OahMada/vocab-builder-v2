@@ -8,6 +8,7 @@ import TextArea from '@/components/TextArea';
 import { TranslationSchema, TranslationType } from '@/lib';
 import { useTranslationContext } from '@/components/TranslationProvider';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import { TOAST_ID, INPUT_NAME } from '@/constants';
 
 export default function EditTranslation({ translationText, cancelEditing }: { translationText: string; cancelEditing: () => void }) {
 	let { addToToast, resetToast } = useGlobalToastContext();
@@ -26,12 +27,12 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 		values: { translation: translationText },
 	});
 
-	let translationTextValue = watch('translation');
+	let translationTextValue = watch(INPUT_NAME.TRANSLATION);
 
 	function clearInput() {
-		resetToast('translation');
-		clearErrors('translation');
-		setValue('translation', translationText);
+		resetToast(TOAST_ID.TRANSLATION_EDITING);
+		clearErrors(INPUT_NAME.TRANSLATION);
+		setValue(INPUT_NAME.TRANSLATION, translationText);
 	}
 
 	function onSubmit(data: TranslationType) {
@@ -45,7 +46,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 
 	function onError(errors: FieldErrors<TranslationType>) {
 		addToToast({
-			id: 'translation',
+			id: TOAST_ID.TRANSLATION_EDITING,
 			contentType: 'error',
 			content: errors.translation!.message,
 		});
@@ -56,10 +57,10 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 			<TextArea
 				value={translationTextValue}
 				clearInput={clearInput}
-				{...register('translation', {
+				{...register(INPUT_NAME.TRANSLATION, {
 					onChange: () => {
-						resetToast('translation');
-						clearErrors('translation');
+						resetToast(TOAST_ID.TRANSLATION_EDITING);
+						clearErrors(INPUT_NAME.TRANSLATION);
 					},
 				})}
 				placeholder='Input translation text here'

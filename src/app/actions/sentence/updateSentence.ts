@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma';
 import { handleZodError } from '@/utils';
 import { sentenceReadSelect } from '@/lib';
 import { revalidateTag } from 'next/cache';
+import { UNSTABLE_CACHE_TAG } from '@/constants';
 
 export default async function updateSentence(data: unknown): Promise<{ error: string } | { data: SentenceWithPieces }> {
 	let result = SentenceUpdateInputSchema.safeParse(data);
@@ -44,7 +45,7 @@ export default async function updateSentence(data: unknown): Promise<{ error: st
 			select: sentenceReadSelect,
 		});
 
-		revalidateTag('sentences');
+		revalidateTag(UNSTABLE_CACHE_TAG);
 		return { data: updatedSentence };
 	} catch (error) {
 		console.error('sentence update failed', error);

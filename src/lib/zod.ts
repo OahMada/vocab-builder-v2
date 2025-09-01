@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
 export var UserInputSchema = z.object({
-	'user-input': z
+	sentence: z
 		.string()
 		.trim()
 		.transform((value) => {

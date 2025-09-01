@@ -10,6 +10,7 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import Loading from '@/components/Loading';
+import { INPUT_NAME } from '@/constants';
 
 export default function QuestionInput({
 	triggerComplete,
@@ -35,12 +36,12 @@ export default function QuestionInput({
 		shouldFocusError: false,
 	});
 
-	let questionText = watch('question');
+	let questionText = watch(INPUT_NAME.QUESTION);
 
 	function clearInput() {
-		clearErrors('question');
+		clearErrors(INPUT_NAME.QUESTION);
 		updateError('');
-		setValue('question', '');
+		setValue(INPUT_NAME.QUESTION, '');
 		onClearInput();
 	}
 
@@ -58,9 +59,9 @@ export default function QuestionInput({
 				autoFocus={true}
 				placeholder='Input your question'
 				value={questionText}
-				{...register('question', {
+				{...register(INPUT_NAME.QUESTION, {
 					onChange: () => {
-						clearErrors('question');
+						clearErrors(INPUT_NAME.QUESTION);
 						updateError('');
 					},
 				})}

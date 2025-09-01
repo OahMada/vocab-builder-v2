@@ -6,6 +6,7 @@ import { Action, PiecesType, RemoveIPAParams, AddIPAParams } from './types';
 import { produce } from 'immer';
 import { segmentSentence, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';
+import { LOCAL_STORAGE_KEY } from '@/constants';
 
 function reducer(state: PiecesType, action: Action) {
 	return produce(state, (draft) => {
@@ -53,11 +54,11 @@ function SentencePiecesProvider({
 		dispatch({ type: 'loadFromStorage', payload: data });
 	}
 
-	let isLoading = useReadLocalStorage<PiecesType>('pieces', loadLocalPiecesData);
+	let isLoading = useReadLocalStorage<PiecesType>(LOCAL_STORAGE_KEY.PIECES, loadLocalPiecesData);
 
 	// write changes to local storage
 	React.useEffect(() => {
-		updateLocalStorage<PiecesType>('save', 'pieces', pieces);
+		updateLocalStorage<PiecesType>('save', LOCAL_STORAGE_KEY.PIECES, pieces);
 	}, [pieces]);
 
 	let addIPA = React.useCallback(function ({ text, id, IPA }: AddIPAParams) {
