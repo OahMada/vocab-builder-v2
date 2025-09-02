@@ -60,6 +60,7 @@ export const TOAST_ID = {
 	IPA_FETCHING: 'IPA_',
 	AUDIO_PLAYING: 'audio_playing',
 	SENTENCE_UPDATING: 'sentence_updating',
+	SENTENCE_FETCHING: 'sentence_fetching',
 } as const;
 
 export const INPUT_NAME = {
@@ -85,3 +86,5 @@ export const LOCAL_DB_KEY = 'audio';
 // export const LANGUAGE_OPTIONS =
 
 export const UNSTABLE_CACHE_TAG = 'sentences';
+
+export const SENTENCE_FETCHING_LIMIT = 15;

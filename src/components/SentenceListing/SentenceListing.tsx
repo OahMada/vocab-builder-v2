@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { unstable_cache } from 'next/cache';
-import { SentenceWithPieces } from '@/lib';
 import ErrorDisplay from './ErrorDisplay';
 import OptimisticSentenceListing from '@/components/OptimisticSentenceListing';
 import readAllSentences from '@/app/actions/sentence/readAllSentences';
@@ -17,14 +16,14 @@ var getCachedSentences = unstable_cache(
 );
 
 async function SentenceListing() {
-	let sentences: SentenceWithPieces[];
-	// throw new Error('test');
 	let result = await getCachedSentences();
+	// result = { error: 'hello' };
 	if ('error' in result) {
 		return <ErrorDisplay />;
 	}
-	sentences = result.data;
-	return <OptimisticSentenceListing sentences={sentences} />;
+	let sentences = result.data;
+	let cursor = result.nextCursor;
+	return <OptimisticSentenceListing sentences={sentences} cursor={cursor ?? undefined} />;
 }
 
 export default SentenceListing;

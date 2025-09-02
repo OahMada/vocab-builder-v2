@@ -3,7 +3,6 @@
 import styled from 'styled-components';
 import Icon from '@/components/Icon';
 import Spacer from '@/components/Spacer';
-import { MessageWrapper } from './StyledComponents';
 import NavLink from '@/components/NavLink';
 
 export default function EmptyDisplay() {
@@ -29,4 +28,13 @@ var InnerWrapper = styled.div`
 
 var Text = styled.p`
 	font-size: 0.9rem;
+`;
+
+var MessageWrapper = styled.div`
+	align-self: center;
+	color: var(--text-secondary);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5px;
 `;

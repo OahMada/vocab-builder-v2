@@ -15,7 +15,7 @@ type ToastProps = {
 
 export function Toast({ title, content, contentType, ...props }: ToastProps) {
 	return (
-		<Root {...props} duration={300000}>
+		<Root {...props} duration={3000}>
 			{title && <Title>{title}</Title>}
 			<Description $contentType={contentType}>{content}</Description>
 			<ToastPrimitives.Close asChild={true}>

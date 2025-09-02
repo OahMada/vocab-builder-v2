@@ -39,6 +39,7 @@
 		"@radix-ui/react-select": "^2.2.5",
 		"@radix-ui/react-toast": "^1.2.14",
 		"@radix-ui/react-visually-hidden": "^1.2.3",
+		"@tanstack/react-virtual": "^3.13.12",
 		"@types/js-cookie": "^3.0.6",
 		"ai": "^5.0.10",
 		"axios": "^1.11.0",

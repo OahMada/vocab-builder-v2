@@ -5,7 +5,6 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import Spacer from '@/components/Spacer';
 import { useRouter } from 'next/navigation';
-import { MessageWrapper } from './StyledComponents';
 
 export default function ErrorDisplay() {
 	let router = useRouter();
@@ -19,12 +18,10 @@ export default function ErrorDisplay() {
 			<Spacer size={100} />
 			<MessageWrapper>
 				<ErrorMessage>Failed to load sentences.</ErrorMessage>
-				<InnerWrapper>
-					<RefreshButton variant='outline' onClick={refreshPage}>
-						<Icon id='retry' size={14} />
-						&nbsp;Refresh
-					</RefreshButton>
-				</InnerWrapper>
+				<RefreshButton variant='outline' onClick={refreshPage}>
+					<Icon id='retry' size={14} />
+					&nbsp;Refresh
+				</RefreshButton>
 			</MessageWrapper>
 		</>
 	);
@@ -32,12 +29,19 @@ export default function ErrorDisplay() {
 
 var ErrorMessage = styled.p`
 	color: var(--text-status-warning);
-	font-size: 0.9rem;
+	font-size: ${14 / 16}rem;
 `;
-
-var InnerWrapper = styled.p``;
 
 var RefreshButton = styled(Button)`
 	color: inherit;
 	vertical-align: -2.5px;
+`;
+
+var MessageWrapper = styled.div`
+	align-self: center;
+	color: var(--text-secondary);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5px;
 `;
