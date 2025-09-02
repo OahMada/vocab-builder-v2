@@ -13,7 +13,7 @@ var uniqueSentences = faker.helpers.uniqueArray(() => {
 	let sentence = faker.lorem.paragraph(lengthCount);
 	let translation = faker.lorem.paragraph(lengthCount);
 	return { sentence, translation };
-}, 3);
+}, 200);
 
 for (let pair of uniqueSentences) {
 	let words = segmentSentence(pair.sentence)

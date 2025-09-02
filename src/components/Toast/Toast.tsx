@@ -15,7 +15,7 @@ type ToastProps = {
 
 export function Toast({ title, content, contentType, ...props }: ToastProps) {
 	return (
-		<Root {...props} duration={3000}>
+		<Root {...props} duration={300000}>
 			{title && <Title>{title}</Title>}
 			<Description $contentType={contentType}>{content}</Description>
 			<ToastPrimitives.Close asChild={true}>
@@ -43,8 +43,8 @@ var Root = styled(ToastPrimitives.Root)`
 `;
 
 var Title = styled(ToastPrimitives.Title)`
-	font-size: 15px;
-	font-weight: 500;
+	font-size: 12px;
+	font-weight: 600;
 `;
 
 var Description = styled(ToastPrimitives.Description)<{ $contentType: 'error' | 'notice' }>`

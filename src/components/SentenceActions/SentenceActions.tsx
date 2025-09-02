@@ -63,6 +63,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	async function handleSubmit() {
 		setErrorMsg('');
 		removeFromToast(TOAST_ID.SENTENCE_CREATION);
+		removeFromToast(TOAST_ID.SENTENCE_UPDATING);
 		startTransition(async () => {
 			let result: { error: string } | { data: SentenceWithPieces };
 			if (sentenceId) {
@@ -76,15 +77,21 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				return;
 			}
 			deleteLocalData(true);
-			addToToast({
-				id: TOAST_ID.SENTENCE_CREATION,
-				contentType: 'notice',
-				content: sentence,
-				title: 'Sentence Created',
-			});
 			if (sentenceId) {
+				addToToast({
+					id: TOAST_ID.SENTENCE_UPDATING,
+					contentType: 'notice',
+					content: sentence,
+					title: 'Sentence Updated',
+				});
 				router.back();
 			} else {
+				addToToast({
+					id: TOAST_ID.SENTENCE_CREATION,
+					contentType: 'notice',
+					content: sentence,
+					title: 'Sentence Created',
+				});
 				router.replace('/');
 			}
 		});

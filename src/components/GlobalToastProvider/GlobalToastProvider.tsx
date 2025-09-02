@@ -14,7 +14,7 @@ function GlobalToastProvider({ children }: { children: React.ReactNode }) {
 
 	let addToToast = React.useCallback(
 		(toastMsg: ToastMsg) => {
-			// just in case, prevent more than one toasts with the same id in toasts
+			// prevent more than one toasts with the same id in `toasts`
 			removeFromToast(toastMsg.id);
 			setToasts((prevState) => [...prevState, toastMsg]);
 		},

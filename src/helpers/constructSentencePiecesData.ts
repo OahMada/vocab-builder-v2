@@ -1,10 +1,11 @@
+import { Piece } from '@prisma/client';
 import { PiecesType } from '@/components/SentencePiecesProvider/types';
 import { segmentSentence } from './segmentSentence';
 import { SentenceWithPieces } from '@/lib';
 
 export function constructSentencePiecesData(wholeSentence: string, pieces: SentenceWithPieces['pieces']) {
 	let result = segmentSentence(wholeSentence);
-	let piecesMap = new Map(pieces.map((item) => [item.word, item]));
+	let piecesMap: [string, Omit<Piece, 'sentenceId'>][] = pieces.map((item) => [item.word, item]);
 
 	let constructedSentencePiecesData: PiecesType = [];
 
@@ -12,13 +13,16 @@ export function constructSentencePiecesData(wholeSentence: string, pieces: Sente
 		if (typeof item === 'string') {
 			constructedSentencePiecesData.push(item);
 		} else {
-			let match = piecesMap.get(item.word);
-			if (match) {
-				if (!match.IPA) {
+			let index = piecesMap.findIndex((piece) => piece[0] === item.word);
+			if (index !== -1) {
+				let matchedPiece = piecesMap[index][1];
+				if (!matchedPiece.IPA) {
 					constructedSentencePiecesData.push(item);
 				} else {
-					constructedSentencePiecesData.push({ ...item, IPA: match.IPA });
+					constructedSentencePiecesData.push({ ...item, IPA: matchedPiece.IPA });
 				}
+				// remove already matched word to deal with duplications
+				piecesMap = [...piecesMap.slice(0, index), ...piecesMap.slice(index + 1)];
 			}
 		}
 	}
