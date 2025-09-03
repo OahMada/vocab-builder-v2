@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import VisuallyHidden from '@/components/VisuallyHidden';
 
 type ToastProps = {
 	contentType: 'error' | 'notice';

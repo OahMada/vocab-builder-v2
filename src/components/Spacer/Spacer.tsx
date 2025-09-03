@@ -18,7 +18,7 @@ function getWidth({ axis, size }: PartialParameters) {
 	return axis === 'vertical' ? 1 : size;
 }
 
-const Spacer = styled.span<PartialParameters>`
+var Spacer = styled.span<PartialParameters>`
 	display: block;
 	width: ${getWidth}px;
 	min-width: ${getWidth}px;

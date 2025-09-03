@@ -28,7 +28,7 @@ import {
 	Pause,
 } from 'react-feather';
 
-const icons = {
+var icons = {
 	clipboard: Clipboard,
 	enter: CornerDownRight,
 	forward: ArrowRight,

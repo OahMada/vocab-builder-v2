@@ -8,7 +8,7 @@ import { QuestionInputSchema, QuestionInputType } from '@/lib';
 import TextArea from '@/components/TextArea';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import VisuallyHidden from '@/components/VisuallyHidden';
 import Loading from '@/components/Loading';
 import { INPUT_NAME } from '@/constants';
 

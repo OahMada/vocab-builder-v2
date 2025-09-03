@@ -7,12 +7,22 @@ import Icon from '@/components/Icon';
 import Button from '@/components/Button';
 import VisuallyHidden from '@/components/VisuallyHidden';
 
-function AccordionRoot({ children }: { children: React.ReactNode }) {
-	return <Root type='multiple'>{children}</Root>;
+type MultipleAccordionProps = React.ComponentProps<typeof AccordionPrimitives.Root> & AccordionPrimitives.AccordionMultipleProps;
+
+function AccordionRoot({ children, ...delegated }: Omit<MultipleAccordionProps, 'type'>) {
+	return (
+		<Root type='multiple' {...delegated}>
+			{children}
+		</Root>
+	);
 }
 
-function AccordionItem({ id, children }: { id: string; children: React.ReactNode } & React.ComponentProps<'div'>) {
-	return <Item value={id}>{children}</Item>;
+function AccordionItem({ id, children, ...delegated }: { id: string; children: React.ReactNode } & React.ComponentProps<'div'>) {
+	return (
+		<Item value={id} {...delegated}>
+			{children}
+		</Item>
+	);
 }
 
 function AccordionTrigger({ children, ...delegated }: React.ComponentProps<typeof AccordionPrimitives.Trigger>) {

@@ -27,13 +27,13 @@ var Crumb = ({ href, isCurrentPage, children }: CrumbProps & React.ComponentProp
 	);
 };
 
-const BreadcrumbList = styled.ol`
+var BreadcrumbList = styled.ol`
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
 `;
 
-const CrumbWrapper = styled.li`
+var CrumbWrapper = styled.li`
 	display: inline;
 	--spacing: 6px;
 
@@ -51,7 +51,7 @@ const CrumbWrapper = styled.li`
 	}
 `;
 
-const CrumbLink = styled(NavLink)`
+var CrumbLink = styled(NavLink)`
 	color: var(--text-secondary);
 	font-size: 0.8rem;
 `;

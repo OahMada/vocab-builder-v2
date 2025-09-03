@@ -16,9 +16,20 @@ import { TOAST_ID } from '@/constants';
 type SentenceListingEntryProps = {
 	index: number;
 	mutateSentences: (id: string) => void;
-} & SentenceWithPieces;
+} & SentenceWithPieces &
+	React.ComponentProps<'div'>;
 
-function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl, pieces, mutateSentences }: SentenceListingEntryProps) {
+function SentenceListingEntry({
+	id,
+	index,
+	translation,
+	note,
+	sentence,
+	audioUrl,
+	pieces,
+	mutateSentences,
+	...delegated
+}: SentenceListingEntryProps) {
 	let { addToToast, removeFromToast } = useGlobalToastContext();
 	let sentencePieces = useConstructedSentence(sentence, pieces);
 	let [isLoading, setIsLoading] = React.useState(false);
@@ -44,61 +55,59 @@ function SentenceListingEntry({ id, index, translation, note, sentence, audioUrl
 	}
 
 	return (
-		<>
-			<AccordionItem id={id}>
-				<AccordionTrigger>
-					<SentenceWrapper>
-						<Index>{`${index + 1}. `}</Index>
-						{sentencePieces}
-						<AudioButton
-							style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
-							isPlaying={isPlaying}
-							playAudio={playAudio}
-							stopAudio={stopAudio}
-						/>
-					</SentenceWrapper>
-				</AccordionTrigger>
-				<AccordionContent asChild={true}>
-					<ContentWrapper>
+		<AccordionItem id={id} {...delegated}>
+			<AccordionTrigger>
+				<SentenceWrapper>
+					<Index>{`${index + 1}. `}</Index>
+					{sentencePieces}
+					<AudioButton
+						style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
+						isPlaying={isPlaying}
+						playAudio={playAudio}
+						stopAudio={stopAudio}
+					/>
+				</SentenceWrapper>
+			</AccordionTrigger>
+			<AccordionContent asChild={true}>
+				<ContentWrapper>
+					<InnerWrapper>
+						{note && <Title>Translation:</Title>}
+						<Translation>{translation}</Translation>
+					</InnerWrapper>
+					{note && (
 						<InnerWrapper>
-							{note && <Title>Translation:</Title>}
-							<Translation>{translation}</Translation>
+							<NoteTitle>Note:</NoteTitle>
+							<Note>{note}</Note>
 						</InnerWrapper>
-						{note && (
-							<InnerWrapper>
-								<NoteTitle>Note:</NoteTitle>
-								<Note>{note}</Note>
-							</InnerWrapper>
-						)}
-						<ActionWrapper>
-							<AlertDialog description='This action cannot be undone.' handleDeleteAction={handleDeleteAction} isDeleting={isLoading}>
-								<Button
-									variant='fill'
-									style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties}
-									onClick={() => {
-										stopAudio();
-									}}
-								>
-									<Icon id='delete' />
-									&nbsp;Delete
-								</Button>
-							</AlertDialog>
+					)}
+					<ActionWrapper>
+						<AlertDialog description='This action cannot be undone.' handleDeleteAction={handleDeleteAction} isDeleting={isLoading}>
 							<Button
 								variant='fill'
-								href={`/sentence/${id}`}
-								disabled={isLoading}
+								style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties}
 								onClick={() => {
 									stopAudio();
 								}}
 							>
-								<EditIcon id='edit' />
-								&nbsp;Edit
+								<Icon id='delete' />
+								&nbsp;Delete
 							</Button>
-						</ActionWrapper>
-					</ContentWrapper>
-				</AccordionContent>
-			</AccordionItem>
-		</>
+						</AlertDialog>
+						<Button
+							variant='fill'
+							href={`/sentence/${id}`}
+							disabled={isLoading}
+							onClick={() => {
+								stopAudio();
+							}}
+						>
+							<EditIcon id='edit' />
+							&nbsp;Edit
+						</Button>
+					</ActionWrapper>
+				</ContentWrapper>
+			</AccordionContent>
+		</AccordionItem>
 	);
 }
 
