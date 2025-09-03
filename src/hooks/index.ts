@@ -7,4 +7,3 @@ export * from './usePlayAudio';
 export * from './useSentenceData';
 export * from './useConstructedSentence';
 export * from './useIntersectionObserver';
-export * from './useIsScrollingToEnd';

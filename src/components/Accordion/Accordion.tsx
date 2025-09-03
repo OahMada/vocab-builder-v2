@@ -59,6 +59,10 @@ var Root = styled(AccordionPrimitives.Root)`
 	gap: 6px;
 	--overall-padding: 12px;
 	--border-radius: 12px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform: var(--transform);
 `;
 
 var Item = styled(AccordionPrimitives.Item)`
