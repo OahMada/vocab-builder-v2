@@ -21,7 +21,7 @@ export default async function readAllSentences(
 			let nextItem = sentences.pop();
 			nextCursor = nextItem!.id;
 		}
-
+		// return { error: 'Failed to fetch sentences' };
 		return { data: sentences, nextCursor };
 	} catch (error) {
 		console.error('fetch all sentences failed', error);

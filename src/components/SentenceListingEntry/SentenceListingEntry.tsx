@@ -15,7 +15,7 @@ import { TOAST_ID } from '@/constants';
 
 type SentenceListingEntryProps = {
 	index: number;
-	mutateSentences: (id: string) => void;
+	onDeleteSentence: (id: string) => void;
 } & SentenceWithPieces &
 	React.ComponentProps<'div'>;
 
@@ -27,7 +27,7 @@ function SentenceListingEntry({
 	sentence,
 	audioUrl,
 	pieces,
-	mutateSentences,
+	onDeleteSentence,
 	...delegated
 }: SentenceListingEntryProps) {
 	let { addToToast, removeFromToast } = useGlobalToastContext();
@@ -38,6 +38,7 @@ function SentenceListingEntry({
 	async function handleDeleteAction() {
 		setIsLoading(true);
 		removeFromToast(TOAST_ID.SENTENCE_DELETION);
+		// not wrapped in startTransition because I need this function to be an async one
 		let result = await deleteSentence(id);
 		if ('error' in result) {
 			setIsLoading(false);
@@ -48,9 +49,7 @@ function SentenceListingEntry({
 			});
 			return;
 		}
-		React.startTransition(() => {
-			mutateSentences(id);
-		});
+		onDeleteSentence(id);
 		setIsLoading(false);
 	}
 

@@ -3,7 +3,7 @@ import * as React from 'react';
 import Wrapper from '@/components/PageWrapper';
 import Breadcrumb from './CustomBreadcrumb';
 import Search from '@/components/SearchSentence';
-import SentenceListing from '@/components/SentenceListing';
+import SentenceListingPreparing from '@/components/SentenceListingPreparing';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import { NoticeText, InnerWrapper } from './StyledComponents';
 
@@ -20,7 +20,7 @@ export default function SentenceBrowse() {
 					<Search />
 					<NoticeText>Tap or click on the underlined words to reveal its IPA.</NoticeText>
 				</InnerWrapper>
-				<SentenceListing />
+				<SentenceListingPreparing />
 			</Wrapper>
 		</MaxWidthWrapper>
 	);
