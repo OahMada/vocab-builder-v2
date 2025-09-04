@@ -5,7 +5,8 @@ import Breadcrumb from './CustomBreadcrumb';
 import Search from '@/components/SearchSentence';
 import SentenceListingPreparing from '@/components/SentenceListingPreparing';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import { NoticeText, InnerWrapper } from './StyledComponents';
+import { InnerWrapper } from './StyledComponents';
+import SearchParamsProvider from '@/components/SearchParamsProvider';
 
 export var metadata: Metadata = {
 	title: 'Browse | Vocab Builder',
@@ -15,12 +16,13 @@ export default function SentenceBrowse() {
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
-				<InnerWrapper>
-					<Breadcrumb />
-					<Search />
-					<NoticeText>Tap or click on the underlined words to reveal its IPA.</NoticeText>
-				</InnerWrapper>
-				<SentenceListingPreparing />
+				<SearchParamsProvider>
+					<InnerWrapper>
+						<Breadcrumb />
+						<Search />
+					</InnerWrapper>
+					<SentenceListingPreparing />
+				</SearchParamsProvider>
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

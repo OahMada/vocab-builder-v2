@@ -7,11 +7,12 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import { SentenceWithPieces } from '@/lib/sentenceReadSelect';
 import PlayAudioFromUrl from '@/components/PlayAudioFromUrl';
-import { useConstructedSentence, usePlayAudio } from '@/hooks';
+import { usePlayAudio } from '@/hooks';
 import deleteSentence from '@/app/actions/sentence/deleteSentence';
 import AlertDialog from '@/components/AlertDialog';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import { TOAST_ID } from '@/constants';
+import { constructSentence } from '@/helpers';
 
 type SentenceListingEntryProps = {
 	index: number;
@@ -31,7 +32,7 @@ function SentenceListingEntry({
 	...delegated
 }: SentenceListingEntryProps) {
 	let { addToToast, removeFromToast } = useGlobalToastContext();
-	let sentencePieces = useConstructedSentence(sentence, pieces);
+	let sentencePieces = constructSentence(sentence, pieces);
 	let [isLoading, setIsLoading] = React.useState(false);
 	let { isPlaying, playAudio, stopAudio } = usePlayAudio(audioUrl);
 

@@ -11,17 +11,14 @@ import { useIntersectionObserver } from '@/hooks';
 import readAllSentences from '@/app/actions/sentence/readAllSentences';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
+import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 
 function SentenceListing({ sentences, cursor, initialError }: { sentences: SentenceWithPieces[]; cursor?: string; initialError?: string }) {
 	let [currentSentences, setCurrentSentences] = React.useState(sentences);
 	let [nextCursor, setNextCursor] = React.useState<string | undefined>(cursor);
 	let [isLoadingData, startTransition] = React.useTransition();
 	let [error, setError] = React.useState<string | undefined>(initialError);
-
-	function onDeleteSentence(id: string) {
-		let newState = currentSentences.filter((item) => item.id !== id);
-		setCurrentSentences(newState);
-	}
+	let { isLoadingSearchResult } = useSearchParamsContext();
 
 	// both used for data fetching indicator
 	let [ref, isIntersecting] = useIntersectionObserver<HTMLSpanElement>();
@@ -35,6 +32,10 @@ function SentenceListing({ sentences, cursor, initialError }: { sentences: Sente
 	});
 	let virtualizedItems = rowVirtualizer.getVirtualItems();
 
+	function onDeleteSentence(id: string) {
+		let newState = currentSentences.filter((item) => item.id !== id);
+		setCurrentSentences(newState);
+	}
 	let fetchMoreSentences = React.useCallback(
 		function () {
 			startTransition(async () => {

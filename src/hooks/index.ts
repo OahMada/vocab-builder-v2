@@ -5,5 +5,5 @@ export * from './useReadLocalStorage';
 export * from './useReadLocalDB';
 export * from './usePlayAudio';
 export * from './useSentenceData';
-export * from './useConstructedSentence';
 export * from './useIntersectionObserver';
+export * from './useNuqsSearchParams';

@@ -4,7 +4,7 @@ import { SentenceWithPieces } from '@/lib';
 import { segmentSentence } from '@/helpers';
 import WordWithPhoneticSymbol from '@/components/WordWithPhoneticSymbol';
 
-export function useConstructedSentence(wholeSentence: string, pieces: SentenceWithPieces['pieces']) {
+export function constructSentence(wholeSentence: string, pieces: SentenceWithPieces['pieces']) {
 	let result = segmentSentence(wholeSentence);
 	let piecesMap: [string, Omit<Piece, 'sentenceId'>][] = pieces.map((item) => [item.word, item]);
 	let constructedSentence: React.ReactNode[] = [];

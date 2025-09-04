@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import { roboto, inter } from '@/helpers/getFont';
@@ -20,7 +21,9 @@ export default function RootLayout({
 			<body>
 				<StyledComponentsRegistry>
 					<GlobalStyles />
-					<GlobalToastProvider>{children}</GlobalToastProvider>
+					<GlobalToastProvider>
+						<NuqsAdapter>{children}</NuqsAdapter>
+					</GlobalToastProvider>
 				</StyledComponentsRegistry>
 			</body>
 		</html>

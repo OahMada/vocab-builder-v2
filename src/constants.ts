@@ -68,6 +68,7 @@ export const INPUT_NAME = {
 	TRANSLATION: 'translation',
 	NOTE: 'note',
 	QUESTION: 'question',
+	SEARCH: 'search',
 } as const;
 
 export const LOCAL_STORAGE_KEY = {
@@ -88,3 +89,4 @@ export const LOCAL_DB_KEY = 'audio';
 export const UNSTABLE_CACHE_TAG = 'sentences';
 
 export const SENTENCE_FETCHING_LIMIT = 15;
+export const MAX_QUERY_LEN = 50;

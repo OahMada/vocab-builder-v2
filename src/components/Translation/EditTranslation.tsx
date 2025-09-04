@@ -27,7 +27,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 		values: { translation: translationText },
 	});
 
-	let translationTextValue = watch(INPUT_NAME.TRANSLATION);
+	let translation = watch(INPUT_NAME.TRANSLATION);
 
 	function clearInput() {
 		removeFromToast(TOAST_ID.TRANSLATION_EDITING);
@@ -55,7 +55,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 	return (
 		<>
 			<TextArea
-				value={translationTextValue}
+				value={translation}
 				clearInput={clearInput}
 				{...register(INPUT_NAME.TRANSLATION, {
 					onChange: () => {

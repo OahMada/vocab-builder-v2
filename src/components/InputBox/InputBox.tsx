@@ -7,21 +7,19 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 function InputBox({
-	input,
-	onChange,
+	value,
 	clearInput,
 	id,
 	...delegated
 }: {
 	id: string;
-	input: string;
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	value?: string;
 	clearInput: () => void;
 } & React.ComponentProps<'input'>) {
 	return (
 		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
-			<Input id={id} value={input} onChange={onChange} {...delegated} />
-			{input && (
+			<Input id={id} {...delegated} />
+			{value && (
 				<ClearButton variant='icon' onClick={clearInput}>
 					<Icon id='x' />
 					<VisuallyHidden>clear input</VisuallyHidden>

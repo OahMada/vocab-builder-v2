@@ -1,7 +1,9 @@
+import { MAX_QUERY_LEN } from '@/constants';
 import * as z from 'zod';
+import { INPUT_NAME } from '@/constants';
 
 export var UserInputSchema = z.object({
-	sentence: z
+	[INPUT_NAME.SENTENCE]: z
 		.string()
 		.trim()
 		.transform((value) => {
@@ -46,12 +48,12 @@ export var SentenceSchema = z.object({
 });
 
 export var TranslationSchema = z.object({
-	translation: z.string().trim(),
+	[INPUT_NAME.TRANSLATION]: z.string().trim(),
 });
 export type TranslationType = z.infer<typeof TranslationSchema>;
 
 export var NoteSchema = z.object({
-	note: z.string().trim().max(500, {
+	[INPUT_NAME.NOTE]: z.string().trim().max(500, {
 		error: 'The note text should be no longer than 500 characters.',
 	}),
 });
@@ -59,7 +61,7 @@ export var NoteSchema = z.object({
 export type NoteType = z.infer<typeof NoteSchema>;
 
 export var QuestionInputSchema = z.object({
-	question: z.string().trim().min(3, {
+	[INPUT_NAME.QUESTION]: z.string().trim().min(3, {
 		error: 'The question text should be at least 3 characters long.',
 	}),
 });
@@ -95,3 +97,13 @@ export var SentenceUpdateInputSchema = z.object({
 });
 
 export type SentenceUpdateInputType = z.infer<typeof SentenceUpdateInputSchema>;
+
+export var SearchSchema = z.object({
+	[INPUT_NAME.SEARCH]: z
+		.string()
+		.trim()
+		.min(3)
+		.transform((val) => val.slice(0, MAX_QUERY_LEN)),
+});
+
+export type SearchType = z.infer<typeof SearchSchema>;
