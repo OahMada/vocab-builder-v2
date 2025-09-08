@@ -38,7 +38,7 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 			<Wrapper>
 				<Label>Name:</Label>
 				<InputBox
-					input={username}
+					value={username}
 					clearInput={clearUsername}
 					onChange={onUsernameChange}
 					id='username'
@@ -48,7 +48,7 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 			<Wrapper>
 				<Label>Email:</Label>
 				<InputBox
-					input={email}
+					value={email}
 					clearInput={clearEmail}
 					onChange={onEmailChange}
 					id='email'
