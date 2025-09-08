@@ -2,7 +2,7 @@
 
 import styled from 'styled-components';
 
-export var InnerWrapper = styled.div`
+export var ChildrenWrapper = styled.div`
 	position: sticky;
 	top: 4rem;
 	width: 100%;

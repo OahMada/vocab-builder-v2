@@ -1,4 +1,4 @@
-import { MAX_QUERY_LEN } from '@/constants';
+import { MAX_QUERY_LEN, SENTENCE_FETCHING_LIMIT } from '@/constants';
 import * as z from 'zod';
 import { INPUT_NAME } from '@/constants';
 
@@ -98,12 +98,14 @@ export var SentenceUpdateInputSchema = z.object({
 
 export type SentenceUpdateInputType = z.infer<typeof SentenceUpdateInputSchema>;
 
-export var SearchSchema = z.object({
+export var SearchInputSchema = z.object({
 	[INPUT_NAME.SEARCH]: z
 		.string()
 		.trim()
-		.min(3)
 		.transform((val) => val.slice(0, MAX_QUERY_LEN)),
+	cursor: z
+		.string()
+		.regex(/^[A-Za-z0-9+/=]+$/, 'Invalid search pagination token')
+		.optional(),
+	limit: z.number().optional().default(SENTENCE_FETCHING_LIMIT),
 });
-
-export type SearchType = z.infer<typeof SearchSchema>;

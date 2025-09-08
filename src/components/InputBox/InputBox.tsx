@@ -18,7 +18,7 @@ function InputBox({
 } & React.ComponentProps<'input'>) {
 	return (
 		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
-			<Input id={id} {...delegated} />
+			<Input id={id} value={value} {...delegated} />
 			{value && (
 				<ClearButton variant='icon' onClick={clearInput}>
 					<Icon id='x' />

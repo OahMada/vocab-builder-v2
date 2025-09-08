@@ -1,29 +1,14 @@
-import { Metadata } from 'next';
 import * as React from 'react';
-import Wrapper from '@/components/PageWrapper';
+
+import { ChildrenWrapper } from './StyledComponents';
 import Breadcrumb from './CustomBreadcrumb';
 import Search from '@/components/SearchSentence';
-import SentenceListingPreparing from '@/components/SentenceListingPreparing';
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import { InnerWrapper } from './StyledComponents';
-import SearchParamsProvider from '@/components/SearchParamsProvider';
 
-export var metadata: Metadata = {
-	title: 'Browse | Vocab Builder',
-};
-
-export default function SentenceBrowse() {
+export default function Page() {
 	return (
-		<MaxWidthWrapper>
-			<Wrapper $position='flex-start'>
-				<SearchParamsProvider>
-					<InnerWrapper>
-						<Breadcrumb />
-						<Search />
-					</InnerWrapper>
-					<SentenceListingPreparing />
-				</SearchParamsProvider>
-			</Wrapper>
-		</MaxWidthWrapper>
+		<ChildrenWrapper>
+			<Breadcrumb />
+			<Search />
+		</ChildrenWrapper>
 	);
 }

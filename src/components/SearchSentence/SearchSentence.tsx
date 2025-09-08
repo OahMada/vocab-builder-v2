@@ -6,53 +6,39 @@ import styled from 'styled-components';
 import Icon from '@/components/Icon';
 import InputBox from '@/components/InputBox';
 import { useDebouncedCallback } from '@tanstack/react-pacer';
-import { useForm } from 'react-hook-form';
-import { SearchType, SearchSchema } from '@/lib';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { INPUT_NAME } from '@/constants';
-import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 import DescriptionText from '@/components/DescriptionText';
+import { useNuqsSearchParams } from '@/hooks';
 
 function SearchSentence() {
-	let { search, updateSearch } = useSearchParamsContext();
+	let { search, setSearch } = useNuqsSearchParams();
+	let [query, setQuery] = React.useState(search);
 
-	// used for filtering out short search params that are shorter than 3 characters
-	let { watch, setValue, register, handleSubmit } = useForm<SearchType>({
-		resolver: zodResolver(SearchSchema),
-		reValidateMode: 'onSubmit',
-		defaultValues: {
-			search: '',
-		},
-		values: {
-			search: search,
-		},
-	});
+	function updateQuery(e: React.ChangeEvent<HTMLInputElement>) {
+		setQuery(e.target.value);
+	}
 
 	function clearInput() {
-		setValue(INPUT_NAME.SEARCH, '');
-		updateSearch('');
+		setQuery('');
+		setSearch('');
 	}
 
-	let searchValue = watch(INPUT_NAME.SEARCH);
-
-	function onSubmit(data: SearchType) {
-		updateSearch(data.search);
-	}
-	function onError() {
-		if (search) {
-			updateSearch('');
+	function handleEnterKeydown(e: React.KeyboardEvent<HTMLInputElement>) {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			setSearch(e.currentTarget.value);
 		}
 	}
-	let submitHandler = useDebouncedCallback(handleSubmit(onSubmit, onError), { wait: 1000 });
+
+	let onSubmit = useDebouncedCallback(setSearch, { wait: 1000 });
 
 	React.useEffect(() => {
-		submitHandler();
-	}, [searchValue, submitHandler]);
+		onSubmit(query);
+	}, [query, onSubmit]);
 
 	return (
 		<Wrapper style={{ '--icon-size': '18px' } as React.CSSProperties}>
 			<InnerWrapper>
-				<SearchInput clearInput={clearInput} id='search' {...register(INPUT_NAME.SEARCH)} value={searchValue} placeholder='Search' />
+				<SearchInput clearInput={clearInput} id='search' value={query} onChange={updateQuery} placeholder='Search' onKeyDown={handleEnterKeydown} />
 				<Label htmlFor='search'>
 					<VisuallyHidden>search sentence</VisuallyHidden>
 					<IconWrapper>

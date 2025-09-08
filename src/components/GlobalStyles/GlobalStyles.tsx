@@ -70,8 +70,9 @@ html {
   --text-primary: hsl(0 0% 100%);
   --text-secondary: hsl(0 0% 90%);
   --text-tertiary: hsl(0 0% 58%);
-  --text-revert: hsl(0 0% 5%);
+  --text-revert: hsl(0deg 0% 5%);
   --text-status-warning: hsl(20 100% 70%);
+  --text-status-mark: hsl(54 100% 70%);
 
   
   --shadow-color: 0deg 0% 0%;

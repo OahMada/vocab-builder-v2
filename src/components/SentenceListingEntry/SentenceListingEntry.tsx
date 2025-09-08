@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/Accordion';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
-import { SentenceWithPieces } from '@/lib/sentenceReadSelect';
 import PlayAudioFromUrl from '@/components/PlayAudioFromUrl';
 import { usePlayAudio } from '@/hooks';
 import deleteSentence from '@/app/actions/sentence/deleteSentence';
@@ -13,11 +12,12 @@ import AlertDialog from '@/components/AlertDialog';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import { TOAST_ID } from '@/constants';
 import { constructSentence } from '@/helpers';
+import { SentenceWithHighlightedPieces } from '@/types';
 
 type SentenceListingEntryProps = {
 	index: number;
 	onDeleteSentence: (id: string) => void;
-} & SentenceWithPieces &
+} & SentenceWithHighlightedPieces &
 	React.ComponentProps<'div'>;
 
 function SentenceListingEntry({

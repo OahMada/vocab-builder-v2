@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { unstable_cache } from 'next/cache';
+import { SearchParams } from 'nuqs';
 import SentenceListing from '@/components/SentenceListing';
 import readAllSentences from '@/app/actions/sentence/readAllSentences';
 import { UNSTABLE_CACHE_TAG } from '@/constants';
-import { SentenceWithPieces } from '@/lib';
-
-// TODO put a suspense boundary around this element
+import { SentenceWithPieces } from '@/lib/sentenceReadSelect';
+import { searchParamsCache } from '@/lib/searchParamsCache';
 
 var getCachedSentences = unstable_cache(
 	async () => {
@@ -15,12 +15,17 @@ var getCachedSentences = unstable_cache(
 	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG] }
 );
 
-async function SentenceListingPreparing() {
-	let result = await getCachedSentences();
+export default async function BrowseList({ searchParams }: { searchParams: Promise<SearchParams> }) {
+	let { search } = searchParamsCache.parse(await searchParams);
+
+	if (search) {
+		return null;
+	}
 
 	let initialError: string | undefined = undefined;
 	let sentences: SentenceWithPieces[] = [];
 	let cursor: string | undefined = undefined;
+	let result = await getCachedSentences();
 	if ('error' in result) {
 		initialError = result.error;
 	} else if ('data' in result) {
@@ -29,5 +34,3 @@ async function SentenceListingPreparing() {
 	}
 	return <SentenceListing sentences={sentences} cursor={cursor} initialError={initialError} />;
 }
-
-export default SentenceListingPreparing;

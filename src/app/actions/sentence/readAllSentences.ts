@@ -4,6 +4,8 @@ import { sentenceReadSelect, SentenceWithPieces } from '@/lib';
 import prisma from '@/lib/prisma';
 import { SENTENCE_FETCHING_LIMIT } from '@/constants';
 
+// TODO zod validate the arguments
+
 export default async function readAllSentences(
 	cursor?: string,
 	limit = SENTENCE_FETCHING_LIMIT

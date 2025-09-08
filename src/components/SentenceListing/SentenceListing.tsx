@@ -3,22 +3,34 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
+import { useSearchParams } from 'next/navigation';
 import { AccordionRoot } from '@/components/Accordion';
 import SentenceListingEntry from '@/components/SentenceListingEntry';
-import { SentenceWithPieces } from '@/lib';
 import EmptyDisplay from './EmptyDisplay';
 import { useIntersectionObserver } from '@/hooks';
 import readAllSentences from '@/app/actions/sentence/readAllSentences';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
-import { useSearchParamsContext } from '@/components/SearchParamsProvider';
+import { SentenceWithHighlightedPieces } from '@/types';
+import { INPUT_NAME } from '@/constants';
+import searchSentences from '@/app/actions/sentence/searchSentence';
 
-function SentenceListing({ sentences, cursor, initialError }: { sentences: SentenceWithPieces[]; cursor?: string; initialError?: string }) {
+function SentenceListing({
+	sentences,
+	cursor,
+	initialError,
+}: {
+	sentences: SentenceWithHighlightedPieces[];
+	cursor?: string;
+	initialError?: string;
+}) {
 	let [currentSentences, setCurrentSentences] = React.useState(sentences);
 	let [nextCursor, setNextCursor] = React.useState<string | undefined>(cursor);
 	let [isLoadingData, startTransition] = React.useTransition();
 	let [error, setError] = React.useState<string | undefined>(initialError);
-	let { isLoadingSearchResult } = useSearchParamsContext();
+
+	let searchParams = useSearchParams();
+	let search = searchParams.get(INPUT_NAME.SEARCH);
 
 	// both used for data fetching indicator
 	let [ref, isIntersecting] = useIntersectionObserver<HTMLSpanElement>();
@@ -39,7 +51,12 @@ function SentenceListing({ sentences, cursor, initialError }: { sentences: Sente
 	let fetchMoreSentences = React.useCallback(
 		function () {
 			startTransition(async () => {
-				let result = await readAllSentences(nextCursor);
+				let result: Awaited<ReturnType<typeof searchSentences>> | Awaited<ReturnType<typeof readAllSentences>>;
+				if (search) {
+					result = await searchSentences({ search, cursor: nextCursor });
+				} else {
+					result = await readAllSentences(nextCursor);
+				}
 				if ('error' in result) {
 					setError(result.error);
 					return;
@@ -49,7 +66,7 @@ function SentenceListing({ sentences, cursor, initialError }: { sentences: Sente
 				setNextCursor(newCursor ?? undefined);
 			});
 		},
-		[nextCursor]
+		[nextCursor, search]
 	);
 
 	// fetch when nearing the page end

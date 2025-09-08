@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/Popover';
 import Button from '@/components/Button';
 
-function WordWithPhoneticSymbol({ children, symbol }: { children: string; symbol: string }) {
+function WordWithPhoneticSymbol({ children, symbol }: { children: React.ReactNode; symbol: string }) {
 	return (
 		<Wrapper>
 			<Popover>
