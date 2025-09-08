@@ -25,7 +25,7 @@ function DeleteAccount() {
 		<Wrapper>
 			<Label htmlFor='email'>Email:</Label>
 			<InputBox
-				input={email}
+				value={email}
 				clearInput={clearEmail}
 				onChange={onEmailChange}
 				id='email'
