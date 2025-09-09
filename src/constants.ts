@@ -58,7 +58,7 @@ export const TOAST_ID = {
 	TRANSLATION_EDITING: 'translation_editing',
 	TRANSLATION_FETCHING: 'translation_fetching',
 	IPA_FETCHING: 'IPA_',
-	AUDIO_PLAYING: 'audio_playing',
+	AUDIO_PLAYING: 'audio_playing_',
 	SENTENCE_UPDATING: 'sentence_updating',
 	SENTENCE_FETCHING: 'sentence_fetching',
 } as const;

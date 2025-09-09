@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import SentencePiecesContext from './SentencePiecesContext';
-import { Action, PiecesType, RemoveIPAParams, AddIPAParams } from './types';
+import { Action, RemoveIPAParams, AddIPAParams } from './types';
+import { PiecesType } from '@/types';
 import { produce } from 'immer';
 import { segmentSentence, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';

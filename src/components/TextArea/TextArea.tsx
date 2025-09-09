@@ -16,7 +16,7 @@ interface TextAreaProps {
 function TextArea({ value, clearInput, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
 	return (
 		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
-			<InputArea as='textarea' {...delegated} rows={1} autoFocus={true} />
+			<InputArea as='textarea' {...delegated} rows={1} />
 			<Overlay aria-hidden='true'>{value + ' '}</Overlay>
 			{value && (
 				<ClearButton variant='icon' onClick={clearInput}>

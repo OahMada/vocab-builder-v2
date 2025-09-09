@@ -1,5 +1,6 @@
 'use client';
 
+import DescriptionText from '@/components/DescriptionText';
 import styled from 'styled-components';
 
 export var ChildrenWrapper = styled.div`
@@ -16,4 +17,11 @@ export var ChildrenWrapper = styled.div`
 	padding-bottom: 12px;
 	margin-bottom: -12px;
 	z-index: 9;
+`;
+
+export var NoticeText = styled(DescriptionText)<{ $hasError?: boolean }>`
+	/* optical alignment */
+	margin-left: 4px;
+	align-self: flex-start;
+	color: ${({ $hasError }) => ($hasError ? 'var(--text-status-warning)' : 'inherit')};
 `;

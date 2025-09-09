@@ -64,6 +64,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 					},
 				})}
 				placeholder='Input translation text here'
+				autoFocus={true}
 			/>
 			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit, onError)} submitDisabled={!!errors.translation} />
 		</>

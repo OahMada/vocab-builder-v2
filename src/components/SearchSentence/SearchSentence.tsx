@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import Icon from '@/components/Icon';
 import InputBox from '@/components/InputBox';
 import { useDebouncedCallback } from '@tanstack/react-pacer';
-import DescriptionText from '@/components/DescriptionText';
 import { useNuqsSearchParams } from '@/hooks';
 
 function SearchSentence() {
@@ -37,16 +36,13 @@ function SearchSentence() {
 
 	return (
 		<Wrapper style={{ '--icon-size': '18px' } as React.CSSProperties}>
-			<InnerWrapper>
-				<SearchInput clearInput={clearInput} id='search' value={query} onChange={updateQuery} placeholder='Search' onKeyDown={handleEnterKeydown} />
-				<Label htmlFor='search'>
-					<VisuallyHidden>search sentence</VisuallyHidden>
-					<IconWrapper>
-						<Icon id='search' />
-					</IconWrapper>
-				</Label>
-			</InnerWrapper>
-			<NoticeText>Type in at least 3 characters to start a search.</NoticeText>
+			<SearchInput clearInput={clearInput} id='search' value={query} onChange={updateQuery} placeholder='Search' onKeyDown={handleEnterKeydown} />
+			<Label htmlFor='search'>
+				<VisuallyHidden>search sentence</VisuallyHidden>
+				<IconWrapper>
+					<Icon id='search' />
+				</IconWrapper>
+			</Label>
 		</Wrapper>
 	);
 }
@@ -56,12 +52,6 @@ export default SearchSentence;
 var Wrapper = styled.form`
 	--icon-padding: 6px;
 	width: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-`;
-
-var InnerWrapper = styled.div`
 	position: relative;
 `;
 
@@ -79,11 +69,4 @@ var IconWrapper = styled.div`
 
 var SearchInput = styled(InputBox)`
 	padding-left: calc(var(--icon-size) + 2 * var(--icon-padding));
-`;
-
-var NoticeText = styled(DescriptionText)`
-	/* optical alignment */
-	margin-left: 4px;
-	align-self: flex-start;
-	color: var(--text-tertiary);
 `;

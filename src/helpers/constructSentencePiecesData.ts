@@ -1,5 +1,5 @@
 import { Piece } from '@prisma/client';
-import { PiecesType } from '@/components/SentencePiecesProvider/types';
+import { PiecesType } from '@/types';
 import { segmentSentence } from './segmentSentence';
 import { SentenceWithPieces } from '@/lib';
 

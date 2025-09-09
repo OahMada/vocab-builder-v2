@@ -2,17 +2,20 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/navigation';
+
+import { usePlayAudio } from '@/hooks';
+import { TOAST_ID } from '@/constants';
+import { constructSentence } from '@/helpers';
+import { SentenceWithHighlightedPieces } from '@/types';
+
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/Accordion';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import PlayAudioFromUrl from '@/components/PlayAudioFromUrl';
-import { usePlayAudio } from '@/hooks';
 import deleteSentence from '@/app/actions/sentence/deleteSentence';
 import AlertDialog from '@/components/AlertDialog';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
-import { TOAST_ID } from '@/constants';
-import { constructSentence } from '@/helpers';
-import { SentenceWithHighlightedPieces } from '@/types';
 
 type SentenceListingEntryProps = {
 	index: number;
@@ -34,7 +37,8 @@ function SentenceListingEntry({
 	let { addToToast, removeFromToast } = useGlobalToastContext();
 	let sentencePieces = constructSentence(sentence, pieces);
 	let [isLoading, setIsLoading] = React.useState(false);
-	let { isPlaying, playAudio, stopAudio } = usePlayAudio(audioUrl);
+	let { isPlaying, playAudio, stopAudio } = usePlayAudio();
+	let router = useRouter();
 
 	async function handleDeleteAction() {
 		setIsLoading(true);
@@ -63,7 +67,7 @@ function SentenceListingEntry({
 					<AudioButton
 						style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
 						isPlaying={isPlaying}
-						playAudio={playAudio}
+						playAudio={() => playAudio(audioUrl)}
 						stopAudio={stopAudio}
 					/>
 				</SentenceWrapper>
@@ -95,10 +99,10 @@ function SentenceListingEntry({
 						</AlertDialog>
 						<Button
 							variant='fill'
-							href={`/sentence/${id}`}
 							disabled={isLoading}
 							onClick={() => {
 								stopAudio();
+								router.push(`/sentence/${id}`);
 							}}
 						>
 							<EditIcon id='edit' />

@@ -76,6 +76,7 @@ function Note({ title }: { title: React.ReactNode }) {
 					value={noteValue}
 					clearInput={clearInput}
 					placeholder='Input note text here'
+					autoFocus={true}
 				/>
 				<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit, onError)} submitDisabled={!!errors.note} />
 			</CardWrapper>

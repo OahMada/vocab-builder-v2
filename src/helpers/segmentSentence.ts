@@ -1,4 +1,4 @@
-import { PiecesType, Piece } from '@/components/SentencePiecesProvider';
+import { PiecesType, Piece } from '@/types';
 import { createId } from '@paralleldrive/cuid2';
 
 function segmentSentence(sentence: string): PiecesType {

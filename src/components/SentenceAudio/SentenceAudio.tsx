@@ -25,7 +25,7 @@ var url = '/api/tts';
 function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sentence: string }) {
 	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, TTSArg>(url, postFetcher);
 	let { isLocalDataLoading, audioBlob, updateBlob, audioUrl } = useAudioDataContext();
-	let { isPlaying, playAudio, stopAudio, enableAutoPlay } = usePlayAudio(audioUrl || audioBlob);
+	let { isPlaying, playAudio, stopAudio } = usePlayAudio();
 
 	React.useEffect(() => {
 		async function activateTrigger() {
@@ -52,6 +52,7 @@ function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sent
 		if (data) {
 			let audioBlob = await base64ToBlob(data.result);
 			updateBlob(audioBlob);
+			return audioBlob;
 		}
 	}
 
@@ -61,8 +62,10 @@ function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sent
 				<RetryButton
 					variant='outline'
 					onClick={async () => {
-						await retryTTS();
-						enableAutoPlay();
+						let result = await retryTTS();
+						if (result) {
+							playAudio(result);
+						}
 					}}
 				>
 					<Icon id='retry' />
@@ -74,7 +77,11 @@ function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sent
 					<VisuallyHidden>stop play audio </VisuallyHidden>
 				</StopPlayButton>
 			) : (
-				<AudioButton variant='outline' onClick={playAudio} disabled={(!audioBlob && !audioUrl) || isSubmitting}>
+				<AudioButton
+					variant='outline'
+					onClick={() => playAudio((audioUrl || audioBlob) as string | Blob)}
+					disabled={(!audioBlob && !audioUrl) || isSubmitting}
+				>
 					<Icon id='audio' />
 					<VisuallyHidden>Play sentence audio</VisuallyHidden>
 				</AudioButton>

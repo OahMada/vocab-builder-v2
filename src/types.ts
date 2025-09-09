@@ -14,3 +14,13 @@ export type SearchResults = SentenceWithPieces & { highlights: Highlight[] };
 export type SentenceWithHighlightedPieces = Omit<SentenceWithPieces, 'pieces'> & {
 	pieces: (SentenceWithPieces['pieces'][number] & { isSearchMatch?: boolean })[];
 };
+
+export type Piece =
+	| {
+			id: string;
+			word: string;
+			IPA?: string;
+	  }
+	| string;
+
+export type PiecesType = Piece[];

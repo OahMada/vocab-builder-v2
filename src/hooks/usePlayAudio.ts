@@ -3,72 +3,73 @@ import { TOAST_ID } from '@/constants';
 import { handleError } from '@/utils';
 import * as React from 'react';
 
-export function usePlayAudio(audioSource: (undefined | Blob) | string) {
+var currentAudio: HTMLAudioElement | null = null;
+
+export function usePlayAudio() {
 	let [isPlaying, setIsPlaying] = React.useState(false);
-	let audioEleRef = React.useRef<null | HTMLAudioElement>(null);
-	let autoPlayRef = React.useRef(false);
 	let { addToToast, removeFromToast } = useGlobalToastContext();
 
 	let stopAudio = React.useCallback(function () {
-		if (audioEleRef.current) {
+		if (currentAudio) {
 			setIsPlaying(false);
-			audioEleRef.current.pause();
-			audioEleRef.current.currentTime = 0;
+			currentAudio.pause();
+			currentAudio.currentTime = 0;
+			currentAudio = null;
 		}
 	}, []);
 
 	let playAudio = React.useCallback(
-		async function () {
-			removeFromToast(TOAST_ID.AUDIO_PLAYING);
-			if (audioEleRef.current) {
+		async function (audioSource: Blob | string) {
+			// stop old one
+			if (currentAudio) {
+				currentAudio.pause();
+				currentAudio.currentTime = 0;
+			}
+
+			// update audio
+			let audioUrl = '';
+			if (typeof audioSource === 'string') {
+				audioUrl = audioSource;
+			} else {
+				audioUrl = URL.createObjectURL(audioSource);
+			}
+			currentAudio = new Audio(audioUrl);
+			try {
+				removeFromToast(`${TOAST_ID.AUDIO_PLAYING}${audioUrl}`);
+				await currentAudio.play();
 				setIsPlaying(true);
-				try {
-					await audioEleRef.current.play();
-				} catch (error) {
-					addToToast({
-						id: TOAST_ID.AUDIO_PLAYING,
-						contentType: 'error',
-						content: handleError(error),
-					});
-					stopAudio();
-				}
+			} catch (error) {
+				addToToast({
+					id: `${TOAST_ID.AUDIO_PLAYING}${audioUrl}`,
+					contentType: 'error',
+					content: handleError(error),
+				});
+				stopAudio();
 			}
 		},
 		[addToToast, removeFromToast, stopAudio]
 	);
 
-	let enableAutoPlay = React.useCallback(() => {
-		autoPlayRef.current = true;
-	}, []);
-
+	// update playing state when audio paused or ended
 	React.useEffect(() => {
-		let audioELe: HTMLAudioElement;
-		if (typeof audioSource === 'string') {
-			audioELe = new Audio(audioSource);
-		} else {
-			if (!audioSource) return;
-			let audioUrl = URL.createObjectURL(audioSource);
-			audioELe = new Audio(audioUrl);
-		}
-		audioEleRef.current = audioELe;
-
-		if (autoPlayRef.current) {
-			playAudio();
-			autoPlayRef.current = false;
-		}
-	}, [audioSource, playAudio]);
-
-	React.useEffect(() => {
-		if (!audioEleRef.current || !isPlaying) return;
-		function handleEnded() {
+		if (!currentAudio || !isPlaying) return;
+		function handlePause() {
 			setIsPlaying(false);
 		}
-		audioEleRef.current.addEventListener('ended', handleEnded);
+
+		function handleEnded() {
+			setIsPlaying(false);
+			currentAudio = null;
+		}
+
+		currentAudio.addEventListener('pause', handlePause);
+		currentAudio.addEventListener('ended', handleEnded);
 		return () => {
-			if (!audioEleRef.current) return;
-			audioEleRef.current.removeEventListener('ended', handleEnded);
+			if (!currentAudio) return;
+			currentAudio.removeEventListener('pause', handlePause);
+			currentAudio.removeEventListener('ended', handleEnded);
 		};
 	}, [isPlaying]);
 
-	return { isPlaying, playAudio, stopAudio, enableAutoPlay };
+	return { isPlaying, playAudio, stopAudio };
 }

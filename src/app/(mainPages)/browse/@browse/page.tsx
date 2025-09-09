@@ -1,19 +1,10 @@
 import * as React from 'react';
-import { unstable_cache } from 'next/cache';
 import { SearchParams } from 'nuqs';
 import SentenceListing from '@/components/SentenceListing';
-import readAllSentences from '@/app/actions/sentence/readAllSentences';
-import { UNSTABLE_CACHE_TAG } from '@/constants';
+import { readAllSentences, countSentences } from '@/app/actions/sentence/readAllSentences';
 import { SentenceWithPieces } from '@/lib/sentenceReadSelect';
 import { searchParamsCache } from '@/lib/searchParamsCache';
-
-var getCachedSentences = unstable_cache(
-	async () => {
-		return await readAllSentences();
-	},
-	[],
-	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG] }
-);
+import { NoticeText } from '../StyledComponents';
 
 export default async function BrowseList({ searchParams }: { searchParams: Promise<SearchParams> }) {
 	let { search } = searchParamsCache.parse(await searchParams);
@@ -22,15 +13,34 @@ export default async function BrowseList({ searchParams }: { searchParams: Promi
 		return null;
 	}
 
-	let initialError: string | undefined = undefined;
+	let dataError: string | undefined = undefined;
 	let sentences: SentenceWithPieces[] = [];
 	let cursor: string | undefined = undefined;
-	let result = await getCachedSentences();
-	if ('error' in result) {
-		initialError = result.error;
-	} else if ('data' in result) {
-		sentences = result.data;
-		cursor = result.nextCursor ?? undefined;
+	let count: number = 0;
+	let countError: string | undefined = undefined;
+	let [dataResult, countResult] = await Promise.allSettled([readAllSentences(), countSentences()]);
+	if (dataResult.status === 'fulfilled') {
+		let value = dataResult.value;
+		if ('error' in value) {
+			dataError = value.error;
+		} else if ('data' in value) {
+			sentences = value.data;
+			cursor = value.nextCursor ?? undefined;
+		}
 	}
-	return <SentenceListing sentences={sentences} cursor={cursor} initialError={initialError} />;
+	if (countResult.status === 'fulfilled') {
+		let value = countResult.value;
+		if ('error' in value) {
+			countError = value.error;
+		} else if ('data' in value) {
+			count = value.data;
+		}
+	}
+
+	return (
+		<>
+			<NoticeText $hasError={!!countError}>{countError ? countError : `There are ${count} sentences in total.`}</NoticeText>
+			<SentenceListing sentences={sentences} cursor={cursor} initialError={dataError} />
+		</>
+	);
 }

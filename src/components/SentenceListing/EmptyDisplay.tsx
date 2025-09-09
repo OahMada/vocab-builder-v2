@@ -33,7 +33,7 @@ var InnerWrapper = styled.div`
 `;
 
 var Text = styled.p`
-	font-size: 0.9rem;
+	font-size: ${14 / 16}rem;
 `;
 
 var MessageWrapper = styled.div`

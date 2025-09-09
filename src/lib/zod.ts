@@ -98,7 +98,7 @@ export var SentenceUpdateInputSchema = z.object({
 
 export type SentenceUpdateInputType = z.infer<typeof SentenceUpdateInputSchema>;
 
-export var SearchInputSchema = z.object({
+export var SearchSentencesInputSchema = z.object({
 	[INPUT_NAME.SEARCH]: z
 		.string()
 		.trim()
@@ -107,5 +107,12 @@ export var SearchInputSchema = z.object({
 		.string()
 		.regex(/^[A-Za-z0-9+/=]+$/, 'Invalid search pagination token')
 		.optional(),
-	limit: z.number().optional().default(SENTENCE_FETCHING_LIMIT),
+	limit: z.number().default(SENTENCE_FETCHING_LIMIT),
 });
+
+export var ReadSentencesInputSchema = z
+	.object({
+		cursor: IdSchema.optional(),
+		limit: SearchSentencesInputSchema.shape.limit,
+	})
+	.default({ limit: SENTENCE_FETCHING_LIMIT });

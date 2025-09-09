@@ -4,16 +4,20 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import { useSearchParams } from 'next/navigation';
-import { AccordionRoot } from '@/components/Accordion';
-import SentenceListingEntry from '@/components/SentenceListingEntry';
-import EmptyDisplay from './EmptyDisplay';
+
+import { readAllSentences } from '@/app/actions/sentence/readAllSentences';
+import { searchSentences } from '@/app/actions/sentence/searchSentence';
+
 import { useIntersectionObserver } from '@/hooks';
-import readAllSentences from '@/app/actions/sentence/readAllSentences';
-import Button from '@/components/Button';
-import Icon from '@/components/Icon';
 import { SentenceWithHighlightedPieces } from '@/types';
 import { INPUT_NAME } from '@/constants';
-import searchSentences from '@/app/actions/sentence/searchSentence';
+
+import { AccordionRoot } from '@/components/Accordion';
+import SentenceListingEntry from '@/components/SentenceListingEntry';
+import Button from '@/components/Button';
+import Icon from '@/components/Icon';
+import EmptyDisplay from './EmptyDisplay';
+import Spinner from '@/components/Loading';
 
 function SentenceListing({
 	sentences,
@@ -28,7 +32,6 @@ function SentenceListing({
 	let [nextCursor, setNextCursor] = React.useState<string | undefined>(cursor);
 	let [isLoadingData, startTransition] = React.useTransition();
 	let [error, setError] = React.useState<string | undefined>(initialError);
-
 	let searchParams = useSearchParams();
 	let search = searchParams.get(INPUT_NAME.SEARCH);
 
@@ -55,19 +58,25 @@ function SentenceListing({
 				if (search) {
 					result = await searchSentences({ search, cursor: nextCursor });
 				} else {
-					result = await readAllSentences(nextCursor);
+					result = await readAllSentences({ cursor: nextCursor });
 				}
 				if ('error' in result) {
 					setError(result.error);
 					return;
 				}
+
 				let { data, nextCursor: newCursor } = result;
+				setError('');
 				setCurrentSentences((prev) => [...prev, ...data]);
 				setNextCursor(newCursor ?? undefined);
 			});
 		},
 		[nextCursor, search]
 	);
+
+	function retryFetchingData() {
+		fetchMoreSentences();
+	}
 
 	// fetch when nearing the page end
 	React.useEffect(() => {
@@ -86,7 +95,7 @@ function SentenceListing({
 		if (isIntersecting) fetchMoreSentences();
 	}, [nextCursor, fetchMoreSentences, isIntersecting, isLoadingData, error]);
 
-	if (currentSentences.length === 0 && !error) {
+	if (currentSentences.length === 0 && !error && !isLoadingData) {
 		return <EmptyDisplay />;
 	}
 
@@ -112,18 +121,12 @@ function SentenceListing({
 					})}
 				</AccordionRoot>
 			</SecondaryWrapper>
-			{nextCursor && <InnerWrapper>{!error && <Loading ref={ref}>Loading...</Loading>}</InnerWrapper>}
+			{nextCursor && !error && <Loading ref={ref}>Loading...</Loading>}
 			{error && (
 				<InnerWrapper>
 					<ErrorMsg>{error}</ErrorMsg>
-					<Button
-						variant='outline'
-						onClick={() => {
-							setError(undefined);
-							fetchMoreSentences();
-						}}
-					>
-						<Icon id='retry' />
+					<Button variant='outline' onClick={retryFetchingData}>
+						{isLoadingData ? <Spinner description='retrying fetching data' /> : <Icon id='retry' />}
 						&nbsp;Retry
 					</Button>
 				</InnerWrapper>
@@ -140,7 +143,7 @@ var Wrapper = styled.div`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	gap: 16px;
 `;
 
 var SecondaryWrapper = styled.div`
@@ -162,7 +165,6 @@ var InnerWrapper = styled.div`
 	align-items: center;
 	color: var(--text-secondary);
 	gap: 5px;
-	margin-bottom: 8px;
 `;
 var ErrorMsg = styled.p`
 	color: var(--text-status-warning);
