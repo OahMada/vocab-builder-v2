@@ -23,18 +23,6 @@ export var UserInputSchema = z.object({
 
 export type UserInputType = z.infer<typeof UserInputSchema>;
 
-export var WordSchema = z.object({
-	word: z
-		.string()
-		.trim()
-		.min(2, {
-			error: 'The word should be at least 2 characters long.',
-		})
-		.max(50, {
-			error: 'The word should be no longer than 50 characters.',
-		}),
-});
-
 export var SentenceSchema = z.object({
 	sentence: z
 		.string()
@@ -44,6 +32,19 @@ export var SentenceSchema = z.object({
 		})
 		.max(300, {
 			error: 'The sentence should be no longer than 300 characters.',
+		}),
+});
+
+export var FetchIPAInputSchema = z.object({
+	sentence: SentenceSchema.shape.sentence,
+	word: z
+		.string()
+		.trim()
+		.min(2, {
+			error: 'The word should be at least 2 characters long.',
+		})
+		.max(50, {
+			error: 'The word should be no longer than 50 characters.',
 		}),
 });
 

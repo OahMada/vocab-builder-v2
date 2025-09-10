@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { openai } from '@ai-sdk/openai';
+import { generateText } from 'ai';
+
 import { SentenceSchema } from '@/lib';
 import { delay, handleZodError } from '@/utils';
-import { generateText } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { API_ABORT_TIMEOUT } from '@/constants';
 
 // TODO load language setting from user setting
 
@@ -23,7 +25,7 @@ export async function POST(request: NextRequest) {
 			system: `Translate the sentence you receive into ${'Chinese'}. If the sentence is already in ${'Chinese'}, do nothing and simply return it as is.`,
 			// @ ts-expect-error stop test case warning
 			prompt: result.data.sentence,
-			abortSignal: AbortSignal.timeout(10000),
+			abortSignal: AbortSignal.timeout(API_ABORT_TIMEOUT),
 		});
 		return NextResponse.json({ result: text });
 	} catch (error) {

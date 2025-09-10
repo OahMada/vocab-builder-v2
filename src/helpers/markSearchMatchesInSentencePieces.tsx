@@ -8,8 +8,6 @@ export function markSearchMatchesInSentencePieces(data: SentenceWithPieces[], se
 		.split(/[^a-z0-9]+/) // split on anything not a-z or 0-9
 		.filter(Boolean);
 
-	console.log('queryTokens', queryTokens);
-
 	return data.map((item) => {
 		let pieces = item.pieces.map((piece) => {
 			for (let token of queryTokens) {

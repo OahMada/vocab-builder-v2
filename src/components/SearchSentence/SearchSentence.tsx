@@ -5,7 +5,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Icon from '@/components/Icon';
 import InputBox from '@/components/InputBox';
-import { useDebouncedCallback } from '@tanstack/react-pacer';
+import { useDebouncer } from '@tanstack/react-pacer';
 import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 
 function SearchSentence() {
@@ -21,20 +21,20 @@ function SearchSentence() {
 		updateSearch('');
 	}
 
+	// to deal with deleting the last search query character, which persists with the later effect call.
 	function handleEnterKeydown(e: React.KeyboardEvent<HTMLInputElement>) {
-		if (e.key === 'Enter') {
-			e.preventDefault();
-			updateSearch(e.currentTarget.value);
+		if (e.key === 'Backspace' && query.length === 1) {
+			updateSearch('');
+			updateSearchDebouncer.cancel();
 		}
 	}
 
-	let onSubmit = useDebouncedCallback(updateSearch, { wait: 1000 });
-
+	let updateSearchDebouncer = useDebouncer(updateSearch, { wait: 1000 });
 	React.useEffect(() => {
 		if (query) {
-			onSubmit(query);
+			updateSearchDebouncer.maybeExecute(query);
 		}
-	}, [query, onSubmit]);
+	}, [query, updateSearchDebouncer]);
 
 	return (
 		<Wrapper style={{ '--icon-size': '18px' } as React.CSSProperties}>
@@ -51,7 +51,7 @@ function SearchSentence() {
 
 export default SearchSentence;
 
-var Wrapper = styled.form`
+var Wrapper = styled.div`
 	--icon-padding: 6px;
 	width: 100%;
 	position: relative;

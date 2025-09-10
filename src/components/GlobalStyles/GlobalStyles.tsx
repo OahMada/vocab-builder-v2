@@ -96,7 +96,24 @@ html {
     -0.2px 34.8px 31.3px -3.4px hsl(var(--shadow-color) / 0.19),
     -0.4px 53.3px 48px -4px hsl(var(--shadow-color) / 0.15);
 
-    /* Official styles (Firefox) */
+  --loading-background-image: linear-gradient(
+      90deg,
+      hsl(0deg 0% 20%) 0%,
+      hsl(344deg 0% 22%) 8%,
+      hsl(344deg 0% 23%) 17%,
+      hsl(344deg 0% 25%) 25%,
+      hsl(344deg 0% 27%) 33%,
+      hsl(344deg 0% 28%) 42%,
+      hsl(0deg 0% 30%) 50%,
+      hsl(344deg 0% 28%) 58%,
+      hsl(344deg 0% 27%) 67%,
+      hsl(344deg 0% 25%) 75%,
+      hsl(344deg 0% 23%) 83%,
+      hsl(344deg 0% 22%) 92%,
+      hsl(0deg 0% 20%) 100%
+    );
+
+  /* Official styles (Firefox) */
   scrollbar-color:
   var(--bg-tertiary)
   transparent;

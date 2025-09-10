@@ -63,7 +63,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 						<Wrapper $position='flex-start'>
 							<Spacer size={0} />
 							<CardWrapper>
-								<WordListing title={<Title>The Sentence</Title>} />
+								<WordListing title={<Title>The Sentence</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
 							</CardWrapper>
 							<CardWrapper>
 								<Translation title={<Title>Translation</Title>} sentence={(sentenceData?.sentence || sentence) as string} />

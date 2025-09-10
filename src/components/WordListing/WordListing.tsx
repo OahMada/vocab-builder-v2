@@ -10,7 +10,7 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import Button from '@/components/Button';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 
-function WordListing({ title }: { title: React.ReactNode }) {
+function WordListing({ title, sentence }: { title: React.ReactNode; sentence: string }) {
 	let { pieces } = useSentencePiecesContext();
 
 	return (
@@ -34,7 +34,7 @@ function WordListing({ title }: { title: React.ReactNode }) {
 					if (typeof item === 'string') {
 						return item;
 					}
-					return <Word key={item.id} piece={item.word} IPA={item.IPA ? item.IPA : null} id={item.id} />;
+					return <Word key={item.id} piece={item.word} IPA={item.IPA ? item.IPA : null} id={item.id} sentence={sentence} />;
 				})}
 			</WordWrapper>
 		</>

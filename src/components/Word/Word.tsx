@@ -1,29 +1,29 @@
 'use client';
 
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import useSWRMutation from 'swr/mutation';
 import Button from '@/components/Button';
 import PhoneticSymbol from './PhoneticSymbol';
 import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
-import Loading from '@/components/Loading';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import { TOAST_ID } from '@/constants';
 
-type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA?: string | null; id: string };
+type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA?: string | null; id: string; sentence: string };
 
 interface IPAResponse {
 	result: string;
 }
 interface IPAArg {
 	word: string;
+	sentence: string;
 }
 
 var url = '/api/IPA';
 
-function Word({ piece, IPA, id }: WordComponentProps) {
+function Word({ piece, IPA, id, sentence }: WordComponentProps) {
 	let { addToToast, removeFromToast } = useGlobalToastContext();
 
 	let { trigger, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher, {
@@ -43,7 +43,7 @@ function Word({ piece, IPA, id }: WordComponentProps) {
 
 	async function triggerFetch() {
 		removeFromToast(`${TOAST_ID.IPA_FETCHING}${piece}`);
-		let data = await trigger({ word: piece });
+		let data = await trigger({ word: piece, sentence });
 		if (data) {
 			addIPA({ text: piece, IPA: data.result, id });
 		}
@@ -59,15 +59,8 @@ function Word({ piece, IPA, id }: WordComponentProps) {
 			{IPA ? (
 				<InactiveWordButton>{piece}</InactiveWordButton>
 			) : (
-				<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating || isLocalDataLoading}>
-					{isMutating ? (
-						<>
-							{piece}&nbsp;
-							<Loading description={`load IPA for word ${piece} `} size={14} />
-						</>
-					) : (
-						piece
-					)}
+				<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating || isLocalDataLoading} $isMutating={isMutating}>
+					{piece}
 				</WordButton>
 			)}
 			{IPA && <PhoneticSymbol symbol={IPA} onClick={handleRemoval} />}
@@ -84,10 +77,19 @@ var Wrapper = styled.div`
 	gap: 3px;
 `;
 
-var WordButton = styled(Button)`
+var WordButton = styled(Button)<{ $isMutating: boolean }>`
 	padding: 3px 6px;
 	border-radius: 8px;
 	font-weight: 500;
+
+	${({ $isMutating }) =>
+		$isMutating &&
+		css`
+			background-image: var(--loading-background-image);
+			background-size: 200% 100%;
+			background-repeat: no-repeat;
+			animation: ${shimmer} 800ms ease-in-out infinite alternate;
+		`}
 `;
 
 var InactiveWordButton = styled.span`
@@ -95,4 +97,13 @@ var InactiveWordButton = styled.span`
 	display: block;
 	padding: 4px;
 	border-bottom: 1px dashed var(--border-medium);
+`;
+
+var shimmer = keyframes`
+	0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 `;
