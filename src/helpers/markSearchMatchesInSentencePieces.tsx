@@ -1,38 +1,30 @@
-import { SearchResults, SentenceWithHighlightedPieces, Highlight } from '@/types';
-
 // This file is used to merge search result highlight data into sentence pieces, adding an extra isSearchMatch field.
 
-function extractHitsFromHighlights(highlights?: Highlight[]): string[] {
-	if (!highlights) return [];
+import { SentenceWithPieces } from '@/lib';
 
-	let hits: string[] = [];
-	for (let item of highlights) {
-		for (let t of item.texts) {
-			if (t.type === 'hit') hits.push(t.value);
-		}
-	}
-	return hits;
-}
+export function markSearchMatchesInSentencePieces(data: SentenceWithPieces[], search: string): SentenceWithPieces[] {
+	let queryTokens = search
+		.toLowerCase()
+		.split(/[^a-z0-9]+/) // split on anything not a-z or 0-9
+		.filter(Boolean);
 
-// TODO more than one word in query
-export function markSearchMatchesInSentencePieces(data: SearchResults[], search: string): SentenceWithHighlightedPieces[] {
-	let query = search.toLowerCase();
+	console.log('queryTokens', queryTokens);
 
-	return data.map(({ highlights, ...rest }) => {
-		let hits = new Set(extractHitsFromHighlights(highlights).map((h) => h.toLowerCase()));
-
-		let pieces = rest.pieces.map((piece) => {
-			if (hits.has(piece.word.toLowerCase()) && piece.word.toLowerCase().includes(query)) {
-				return {
-					...piece,
-					isSearchMatch: true,
-				};
+	return data.map((item) => {
+		let pieces = item.pieces.map((piece) => {
+			for (let token of queryTokens) {
+				if (piece.word.toLowerCase().includes(token)) {
+					return {
+						...piece,
+						isSearchMatch: true,
+					};
+				}
 			}
 			return piece;
 		});
 
 		return {
-			...rest,
+			...item,
 			pieces,
 		};
 	});

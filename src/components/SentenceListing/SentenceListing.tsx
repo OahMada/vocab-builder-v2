@@ -8,7 +8,7 @@ import { readAllSentences } from '@/app/actions/sentence/readAllSentences';
 import { searchSentences } from '@/app/actions/sentence/searchSentence';
 
 import { useIntersectionObserver } from '@/hooks';
-import { SentenceWithHighlightedPieces } from '@/types';
+import { SentenceWithPieces } from '@/lib';
 
 import { AccordionRoot } from '@/components/Accordion';
 import SentenceListingEntry from '@/components/SentenceListingEntry';
@@ -18,6 +18,7 @@ import EmptyDisplay from './EmptyDisplay';
 import Spinner from '@/components/Loading';
 import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 import NoticeText from '@/components/BrowsePageNoticeText';
+import { markSearchMatchesInSentencePieces } from '@/helpers';
 
 function SentenceListing({
 	sentences,
@@ -26,7 +27,7 @@ function SentenceListing({
 	countMessage,
 	hasCountError,
 }: {
-	sentences: SentenceWithHighlightedPieces[];
+	sentences: SentenceWithPieces[];
 	cursor: string | undefined;
 	initialError: string | undefined;
 	countMessage: string;
@@ -69,8 +70,10 @@ function SentenceListing({
 				}
 
 				let { data, nextCursor: newCursor } = result;
+				let markedData = markSearchMatchesInSentencePieces(data, search);
+
 				setError('');
-				setCurrentSentences((prev) => [...prev, ...data]);
+				setCurrentSentences((prev) => [...prev, ...markedData]);
 				setNextCursor(newCursor ?? undefined);
 			});
 		},

@@ -2,13 +2,20 @@
 
 import { unstable_cache } from 'next/cache';
 import prisma from '@/lib/prisma';
-import { SearchSentencesInputSchema } from '@/lib';
+import { SearchSentencesInputSchema, SentenceWithPieces } from '@/lib';
 import { handleZodError } from '@/utils';
 import { SENTENCE_FETCHING_LIMIT, UNSTABLE_CACHE_TAG } from '@/constants';
 import { Document } from 'mongodb';
-import { SearchResults } from '@/types';
 
-type SearchResultsWithPaginationToken = SearchResults & { paginationToken: string };
+type SearchResultsWithPaginationToken = SentenceWithPieces & { paginationToken: string };
+
+function compoundOperatorOption(search: string) {
+	return {
+		compound: {
+			should: [{ autocomplete: { query: search, path: 'sentence', tokenOrder: 'any' } }, { text: { query: search, path: 'sentence' } }],
+		},
+	};
+}
 
 function buildSearchPipeline(search: string, nextCursor?: string) {
 	let databaseIndexName = process.env.DATABASE_INDEX_NAME;
@@ -16,8 +23,7 @@ function buildSearchPipeline(search: string, nextCursor?: string) {
 	let searchStage: Document = {
 		$search: {
 			index: databaseIndexName,
-			text: { query: search, path: 'sentence' },
-			highlight: { path: 'sentence' },
+			...compoundOperatorOption(search),
 			sort: {
 				score: {
 					$meta: 'searchScore',
@@ -48,7 +54,6 @@ function buildSearchPipeline(search: string, nextCursor?: string) {
 		{ $limit: SENTENCE_FETCHING_LIMIT + 1 },
 		{
 			$project: {
-				highlights: { $meta: 'searchHighlights' },
 				paginationToken: { $meta: 'searchSequenceToken' },
 				createdAt: 0,
 				updatedAt: 0,
@@ -59,7 +64,7 @@ function buildSearchPipeline(search: string, nextCursor?: string) {
 }
 
 export var searchSentences = unstable_cache(
-	async function (data: unknown): Promise<{ error: string } | { data: SearchResults[]; nextCursor: string | null }> {
+	async function (data: unknown): Promise<{ error: string } | { data: SentenceWithPieces[]; nextCursor: string | null }> {
 		let result = SearchSentencesInputSchema.safeParse(data);
 		if (!result.success) {
 			let error = handleZodError(result.error, 'prettify');
@@ -81,7 +86,7 @@ export var searchSentences = unstable_cache(
 			}
 
 			// no need to return all the paginationTokens
-			let sentences: SearchResults[] = searchResult.map((item) => {
+			let sentences: SentenceWithPieces[] = searchResult.map((item) => {
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				let { paginationToken, ...rest } = item;
 				return rest;
@@ -116,7 +121,7 @@ export var countSearchResults = unstable_cache(
 					{
 						$searchMeta: {
 							index: databaseIndexName,
-							text: { query: search, path: 'sentence' },
+							...compoundOperatorOption(search),
 							count: {
 								type: 'total',
 							},

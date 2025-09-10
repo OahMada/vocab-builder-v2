@@ -1,10 +1,10 @@
 import * as React from 'react';
 import SentenceListing from '@/components/SentenceListing';
 import { searchSentences, countSearchResults } from '@/app/actions/sentence/searchSentence';
-import { markSearchMatchesInSentencePieces } from '@/helpers';
-import { SentenceWithHighlightedPieces } from '@/types';
 import { SearchParams } from 'nuqs/server';
 import { searchParamsCache } from '@/lib/searchParamsCache';
+import { SentenceWithPieces } from '@/lib';
+import { markSearchMatchesInSentencePieces } from '@/helpers';
 
 export default async function SearchList({ searchParams }: { searchParams: Promise<SearchParams> }) {
 	let { search } = searchParamsCache.parse(await searchParams);
@@ -14,7 +14,7 @@ export default async function SearchList({ searchParams }: { searchParams: Promi
 	}
 
 	let dataError: string | undefined = undefined;
-	let sentences: SentenceWithHighlightedPieces[] = [];
+	let sentences: SentenceWithPieces[] = [];
 	let cursor: string | undefined = undefined;
 	let count: number | undefined = undefined;
 	let countError: string | undefined = undefined;

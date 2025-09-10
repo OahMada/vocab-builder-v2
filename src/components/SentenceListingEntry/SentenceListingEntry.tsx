@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { usePlayAudio } from '@/hooks';
 import { TOAST_ID } from '@/constants';
 import { constructSentence } from '@/helpers';
-import { SentenceWithHighlightedPieces } from '@/types';
+import { SentenceWithPieces } from '@/lib';
 
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/Accordion';
 import Button from '@/components/Button';
@@ -20,7 +20,7 @@ import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 type SentenceListingEntryProps = {
 	index: number;
 	onDeleteSentence: (id: string) => void;
-} & SentenceWithHighlightedPieces &
+} & SentenceWithPieces &
 	React.ComponentProps<'div'>;
 
 function SentenceListingEntry({

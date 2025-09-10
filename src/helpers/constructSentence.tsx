@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Piece } from '@prisma/client';
 import { segmentSentence } from '@/helpers';
 import WordWithPhoneticSymbol, { CombinedLastTwoPieces } from '@/components/WordWithPhoneticSymbol';
-import { SentenceWithHighlightedPieces } from '@/types';
+import { SentenceWithPieces } from '@/lib';
 import SearchMatchedWord from '@/components/SearchMatchedWord';
 
-export function constructSentence(wholeSentence: string, pieces: SentenceWithHighlightedPieces['pieces']) {
+export function constructSentence(wholeSentence: string, pieces: SentenceWithPieces['pieces']) {
 	let result = segmentSentence(wholeSentence);
 	let piecesMap: [string, Omit<Piece & { isSearchMatch?: boolean }, 'sentenceId'>][] = pieces.map((item) => [item.word, item]);
 	let constructedSentence: React.ReactNode[] = [];
