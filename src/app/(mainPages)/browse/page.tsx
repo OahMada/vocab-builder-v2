@@ -8,10 +8,8 @@ export default function Page() {
 	return (
 		<ChildrenWrapper>
 			<Breadcrumb />
-			<React.Suspense>
-				{/* https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout nuqs's useQueryState mush internally uses useSearchParams */}
-				<Search />
-			</React.Suspense>
+			{/* https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout nuqs's useQueryState mush internally uses useSearchParams */}
+			<Search />
 		</ChildrenWrapper>
 	);
 }

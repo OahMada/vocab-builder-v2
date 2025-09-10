@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import * as React from 'react';
+import { connection } from 'next/server';
 
 import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
@@ -18,6 +19,8 @@ export default async function SentenceBrowse({
 	browse: React.ReactNode;
 	children: React.ReactNode;
 }) {
+	// to avoid build error: useSearchParams() should be wrapped in a suspense boundary https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout#possible-ways-to-fix-it
+	await connection();
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
