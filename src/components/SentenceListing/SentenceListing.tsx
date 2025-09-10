@@ -3,14 +3,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
-import { useSearchParams } from 'next/navigation';
 
 import { readAllSentences } from '@/app/actions/sentence/readAllSentences';
 import { searchSentences } from '@/app/actions/sentence/searchSentence';
 
 import { useIntersectionObserver } from '@/hooks';
 import { SentenceWithHighlightedPieces } from '@/types';
-import { INPUT_NAME } from '@/constants';
 
 import { AccordionRoot } from '@/components/Accordion';
 import SentenceListingEntry from '@/components/SentenceListingEntry';
@@ -18,24 +16,29 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import EmptyDisplay from './EmptyDisplay';
 import Spinner from '@/components/Loading';
+import { useSearchParamsContext } from '@/components/SearchParamsProvider';
+import NoticeText from '@/components/BrowsePageNoticeText';
 
 function SentenceListing({
 	sentences,
 	cursor,
 	initialError,
+	countMessage,
+	hasCountError,
 }: {
 	sentences: SentenceWithHighlightedPieces[];
-	cursor?: string;
-	initialError?: string;
+	cursor: string | undefined;
+	initialError: string | undefined;
+	countMessage: string;
+	hasCountError: boolean;
 }) {
 	let [currentSentences, setCurrentSentences] = React.useState(sentences);
 	let [nextCursor, setNextCursor] = React.useState<string | undefined>(cursor);
 	let [isLoadingData, startTransition] = React.useTransition();
 	let [error, setError] = React.useState<string | undefined>(initialError);
-	let searchParams = useSearchParams();
-	let search = searchParams.get(INPUT_NAME.SEARCH);
+	let { search, isPending } = useSearchParamsContext();
 
-	// both used for data fetching indicator
+	// used for data fetching indicator
 	let [ref, isIntersecting] = useIntersectionObserver<HTMLSpanElement>();
 
 	// virtualization
@@ -101,6 +104,7 @@ function SentenceListing({
 
 	return (
 		<Wrapper>
+			<NoticeText $hasError={hasCountError}>{countMessage}</NoticeText>
 			<SecondaryWrapper style={{ '--height': `${rowVirtualizer.getTotalSize()}px` } as React.CSSProperties}>
 				<AccordionRoot style={{ '--transform': `translateY(${virtualizedItems[0]?.start || 0}px)` } as React.CSSProperties}>
 					{virtualizedItems.map((virtualItem) => {
@@ -131,6 +135,11 @@ function SentenceListing({
 					</Button>
 				</InnerWrapper>
 			)}
+			{isPending && (
+				<Overlay>
+					<OverlaySpinner description='updating page with/without search results' size={25} strokeWidth={1} />
+				</Overlay>
+			)}
 		</Wrapper>
 	);
 }
@@ -143,7 +152,8 @@ var Wrapper = styled.div`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: 12px;
+	position: relative;
 `;
 
 var SecondaryWrapper = styled.div`
@@ -169,4 +179,19 @@ var InnerWrapper = styled.div`
 var ErrorMsg = styled.p`
 	color: var(--text-status-warning);
 	font-size: ${14 / 16}rem;
+`;
+
+var Overlay = styled.div`
+	height: 100%;
+	width: 100%;
+	background-color: var(--bg-loading-overlay);
+	position: absolute;
+	top: 0;
+	left: 0;
+`;
+
+var OverlaySpinner = styled(Spinner)`
+	position: fixed;
+	right: 32px;
+	bottom: calc(4rem + 16px);
 `;

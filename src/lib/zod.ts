@@ -116,3 +116,11 @@ export var ReadSentencesInputSchema = z
 		limit: SearchSentencesInputSchema.shape.limit,
 	})
 	.default({ limit: SENTENCE_FETCHING_LIMIT });
+
+export var DeleteSentenceInputSchema = z.object({
+	sentenceId: IdSchema,
+	audioUrl: z.url({
+		protocol: /^https?$/,
+		hostname: z.regexes.domain,
+	}),
+});

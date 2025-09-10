@@ -5,7 +5,6 @@ import { markSearchMatchesInSentencePieces } from '@/helpers';
 import { SentenceWithHighlightedPieces } from '@/types';
 import { SearchParams } from 'nuqs/server';
 import { searchParamsCache } from '@/lib/searchParamsCache';
-import { NoticeText } from '../StyledComponents';
 
 export default async function SearchList({ searchParams }: { searchParams: Promise<SearchParams> }) {
 	let { search } = searchParamsCache.parse(await searchParams);
@@ -17,7 +16,7 @@ export default async function SearchList({ searchParams }: { searchParams: Promi
 	let dataError: string | undefined = undefined;
 	let sentences: SentenceWithHighlightedPieces[] = [];
 	let cursor: string | undefined = undefined;
-	let count: number = 0;
+	let count: number | undefined = undefined;
 	let countError: string | undefined = undefined;
 	let [dataResult, countResult] = await Promise.allSettled([searchSentences({ search }), countSearchResults(search)]);
 	if (dataResult.status === 'fulfilled') {
@@ -38,10 +37,21 @@ export default async function SearchList({ searchParams }: { searchParams: Promi
 		}
 	}
 
+	let countMessage: string;
+	if (countError) {
+		countMessage = countError;
+	} else {
+		countMessage = `Found ${count} matching sentences in total.`;
+	}
+
 	return (
-		<>
-			<NoticeText $hasError={!!countError}>{countError ? countError : `Found ${count} matching sentences in total.`}</NoticeText>
-			<SentenceListing sentences={sentences} cursor={cursor} initialError={dataError} />
-		</>
+		<SentenceListing
+			sentences={sentences}
+			cursor={cursor}
+			initialError={dataError}
+			key={search}
+			countMessage={countMessage}
+			hasCountError={!!countError}
+		/>
 	);
 }

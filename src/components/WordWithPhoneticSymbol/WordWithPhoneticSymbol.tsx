@@ -41,3 +41,8 @@ var SymbolWrapper = styled.span`
 	font-weight: 300;
 	user-select: none;
 `;
+
+export var CombinedLastTwoPieces = styled.span`
+	display: inline-flex;
+	align-items: baseline;
+`;

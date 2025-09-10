@@ -1,27 +1,15 @@
-'use client';
-
 import * as React from 'react';
-import styled from 'styled-components';
-import Spinner from '@/components/Loading';
+
+import { LoadingInnerWrapper, LoadingSpinner, LoadingWrapper } from '../StyledComponents';
+import NoticeText from '@/components/BrowsePageNoticeText';
 
 export default function Loading() {
 	return (
-		<Wrapper>
-			<CornerSpinner description='Loading sentence list' />
-		</Wrapper>
+		<LoadingWrapper>
+			<NoticeText>Counting records...</NoticeText>
+			<LoadingInnerWrapper>
+				<LoadingSpinner description='Loading sentence list' size={25} />
+			</LoadingInnerWrapper>
+		</LoadingWrapper>
 	);
 }
-
-var Wrapper = styled.div`
-	width: 100%;
-	height: 100%;
-	position: relative;
-	background-color: var(--bg-secondary);
-	border-radius: 12px;
-`;
-
-var CornerSpinner = styled(Spinner)`
-	position: absolute;
-	right: 16px;
-	bottom: 16px;
-`;

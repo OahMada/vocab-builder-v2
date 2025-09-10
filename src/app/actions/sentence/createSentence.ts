@@ -4,26 +4,12 @@ import { Prisma } from '@prisma/client';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { createId } from '@paralleldrive/cuid2';
-import { BlobServiceClient, BlockBlobClient } from '@azure/storage-blob';
+import { BlockBlobClient } from '@azure/storage-blob';
 import { SentenceCreateInputSchema, sentenceReadSelect, SentenceWithPieces } from '@/lib';
 import { handleZodError } from '@/utils';
 import prisma from '@/lib/prisma';
 import { UNSTABLE_CACHE_TAG } from '@/constants';
-
-function getAudioUrl(blobName: string): [BlockBlobClient, string] {
-	let storageAccountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
-	if (!storageAccountName) throw new Error('Azure Storage account name not found');
-	let storageAccountConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
-	if (!storageAccountConnectionString) {
-		throw Error('Azure Storage Connection string not found');
-	}
-	let blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
-	let containerName = process.env.AZURE_STORAGE_AUDIO_CONTAINER_NAME;
-	if (!containerName) throw new Error('Azure Storage containerName not found.');
-	let containerClient = blobServiceClient.getContainerClient(containerName);
-	let blockBlobClient: BlockBlobClient = containerClient.getBlockBlobClient(blobName);
-	return [blockBlobClient, blockBlobClient.url];
-}
+import { getBlockBlobClient } from './helpers';
 
 async function saveToBlobStorage(blockBlobClient: BlockBlobClient, audioBlob: Blob) {
 	// convert blob to buffer
@@ -56,7 +42,8 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 
 	// prepare for saving to blob storage
 	let blobName = sentenceId + '.mp3';
-	let [blockBlobClient, audioUrl] = getAudioUrl(blobName);
+	let blockBlobClient = getBlockBlobClient(blobName);
+	let audioUrl = blockBlobClient.url;
 
 	// prepare for saving to database
 	let piecesCreateInput = pieces

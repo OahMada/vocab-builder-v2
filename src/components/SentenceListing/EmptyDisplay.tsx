@@ -1,15 +1,13 @@
 'use client';
 
 import styled from 'styled-components';
-import { useSearchParams } from 'next/navigation';
 import Icon from '@/components/Icon';
 import Spacer from '@/components/Spacer';
 import NavLink from '@/components/NavLink';
-import { INPUT_NAME } from '@/constants';
+import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 
 export default function EmptyDisplay() {
-	let searchParams = useSearchParams();
-	let search = searchParams.get(INPUT_NAME.SEARCH);
+	let { search } = useSearchParamsContext();
 
 	return (
 		<>

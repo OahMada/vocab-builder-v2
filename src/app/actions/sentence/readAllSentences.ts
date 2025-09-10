@@ -18,7 +18,7 @@ export var readAllSentences = unstable_cache(
 		try {
 			let sentences = await prisma.sentence.findMany({
 				select: sentenceReadSelect,
-				orderBy: { createdAt: 'desc' },
+				orderBy: { updatedAt: 'desc' },
 				take: limit + 1,
 				...(cursor && { cursor: { id: cursor } }),
 			});

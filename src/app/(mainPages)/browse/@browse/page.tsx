@@ -4,7 +4,6 @@ import SentenceListing from '@/components/SentenceListing';
 import { readAllSentences, countSentences } from '@/app/actions/sentence/readAllSentences';
 import { SentenceWithPieces } from '@/lib/sentenceReadSelect';
 import { searchParamsCache } from '@/lib/searchParamsCache';
-import { NoticeText } from '../StyledComponents';
 
 export default async function BrowseList({ searchParams }: { searchParams: Promise<SearchParams> }) {
 	let { search } = searchParamsCache.parse(await searchParams);
@@ -37,10 +36,12 @@ export default async function BrowseList({ searchParams }: { searchParams: Promi
 		}
 	}
 
-	return (
-		<>
-			<NoticeText $hasError={!!countError}>{countError ? countError : `There are ${count} sentences in total.`}</NoticeText>
-			<SentenceListing sentences={sentences} cursor={cursor} initialError={dataError} />
-		</>
-	);
+	let countMessage: string;
+	if (countError) {
+		countMessage = countError;
+	} else {
+		countMessage = `There are ${count} sentences in total.`;
+	}
+
+	return <SentenceListing sentences={sentences} cursor={cursor} initialError={dataError} countMessage={countMessage} hasCountError={!!countError} />;
 }

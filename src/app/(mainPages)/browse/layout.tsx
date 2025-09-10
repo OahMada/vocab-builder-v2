@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
 import * as React from 'react';
+
 import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import SearchParamsProvider from '@/components/SearchParamsProvider';
 
 export var metadata: Metadata = {
 	title: 'Browse | Vocab Builder',
@@ -19,9 +21,11 @@ export default async function SentenceBrowse({
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
-				{children}
-				{search}
-				{browse}
+				<SearchParamsProvider>
+					{children}
+					{search}
+					{browse}
+				</SearchParamsProvider>
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

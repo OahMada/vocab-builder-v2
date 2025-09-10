@@ -6,10 +6,10 @@ import styled from 'styled-components';
 import Icon from '@/components/Icon';
 import InputBox from '@/components/InputBox';
 import { useDebouncedCallback } from '@tanstack/react-pacer';
-import { useNuqsSearchParams } from '@/hooks';
+import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 
 function SearchSentence() {
-	let { search, setSearch } = useNuqsSearchParams();
+	let { search, updateSearch } = useSearchParamsContext();
 	let [query, setQuery] = React.useState(search);
 
 	function updateQuery(e: React.ChangeEvent<HTMLInputElement>) {
@@ -18,20 +18,22 @@ function SearchSentence() {
 
 	function clearInput() {
 		setQuery('');
-		setSearch('');
+		updateSearch('');
 	}
 
 	function handleEnterKeydown(e: React.KeyboardEvent<HTMLInputElement>) {
 		if (e.key === 'Enter') {
 			e.preventDefault();
-			setSearch(e.currentTarget.value);
+			updateSearch(e.currentTarget.value);
 		}
 	}
 
-	let onSubmit = useDebouncedCallback(setSearch, { wait: 1000 });
+	let onSubmit = useDebouncedCallback(updateSearch, { wait: 1000 });
 
 	React.useEffect(() => {
-		onSubmit(query);
+		if (query) {
+			onSubmit(query);
+		}
 	}, [query, onSubmit]);
 
 	return (

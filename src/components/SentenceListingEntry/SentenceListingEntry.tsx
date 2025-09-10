@@ -44,7 +44,7 @@ function SentenceListingEntry({
 		setIsLoading(true);
 		removeFromToast(TOAST_ID.SENTENCE_DELETION);
 		// not wrapped in startTransition because I need this function to be an async one
-		let result = await deleteSentence(id);
+		let result = await deleteSentence({ sentenceId: id, audioUrl });
 		if ('error' in result) {
 			setIsLoading(false);
 			addToToast({
