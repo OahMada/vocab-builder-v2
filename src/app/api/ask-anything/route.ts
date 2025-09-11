@@ -30,35 +30,6 @@ export async function POST(request: NextRequest) {
 		});
 	}
 
-	// Fake helper for test
-	let result = streamText({
-		model: new MockLanguageModelV2({
-			doStream: async () => ({
-				stream: simulateReadableStream({
-					chunks: [
-						{ type: 'text-start', id: 'text-1' },
-						{ type: 'text-delta', id: 'text-1', delta: "Governor Eudicot's welcoming speech this year is... short." },
-						{ type: 'text-delta', id: 'text-1', delta: ', ' },
-						{ type: 'text-delta', id: 'text-1', delta: 'Her frail body trembles as she welcomes you all to Vertumnalia with a dry, ' },
-						{
-							type: 'text-delta',
-							id: 'text-1',
-							delta: 'whispery voice, then has to be helped off stage. Like all of you, she has been feeling the effects of the famine.',
-						},
-						{ type: 'text-end', id: 'text-1' },
-						{
-							type: 'finish',
-							finishReason: 'stop',
-							logprobs: undefined,
-							usage: { inputTokens: 3, outputTokens: 10, totalTokens: 13 },
-						},
-					],
-				}),
-			}),
-		}),
-		prompt: 'Hello, test!',
-	});
-
 	try {
 		// throw new Error('error');
 		let result = streamText({

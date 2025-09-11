@@ -40,7 +40,6 @@ export async function POST(request: NextRequest) {
 		synthesizer.speakSsmlAsync(
 			ssml,
 			(result) => {
-				// throw new Error('test');
 				let audioData = Buffer.from(result.audioData);
 				synthesizer.close();
 				resolve(NextResponse.json({ result: audioData.toString('base64') }));

@@ -5,15 +5,29 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Icon from '@/components/Icon';
 import InputBox from '@/components/InputBox';
-import { useDebouncer } from '@tanstack/react-pacer';
+import { useDebouncedCallback } from '@tanstack/react-pacer';
 import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 
 function SearchSentence() {
 	let { search, updateSearch } = useSearchParamsContext();
 	let [query, setQuery] = React.useState(search);
 
+	let submitSearch = useDebouncedCallback(
+		(query: string) => {
+			updateSearch(query);
+
+			// reset scroll when entering search mode
+			if (!search) {
+				window.scrollTo(0, 0);
+			}
+		},
+		{ wait: 1000 }
+	);
+
 	function updateQuery(e: React.ChangeEvent<HTMLInputElement>) {
-		setQuery(e.target.value);
+		let value = e.target.value;
+		setQuery(value);
+		submitSearch(value);
 	}
 
 	function clearInput() {
@@ -21,24 +35,9 @@ function SearchSentence() {
 		updateSearch('');
 	}
 
-	// to deal with deleting the last search query character, which persists with the later effect call.
-	function handleEnterKeydown(e: React.KeyboardEvent<HTMLInputElement>) {
-		if (e.key === 'Backspace' && query.length === 1) {
-			updateSearch('');
-			updateSearchDebouncer.cancel();
-		}
-	}
-
-	let updateSearchDebouncer = useDebouncer(updateSearch, { wait: 1000 });
-	React.useEffect(() => {
-		if (query) {
-			updateSearchDebouncer.maybeExecute(query);
-		}
-	}, [query, updateSearchDebouncer]);
-
 	return (
 		<Wrapper style={{ '--icon-size': '18px' } as React.CSSProperties}>
-			<SearchInput clearInput={clearInput} id='search' value={query} onChange={updateQuery} placeholder='Search' onKeyDown={handleEnterKeydown} />
+			<SearchInput clearInput={clearInput} id='search' value={query} onChange={updateQuery} placeholder='Search' />
 			<Label htmlFor='search'>
 				<VisuallyHidden>search sentence</VisuallyHidden>
 				<IconWrapper>

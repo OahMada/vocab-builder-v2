@@ -54,6 +54,7 @@ function AccordionContent({ children }: React.ComponentProps<typeof AccordionPri
 export { AccordionContent, AccordionRoot, AccordionTrigger, AccordionItem };
 
 var Root = styled(AccordionPrimitives.Root)`
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	gap: 6px;

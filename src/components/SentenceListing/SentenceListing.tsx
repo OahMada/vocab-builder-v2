@@ -195,6 +195,7 @@ var Overlay = styled.div`
 
 var OverlaySpinner = styled(Spinner)`
 	position: fixed;
-	right: 32px;
-	bottom: calc(4rem + 16px);
+	right: 20px;
+	/* 4rem is the height of footer */
+	bottom: calc(16px + 4rem);
 `;
