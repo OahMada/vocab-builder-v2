@@ -1,18 +1,21 @@
 'use server';
 
 import { unstable_cache } from 'next/cache';
+
 import prisma from '@/lib/prisma';
-import { SentenceSchema } from '@/lib';
+import { CheckSentenceInputSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { UNSTABLE_CACHE_TAG } from '@/constants';
 
 var checkSentenceUniqueness = unstable_cache(
 	async function (data: unknown): Promise<{ error: string } | { data: boolean }> {
-		let sentenceResult = SentenceSchema.safeParse({ sentence: data });
-		if (!sentenceResult.success) {
-			let errors = handleZodError(sentenceResult.error);
-			return { error: errors.fieldErrors.sentence![0] as string };
+		let result = CheckSentenceInputSchema.safeParse({ sentence: data });
+		if (!result.success) {
+			let error = handleZodError(result.error, 'prettify');
+			return { error };
 		}
+
+		let { sentence, userId } = result.data;
 
 		let sentenceExisted: boolean;
 
@@ -20,7 +23,8 @@ var checkSentenceUniqueness = unstable_cache(
 			// throw new Error('');
 			let uniqueSentence = await prisma.sentence.findUnique({
 				where: {
-					sentence: sentenceResult.data.sentence,
+					sentence,
+					userId,
 				},
 			});
 

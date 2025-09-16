@@ -1,9 +1,10 @@
 'use client';
 
-import Toast, { ToastProvider, ToastViewport } from '@/components/Toast';
 import * as React from 'react';
-import GlobalToastContext from './GlobalToastContext';
+import Toast, { ToastProvider, ToastViewport } from '@/components/Toast';
+
 import { ToastMsgs, ToastMsg } from './types';
+import GlobalToastContext from './GlobalToastContext';
 
 function GlobalToastProvider({ children }: { children: React.ReactNode }) {
 	let [toasts, setToasts] = React.useState<ToastMsgs>([]);
@@ -33,7 +34,7 @@ function GlobalToastProvider({ children }: { children: React.ReactNode }) {
 		<ToastProvider>
 			<GlobalToastContext.Provider value={value}>{children}</GlobalToastContext.Provider>
 			{toasts.map(({ id, ...rest }) => (
-				<Toast key={id} {...rest} />
+				<Toast key={id} {...rest} id={id} removeToast={() => removeFromToast(id)} />
 			))}
 			<ToastViewport $position='bottom' />
 		</ToastProvider>

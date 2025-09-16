@@ -1,13 +1,23 @@
 import * as React from 'react';
 import { SearchParams } from 'nuqs';
-import SentenceListing from '@/components/SentenceListing';
+
 import { readAllSentences, countSentences } from '@/app/actions/sentence/readAllSentences';
+
 import { SentenceWithPieces } from '@/lib/sentenceReadSelect';
-import { searchParamsCache } from '@/lib/searchParamsCache';
+import searchParamsCache from '@/lib/searchParamsCache';
+import { auth } from '@/auth';
+
+import SentenceListing from '@/components/SentenceListing';
 
 export default async function BrowseList({ searchParams }: { searchParams: Promise<SearchParams> }) {
-	let { search } = searchParamsCache.parse(await searchParams);
+	let session = await auth();
 
+	if (!session?.user) {
+		return null;
+	}
+	let userId = session.user.id;
+
+	let { search } = searchParamsCache.parse(await searchParams);
 	if (search) {
 		return null;
 	}
@@ -17,7 +27,7 @@ export default async function BrowseList({ searchParams }: { searchParams: Promi
 	let cursor: string | undefined = undefined;
 	let count: number = 0;
 	let countError: string | undefined = undefined;
-	let [dataResult, countResult] = await Promise.allSettled([readAllSentences(), countSentences()]);
+	let [dataResult, countResult] = await Promise.allSettled([readAllSentences({ userId }), countSentences(userId)]);
 	if (dataResult.status === 'fulfilled') {
 		let value = dataResult.value;
 		if ('error' in value) {

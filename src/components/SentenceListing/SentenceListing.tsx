@@ -3,6 +3,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
+import { useSession } from 'next-auth/react';
 
 import { readAllSentences } from '@/app/actions/sentence/readAllSentences';
 import { searchSentences } from '@/app/actions/sentence/searchSentence';
@@ -39,6 +40,9 @@ function SentenceListing({
 	let [error, setError] = React.useState<string | undefined>(initialError);
 	let { search, isPending } = useSearchParamsContext();
 
+	let { data: session } = useSession();
+	let userId = session?.user?.id;
+
 	// used for data fetching indicator
 	let [ref, isIntersecting] = useIntersectionObserver<HTMLSpanElement>();
 
@@ -60,9 +64,9 @@ function SentenceListing({
 			startTransition(async () => {
 				let result: Awaited<ReturnType<typeof searchSentences>> | Awaited<ReturnType<typeof readAllSentences>>;
 				if (search) {
-					result = await searchSentences({ search, cursor: nextCursor });
+					result = await searchSentences({ search, cursor: nextCursor, userId });
 				} else {
-					result = await readAllSentences({ cursor: nextCursor });
+					result = await readAllSentences({ cursor: nextCursor, userId });
 				}
 				if ('error' in result) {
 					setError(result.error);
@@ -77,7 +81,7 @@ function SentenceListing({
 				setNextCursor(newCursor ?? undefined);
 			});
 		},
-		[nextCursor, search]
+		[nextCursor, search, userId]
 	);
 
 	function retryFetchingData() {
@@ -182,6 +186,7 @@ var InnerWrapper = styled.div`
 var ErrorMsg = styled.p`
 	color: var(--text-status-warning);
 	font-size: ${14 / 16}rem;
+	text-align: center;
 `;
 
 var Overlay = styled.div`

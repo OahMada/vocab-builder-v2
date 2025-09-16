@@ -26,6 +26,7 @@ import {
 	Save,
 	Menu,
 	Pause,
+	Globe,
 } from 'react-feather';
 
 var icons = {
@@ -52,6 +53,7 @@ var icons = {
 	save: Save,
 	'mobile-menu': Menu,
 	stop: Pause,
+	globe: Globe,
 };
 
 interface IconProps {

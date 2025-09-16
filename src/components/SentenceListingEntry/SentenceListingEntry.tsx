@@ -34,7 +34,7 @@ function SentenceListingEntry({
 	onDeleteSentence,
 	...delegated
 }: SentenceListingEntryProps) {
-	let { addToToast, removeFromToast } = useGlobalToastContext();
+	let { addToToast } = useGlobalToastContext();
 	let sentencePieces = constructSentence(sentence, pieces);
 	let [isLoading, setIsLoading] = React.useState(false);
 	let { isPlaying, playAudio, stopAudio } = usePlayAudio();
@@ -42,7 +42,6 @@ function SentenceListingEntry({
 
 	async function handleDeleteAction() {
 		setIsLoading(true);
-		removeFromToast(TOAST_ID.SENTENCE_DELETION);
 		// not wrapped in startTransition because I need this function to be an async one
 		let result = await deleteSentence({ sentenceId: id, audioUrl });
 		if ('error' in result) {

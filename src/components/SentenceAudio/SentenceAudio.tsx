@@ -13,7 +13,7 @@ import { handleError, base64ToBlob } from '@/utils';
 import { usePlayAudio } from '@/hooks';
 
 interface TTSResponse {
-	result: string;
+	data: string;
 }
 
 interface TTSArg {
@@ -29,9 +29,9 @@ function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sent
 
 	React.useEffect(() => {
 		async function activateTrigger() {
-			let data = await trigger({ sentence });
-			if (data) {
-				let audioBlob = await base64ToBlob(data.result);
+			let result = await trigger({ sentence });
+			if (result) {
+				let audioBlob = await base64ToBlob(result.data);
 				updateBlob(audioBlob);
 			}
 		}
@@ -48,9 +48,9 @@ function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sent
 
 	async function retryTTS() {
 		reset();
-		let data = await trigger({ sentence });
-		if (data) {
-			let audioBlob = await base64ToBlob(data.result);
+		let result = await trigger({ sentence });
+		if (result) {
+			let audioBlob = await base64ToBlob(result.data);
 			updateBlob(audioBlob);
 			return audioBlob;
 		}

@@ -1,18 +1,24 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import { NextAuthRequest } from 'next-auth';
+import { SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat } from 'microsoft-cognitiveservices-speech-sdk';
+
 import { SentenceSchema } from '@/lib';
 import { handleZodError } from '@/utils';
-import { SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat } from 'microsoft-cognitiveservices-speech-sdk';
+import { auth } from '@/auth';
 
 function escapeForSSML(text: string) {
 	return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 }
 
-export async function POST(request: NextRequest) {
+export var POST = auth(async function (request: NextAuthRequest) {
+	if (!request.auth) {
+		return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
+	}
 	let body = await request.json();
 	let sentenceResult = SentenceSchema.safeParse(body);
 	if (!sentenceResult.success) {
 		let errors = handleZodError(sentenceResult.error);
-		return NextResponse.json({ error: errors.fieldErrors.sentence![0] }, { status: 400 });
+		return NextResponse.json({ error: errors.formErrors[0] }, { status: 400 });
 	}
 
 	if (!process.env.AZURE_SPEECH_KEY || !process.env.AZURE_SPEECH_REGION) {
@@ -31,7 +37,7 @@ export async function POST(request: NextRequest) {
 	<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
 		<voice name="en-US-AriaNeural">
 			<prosody rate="-20%" pitch="low">
-				${escapeForSSML(sentenceResult.data.sentence)}
+				${escapeForSSML(sentenceResult.data)}
 			</prosody>
 		</voice>
 	</speak>`;
@@ -42,7 +48,7 @@ export async function POST(request: NextRequest) {
 			(result) => {
 				let audioData = Buffer.from(result.audioData);
 				synthesizer.close();
-				resolve(NextResponse.json({ result: audioData.toString('base64') }));
+				resolve(NextResponse.json({ data: audioData.toString('base64') }));
 			},
 			(err) => {
 				console.error(err);
@@ -51,4 +57,4 @@ export async function POST(request: NextRequest) {
 			}
 		);
 	});
-}
+});

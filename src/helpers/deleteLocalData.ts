@@ -1,6 +1,6 @@
 import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_OBJ } from '@/constants';
 import { updateLocalDB } from './updateLocalDB';
-import { updateLocalStorage } from '@/helpers/updateLocalStorage';
+import { updateLocalStorage } from '@/helpers';
 
 export async function deleteLocalData(includeSentence: boolean = false) {
 	if (!includeSentence) {
@@ -10,6 +10,5 @@ export async function deleteLocalData(includeSentence: boolean = false) {
 	} else {
 		window.localStorage.removeItem(LOCAL_STORAGE_OBJ);
 	}
-
 	await updateLocalDB('delete');
 }

@@ -1,10 +1,5 @@
 import Toast from '@/components/Toast';
-import { TOAST_ID } from '@/constants';
-
-type IPAId = `IPA_${string}`;
-type AudioPlayingWithUrl = `audio_playing_${string}`;
-
-type ToastId = Exclude<(typeof TOAST_ID)[keyof typeof TOAST_ID], 'IPA_' | 'audio_playing_'> | IPAId | AudioPlayingWithUrl;
+import { ToastId } from '@/types';
 
 export type ToastMsg = { id: ToastId } & React.ComponentProps<typeof Toast>;
 export type ToastMsgs = ToastMsg[];

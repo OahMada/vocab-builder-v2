@@ -1,22 +1,29 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
+
 import prisma from '@/lib/prisma';
+import verifySession from '@/lib/dal';
 import { sentenceReadSelect, SentenceWithPieces, DeleteSentenceInputSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { UNSTABLE_CACHE_TAG } from '@/constants';
 import { getBlobNameFromUrl, getBlockBlobClient } from './helpers';
 
-async function deleteDatabaseEntry(sentenceId: string) {
+async function deleteDatabaseEntry(sentenceId: string, userId: string) {
 	let deletedSentence = await prisma.$transaction([
 		prisma.piece.deleteMany({ where: { sentenceId } }),
-		prisma.sentence.delete({ where: { id: sentenceId }, select: sentenceReadSelect }),
+		prisma.sentence.delete({ where: { id: sentenceId, userId: userId }, select: sentenceReadSelect }),
 	]);
 
 	return deletedSentence;
 }
 
 export default async function deleteSentence(data: unknown): Promise<{ error: string } | { data: SentenceWithPieces }> {
+	let session = await verifySession();
+	if (!session) {
+		return { error: 'Unauthorized.' };
+	}
+
 	let result = DeleteSentenceInputSchema.safeParse(data);
 	if (!result.success) {
 		let errors = handleZodError(result.error, 'prettify');
@@ -28,7 +35,7 @@ export default async function deleteSentence(data: unknown): Promise<{ error: st
 	let blobName = getBlobNameFromUrl(audioUrl);
 	let blockBlobClient = getBlockBlobClient(blobName);
 
-	let [dbResult, blobResult] = await Promise.allSettled([deleteDatabaseEntry(sentenceId), blockBlobClient.deleteIfExists()]);
+	let [dbResult, blobResult] = await Promise.allSettled([deleteDatabaseEntry(sentenceId, session.userId), blockBlobClient.deleteIfExists()]);
 
 	if (dbResult.status === 'rejected' || blobResult.status === 'rejected') {
 		if (dbResult.status === 'rejected' && blobResult.status === 'fulfilled') {
@@ -45,7 +52,7 @@ export default async function deleteSentence(data: unknown): Promise<{ error: st
 
 			// try delete blob again
 			try {
-				await blockBlobClient.deleteIfExists();
+				await blockBlobClient.deleteIfExists({ deleteSnapshots: 'include' });
 			} catch (error) {
 				console.error('Retrying blob deletion failed:', error);
 			}

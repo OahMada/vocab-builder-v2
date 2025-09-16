@@ -14,7 +14,7 @@ import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import { TOAST_ID } from '@/constants';
 
 interface TranslationResponse {
-	result: string;
+	data: string;
 }
 
 interface TranslationArg {
@@ -45,9 +45,9 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 
 	React.useEffect(() => {
 		async function activateTrigger() {
-			let data = await trigger({ sentence });
-			if (data) {
-				updateTranslation(data.result);
+			let result = await trigger({ sentence });
+			if (result) {
+				updateTranslation(result.data);
 			}
 		}
 
@@ -63,9 +63,9 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 	async function retryTranslate() {
 		reset();
 		removeFromToast(TOAST_ID.TRANSLATION_FETCHING);
-		let data = await trigger({ sentence });
-		if (data) {
-			updateTranslation(data.result);
+		let result = await trigger({ sentence });
+		if (result) {
+			updateTranslation(result.data);
 		}
 	}
 

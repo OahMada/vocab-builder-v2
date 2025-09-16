@@ -17,11 +17,9 @@ interface AskAQuestionProps {
 
 function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	let [errorMsg, setErrorMsg] = React.useState('');
-	let { complete, isLoading, setCompletion, completion } = useCompletion({
+	let { complete, isLoading, setCompletion, completion, stop } = useCompletion({
 		api: '/api/ask-anything',
 		onError: (error) => {
-			// to silence the active abort error
-			if (error.name === 'TypeError' && error.message === 'network error') return;
 			setErrorMsg(error.message);
 		},
 		experimental_throttle: 5,

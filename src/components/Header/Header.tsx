@@ -1,17 +1,26 @@
 import * as React from 'react';
-import Wrapper from './Wrapper';
+
+import { auth } from '@/auth';
+
+import { Wrapper, StyledHeader, LoginButton } from './StyledComponents';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import StyledHeader from './StyledHeader';
 import Logo from '@/components/Logo';
 import MobileMenu from '@/components/MobileMenu';
 
-function Header() {
+async function Header() {
+	let session = await auth();
 	return (
 		<Wrapper>
 			<MaxWidthWrapper>
 				<StyledHeader>
 					<Logo />
-					<MobileMenu />
+					{!!session?.user ? (
+						<MobileMenu />
+					) : (
+						<LoginButton variant='fill' href='/auth/login'>
+							Log in
+						</LoginButton>
+					)}
 				</StyledHeader>
 			</MaxWidthWrapper>
 		</Wrapper>

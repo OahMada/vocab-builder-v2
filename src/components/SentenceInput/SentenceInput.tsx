@@ -5,16 +5,19 @@ import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { FieldErrors, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSession } from 'next-auth/react';
 
-import { UserInputType, UserInputSchema } from '@/lib';
-import TextArea from '@/components/TextArea';
-import ActionButtons from './ActionButtons';
-import Spacer from '@/components/Spacer';
-import { setCookie, updateLocalStorage } from '@/helpers';
-import { useReadLocalStorage } from '@/hooks';
 import checkForSentenceUniqueness from '@/app/actions/sentence/checkSentenceUniqueness';
-import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+
 import { TOAST_ID, INPUT_NAME, LOCAL_STORAGE_KEY, COOKIE_KEY } from '@/constants';
+import { UserInputType, UserInputSchema, setCookie } from '@/lib';
+import { updateLocalStorage } from '@/helpers';
+import { useReadLocalStorage } from '@/hooks';
+
+import TextArea from '@/components/TextArea';
+import Spacer from '@/components/Spacer';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import ActionButtons from './ActionButtons';
 
 function SentenceInput() {
 	let { addToToast, removeFromToast } = useGlobalToastContext();
@@ -33,6 +36,8 @@ function SentenceInput() {
 		reValidateMode: 'onSubmit',
 		shouldFocusError: false,
 	});
+
+	let { data: session } = useSession();
 
 	function updateInput(text: string) {
 		setValue(INPUT_NAME.SENTENCE, text);
@@ -56,9 +61,8 @@ function SentenceInput() {
 	}
 
 	async function onSubmit(data: UserInputType) {
-		removeFromToast(TOAST_ID.SENTENCE);
 		startTransition(async () => {
-			let result = await checkForSentenceUniqueness(data[INPUT_NAME.SENTENCE]);
+			let result = await checkForSentenceUniqueness({ sentence: data[INPUT_NAME.SENTENCE], userId: session?.user?.id });
 			if ('error' in result) {
 				addToToast({
 					contentType: 'error',

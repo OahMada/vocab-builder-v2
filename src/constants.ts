@@ -61,6 +61,7 @@ export const TOAST_ID = {
 	AUDIO_PLAYING: 'audio_playing_',
 	SENTENCE_UPDATING: 'sentence_updating',
 	SENTENCE_FETCHING: 'sentence_fetching',
+	LOGIN: 'login',
 } as const;
 
 export const INPUT_NAME = {
@@ -69,6 +70,7 @@ export const INPUT_NAME = {
 	NOTE: 'note',
 	QUESTION: 'question',
 	SEARCH: 'search',
+	EMAIL: 'email',
 } as const;
 
 export const LOCAL_STORAGE_KEY = {

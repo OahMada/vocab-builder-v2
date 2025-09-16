@@ -64,6 +64,7 @@ html {
   --bg-tertiary: hsl(0 0% 20%);
   --bg-tertiary-hover: hsl(0 0% 23%);
   --bg-revert: hsl(0 0% 98%);
+  --bg-revert-hover: hsl(0 0% 93%);
   --bg-status-warning: hsl(25 85% 15%);
   --border-light: hsl(0 0% 100% / 5%);
   --border-medium: hsl(0 0% 100% / 15%);
@@ -118,7 +119,7 @@ html {
   var(--bg-tertiary)
   transparent;
   scrollbar-width: thin;
-  
+  height: 100%;
 }
 
 /* Vendor prefix for other browsers */
@@ -133,6 +134,7 @@ body {
   font-family: var(--font-family);
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  height: 100%;
 }
 `;
 

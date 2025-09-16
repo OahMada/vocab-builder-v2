@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { SessionProvider } from 'next-auth/react';
 
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
-import { roboto, inter } from '@/helpers/getFont';
+import { roboto, inter } from '@/lib/getFont';
 import GlobalStyles from '@/components/GlobalStyles';
 import GlobalToastProvider from '@/components/GlobalToastProvider';
 
@@ -21,9 +22,11 @@ export default function RootLayout({
 			<body>
 				<StyledComponentsRegistry>
 					<GlobalStyles />
-					<GlobalToastProvider>
-						<NuqsAdapter>{children}</NuqsAdapter>
-					</GlobalToastProvider>
+					<SessionProvider>
+						<NuqsAdapter>
+							<GlobalToastProvider>{children}</GlobalToastProvider>
+						</NuqsAdapter>
+					</SessionProvider>
 				</StyledComponentsRegistry>
 			</body>
 		</html>

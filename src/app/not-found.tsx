@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Metadata } from 'next';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import NotFoundRedirect, { NotFoundTitle, Wrapper } from '@/components/NotFoundComponents';
+import Redirect, { RedirectTitle, Wrapper } from '@/components/RedirectComponents';
 import Spacer from '@/components/Spacer';
 
 export var metadata: Metadata = {
@@ -13,10 +13,10 @@ export default function NotFound() {
 	return (
 		<MaxWidthWrapper>
 			<Wrapper>
-				<NotFoundTitle>404 | Not Found</NotFoundTitle>
+				<RedirectTitle>404 | Not Found</RedirectTitle>
 				<p>Could not find requested resource.</p>
 				<Spacer size={12} />
-				<NotFoundRedirect />
+				<Redirect redirectUrl='/' />
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

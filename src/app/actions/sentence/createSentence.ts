@@ -5,11 +5,13 @@ import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { createId } from '@paralleldrive/cuid2';
 import { BlockBlobClient } from '@azure/storage-blob';
+
 import { SentenceCreateInputSchema, sentenceReadSelect, SentenceWithPieces } from '@/lib';
-import { handleZodError } from '@/utils';
 import prisma from '@/lib/prisma';
-import { UNSTABLE_CACHE_TAG } from '@/constants';
+import verifySession from '@/lib/dal';
 import { getBlockBlobClient } from './helpers';
+import { handleZodError } from '@/utils';
+import { COOKIE_KEY, UNSTABLE_CACHE_TAG } from '@/constants';
 
 async function saveToBlobStorage(blockBlobClient: BlockBlobClient, audioBlob: Blob) {
 	// convert blob to buffer
@@ -30,6 +32,12 @@ async function createDatabaseEntry(data: Prisma.SentenceCreateInput) {
 }
 
 export default async function createSentence(data: unknown): Promise<{ error: string } | { data: SentenceWithPieces }> {
+	let session = await verifySession();
+
+	if (!session) {
+		return { error: 'Unauthorized.' };
+	}
+
 	let sentenceId = createId();
 	let result = SentenceCreateInputSchema.safeParse(data);
 	if (!result.success) {
@@ -37,12 +45,15 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 		return { error: error };
 	}
 
-	// TODO put userId in the blob name for later batch delete userId/cuid.mp3
 	let { audioBlob, note, pieces, ...rest } = result.data;
 
 	// prepare for saving to blob storage
 	let blobName = sentenceId + '.mp3';
 	let blockBlobClient = getBlockBlobClient(blobName);
+	blockBlobClient.setMetadata({
+		userId: session.userId,
+	});
+
 	let audioUrl = blockBlobClient.url;
 
 	// prepare for saving to database
@@ -59,6 +70,11 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 		pieces: {
 			create: piecesCreateInput,
 		},
+		user: {
+			connect: {
+				id: session.userId,
+			},
+		},
 	};
 
 	// return { error: 'test error' };
@@ -72,7 +88,7 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 			try {
 				await prisma.$transaction([
 					prisma.piece.deleteMany({ where: { sentenceId: sentenceId } }),
-					prisma.sentence.delete({ where: { id: sentenceId } }),
+					prisma.sentence.delete({ where: { id: sentenceId, userId: session.userId } }),
 				]);
 			} catch (error) {
 				console.error('Cleanup failed after blob error:', error);
@@ -83,7 +99,7 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 			console.error('Error creating sentence:', dbResult.reason);
 			// clean up
 			try {
-				await blockBlobClient.deleteIfExists();
+				await blockBlobClient.deleteIfExists({ deleteSnapshots: 'include' });
 			} catch (cleanupError) {
 				console.error('Cleanup failed after DB error:', cleanupError);
 			}
@@ -92,6 +108,6 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 	}
 
 	revalidateTag(UNSTABLE_CACHE_TAG);
-	(await cookies()).delete('sentence');
+	(await cookies()).delete(COOKIE_KEY);
 	return { data: dbResult.value };
 }

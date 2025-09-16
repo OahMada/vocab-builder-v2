@@ -2,25 +2,29 @@ import { Metadata } from 'next';
 import * as React from 'react';
 import { redirect, notFound } from 'next/navigation';
 
+import readOneSentenceById from '@/app/actions/sentence/readOneSentenceById';
+
+import { COOKIE_KEY } from '@/constants';
+import { constructSentencePiecesData } from '@/helpers';
+import { SentenceCreateInputType } from '@/lib';
+import getCookie from '@/lib/getCookie';
+import { auth } from '@/auth';
+
 import Wrapper from '@/components/PageWrapper';
 import WordListing from '@/components/WordListing';
 import Translation from '@/components/Translation';
 import Note from '@/components/Note';
 import SentenceActions from '@/components/SentenceActions';
-import Title from './Title';
-import CardWrapper from './CardWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import { getCookie } from '@/helpers/getCookie';
 import NoteProvider from '@/components/NoteProvider';
 import TranslationProvider from '@/components/TranslationProvider';
 import SentencePiecesProvider from '@/components/SentencePiecesProvider';
 import AudioDataProvider from '@/components/AudioDataProvider';
 import { ToastProvider, ToastViewport } from '@/components/Toast';
 import Spacer from '@/components/Spacer';
-import readOneSentenceById from '@/app/actions/sentence/readOneSentenceById';
-import { SentenceCreateInputType } from '@/lib';
-import { constructSentencePiecesData } from '@/helpers';
-import { COOKIE_KEY } from '@/constants';
+import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
+import Title from './Title';
+import CardWrapper from './CardWrapper';
 
 export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',
@@ -29,6 +33,12 @@ export var metadata: Metadata = {
 type ClientSentenceData = (Omit<SentenceCreateInputType, 'audioBlob'> & { audioUrl: string; id: string }) | null;
 
 export default async function Sentence({ params }: { params: Promise<{ sentenceId: string }> }) {
+	let session = await auth();
+	if (!session?.user) {
+		return <UnauthorizedDisplay />;
+	}
+	let userId = session.user.id;
+
 	let { sentenceId } = await params;
 
 	let sentence: string | undefined = undefined;
@@ -40,7 +50,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 		}
 		sentence = data;
 	} else {
-		let result = await readOneSentenceById(sentenceId);
+		let result = await readOneSentenceById({ sentenceId, userId });
 		if ('error' in result) {
 			throw result.error;
 		} else if (!result.data) {

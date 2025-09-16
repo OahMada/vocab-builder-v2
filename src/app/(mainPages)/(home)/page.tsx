@@ -1,11 +1,19 @@
+import { auth } from '@/auth';
+
 import Wrapper from '@/components/PageWrapper';
 import SentenceInput from '@/components/SentenceInput';
-import { Title, BrowseButton } from './StyledComponents';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Spacer from '@/components/Spacer';
 import Icon from '@/components/Icon';
+import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
+import { Title, BrowseButton } from './StyledComponents';
 
-export default function Home() {
+export default async function Home() {
+	let session = await auth();
+	if (!session?.user) {
+		return <UnauthorizedDisplay />;
+	}
+
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>

@@ -14,7 +14,7 @@ function InputBox({
 }: {
 	id: string;
 	value?: string;
-	clearInput: () => void;
+	clearInput?: () => void;
 } & React.ComponentProps<'input'>) {
 	return (
 		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>

@@ -23,20 +23,18 @@ export var UserInputSchema = z.object({
 
 export type UserInputType = z.infer<typeof UserInputSchema>;
 
-export var SentenceSchema = z.object({
-	sentence: z
-		.string()
-		.trim()
-		.min(5, {
-			error: 'The sentence should be at least 5 characters long.',
-		})
-		.max(300, {
-			error: 'The sentence should be no longer than 300 characters.',
-		}),
-});
+export var SentenceSchema = z
+	.string()
+	.trim()
+	.min(5, {
+		error: 'The sentence should be at least 5 characters long.',
+	})
+	.max(300, {
+		error: 'The sentence should be no longer than 300 characters.',
+	});
 
 export var FetchIPAInputSchema = z.object({
-	sentence: SentenceSchema.shape.sentence,
+	sentence: SentenceSchema,
 	word: z
 		.string()
 		.trim()
@@ -68,7 +66,7 @@ export var QuestionInputSchema = z.object({
 });
 export type QuestionInputType = z.infer<typeof QuestionInputSchema>;
 
-export var FetchAnswerInputSchema = QuestionInputSchema.extend({ sentence: SentenceSchema.shape.sentence });
+export var FetchAnswerInputSchema = QuestionInputSchema.extend({ sentence: SentenceSchema });
 
 var PieceSchema = z.object({
 	id: z.cuid2(),
@@ -79,7 +77,7 @@ var PieceSchema = z.object({
 var PiecesCreateInputSchema = z.union([PieceSchema, z.string()]);
 
 export var SentenceCreateInputSchema = z.object({
-	sentence: SentenceSchema.shape.sentence,
+	sentence: SentenceSchema,
 	pieces: z.array(PiecesCreateInputSchema),
 	translation: TranslationSchema.shape.translation.min(3),
 	note: NoteSchema.shape.note.optional(),
@@ -99,11 +97,17 @@ export var SentenceUpdateInputSchema = z.object({
 
 export type SentenceUpdateInputType = z.infer<typeof SentenceUpdateInputSchema>;
 
-export var SearchSentencesInputSchema = z.object({
+export var UserIdSchema = z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ObjectId');
+
+export var CountSearchResultSchema = z.object({
 	[INPUT_NAME.SEARCH]: z
 		.string()
 		.trim()
 		.transform((val) => val.slice(0, MAX_QUERY_LEN)),
+	userId: UserIdSchema,
+});
+
+export var SearchSentencesInputSchema = CountSearchResultSchema.extend({
 	cursor: z
 		.string()
 		.regex(/^[A-Za-z0-9+/=]+$/, 'Invalid search pagination token')
@@ -111,12 +115,21 @@ export var SearchSentencesInputSchema = z.object({
 	limit: z.number().default(SENTENCE_FETCHING_LIMIT),
 });
 
-export var ReadSentencesInputSchema = z
-	.object({
-		cursor: IdSchema.optional(),
-		limit: SearchSentencesInputSchema.shape.limit,
-	})
-	.default({ limit: SENTENCE_FETCHING_LIMIT });
+export var ReadSentencesInputSchema = z.object({
+	cursor: IdSchema.optional(),
+	limit: SearchSentencesInputSchema.shape.limit,
+	userId: UserIdSchema,
+});
+
+export var CheckSentenceInputSchema = z.object({
+	sentence: SentenceSchema,
+	userId: UserIdSchema,
+});
+
+export var ReadOneSentenceInputSchema = z.object({
+	sentenceId: IdSchema,
+	userId: UserIdSchema,
+});
 
 export var DeleteSentenceInputSchema = z.object({
 	sentenceId: IdSchema,
@@ -125,3 +138,9 @@ export var DeleteSentenceInputSchema = z.object({
 		hostname: z.regexes.domain,
 	}),
 });
+
+export var LoginInputSchema = z.object({
+	email: z.email('Invalid email'),
+});
+
+export type LoginInputType = z.infer<typeof LoginInputSchema>;

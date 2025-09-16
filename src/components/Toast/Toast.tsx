@@ -3,6 +3,7 @@
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 import * as ToastPrimitives from '@radix-ui/react-toast';
+
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
@@ -11,11 +12,24 @@ type ToastProps = {
 	contentType: 'error' | 'notice';
 	content: React.ReactNode;
 	title?: string;
+	removeToast?: () => void;
 } & React.ComponentProps<typeof ToastPrimitives.Root>;
 
-export function Toast({ title, content, contentType, ...props }: ToastProps) {
+export function Toast({ title, content, contentType, removeToast, ...props }: ToastProps) {
+	let [open, setIsOpen] = React.useState(true);
+
 	return (
-		<Root {...props} duration={3000}>
+		<Root
+			{...props}
+			duration={3000}
+			open={open}
+			onOpenChange={(open) => {
+				setIsOpen(open);
+				if (!open && removeToast) {
+					removeToast();
+				}
+			}}
+		>
 			{title && <Title>{title}</Title>}
 			<Description $contentType={contentType}>{content}</Description>
 			<ToastPrimitives.Close asChild={true}>

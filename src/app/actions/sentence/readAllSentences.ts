@@ -1,8 +1,9 @@
 'use server';
 
 import { unstable_cache } from 'next/cache';
+
 import prisma from '@/lib/prisma';
-import { sentenceReadSelect, SentenceWithPieces, ReadSentencesInputSchema } from '@/lib';
+import { sentenceReadSelect, SentenceWithPieces, ReadSentencesInputSchema, UserIdSchema } from '@/lib';
 import { UNSTABLE_CACHE_TAG } from '@/constants';
 import { handleZodError } from '@/utils';
 
@@ -13,10 +14,11 @@ export var readAllSentences = unstable_cache(
 			let error = handleZodError(result.error, 'prettify');
 			return { error: error };
 		}
-		let { cursor, limit } = result.data;
+		let { cursor, limit, userId } = result.data;
 
 		try {
 			let sentences = await prisma.sentence.findMany({
+				where: { userId },
 				select: sentenceReadSelect,
 				orderBy: { updatedAt: 'desc' },
 				take: limit + 1,
@@ -39,9 +41,15 @@ export var readAllSentences = unstable_cache(
 );
 
 export var countSentences = unstable_cache(
-	async function (): Promise<{ error: string } | { data: number }> {
+	async function (data: unknown): Promise<{ error: string } | { data: number }> {
+		let result = UserIdSchema.safeParse(data);
+		if (!result.success) {
+			let errors = handleZodError(result.error);
+			return { error: errors.formErrors[0] as string };
+		}
+
 		try {
-			let count = await prisma.sentence.count();
+			let count = await prisma.sentence.count({ where: { userId: result.data } });
 			// throw new Error('error');
 			return { data: count };
 		} catch (error) {

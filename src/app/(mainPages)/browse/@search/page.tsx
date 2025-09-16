@@ -1,12 +1,23 @@
 import * as React from 'react';
-import SentenceListing from '@/components/SentenceListing';
-import { searchSentences, countSearchResults } from '@/app/actions/sentence/searchSentence';
 import { SearchParams } from 'nuqs/server';
-import { searchParamsCache } from '@/lib/searchParamsCache';
+
+import searchParamsCache from '@/lib/searchParamsCache';
 import { SentenceWithPieces } from '@/lib';
 import { markSearchMatchesInSentencePieces } from '@/helpers';
+import { auth } from '@/auth';
+
+import { searchSentences, countSearchResults } from '@/app/actions/sentence/searchSentence';
+import SentenceListing from '@/components/SentenceListing';
 
 export default async function SearchList({ searchParams }: { searchParams: Promise<SearchParams> }) {
+	let session = await auth();
+
+	if (!session?.user) {
+		return null;
+	}
+
+	let userId = session.user.id;
+
 	let { search } = searchParamsCache.parse(await searchParams);
 
 	if (!search) {
@@ -18,7 +29,7 @@ export default async function SearchList({ searchParams }: { searchParams: Promi
 	let cursor: string | undefined = undefined;
 	let count: number | undefined = undefined;
 	let countError: string | undefined = undefined;
-	let [dataResult, countResult] = await Promise.allSettled([searchSentences({ search }), countSearchResults(search)]);
+	let [dataResult, countResult] = await Promise.allSettled([searchSentences({ search, userId }), countSearchResults({ search, userId })]);
 	if (dataResult.status === 'fulfilled') {
 		let value = dataResult.value;
 		if ('error' in value) {

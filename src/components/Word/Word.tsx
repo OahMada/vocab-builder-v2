@@ -14,7 +14,7 @@ import { TOAST_ID } from '@/constants';
 type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA?: string | null; id: string; sentence: string };
 
 interface IPAResponse {
-	result: string;
+	data: string;
 }
 interface IPAArg {
 	word: string;
@@ -43,9 +43,9 @@ function Word({ piece, IPA, id, sentence }: WordComponentProps) {
 
 	async function triggerFetch() {
 		removeFromToast(`${TOAST_ID.IPA_FETCHING}${piece}`);
-		let data = await trigger({ word: piece, sentence });
-		if (data) {
-			addIPA({ text: piece, IPA: data.result, id });
+		let result = await trigger({ word: piece, sentence });
+		if (result) {
+			addIPA({ text: piece, IPA: result.data, id });
 		}
 	}
 

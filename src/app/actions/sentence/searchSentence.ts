@@ -2,28 +2,37 @@
 
 import { unstable_cache } from 'next/cache';
 import prisma from '@/lib/prisma';
-import { SearchSentencesInputSchema, SentenceWithPieces } from '@/lib';
+import { SearchSentencesInputSchema, SentenceWithPieces, CountSearchResultSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { SENTENCE_FETCHING_LIMIT, UNSTABLE_CACHE_TAG } from '@/constants';
 import { Document } from 'mongodb';
 
 type SearchResultsWithPaginationToken = SentenceWithPieces & { paginationToken: string };
 
-function compoundOperatorOption(search: string) {
+function compoundOperatorOption(search: string, userId: string) {
 	return {
 		compound: {
+			filter: [
+				{
+					equals: {
+						// https://github.com/prisma/prisma/issues/15013#issuecomment-1381397966
+						value: { $oid: userId },
+						path: 'userId',
+					},
+				},
+			],
 			should: [{ autocomplete: { query: search, path: 'sentence', tokenOrder: 'any' } }, { text: { query: search, path: 'sentence' } }],
 		},
 	};
 }
 
-function buildSearchPipeline(search: string, nextCursor?: string) {
+function buildSearchPipeline(search: string, userId: string, nextCursor?: string) {
 	let databaseIndexName = process.env.DATABASE_INDEX_NAME;
 	if (!databaseIndexName) throw new Error('Database index name not found');
 	let searchStage: Document = {
 		$search: {
 			index: databaseIndexName,
-			...compoundOperatorOption(search),
+			...compoundOperatorOption(search, userId),
 			sort: {
 				score: {
 					$meta: 'searchScore',
@@ -58,6 +67,7 @@ function buildSearchPipeline(search: string, nextCursor?: string) {
 				createdAt: 0,
 				updatedAt: 0,
 				_id: 0,
+				userId: 0,
 			},
 		},
 	];
@@ -68,12 +78,12 @@ export var searchSentences = unstable_cache(
 		let result = SearchSentencesInputSchema.safeParse(data);
 		if (!result.success) {
 			let error = handleZodError(result.error, 'prettify');
-			return { error: error };
+			return { error };
 		}
-		let { search, cursor, limit } = result.data;
+		let { search, cursor, limit, userId } = result.data;
 
 		try {
-			let pipeline = buildSearchPipeline(search, cursor);
+			let pipeline = buildSearchPipeline(search, userId, cursor);
 			let searchResult = (await prisma.sentence.aggregateRaw({
 				pipeline,
 			})) as unknown as SearchResultsWithPaginationToken[];
@@ -105,13 +115,13 @@ export var searchSentences = unstable_cache(
 
 export var countSearchResults = unstable_cache(
 	async function (data: unknown): Promise<{ error: string } | { data: number }> {
-		let result = SearchSentencesInputSchema.shape.search.safeParse(data);
+		let result = CountSearchResultSchema.safeParse(data);
 		if (!result.success) {
-			let errors = handleZodError(result.error);
-			return { error: errors.formErrors[0] as string };
+			let error = handleZodError(result.error, 'prettify');
+			return { error };
 		}
 
-		let search = result.data;
+		let { search, userId } = result.data;
 
 		try {
 			let databaseIndexName = process.env.DATABASE_INDEX_NAME;
@@ -121,7 +131,7 @@ export var countSearchResults = unstable_cache(
 					{
 						$searchMeta: {
 							index: databaseIndexName,
-							...compoundOperatorOption(search),
+							...compoundOperatorOption(search, userId),
 							count: {
 								type: 'total',
 							},

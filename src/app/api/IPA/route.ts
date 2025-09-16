@@ -1,12 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
+import { NextAuthRequest } from 'next-auth';
 
 import { FetchIPAInputSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { API_ABORT_TIMEOUT } from '@/constants';
+import { auth } from '@/auth';
 
-export async function POST(request: NextRequest) {
+export var POST = auth(async function (request: NextAuthRequest) {
+	if (!request.auth) {
+		return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
+	}
 	let body = await request.json();
 
 	let result = FetchIPAInputSchema.safeParse(body);
@@ -26,7 +31,7 @@ export async function POST(request: NextRequest) {
 			prompt: word,
 			abortSignal: AbortSignal.timeout(API_ABORT_TIMEOUT),
 		});
-		return NextResponse.json({ result: text });
+		return NextResponse.json({ data: text });
 	} catch (error) {
 		console.error('Generate IPA init error:', error);
 		if (error instanceof DOMException && error.name === 'TimeoutError') {
@@ -34,4 +39,4 @@ export async function POST(request: NextRequest) {
 		}
 		return NextResponse.json({ error: 'Failed to generate IPA' }, { status: 500 });
 	}
-}
+});

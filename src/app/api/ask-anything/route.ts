@@ -1,8 +1,10 @@
 import { openai } from '@ai-sdk/openai';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { streamText, simulateReadableStream } from 'ai';
 import { MockLanguageModelV2 } from 'ai/test';
+import { NextAuthRequest } from 'next-auth';
 
+import { auth } from '@/auth';
 import { FetchAnswerInputSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { API_ABORT_TIMEOUT } from '@/constants';
@@ -19,7 +21,11 @@ function toErrorStream(errorText: string) {
 	return stream;
 }
 
-export async function POST(request: NextRequest) {
+export var POST = auth(async function (request: NextAuthRequest) {
+	if (!request.auth) {
+		return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
+	}
+
 	let body = await request.json();
 	let parseResult = FetchAnswerInputSchema.safeParse(body);
 	if (!parseResult.success) {
@@ -47,4 +53,4 @@ export async function POST(request: NextRequest) {
 			headers: { 'Content-Type': 'text/event-stream' },
 		});
 	}
-}
+});

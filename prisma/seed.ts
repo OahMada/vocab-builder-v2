@@ -29,6 +29,11 @@ for (let pair of uniqueSentences) {
 		pieces: {
 			create: words,
 		},
+		user: {
+			connect: {
+				id: process.env.DEMO_USERID,
+			},
+		},
 	};
 
 	dummyData.push(data);

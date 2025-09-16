@@ -7,7 +7,7 @@ var currentAudio: HTMLAudioElement | null = null;
 
 export function usePlayAudio() {
 	let [isPlaying, setIsPlaying] = React.useState(false);
-	let { addToToast, removeFromToast } = useGlobalToastContext();
+	let { addToToast } = useGlobalToastContext();
 
 	let stopAudio = React.useCallback(function () {
 		if (currentAudio) {
@@ -35,7 +35,6 @@ export function usePlayAudio() {
 			}
 			currentAudio = new Audio(audioUrl);
 			try {
-				removeFromToast(`${TOAST_ID.AUDIO_PLAYING}${audioUrl}`);
 				await currentAudio.play();
 				setIsPlaying(true);
 			} catch (error) {
@@ -47,7 +46,7 @@ export function usePlayAudio() {
 				stopAudio();
 			}
 		},
-		[addToToast, removeFromToast, stopAudio]
+		[addToToast, stopAudio]
 	);
 
 	// update playing state when audio paused or ended
