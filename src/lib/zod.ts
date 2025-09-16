@@ -23,18 +23,20 @@ export var UserInputSchema = z.object({
 
 export type UserInputType = z.infer<typeof UserInputSchema>;
 
-export var SentenceSchema = z
-	.string()
-	.trim()
-	.min(5, {
-		error: 'The sentence should be at least 5 characters long.',
-	})
-	.max(300, {
-		error: 'The sentence should be no longer than 300 characters.',
-	});
+export var SentenceSchema = z.object({
+	sentence: z
+		.string()
+		.trim()
+		.min(5, {
+			error: 'The sentence should be at least 5 characters long.',
+		})
+		.max(300, {
+			error: 'The sentence should be no longer than 300 characters.',
+		}),
+});
 
 export var FetchIPAInputSchema = z.object({
-	sentence: SentenceSchema,
+	sentence: SentenceSchema.shape.sentence,
 	word: z
 		.string()
 		.trim()
@@ -66,7 +68,7 @@ export var QuestionInputSchema = z.object({
 });
 export type QuestionInputType = z.infer<typeof QuestionInputSchema>;
 
-export var FetchAnswerInputSchema = QuestionInputSchema.extend({ sentence: SentenceSchema });
+export var FetchAnswerInputSchema = QuestionInputSchema.extend({ sentence: SentenceSchema.shape.sentence });
 
 var PieceSchema = z.object({
 	id: z.cuid2(),
@@ -77,7 +79,7 @@ var PieceSchema = z.object({
 var PiecesCreateInputSchema = z.union([PieceSchema, z.string()]);
 
 export var SentenceCreateInputSchema = z.object({
-	sentence: SentenceSchema,
+	sentence: SentenceSchema.shape.sentence,
 	pieces: z.array(PiecesCreateInputSchema),
 	translation: TranslationSchema.shape.translation.min(3),
 	note: NoteSchema.shape.note.optional(),
@@ -122,7 +124,7 @@ export var ReadSentencesInputSchema = z.object({
 });
 
 export var CheckSentenceInputSchema = z.object({
-	sentence: SentenceSchema,
+	sentence: SentenceSchema.shape.sentence,
 	userId: UserIdSchema,
 });
 

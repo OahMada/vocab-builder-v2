@@ -25,7 +25,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 		let { text } = await generateText({
 			model: openai.responses('gpt-4.1'),
 			system: `Translate the sentence you receive into ${'Chinese'}. If the sentence is already in ${'Chinese'}, do nothing and simply return it as is.`,
-			prompt: result.data,
+			prompt: result.data.sentence,
 			abortSignal: AbortSignal.timeout(API_ABORT_TIMEOUT),
 		});
 		return NextResponse.json({ data: text });

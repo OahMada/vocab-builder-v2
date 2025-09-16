@@ -71,14 +71,13 @@ var Description = styled(ToastPrimitives.Description)<{ $contentType: 'error' | 
 		} else if ($contentType === 'notice') {
 			return css`
 				color: var(--text-secondary);
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				/* hide text that are more than one lines */
+				overflow: hidden;
 			`;
 		}
 	}}
-
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	/* hide text that are more than one lines */
-	overflow: hidden;
 `;
 
 var CloseButton = styled(Button)`

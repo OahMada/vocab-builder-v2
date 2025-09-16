@@ -9,7 +9,7 @@ import { UNSTABLE_CACHE_TAG } from '@/constants';
 
 var checkSentenceUniqueness = unstable_cache(
 	async function (data: unknown): Promise<{ error: string } | { data: boolean }> {
-		let result = CheckSentenceInputSchema.safeParse({ sentence: data });
+		let result = CheckSentenceInputSchema.safeParse(data);
 		if (!result.success) {
 			let error = handleZodError(result.error, 'prettify');
 			return { error };

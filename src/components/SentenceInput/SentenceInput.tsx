@@ -7,7 +7,7 @@ import { FieldErrors, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 
-import checkForSentenceUniqueness from '@/app/actions/sentence/checkSentenceUniqueness';
+import checkSentenceUniqueness from '@/app/actions/sentence/checkSentenceUniqueness';
 
 import { TOAST_ID, INPUT_NAME, LOCAL_STORAGE_KEY, COOKIE_KEY } from '@/constants';
 import { UserInputType, UserInputSchema, setCookie } from '@/lib';
@@ -62,7 +62,7 @@ function SentenceInput() {
 
 	async function onSubmit(data: UserInputType) {
 		startTransition(async () => {
-			let result = await checkForSentenceUniqueness({ sentence: data[INPUT_NAME.SENTENCE], userId: session?.user?.id });
+			let result = await checkSentenceUniqueness({ sentence: data[INPUT_NAME.SENTENCE], userId: session?.user?.id });
 			if ('error' in result) {
 				addToToast({
 					contentType: 'error',

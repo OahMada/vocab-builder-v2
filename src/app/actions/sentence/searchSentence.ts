@@ -22,6 +22,7 @@ function compoundOperatorOption(search: string, userId: string) {
 				},
 			],
 			should: [{ autocomplete: { query: search, path: 'sentence', tokenOrder: 'any' } }, { text: { query: search, path: 'sentence' } }],
+			minimumShouldMatch: 1,
 		},
 	};
 }

@@ -18,7 +18,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	let sentenceResult = SentenceSchema.safeParse(body);
 	if (!sentenceResult.success) {
 		let errors = handleZodError(sentenceResult.error);
-		return NextResponse.json({ error: errors.formErrors[0] }, { status: 400 });
+		return NextResponse.json({ error: errors.fieldErrors.sentence![0] }, { status: 400 });
 	}
 
 	if (!process.env.AZURE_SPEECH_KEY || !process.env.AZURE_SPEECH_REGION) {
@@ -37,7 +37,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
 		<voice name="en-US-AriaNeural">
 			<prosody rate="-20%" pitch="low">
-				${escapeForSSML(sentenceResult.data)}
+				${escapeForSSML(sentenceResult.data.sentence)}
 			</prosody>
 		</voice>
 	</speak>`;
