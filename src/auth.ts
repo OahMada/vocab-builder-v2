@@ -6,8 +6,10 @@ import { createId } from '@paralleldrive/cuid2';
 import prisma from '@/lib/prisma';
 import sendVerificationRequest from '@/lib/sendVerificationRequest';
 import { EMAIL_FROM } from '@/constants';
+import { authConfig } from './auth.config';
 
 export var { handlers, signIn, signOut, auth } = NextAuth({
+	...authConfig,
 	adapter: PrismaAdapter(prisma),
 	providers: [
 		Resend({
