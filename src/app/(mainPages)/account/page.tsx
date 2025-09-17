@@ -22,7 +22,11 @@ export var metadata: Metadata = {
 export default async function AccountPage() {
 	let session = await auth();
 	if (!session?.user) {
-		return <UnauthorizedDisplay />;
+		return (
+			<MaxWidthWrapper>
+				<UnauthorizedDisplay />;
+			</MaxWidthWrapper>
+		);
 	}
 
 	return (

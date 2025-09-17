@@ -10,16 +10,17 @@ import { searchSentences } from '@/app/actions/sentence/searchSentence';
 
 import { useIntersectionObserver } from '@/hooks';
 import { SentenceWithPieces } from '@/lib';
+import { markSearchMatchesInSentencePieces } from '@/helpers';
 
 import { AccordionRoot } from '@/components/Accordion';
 import SentenceListingEntry from '@/components/SentenceListingEntry';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
-import EmptyDisplay from './EmptyDisplay';
 import Spinner from '@/components/Loading';
 import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 import NoticeText from '@/components/BrowsePageNoticeText';
-import { markSearchMatchesInSentencePieces } from '@/helpers';
+import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
+import EmptyDisplay from './EmptyDisplay';
 
 function SentenceListing({
 	sentences,
@@ -34,14 +35,16 @@ function SentenceListing({
 	countMessage: string;
 	hasCountError: boolean;
 }) {
+	// for auth
+	let { data: session, update: updateSession } = useSession();
+	let userId = session?.user?.id;
+	let [isAuthenticated, setIsAuthenticated] = React.useState(true);
+
 	let [currentSentences, setCurrentSentences] = React.useState(sentences);
 	let [nextCursor, setNextCursor] = React.useState<string | undefined>(cursor);
 	let [isLoadingData, startTransition] = React.useTransition();
 	let [error, setError] = React.useState<string | undefined>(initialError);
 	let { search, isPending } = useSearchParamsContext();
-
-	let { data: session } = useSession();
-	let userId = session?.user?.id;
 
 	// used for data fetching indicator
 	let [ref, isIntersecting] = useIntersectionObserver<HTMLSpanElement>();
@@ -62,7 +65,14 @@ function SentenceListing({
 	let fetchMoreSentences = React.useCallback(
 		function () {
 			startTransition(async () => {
-				let result: Awaited<ReturnType<typeof searchSentences>> | Awaited<ReturnType<typeof readAllSentences>>;
+				let currentSession = await updateSession();
+				if (!currentSession) {
+					setIsAuthenticated(false);
+					return;
+				}
+
+				let result: Awaited<ReturnType<typeof searchSentences>> | Awaited<ReturnType<typeof readAllSentences>> | undefined;
+
 				if (search) {
 					result = await searchSentences({ search, cursor: nextCursor, userId });
 				} else {
@@ -72,7 +82,6 @@ function SentenceListing({
 					setError(result.error);
 					return;
 				}
-
 				let { data, nextCursor: newCursor } = result;
 				let markedData = markSearchMatchesInSentencePieces(data, search);
 
@@ -81,7 +90,7 @@ function SentenceListing({
 				setNextCursor(newCursor ?? undefined);
 			});
 		},
-		[nextCursor, search, userId]
+		[nextCursor, search, updateSession, userId]
 	);
 
 	function retryFetchingData() {
@@ -105,13 +114,17 @@ function SentenceListing({
 		if (isIntersecting) fetchMoreSentences();
 	}, [nextCursor, fetchMoreSentences, isIntersecting, isLoadingData, error]);
 
-	if (currentSentences.length === 0 && !error && !isLoadingData) {
+	if (!isAuthenticated) {
+		return <UnauthorizedDisplay />;
+	}
+
+	if (currentSentences.length === 0 && !error && !isLoadingData && !isPending) {
 		return <EmptyDisplay />;
 	}
 
 	return (
 		<Wrapper>
-			<NoticeText $hasError={hasCountError}>{countMessage}</NoticeText>
+			{currentSentences.length !== 0 && <NoticeText $hasError={hasCountError}>{countMessage}</NoticeText>}
 			<SecondaryWrapper style={{ '--height': `${rowVirtualizer.getTotalSize()}px` } as React.CSSProperties}>
 				<AccordionRoot style={{ '--transform': `translateY(${virtualizedItems[0]?.start || 0}px)` } as React.CSSProperties}>
 					{virtualizedItems.map((virtualItem) => {

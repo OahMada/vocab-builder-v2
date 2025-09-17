@@ -20,6 +20,8 @@ import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import ActionButtons from './ActionButtons';
 
 function SentenceInput() {
+	let { data: session, update: updateSession } = useSession();
+	let userId = session?.user?.id;
 	let { addToToast, removeFromToast } = useGlobalToastContext();
 	let [isLoading, startTransition] = React.useTransition();
 
@@ -36,8 +38,6 @@ function SentenceInput() {
 		reValidateMode: 'onSubmit',
 		shouldFocusError: false,
 	});
-
-	let { data: session } = useSession();
 
 	function updateInput(text: string) {
 		setValue(INPUT_NAME.SENTENCE, text);
@@ -62,7 +62,13 @@ function SentenceInput() {
 
 	async function onSubmit(data: UserInputType) {
 		startTransition(async () => {
-			let result = await checkSentenceUniqueness({ sentence: data[INPUT_NAME.SENTENCE], userId: session?.user?.id });
+			let currentSession = await updateSession();
+			if (!currentSession) {
+				router.replace('/auth/login');
+			}
+
+			let result = await checkSentenceUniqueness({ sentence: data[INPUT_NAME.SENTENCE], userId });
+
 			if ('error' in result) {
 				addToToast({
 					contentType: 'error',

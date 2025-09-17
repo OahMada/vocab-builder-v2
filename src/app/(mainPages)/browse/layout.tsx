@@ -24,7 +24,11 @@ export default async function SentenceBrowse({
 }) {
 	let session = await auth();
 	if (!session?.user) {
-		return <UnauthorizedDisplay />;
+		return (
+			<MaxWidthWrapper>
+				<UnauthorizedDisplay />
+			</MaxWidthWrapper>
+		);
 	}
 
 	// to avoid build error: useSearchParams() should be wrapped in a suspense boundary https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout#possible-ways-to-fix-it

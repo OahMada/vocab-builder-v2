@@ -35,7 +35,11 @@ type ClientSentenceData = (Omit<SentenceCreateInputType, 'audioBlob'> & { audioU
 export default async function Sentence({ params }: { params: Promise<{ sentenceId: string }> }) {
 	let session = await auth();
 	if (!session?.user) {
-		return <UnauthorizedDisplay />;
+		return (
+			<MaxWidthWrapper>
+				<UnauthorizedDisplay />
+			</MaxWidthWrapper>
+		);
 	}
 	let userId = session.user.id;
 

@@ -11,7 +11,11 @@ import { Title, BrowseButton } from './StyledComponents';
 export default async function Home() {
 	let session = await auth();
 	if (!session?.user) {
-		return <UnauthorizedDisplay />;
+		return (
+			<MaxWidthWrapper>
+				<UnauthorizedDisplay />
+			</MaxWidthWrapper>
+		);
 	}
 
 	return (

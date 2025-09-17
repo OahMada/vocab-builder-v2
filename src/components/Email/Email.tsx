@@ -82,7 +82,7 @@ var fallbackUrl = {
 	lineHeight: '20px',
 	color: '#111',
 	backgroundColor: '#f5f5f5',
-	padding: '2px',
+	padding: '2px 0',
 	borderRadius: '4px',
 	wordBreak: 'break-all' as const,
 };
