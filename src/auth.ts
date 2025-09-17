@@ -5,12 +5,13 @@ import { createId } from '@paralleldrive/cuid2';
 
 import prisma from '@/lib/prisma';
 import sendVerificationRequest from '@/lib/sendVerificationRequest';
+import { EMAIL_FROM } from '@/constants';
 
 export var { handlers, signIn, signOut, auth } = NextAuth({
 	adapter: PrismaAdapter(prisma),
 	providers: [
 		Resend({
-			from: process.env.EMAIL_FROM,
+			from: EMAIL_FROM,
 			sendVerificationRequest,
 			normalizeIdentifier(identifier: string): string {
 				// https://authjs.dev/getting-started/providers/resend#normalizing-email-addresses

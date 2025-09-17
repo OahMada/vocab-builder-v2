@@ -93,3 +93,4 @@ export const UNSTABLE_CACHE_TAG = 'sentences';
 export const SENTENCE_FETCHING_LIMIT = 15;
 export const MAX_QUERY_LEN = 50;
 export const API_ABORT_TIMEOUT = 15000;
+export const EMAIL_FROM = 'no-reply@vocab-builder.app';
