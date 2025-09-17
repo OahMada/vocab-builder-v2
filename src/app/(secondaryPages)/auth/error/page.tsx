@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { Metadata } from 'next';
 import { SearchParams } from 'nuqs/server';
+import { redirect } from 'next/navigation';
+
+import { auth } from '@/auth';
 
 import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
@@ -15,7 +18,6 @@ export var metadata: Metadata = {
 const ErrorCodes = {
 	Configuration: 'Configuration',
 	AccessDenied: 'AccessDenied',
-	Verification: 'Verification',
 	Default: 'Default',
 } as const;
 
@@ -41,15 +43,6 @@ var errorMap = {
 		</>
 	),
 
-	[ErrorCodes.Verification]: (
-		<>
-			<p>The verification link is invalid or has expired. Please try signing in again to request a new link.</p>
-			<SecondaryText>
-				Unique error code: <ErrorCode>Verification</ErrorCode>
-			</SecondaryText>
-		</>
-	),
-
 	[ErrorCodes.Default]: (
 		<>
 			<p>Something went wrong during authentication. Please try again, and contact support if the issue continues. </p>
@@ -61,6 +54,12 @@ var errorMap = {
 };
 
 export default async function AuthErrorPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+	let session = await auth();
+
+	if (session?.user) {
+		redirect('/');
+	}
+
 	let result = await searchParams;
 	let error = result.error as keyof typeof ErrorCodes;
 

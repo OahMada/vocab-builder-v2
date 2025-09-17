@@ -102,7 +102,7 @@ function SentenceInput() {
 	return (
 		<Wrapper onSubmit={handleSubmit(onSubmit, onError)}>
 			<Spacer size={4} />
-			<TextArea placeholder='Enter or paste in a sentence.' clearInput={clearInput} {...rest} ref={ref} value={userInput} />
+			<TextArea placeholder='Enter or paste in a sentence' clearInput={clearInput} {...rest} ref={ref} value={userInput} />
 			<ActionButtons handlePaste={updateInput} submitDisabled={!!errors[INPUT_NAME.SENTENCE] || isLoading} isLoading={isLoading} />
 		</Wrapper>
 	);

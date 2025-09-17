@@ -54,16 +54,6 @@ var InputArea = styled(Base)`
 	border: none;
 	color: inherit;
 	background-color: inherit;
-
-	&::placeholder {
-		font-size: 16px;
-		line-height: 1.5;
-		height: 24px;
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		margin: auto;
-	}
 `;
 var Overlay = styled(Base)`
 	visibility: hidden;

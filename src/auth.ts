@@ -29,9 +29,6 @@ export var { handlers, signIn, signOut, auth } = NextAuth({
 		}),
 	],
 	callbacks: {
-		async redirect({ url, baseUrl }) {
-			return baseUrl; // open home page after login
-		},
 		jwt({ token, user }) {
 			if (user) {
 				// User is available during sign-in

@@ -19,7 +19,7 @@ var RedirectUrlMap = {
 
 type RedirectUrl = keyof typeof RedirectUrlMap;
 
-function NotFoundRedirect({ redirectUrl }: { redirectUrl: RedirectUrl }) {
+function Redirect({ redirectUrl }: { redirectUrl: RedirectUrl }) {
 	let [countDown, setCountDown] = React.useState(3);
 	let router = useRouter();
 
@@ -52,7 +52,7 @@ function NotFoundRedirect({ redirectUrl }: { redirectUrl: RedirectUrl }) {
 	);
 }
 
-export default NotFoundRedirect;
+export default Redirect;
 
 var RedirectWrapper = styled.p`
 	color: var(--text-tertiary);

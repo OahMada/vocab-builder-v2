@@ -15,6 +15,6 @@ export default async function login(data: unknown): Promise<{ error: string } | 
 	// two return data examples
 	// http://localhost:3000/api/auth/error?error=Configuration
 	// http://localhost:3000/api/auth/verify-request?provider=resend&type=email
-	let signInResult = await signIn('resend', { email: result.data.email, redirect: false });
+	let signInResult = await signIn('resend', { email: result.data.email, redirect: false, redirectTo: '/' });
 	return { data: signInResult };
 }
