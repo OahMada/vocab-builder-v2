@@ -8,21 +8,23 @@ import { auth } from '@/auth';
 
 import { searchSentences, countSearchResults } from '@/app/actions/sentence/searchSentence';
 import SentenceListing from '@/components/SentenceListing';
+import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 
 export default async function SearchList({ searchParams }: { searchParams: Promise<SearchParams> }) {
-	let session = await auth();
-
-	if (!session?.user) {
-		return null;
-	}
-
-	let userId = session.user.id;
-
 	let { search } = searchParamsCache.parse(await searchParams);
-
 	if (!search) {
 		return null;
 	}
+	let session = await auth();
+	if (!session?.user) {
+		return (
+			<MaxWidthWrapper>
+				<UnauthorizedDisplay callback={`/browse?search=${search}`} />
+			</MaxWidthWrapper>
+		);
+	}
+	let userId = session.user.id;
 
 	let dataError: string | undefined = undefined;
 	let sentences: SentenceWithPieces[] = [];

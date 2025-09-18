@@ -143,6 +143,7 @@ export var DeleteSentenceInputSchema = z.object({
 
 export var LoginInputSchema = z.object({
 	email: z.email('Invalid email'),
+	callback: z.string().optional(),
 });
 
 export type LoginInputType = z.infer<typeof LoginInputSchema>;

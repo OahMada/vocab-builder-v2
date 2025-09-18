@@ -4,7 +4,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import login from '@/app/actions/auth/login';
 
@@ -22,6 +22,9 @@ function Login() {
 	let [emailSent, setEmailSent] = React.useState(false);
 	let [isLoading, startTransition] = React.useTransition();
 	let router = useRouter();
+	let searchParams = useSearchParams();
+	let callback = searchParams.get('callback');
+
 	let { addToToast } = useGlobalToastContext();
 
 	function RetryEmailLogin() {
@@ -48,8 +51,7 @@ function Login() {
 
 	function onSubmit(data: LoginInputType) {
 		startTransition(async () => {
-			let result = await login(data);
-
+			let result = await login({ email: data.email, callback: callback ?? undefined });
 			if ('error' in result) {
 				addToToast({
 					id: TOAST_ID.LOGIN,

@@ -54,7 +54,12 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	}
 
 	function handleCancel() {
-		router.back();
+		if (window.history.length && window.history.length > 1) {
+			// you can login and land on one of the sentence page, in this case, you can't simply go back
+			router.back();
+		} else {
+			router.replace('/');
+		}
 
 		if (sentenceId) {
 			deleteLocalData(true);
@@ -87,7 +92,12 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 					content: sentence,
 					title: 'Sentence Updated',
 				});
-				router.back();
+
+				if (window.history.length && window.history.length > 1) {
+					router.back();
+				} else {
+					router.replace('/');
+				}
 			} else {
 				addToToast({
 					id: TOAST_ID.SENTENCE_CREATION,

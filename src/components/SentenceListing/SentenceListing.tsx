@@ -115,7 +115,7 @@ function SentenceListing({
 	}, [nextCursor, fetchMoreSentences, isIntersecting, isLoadingData, error]);
 
 	if (!isAuthenticated) {
-		return <UnauthorizedDisplay />;
+		return <UnauthorizedDisplay callback={search ? `/browse?search=${search}` : '/browse'} />;
 	}
 
 	if (currentSentences.length === 0 && !error && !isLoadingData && !isPending) {

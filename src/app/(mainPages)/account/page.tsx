@@ -24,7 +24,7 @@ export default async function AccountPage() {
 	if (!session?.user) {
 		return (
 			<MaxWidthWrapper>
-				<UnauthorizedDisplay />;
+				<UnauthorizedDisplay callback='/account' />;
 			</MaxWidthWrapper>
 		);
 	}

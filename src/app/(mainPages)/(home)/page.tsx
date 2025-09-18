@@ -13,7 +13,7 @@ export default async function Home() {
 	if (!session?.user) {
 		return (
 			<MaxWidthWrapper>
-				<UnauthorizedDisplay />
+				<UnauthorizedDisplay callback='/' />
 			</MaxWidthWrapper>
 		);
 	}

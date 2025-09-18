@@ -3,8 +3,14 @@ import * as React from 'react';
 import { ChildrenWrapper } from './StyledComponents';
 import Breadcrumb from './CustomBreadcrumb';
 import Search from '@/components/SearchSentence';
+import { auth } from '@/auth';
 
-export default function Page() {
+export default async function Page() {
+	let session = await auth();
+	if (!session?.user) {
+		return null;
+	}
+
 	return (
 		<ChildrenWrapper>
 			<Breadcrumb />

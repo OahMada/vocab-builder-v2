@@ -8,13 +8,13 @@ export var metadata: Metadata = {
 	description: 'Unauthorized to access.',
 };
 
-function UnauthorizedDisplay() {
+function UnauthorizedDisplay({ callback }: { callback: string }) {
 	return (
 		<Wrapper>
 			<RedirectTitle>401 | Unauthorized</RedirectTitle>
 			<p>You are not authorized to view this page. </p>
 			<Spacer size={12} />
-			<Redirect redirectUrl='/auth/login' />
+			<Redirect redirectUrl={`/auth/login?callback=${callback}`} />
 		</Wrapper>
 	);
 }

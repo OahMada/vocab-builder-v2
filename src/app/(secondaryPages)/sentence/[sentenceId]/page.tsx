@@ -33,17 +33,16 @@ export var metadata: Metadata = {
 type ClientSentenceData = (Omit<SentenceCreateInputType, 'audioBlob'> & { audioUrl: string; id: string }) | null;
 
 export default async function Sentence({ params }: { params: Promise<{ sentenceId: string }> }) {
+	let { sentenceId } = await params;
 	let session = await auth();
 	if (!session?.user) {
 		return (
 			<MaxWidthWrapper>
-				<UnauthorizedDisplay />
+				<UnauthorizedDisplay callback={`/sentence/${sentenceId}`} />
 			</MaxWidthWrapper>
 		);
 	}
 	let userId = session.user.id;
-
-	let { sentenceId } = await params;
 
 	let sentence: string | undefined = undefined;
 	let sentenceData: ClientSentenceData = null;

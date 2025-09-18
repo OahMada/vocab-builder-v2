@@ -19,11 +19,13 @@ var RedirectUrlMap = {
 
 type RedirectUrl = keyof typeof RedirectUrlMap;
 
-function Redirect({ redirectUrl }: { redirectUrl: RedirectUrl }) {
+function Redirect({ redirectUrl }: { redirectUrl: string }) {
+	let [url] = redirectUrl.split('?');
+
 	let [countDown, setCountDown] = React.useState(3);
 	let router = useRouter();
 
-	let { linkText, pageName } = RedirectUrlMap[redirectUrl];
+	let { linkText, pageName } = RedirectUrlMap[url as RedirectUrl];
 
 	let intervalId = useInterval(
 		() => {
