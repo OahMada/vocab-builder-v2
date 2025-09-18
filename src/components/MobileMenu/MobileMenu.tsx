@@ -2,16 +2,36 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+
+import logout from '@/app/actions/auth/logout';
+
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/DropDownMenu';
 import Avatar from '@/components/Avatar';
+import Loading from '@/components/Loading';
 
 function MobileMenu() {
+	let [isLoading, startTransition] = React.useTransition();
+	let [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+	function onOpenChange(open: boolean) {
+		if (!isLoading) {
+			setIsMenuOpen(open);
+		}
+	}
+
+	function handleLogout() {
+		startTransition(async () => {
+			await logout();
+			setIsMenuOpen(false);
+		});
+	}
+
 	return (
 		<Wrapper>
-			<DropdownMenu>
+			<DropdownMenu open={isMenuOpen} onOpenChange={onOpenChange}>
 				<DropdownMenuTrigger asChild={true}>
 					<Button variant='icon'>
 						<Icon id='mobile-menu' />
@@ -32,7 +52,15 @@ function MobileMenu() {
 						</DropdownItemButton>
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild={true}>
-						<DropdownItemButton variant='icon'>Logout</DropdownItemButton>
+						<DropdownItemButton variant='icon' onClick={handleLogout} disabled={isLoading}>
+							{isLoading && (
+								<>
+									<Loading description='Logging out' />
+									&nbsp;
+								</>
+							)}
+							Logout
+						</DropdownItemButton>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
