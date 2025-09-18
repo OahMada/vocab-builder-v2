@@ -8,9 +8,9 @@ export var metadata: Metadata = {
 	description: 'Unauthorized to access.',
 };
 
-function UnauthorizedDisplay({ callback }: { callback: string }) {
+function UnauthorizedDisplay({ callback, ...delegated }: { callback: string } & React.ComponentProps<'div'>) {
 	return (
-		<Wrapper>
+		<Wrapper {...delegated}>
 			<RedirectTitle>401 | Unauthorized</RedirectTitle>
 			<p>You are not authorized to view this page. </p>
 			<Spacer size={12} />

@@ -29,8 +29,8 @@ export async function delay(time: number) {
 }
 
 export function handleZodError<T>(error: ZodError<T>, mode: 'prettify'): string;
-export function handleZodError<T>(error: ZodError<T>, mode?: 'flatten'): ReturnType<ZodError<T>['flatten']>;
-export function handleZodError<T>(error: ZodError<T>, mode: 'flatten' | 'prettify' = 'flatten'): string | ReturnType<z.ZodError['flatten']> {
+export function handleZodError<T>(error: ZodError<T>, mode?: 'flatten'): z.ZodFlattenedError<T, string>;
+export function handleZodError<T>(error: ZodError<T>, mode: 'flatten' | 'prettify' = 'flatten'): string | z.ZodFlattenedError<T, string> {
 	if (mode === 'prettify') {
 		return z.prettifyError(error);
 	} else if (mode === 'flatten') {

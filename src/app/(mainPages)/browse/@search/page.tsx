@@ -9,7 +9,6 @@ import { auth } from '@/auth';
 import { searchSentences, countSearchResults } from '@/app/actions/sentence/searchSentence';
 import SentenceListing from '@/components/SentenceListing';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 
 export default async function SearchList({ searchParams }: { searchParams: Promise<SearchParams> }) {
 	let { search } = searchParamsCache.parse(await searchParams);
@@ -18,11 +17,7 @@ export default async function SearchList({ searchParams }: { searchParams: Promi
 	}
 	let session = await auth();
 	if (!session?.user) {
-		return (
-			<MaxWidthWrapper>
-				<UnauthorizedDisplay callback={`/browse?search=${search}`} />
-			</MaxWidthWrapper>
-		);
+		return <UnauthorizedDisplay callback={`/browse?search=${search}`} />;
 	}
 	let userId = session.user.id;
 

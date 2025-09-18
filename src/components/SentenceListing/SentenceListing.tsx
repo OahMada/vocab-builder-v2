@@ -36,7 +36,7 @@ function SentenceListing({
 	hasCountError: boolean;
 }) {
 	// for auth
-	let { data: session, update: updateSession } = useSession();
+	let { data: session, update: updateSession, status: sessionStatus } = useSession();
 	let userId = session?.user?.id;
 	let [isAuthenticated, setIsAuthenticated] = React.useState(true);
 
@@ -66,31 +66,33 @@ function SentenceListing({
 		function () {
 			startTransition(async () => {
 				let currentSession = await updateSession();
-				if (!currentSession) {
-					setIsAuthenticated(false);
-					return;
-				}
+				if (sessionStatus !== 'loading') {
+					if (!currentSession) {
+						setIsAuthenticated(false);
+						return;
+					}
 
-				let result: Awaited<ReturnType<typeof searchSentences>> | Awaited<ReturnType<typeof readAllSentences>> | undefined;
+					let result: Awaited<ReturnType<typeof searchSentences>> | Awaited<ReturnType<typeof readAllSentences>> | undefined;
 
-				if (search) {
-					result = await searchSentences({ search, cursor: nextCursor, userId });
-				} else {
-					result = await readAllSentences({ cursor: nextCursor, userId });
-				}
-				if ('error' in result) {
-					setError(result.error);
-					return;
-				}
-				let { data, nextCursor: newCursor } = result;
-				let markedData = markSearchMatchesInSentencePieces(data, search);
+					if (search) {
+						result = await searchSentences({ search, cursor: nextCursor, userId });
+					} else {
+						result = await readAllSentences({ cursor: nextCursor, userId });
+					}
+					if ('error' in result) {
+						setError(result.error);
+						return;
+					}
+					let { data, nextCursor: newCursor } = result;
+					let markedData = markSearchMatchesInSentencePieces(data, search);
 
-				setError('');
-				setCurrentSentences((prev) => [...prev, ...markedData]);
-				setNextCursor(newCursor ?? undefined);
+					setError('');
+					setCurrentSentences((prev) => [...prev, ...markedData]);
+					setNextCursor(newCursor ?? undefined);
+				}
 			});
 		},
-		[nextCursor, search, updateSession, userId]
+		[nextCursor, search, sessionStatus, updateSession, userId]
 	);
 
 	function retryFetchingData() {

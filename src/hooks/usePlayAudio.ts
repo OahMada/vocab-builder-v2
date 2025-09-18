@@ -7,6 +7,7 @@ var currentAudio: HTMLAudioElement | null = null;
 
 export function usePlayAudio() {
 	let [isPlaying, setIsPlaying] = React.useState(false);
+	let [isAudioLoading, setIsAudioLoading] = React.useState(false);
 	let { addToToast } = useGlobalToastContext();
 
 	let stopAudio = React.useCallback(function () {
@@ -34,6 +35,7 @@ export function usePlayAudio() {
 				audioUrl = URL.createObjectURL(audioSource);
 			}
 			currentAudio = new Audio(audioUrl);
+			setIsAudioLoading(true);
 			try {
 				await currentAudio.play();
 				setIsPlaying(true);
@@ -45,6 +47,7 @@ export function usePlayAudio() {
 				});
 				stopAudio();
 			}
+			setIsAudioLoading(false);
 		},
 		[addToToast, stopAudio]
 	);
@@ -70,5 +73,5 @@ export function usePlayAudio() {
 		};
 	}, [isPlaying]);
 
-	return { isPlaying, playAudio, stopAudio };
+	return { isPlaying, playAudio, stopAudio, isAudioLoading };
 }

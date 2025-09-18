@@ -45,7 +45,7 @@ export var countSentences = unstable_cache(
 		let result = UserIdSchema.safeParse(data);
 		if (!result.success) {
 			let errors = handleZodError(result.error);
-			return { error: errors.formErrors[0] as string };
+			return { error: errors.formErrors[0] };
 		}
 
 		try {

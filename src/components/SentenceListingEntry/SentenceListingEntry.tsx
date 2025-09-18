@@ -37,7 +37,7 @@ function SentenceListingEntry({
 	let { addToToast } = useGlobalToastContext();
 	let sentencePieces = constructSentence(sentence, pieces);
 	let [isLoading, setIsLoading] = React.useState(false);
-	let { isPlaying, playAudio, stopAudio } = usePlayAudio();
+	let { isPlaying, playAudio, stopAudio, isAudioLoading } = usePlayAudio();
 	let router = useRouter();
 
 	async function handleDeleteAction() {
@@ -68,6 +68,8 @@ function SentenceListingEntry({
 						isPlaying={isPlaying}
 						playAudio={() => playAudio(audioUrl)}
 						stopAudio={stopAudio}
+						disabled={isAudioLoading}
+						isAudioLoading={isAudioLoading}
 					/>
 				</SentenceWrapper>
 			</AccordionTrigger>

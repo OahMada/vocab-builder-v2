@@ -11,6 +11,7 @@ import { useAudioDataContext } from '@/components/AudioDataProvider';
 import Toast from '@/components/Toast';
 import { handleError, base64ToBlob } from '@/utils';
 import { usePlayAudio } from '@/hooks';
+import Loading from '@/components/Loading';
 
 interface TTSResponse {
 	data: string;
@@ -25,7 +26,7 @@ var url = '/api/tts';
 function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sentence: string }) {
 	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, TTSArg>(url, postFetcher);
 	let { isLocalDataLoading, audioBlob, updateBlob, audioUrl } = useAudioDataContext();
-	let { isPlaying, playAudio, stopAudio } = usePlayAudio();
+	let { isPlaying, playAudio, stopAudio, isAudioLoading } = usePlayAudio();
 
 	React.useEffect(() => {
 		async function activateTrigger() {
@@ -80,10 +81,16 @@ function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sent
 				<AudioButton
 					variant='outline'
 					onClick={() => playAudio((audioUrl || audioBlob) as string | Blob)}
-					disabled={(!audioBlob && !audioUrl) || isSubmitting}
+					disabled={(!audioBlob && !audioUrl) || isSubmitting || isAudioLoading}
 				>
-					<Icon id='audio' />
-					<VisuallyHidden>Play sentence audio</VisuallyHidden>
+					{isAudioLoading ? (
+						<Loading description='loading audio data' />
+					) : (
+						<>
+							<Icon id='audio' />
+							<VisuallyHidden>Play sentence audio</VisuallyHidden>
+						</>
+					)}
 				</AudioButton>
 			)}
 			{error && <Toast content={handleError(error)} contentType='error' />}
