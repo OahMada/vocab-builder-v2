@@ -35,12 +35,15 @@ model Piece {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  name              String?
+  email             String?   @unique
+  emailVerified     DateTime?
+  image             String?
+  accounts          Account[]
+  learningLanguage  String?
+  nativeLanguage    String?
+  EnglishIPAFlavour String? // only when learning language is English
 
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt

@@ -8,13 +8,13 @@ export var metadata: Metadata = {
 	description: 'Unauthorized to access.',
 };
 
-function UnauthorizedDisplay({ callback, ...delegated }: { callback: string } & React.ComponentProps<'div'>) {
+function UnauthorizedDisplay({ callback, ...delegated }: { callback?: string } & React.ComponentProps<'div'>) {
 	return (
 		<Wrapper {...delegated}>
 			<RedirectTitle>401 | Unauthorized</RedirectTitle>
 			<p>You are not authorized to view this page. </p>
 			<Spacer size={12} />
-			<Redirect redirectUrl={`/auth/login?callback=${callback}`} />
+			<Redirect redirectUrl={`/auth/login?callback=${callback || '/'}`} />
 		</Wrapper>
 	);
 }

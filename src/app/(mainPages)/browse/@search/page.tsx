@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { SearchParams } from 'nuqs/server';
+import { redirect } from 'next/navigation';
 
 import searchParamsCache from '@/lib/searchParamsCache';
 import { SentenceWithPieces } from '@/lib';
@@ -19,6 +20,7 @@ export default async function SearchList({ searchParams }: { searchParams: Promi
 	if (!session?.user) {
 		return <UnauthorizedDisplay callback={`/browse?search=${search}`} />;
 	}
+
 	let userId = session.user.id;
 
 	let dataError: string | undefined = undefined;

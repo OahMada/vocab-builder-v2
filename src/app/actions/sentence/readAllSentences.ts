@@ -33,7 +33,7 @@ export var readAllSentences = unstable_cache(
 			return { data: sentences, nextCursor };
 		} catch (error) {
 			console.error('fetch all sentences failed', error);
-			return { error: 'Failed to fetch the sentences.' };
+			return { error: 'Failed to fetch the sentences' };
 		}
 	},
 	[],
@@ -54,7 +54,7 @@ export var countSentences = unstable_cache(
 			return { data: count };
 		} catch (error) {
 			console.error('count sentences amount failed', error);
-			return { error: 'Failed to count the amount of sentences.' };
+			return { error: 'Failed to count the amount of sentences' };
 		}
 	},
 	[],

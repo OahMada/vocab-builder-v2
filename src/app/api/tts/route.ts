@@ -22,7 +22,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	}
 
 	if (!process.env.AZURE_SPEECH_KEY || !process.env.AZURE_SPEECH_REGION) {
-		return NextResponse.json({ error: 'Azure api key or region config missing.' }, { status: 400 });
+		return NextResponse.json({ error: 'Azure api key or region config missing' }, { status: 400 });
 	}
 
 	let speechConfig = SpeechConfig.fromSubscription(process.env.AZURE_SPEECH_KEY, process.env.AZURE_SPEECH_REGION);
@@ -53,7 +53,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 			(err) => {
 				console.error(err);
 				synthesizer.close();
-				resolve(NextResponse.json({ error: 'Generating speech failed, please try again later.' }, { status: 500 }));
+				resolve(NextResponse.json({ error: 'Generating speech failed, please try again later' }, { status: 500 }));
 			}
 		);
 	});

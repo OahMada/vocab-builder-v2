@@ -29,7 +29,7 @@ var readOneSentenceById = unstable_cache(
 		} catch (error) {
 			console.error('error reading sentence data', error);
 			return {
-				error: 'Failed to read specified sentence data.',
+				error: 'Failed to read specified sentence data',
 			};
 		}
 	},

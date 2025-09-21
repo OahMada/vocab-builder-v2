@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import * as React from 'react';
+import { redirect } from 'next/navigation';
 
 import { auth } from '@/auth';
 
@@ -27,6 +28,8 @@ export default async function AccountPage() {
 				<UnauthorizedDisplay callback='/account' />;
 			</MaxWidthWrapper>
 		);
+	} else if (!session.user.learningLanguage || !session.user.nativeLanguage) {
+		redirect('/');
 	}
 
 	return (
@@ -36,8 +39,9 @@ export default async function AccountPage() {
 				<UserPhoto />
 				<UserInfo />
 				<InnerWrapper>
-					<ChooseLanguage />
-					<ChooseIPAFlavour />
+					<ChooseLanguage type='learning' />
+					<ChooseLanguage type='translation' />
+					{session.user.EnglishIPAFlavour && <ChooseIPAFlavour />}
 				</InnerWrapper>
 				<ExportData />
 				<DeleteAccount />

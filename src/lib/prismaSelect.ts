@@ -16,3 +16,14 @@ export var sentenceReadSelect = {
 } satisfies Prisma.SentenceSelect;
 
 export type SentenceWithPieces = Prisma.SentenceGetPayload<{ select: typeof sentenceReadSelect }>;
+
+export var userSelect = {
+	name: true,
+	email: true,
+	EnglishIPAFlavour: true,
+	image: true,
+	learningLanguage: true,
+	nativeLanguage: true,
+} satisfies Prisma.UserSelect;
+
+export type User = Prisma.UserGetPayload<{ select: typeof userSelect }>;

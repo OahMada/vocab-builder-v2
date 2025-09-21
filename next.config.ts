@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
 	compiler: {
 		styledComponents: true,
 	},
+	experimental: {
+		typedEnv: true,
+	},
 };
 
 export default bundleAnalyzer(nextConfig);

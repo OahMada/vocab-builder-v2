@@ -107,7 +107,7 @@ export var searchSentences = unstable_cache(
 			return { data: sentences, nextCursor };
 		} catch (error) {
 			console.error('could not perform search action', error);
-			return { error: 'Failed to search, please try again later.' };
+			return { error: 'Failed to search, please try again later' };
 		}
 	},
 	[],
@@ -144,7 +144,7 @@ export var countSearchResults = unstable_cache(
 			return { data: result[0].count.total };
 		} catch (error) {
 			console.error('could not count search results', error);
-			return { error: 'Failed to count the amount of search results.' };
+			return { error: 'Failed to count the amount of search results' };
 		}
 	},
 	[],

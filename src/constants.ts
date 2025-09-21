@@ -62,6 +62,7 @@ export const TOAST_ID = {
 	SENTENCE_UPDATING: 'sentence_updating',
 	SENTENCE_FETCHING: 'sentence_fetching',
 	LOGIN: 'login',
+	USER_UPDATE: 'user_update',
 } as const;
 
 export const INPUT_NAME = {
@@ -71,6 +72,10 @@ export const INPUT_NAME = {
 	QUESTION: 'question',
 	SEARCH: 'search',
 	EMAIL: 'email',
+	NAME: 'name',
+	LEARNING_LANGUAGE: 'learningLanguage',
+	NATIVE_LANGUAGE: 'nativeLanguage',
+	ENGLISH_IPA_FLAVOUR: 'EnglishIPAFlavour',
 } as const;
 
 export const LOCAL_STORAGE_KEY = {
@@ -94,3 +99,14 @@ export const SENTENCE_FETCHING_LIMIT = 15;
 export const MAX_QUERY_LEN = 50;
 export const API_ABORT_TIMEOUT = 15000;
 export const EMAIL_FROM = 'no-reply@vocab-builder.app';
+
+export const LEARNING_LANGUAGE = ['English', 'French', 'Spanish', 'German'] as const;
+export const NATIVE_LANGUAGE = [...LEARNING_LANGUAGE, 'Chinese'] as const;
+export const ENGLISH_IPA_FLAVOUR = ['UK', 'US'] as const;
+
+export const USER_UPDATE_ACTION = {
+	PERSONALIZE: 'personalize',
+	USER_INFO: 'user-info',
+	LANGUAGE_SETTING: 'language-setting',
+	IMAGE: 'image',
+} as const;

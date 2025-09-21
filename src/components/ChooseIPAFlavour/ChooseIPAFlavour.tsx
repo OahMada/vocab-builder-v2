@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/Popover';
 import DescriptionText from '@/components/DescriptionText';
 import VisuallyHidden from '@/components/VisuallyHidden';
 
-function ChooseIPAFlavour() {
+function ChooseIPAFlavour({ ...delegated }: React.ComponentProps<typeof RadioGroup>) {
 	return (
 		<Wrapper>
 			<Title>
@@ -26,7 +26,7 @@ function ChooseIPAFlavour() {
 					</PopoverContent>
 				</Popover>
 			</Title>
-			<RadioGroup defaultValue='UK'>
+			<RadioGroup defaultValue='UK' {...delegated}>
 				<RadioGroupItem value='UK' />
 				<RadioGroupItem value='US' />
 			</RadioGroup>
@@ -40,6 +40,7 @@ var Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
+	align-items: center;
 `;
 
 var Title = styled.div`

@@ -21,9 +21,10 @@ async function deleteDatabaseEntry(sentenceId: string, userId: string) {
 export default async function deleteSentence(data: unknown): Promise<{ error: string } | { data: SentenceWithPieces }> {
 	let session = await verifySession();
 	if (!session) {
-		return { error: 'Unauthorized.' };
+		return { error: 'Unauthorized' };
 	}
 
+	let userId = session.id;
 	let result = DeleteSentenceInputSchema.safeParse(data);
 	if (!result.success) {
 		let errors = handleZodError(result.error, 'prettify');
@@ -35,7 +36,7 @@ export default async function deleteSentence(data: unknown): Promise<{ error: st
 	let blobName = getBlobNameFromUrl(audioUrl);
 	let blockBlobClient = getBlockBlobClient(blobName);
 
-	let [dbResult, blobResult] = await Promise.allSettled([deleteDatabaseEntry(sentenceId, session.userId), blockBlobClient.deleteIfExists()]);
+	let [dbResult, blobResult] = await Promise.allSettled([deleteDatabaseEntry(sentenceId, userId), blockBlobClient.deleteIfExists()]);
 
 	if (dbResult.status === 'rejected' || blobResult.status === 'rejected') {
 		if (dbResult.status === 'rejected' && blobResult.status === 'fulfilled') {
@@ -58,7 +59,7 @@ export default async function deleteSentence(data: unknown): Promise<{ error: st
 			}
 		}
 
-		return { error: 'failed to delete sentence.' };
+		return { error: 'failed to delete sentence' };
 	}
 
 	revalidateTag(UNSTABLE_CACHE_TAG);

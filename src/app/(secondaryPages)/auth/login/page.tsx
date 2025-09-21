@@ -12,7 +12,7 @@ export var metadata: Metadata = {
 	title: 'Login | Vocab Builder',
 };
 
-export default async function IntroPage() {
+export default async function LoginPage() {
 	let session = await auth();
 	if (session?.user) {
 		redirect('/');

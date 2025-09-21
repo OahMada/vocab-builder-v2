@@ -13,8 +13,10 @@ import { UNSTABLE_CACHE_TAG } from '@/constants';
 export default async function updateSentence(data: unknown): Promise<{ error: string } | { data: SentenceWithPieces }> {
 	let session = await verifySession();
 	if (!session) {
-		return { error: 'Unauthorized.' };
+		return { error: 'Unauthorized' };
 	}
+
+	let userId = session.id;
 
 	let result = SentenceUpdateInputSchema.safeParse(data);
 	if (!result.success) {
@@ -47,7 +49,7 @@ export default async function updateSentence(data: unknown): Promise<{ error: st
 		let updatedSentence = await prisma.sentence.update({
 			where: {
 				id,
-				userId: session.userId,
+				userId,
 			},
 			data: sentenceUpdateInput,
 			select: sentenceReadSelect,
@@ -57,6 +59,6 @@ export default async function updateSentence(data: unknown): Promise<{ error: st
 		return { data: updatedSentence };
 	} catch (error) {
 		console.error('sentence update failed', error);
-		return { error: 'Failed to update sentence.' };
+		return { error: 'Failed to update sentence' };
 	}
 }

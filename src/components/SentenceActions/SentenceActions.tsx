@@ -9,7 +9,6 @@ import updateSentence from '@/app/actions/sentence/updateSentence';
 
 import { deleteLocalData } from '@/helpers';
 import { useSentenceData } from '@/hooks';
-import { handleError } from '@/utils';
 import { SentenceCreateInputType, SentenceUpdateInputType, SentenceWithPieces, deleteCookie } from '@/lib';
 import { COOKIE_KEY, TOAST_ID } from '@/constants';
 
@@ -81,7 +80,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 			}
 
 			if ('error' in result) {
-				setErrorMsg(handleError(result.error));
+				setErrorMsg(result.error);
 				return;
 			}
 			deleteLocalData(true);

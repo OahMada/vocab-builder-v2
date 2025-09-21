@@ -35,7 +35,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	} catch (error) {
 		console.error('Generate IPA init error:', error);
 		if (error instanceof DOMException && error.name === 'TimeoutError') {
-			return NextResponse.json({ error: 'Request timed out. Please try again later.' }, { status: 500 });
+			return NextResponse.json({ error: 'Request timed out. Please try again later' }, { status: 500 });
 		}
 		return NextResponse.json({ error: 'Failed to generate IPA' }, { status: 500 });
 	}

@@ -41,6 +41,8 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 				<UnauthorizedDisplay callback={`/sentence/${sentenceId}`} />
 			</MaxWidthWrapper>
 		);
+	} else if (!session.user.learningLanguage || !session.user.nativeLanguage) {
+		redirect('/');
 	}
 	let userId = session.user.id;
 

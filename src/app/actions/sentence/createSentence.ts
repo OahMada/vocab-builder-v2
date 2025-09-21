@@ -35,8 +35,10 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 	let session = await verifySession();
 
 	if (!session) {
-		return { error: 'Unauthorized.' };
+		return { error: 'Unauthorized' };
 	}
+
+	let userId = session.id;
 
 	let sentenceId = createId();
 	let result = SentenceCreateInputSchema.safeParse(data);
@@ -51,7 +53,7 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 	let blobName = sentenceId + '.mp3';
 	let blockBlobClient = getBlockBlobClient(blobName);
 	blockBlobClient.setMetadata({
-		userId: session.userId,
+		userId,
 	});
 
 	let audioUrl = blockBlobClient.url;
@@ -72,7 +74,7 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 		},
 		user: {
 			connect: {
-				id: session.userId,
+				id: userId,
 			},
 		},
 	};
@@ -88,7 +90,7 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 			try {
 				await prisma.$transaction([
 					prisma.piece.deleteMany({ where: { sentenceId: sentenceId } }),
-					prisma.sentence.delete({ where: { id: sentenceId, userId: session.userId } }),
+					prisma.sentence.delete({ where: { id: sentenceId, userId } }),
 				]);
 			} catch (error) {
 				console.error('Cleanup failed after blob error:', error);
@@ -104,7 +106,7 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 				console.error('Cleanup failed after DB error:', cleanupError);
 			}
 		}
-		return { error: 'Failed to save sentence.' };
+		return { error: 'Failed to save sentence' };
 	}
 
 	revalidateTag(UNSTABLE_CACHE_TAG);

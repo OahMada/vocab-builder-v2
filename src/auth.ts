@@ -4,11 +4,13 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { createId } from '@paralleldrive/cuid2';
 
 import prisma from '@/lib/prisma';
+import { UpdataSessionSchema } from '@/lib';
 import sendVerificationRequest from '@/lib/sendVerificationRequest';
 import { EMAIL_FROM } from '@/constants';
 import { authConfig } from './auth.config';
+import { handleZodError } from '@/utils';
 
-export var { handlers, signIn, signOut, auth } = NextAuth({
+export var { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
 	...authConfig,
 	adapter: PrismaAdapter(prisma),
 	providers: [
@@ -36,15 +38,36 @@ export var { handlers, signIn, signOut, auth } = NextAuth({
 			else if (new URL(url).origin === baseUrl) return url;
 			return baseUrl;
 		},
-		jwt({ token, user }) {
+		jwt({ token, user, trigger, session }) {
 			if (user) {
 				// User is available during sign-in
-				token.id = user.id;
+				return {
+					...token,
+					learningLanguage: user.learningLanguage,
+					nativeLanguage: user.nativeLanguage,
+					EnglishIPAFlavour: user.EnglishIPAFlavour,
+					id: user.id!,
+				};
+			}
+			// updating session with client update call
+			if (trigger === 'update' && session) {
+				let result = UpdataSessionSchema.safeParse(session);
+				if (result.success) {
+					return {
+						...token,
+						...result.data,
+					};
+				} else {
+					console.error('Invalid session update payload', handleZodError(result.error, 'prettify'));
+				}
 			}
 			return token;
 		},
 		session({ session, token }) {
-			session.user.id = token.id!;
+			session.user.id = token.id;
+			session.user.EnglishIPAFlavour = token.EnglishIPAFlavour;
+			session.user.learningLanguage = token.learningLanguage;
+			session.user.nativeLanguage = token.nativeLanguage;
 			return session;
 		},
 	},

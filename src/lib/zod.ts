@@ -1,6 +1,6 @@
 import { MAX_QUERY_LEN, SENTENCE_FETCHING_LIMIT } from '@/constants';
 import * as z from 'zod';
-import { INPUT_NAME } from '@/constants';
+import { INPUT_NAME, NATIVE_LANGUAGE, LEARNING_LANGUAGE, ENGLISH_IPA_FLAVOUR } from '@/constants';
 
 export var UserInputSchema = z.object({
 	[INPUT_NAME.SENTENCE]: z
@@ -13,10 +13,10 @@ export var UserInputSchema = z.object({
 			z
 				.string()
 				.min(5, {
-					error: 'The sentence should be at least 5 characters long.',
+					error: 'The sentence should be at least 5 characters long',
 				})
 				.max(300, {
-					error: 'The sentence should be no longer than 300 characters.',
+					error: 'The sentence should be no longer than 300 characters',
 				})
 		),
 });
@@ -28,10 +28,10 @@ export var SentenceSchema = z.object({
 		.string()
 		.trim()
 		.min(5, {
-			error: 'The sentence should be at least 5 characters long.',
+			error: 'The sentence should be at least 5 characters long',
 		})
 		.max(300, {
-			error: 'The sentence should be no longer than 300 characters.',
+			error: 'The sentence should be no longer than 300 characters',
 		}),
 });
 
@@ -41,10 +41,10 @@ export var FetchIPAInputSchema = z.object({
 		.string()
 		.trim()
 		.min(2, {
-			error: 'The word should be at least 2 characters long.',
+			error: 'The word should be at least 2 characters long',
 		})
 		.max(50, {
-			error: 'The word should be no longer than 50 characters.',
+			error: 'The word should be no longer than 50 characters',
 		}),
 });
 
@@ -55,7 +55,7 @@ export type TranslationType = z.infer<typeof TranslationSchema>;
 
 export var NoteSchema = z.object({
 	[INPUT_NAME.NOTE]: z.string().trim().max(500, {
-		error: 'The note text should be no longer than 500 characters.',
+		error: 'The note text should be no longer than 500 characters',
 	}),
 });
 
@@ -63,7 +63,7 @@ export type NoteType = z.infer<typeof NoteSchema>;
 
 export var QuestionInputSchema = z.object({
 	[INPUT_NAME.QUESTION]: z.string().trim().min(3, {
-		error: 'The question text should be at least 3 characters long.',
+		error: 'The question text should be at least 3 characters long',
 	}),
 });
 export type QuestionInputType = z.infer<typeof QuestionInputSchema>;
@@ -83,7 +83,7 @@ export var SentenceCreateInputSchema = z.object({
 	pieces: z.array(PiecesCreateInputSchema),
 	translation: TranslationSchema.shape.translation.min(3),
 	note: NoteSchema.shape.note.optional(),
-	audioBlob: z.instanceof(Blob).refine((blob) => blob.type.startsWith('audio/'), { error: 'Must be an audio Blob.' }),
+	audioBlob: z.instanceof(Blob).refine((blob) => blob.type.startsWith('audio/'), { error: 'Must be an audio Blob' }),
 });
 
 export type SentenceCreateInputType = z.infer<typeof SentenceCreateInputSchema>;
@@ -141,9 +141,66 @@ export var DeleteSentenceInputSchema = z.object({
 	}),
 });
 
+var EmailSchema = z.email({ error: 'Invalid email' });
+
 export var LoginInputSchema = z.object({
-	email: z.email('Invalid email'),
+	email: EmailSchema,
 	callback: z.string().optional(),
 });
 
 export type LoginInputType = z.infer<typeof LoginInputSchema>;
+
+var UpdateUserSchemaFields = {
+	[INPUT_NAME.EMAIL]: EmailSchema,
+	[INPUT_NAME.NAME]: z
+		.string()
+		.trim()
+		.min(1, { error: 'Name should be at least 1 characters long' })
+		.max(50, {
+			error: 'Name should be no longer than 50 characters',
+		})
+		.regex(/^[a-zA-Z\s'-]+$/, { error: 'Invalid characters in name' }),
+	[INPUT_NAME.LEARNING_LANGUAGE]: z.enum(LEARNING_LANGUAGE),
+	[INPUT_NAME.NATIVE_LANGUAGE]: z.enum(NATIVE_LANGUAGE),
+	[INPUT_NAME.ENGLISH_IPA_FLAVOUR]: z.enum(ENGLISH_IPA_FLAVOUR),
+	imageUrl: z.url({
+		protocol: /^https?$/,
+		// TODO maybe use a specific domain
+		hostname: z.regexes.domain,
+	}),
+};
+
+export var UpdataSessionSchema = z
+	.object({ ...UpdateUserSchemaFields, [INPUT_NAME.ENGLISH_IPA_FLAVOUR]: z.enum(ENGLISH_IPA_FLAVOUR).nullable() })
+	.partial();
+
+export var PersonalizeInputSchema = z.object({
+	[INPUT_NAME.NAME]: UpdateUserSchemaFields[INPUT_NAME.NAME].optional(),
+	[INPUT_NAME.LEARNING_LANGUAGE]: UpdateUserSchemaFields[INPUT_NAME.LEARNING_LANGUAGE],
+	[INPUT_NAME.NATIVE_LANGUAGE]: UpdateUserSchemaFields[INPUT_NAME.NATIVE_LANGUAGE],
+	[INPUT_NAME.ENGLISH_IPA_FLAVOUR]: UpdateUserSchemaFields[INPUT_NAME.ENGLISH_IPA_FLAVOUR].optional(),
+});
+
+export type PersonalizeInput = z.infer<typeof PersonalizeInputSchema>;
+
+export var UserInfoInputSchema = z.object({
+	[INPUT_NAME.NAME]: UpdateUserSchemaFields[INPUT_NAME.NAME],
+	[INPUT_NAME.EMAIL]: UpdateUserSchemaFields[INPUT_NAME.EMAIL],
+});
+
+export var LanguageSettingInputSchema = z.object({
+	[INPUT_NAME.LEARNING_LANGUAGE]: UpdateUserSchemaFields[INPUT_NAME.LEARNING_LANGUAGE].optional(),
+	[INPUT_NAME.NATIVE_LANGUAGE]: UpdateUserSchemaFields[INPUT_NAME.NATIVE_LANGUAGE].optional(),
+	[INPUT_NAME.ENGLISH_IPA_FLAVOUR]: UpdateUserSchemaFields[INPUT_NAME.ENGLISH_IPA_FLAVOUR].optional(),
+});
+
+export var UpdateUserImageSchema = z.object({
+	image: UpdateUserSchemaFields.imageUrl,
+});
+
+export var UpdateUserInputSchema = z.discriminatedUnion('action', [
+	PersonalizeInputSchema.extend({ action: z.literal('personalize') }),
+	UserInfoInputSchema.extend({ action: z.literal('user-info') }),
+	LanguageSettingInputSchema.extend({ action: z.literal('language-setting') }),
+	UpdateUserImageSchema.extend({ action: z.literal('image') }),
+]);

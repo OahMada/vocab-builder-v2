@@ -18,6 +18,7 @@ export var metadata: Metadata = {
 const ErrorCodes = {
 	Configuration: 'Configuration',
 	AccessDenied: 'AccessDenied',
+	Verification: 'Verification',
 	Default: 'Default',
 } as const;
 
@@ -28,6 +29,15 @@ var errorMap = {
 			<SecondaryText>
 				Unique error code: <ErrorCode>Configuration</ErrorCode>
 			</SecondaryText>
+		</>
+	),
+	[ErrorCodes.Verification]: (
+		<>
+			<p>The verification link is invalid or has expired. Please try signing in again to request a new link.</p>
+			<p>
+				Unique error code:
+				<ErrorCode>Verification</ErrorCode>
+			</p>
 		</>
 	),
 
@@ -71,7 +81,7 @@ export default async function AuthErrorPage({ searchParams }: { searchParams: Pr
 				<InnerWrapper>
 					<Icon id='forward' size={14} />
 					&nbsp;
-					<NavLink href='/auth/login'>Retry</NavLink>
+					<NavLink href='/auth/login'>Retry Login</NavLink>
 				</InnerWrapper>
 			</Wrapper>
 		</MaxWidthWrapper>

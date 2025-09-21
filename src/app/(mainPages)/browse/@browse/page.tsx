@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { SearchParams } from 'nuqs';
+import { redirect } from 'next/navigation';
 
 import { readAllSentences, countSentences } from '@/app/actions/sentence/readAllSentences';
 
-import { SentenceWithPieces } from '@/lib/sentenceReadSelect';
+import { SentenceWithPieces } from '@/lib/prismaSelect';
 import searchParamsCache from '@/lib/searchParamsCache';
 import { auth } from '@/auth';
 

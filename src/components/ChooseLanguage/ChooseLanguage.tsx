@@ -9,11 +9,24 @@ import Icon from '@/components/Icon';
 import DescriptionText from '@/components/DescriptionText';
 import VisuallyHidden from '@/components/VisuallyHidden';
 
-function ChooseLanguage() {
+var LanguageMap = {
+	learning: {
+		labelText: 'Set Learning Language',
+		desc: 'the language you are learning',
+	},
+	translation: {
+		labelText: 'Set Transition Language',
+		desc: 'your native language',
+	},
+} as const;
+
+function ChooseLanguage({ type, ...delegated }: { type: 'learning' | 'translation' } & Omit<React.ComponentProps<typeof Select>, 'id'>) {
+	let { labelText, desc } = LanguageMap[type];
+
 	return (
 		<Wrapper>
 			<Label htmlFor='language'>
-				<LabelText>Set Translation Language</LabelText>
+				<LabelText>{labelText}</LabelText>
 				<Popover>
 					<PopoverTrigger asChild={true}>
 						<InfoButton variant='icon'>
@@ -22,14 +35,12 @@ function ChooseLanguage() {
 						</InfoButton>
 					</PopoverTrigger>
 					<PopoverContent>
-						<DescriptionText>
-							This option corresponds to your mother language. You don&apos;t need to set which language you want to learn.{' '}
-						</DescriptionText>
+						<DescriptionText>This option corresponds to {desc}.</DescriptionText>
 					</PopoverContent>
 				</Popover>
 			</Label>
-			<Select defaultValue='Chinese' id='language'>
-				<SelectItem value='Chinese'>Chinese</SelectItem>
+			<Select id='language' {...delegated}>
+				{type === 'translation' && <SelectItem value='Chinese'>Chinese</SelectItem>}
 				<SelectItem value='English'>English</SelectItem>
 				<SelectItem value='French'>French</SelectItem>
 				<SelectItem value='Spanish'>Spanish</SelectItem>
@@ -41,7 +52,7 @@ function ChooseLanguage() {
 
 export default ChooseLanguage;
 
-var Wrapper = styled.form`
+var Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
