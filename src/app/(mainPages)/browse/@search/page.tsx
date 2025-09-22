@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { SearchParams } from 'nuqs/server';
-import { redirect } from 'next/navigation';
 
 import searchParamsCache from '@/lib/searchParamsCache';
 import { SentenceWithPieces } from '@/lib';

@@ -27,17 +27,17 @@ var errorMap = {
 		<>
 			<p>There was a problem when trying to authenticate. Please contact us if this error persists. </p>
 			<SecondaryText>
-				Unique error code: <ErrorCode>Configuration</ErrorCode>
+				Unique error code: <ErrorCode>{ErrorCodes.Configuration}</ErrorCode>
 			</SecondaryText>
 		</>
 	),
 	[ErrorCodes.Verification]: (
 		<>
 			<p>The verification link is invalid or has expired. Please try signing in again to request a new link.</p>
-			<p>
+			<SecondaryText>
 				Unique error code:
-				<ErrorCode>Verification</ErrorCode>
-			</p>
+				<ErrorCode>{ErrorCodes.Verification}</ErrorCode>
+			</SecondaryText>
 		</>
 	),
 
@@ -48,7 +48,7 @@ var errorMap = {
 				email domain or missing role).
 			</p>
 			<SecondaryText>
-				Unique error code: <ErrorCode>AccessDenied</ErrorCode>
+				Unique error code: <ErrorCode>{ErrorCodes.AccessDenied}</ErrorCode>
 			</SecondaryText>
 		</>
 	),
@@ -57,7 +57,7 @@ var errorMap = {
 		<>
 			<p>Something went wrong during authentication. Please try again, and contact support if the issue continues. </p>
 			<SecondaryText>
-				Unique error code: <ErrorCode>Default</ErrorCode>
+				Unique error code: <ErrorCode>{ErrorCodes.Default}</ErrorCode>
 			</SecondaryText>
 		</>
 	),

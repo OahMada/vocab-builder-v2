@@ -30,7 +30,7 @@ export function Toast({ title, content, contentType, removeToast, ...props }: To
 				}
 			}}
 		>
-			{title && <Title>{title}</Title>}
+			{title && <Title $contentType={contentType}>{title}</Title>}
 			<Description $contentType={contentType}>{content}</Description>
 			<ToastPrimitives.Close asChild={true}>
 				<CloseButton variant='icon' style={{ '--icon-size': '16px' } as React.CSSProperties}>
@@ -56,9 +56,21 @@ var Root = styled(ToastPrimitives.Root)`
 	position: relative;
 `;
 
-var Title = styled(ToastPrimitives.Title)`
+var Title = styled(ToastPrimitives.Title)<{ $contentType: 'error' | 'notice' }>`
 	font-size: 12px;
 	font-weight: 600;
+
+	${({ $contentType }) => {
+		if ($contentType === 'error') {
+			return css`
+				color: var(--text-status-warning);
+			`;
+		} else if ($contentType === 'notice') {
+			return css`
+				color: inherit;
+			`;
+		}
+	}}
 `;
 
 var Description = styled(ToastPrimitives.Description)<{ $contentType: 'error' | 'notice' }>`

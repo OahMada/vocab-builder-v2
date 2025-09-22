@@ -6,7 +6,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import login from '@/app/actions/auth/login';
+import emailLogin from '@/app/actions/auth/emailLogin';
+import googleLogin from '@/app/actions/auth/googleLogin';
 
 import { LoginInputSchema, LoginInputType } from '@/lib';
 import { INPUT_NAME } from '@/constants';
@@ -18,9 +19,10 @@ import Loading from '@/components/Loading';
 import { TOAST_ID } from '@/constants';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
-function Login() {
+function Login({ error }: { error: string | undefined }) {
 	let [emailSent, setEmailSent] = React.useState(false);
-	let [isLoading, startTransition] = React.useTransition();
+	let [emailLoggingLoading, setEmailLoggingLoading] = React.useState(false);
+	let [oauthLoggingLoading, startTransition] = React.useTransition();
 	let router = useRouter();
 	let searchParams = useSearchParams();
 	let callback = searchParams.get('callback');
@@ -42,23 +44,23 @@ function Login() {
 		reValidateMode: 'onSubmit',
 	});
 
-	// let email = watch(INPUT_NAME.EMAIL);
-
 	function clearInput() {
 		clearErrors(INPUT_NAME.EMAIL);
 		setValue(INPUT_NAME.EMAIL, '');
 	}
 
 	function onSubmit(data: LoginInputType) {
-		startTransition(async () => {
-			let result = await login({ email: data.email, callback: callback ?? undefined });
+		setEmailLoggingLoading(true);
+		React.startTransition(async () => {
+			let result = await emailLogin({ email: data.email, callback: callback ?? undefined });
+
 			if ('error' in result) {
 				addToToast({
 					id: TOAST_ID.LOGIN,
 					contentType: 'error',
 					content: result.error,
 				});
-			} else if ('data' in result) {
+			} else if ('data' in result && result.data) {
 				let parsed = new URL(result.data);
 				if (parsed.searchParams.get('error')) {
 					router.push(result.data);
@@ -66,7 +68,31 @@ function Login() {
 					setEmailSent(true);
 				}
 			}
+			setEmailLoggingLoading(false);
 		});
+	}
+
+	function handleGoogleLogin() {
+		startTransition(async () => {
+			let result = await googleLogin(callback ?? undefined);
+			if (result && 'error' in result) {
+				addToToast({
+					id: TOAST_ID.LOGIN,
+					contentType: 'error',
+					content: result.error,
+				});
+			}
+		});
+	}
+
+	let errorMsgEle: React.ReactNode;
+
+	if (error) {
+		if (error === ErrorCodes.OAuthAccountNotLinked) {
+			errorMsgEle = <ErrorMsg>{ErrorMap[ErrorCodes.OAuthAccountNotLinked] + ` Code: ${error}`}</ErrorMsg>;
+		} else {
+			errorMsgEle = <ErrorMsg>{ErrorMap[ErrorCodes.Default] + ` Code: ${error}`}</ErrorMsg>;
+		}
 	}
 
 	return (
@@ -108,8 +134,8 @@ function Login() {
 						/>
 						{errors.email && <ErrorText>{errors.email.message}</ErrorText>}
 					</InputWrapper>
-					<EmailButton variant='fill' onClick={handleSubmit(onSubmit)} disabled={isLoading}>
-						{isLoading ? <Loading description='Signing in' /> : <Icon id='enter' />}
+					<EmailButton variant='fill' onClick={handleSubmit(onSubmit)} disabled={emailLoggingLoading || oauthLoggingLoading}>
+						{emailLoggingLoading ? <Loading description='Signing in' /> : <Icon id='enter' />}
 						&nbsp; Continue
 					</EmailButton>
 					<Divider>
@@ -117,10 +143,11 @@ function Login() {
 						<span>Or</span>
 						<HorizontalLine />
 					</Divider>
-					<GoogleButton variant='fill'>
-						<Icon id='globe' />
+					<GoogleButton variant='fill' disabled={emailLoggingLoading || oauthLoggingLoading} onClick={handleGoogleLogin}>
+						{oauthLoggingLoading ? <Loading description='Signing in' /> : <Icon id='globe' />}
 						&nbsp; Continue With Google
 					</GoogleButton>
+					{error && errorMsgEle}
 				</>
 			)}
 		</Wrapper>
@@ -208,3 +235,20 @@ var Title = styled.h2`
 	font-weight: 600;
 	margin-bottom: 10px;
 `;
+
+var ErrorMsg = styled.p`
+	color: var(--text-status-warning);
+	font-size: ${14 / 16}rem;
+	text-align: center;
+`;
+
+// https://next-auth.js.org/configuration/pages#sign-in-page
+var ErrorCodes = {
+	OAuthAccountNotLinked: 'OAuthAccountNotLinked',
+	Default: 'Default',
+} as const;
+
+var ErrorMap = {
+	[ErrorCodes.OAuthAccountNotLinked]: 'An account with this email already exists. Try sign in with the email method.',
+	[ErrorCodes.Default]: 'Something went wrong during authentication. Please try again, and contact support if the issue continues.',
+};

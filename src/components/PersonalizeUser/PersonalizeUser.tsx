@@ -67,7 +67,7 @@ export default function PersonalizeUser({ hasName }: { hasName: boolean }) {
 			addToToast({
 				id: 'user_update',
 				contentType: 'notice',
-				content: 'User Updated',
+				content: 'Account Updated',
 			});
 			router.replace('/');
 		});

@@ -141,25 +141,21 @@ export var DeleteSentenceInputSchema = z.object({
 	}),
 });
 
+export var CallbackSchema = z.string().optional();
 var EmailSchema = z.email({ error: 'Invalid email' });
 
 export var LoginInputSchema = z.object({
 	email: EmailSchema,
-	callback: z.string().optional(),
+	callback: CallbackSchema,
 });
 
 export type LoginInputType = z.infer<typeof LoginInputSchema>;
 
 var UpdateUserSchemaFields = {
 	[INPUT_NAME.EMAIL]: EmailSchema,
-	[INPUT_NAME.NAME]: z
-		.string()
-		.trim()
-		.min(1, { error: 'Name should be at least 1 characters long' })
-		.max(50, {
-			error: 'Name should be no longer than 50 characters',
-		})
-		.regex(/^[a-zA-Z\s'-]+$/, { error: 'Invalid characters in name' }),
+	[INPUT_NAME.NAME]: z.string().trim().min(1, { error: 'Name should be at least 1 characters long' }).max(50, {
+		error: 'Name should be no longer than 50 characters',
+	}),
 	[INPUT_NAME.LEARNING_LANGUAGE]: z.enum(LEARNING_LANGUAGE),
 	[INPUT_NAME.NATIVE_LANGUAGE]: z.enum(NATIVE_LANGUAGE),
 	[INPUT_NAME.ENGLISH_IPA_FLAVOUR]: z.enum(ENGLISH_IPA_FLAVOUR),

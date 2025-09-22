@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth';
 import Resend from 'next-auth/providers/resend';
+import Google from 'next-auth/providers/google';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { createId } from '@paralleldrive/cuid2';
 
@@ -14,6 +15,15 @@ export var { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
 	...authConfig,
 	adapter: PrismaAdapter(prisma),
 	providers: [
+		Google({
+			authorization: {
+				params: {
+					prompt: 'consent',
+					access_type: 'offline',
+					response_type: 'code',
+				},
+			},
+		}),
 		Resend({
 			from: EMAIL_FROM,
 			sendVerificationRequest,
@@ -37,6 +47,12 @@ export var { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
 			// Allows callback URLs on the same origin
 			else if (new URL(url).origin === baseUrl) return url;
 			return baseUrl;
+		},
+		async signIn({ account, profile }) {
+			if (account?.provider === 'google') {
+				return Boolean(profile?.email_verified);
+			}
+			return true;
 		},
 		jwt({ token, user, trigger, session }) {
 			if (user) {
