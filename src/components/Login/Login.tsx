@@ -10,14 +10,14 @@ import emailLogin from '@/app/actions/auth/emailLogin';
 import googleLogin from '@/app/actions/auth/googleLogin';
 
 import { LoginInputSchema, LoginInputType } from '@/lib';
-import { INPUT_NAME } from '@/constants';
+import { INPUT_NAME, TOAST_ID } from '@/constants';
 
 import InputBox from '@/components/InputBox';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import Loading from '@/components/Loading';
-import { TOAST_ID } from '@/constants';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import FormErrorText from '@/components/FormErrorText';
 
 function Login({ error }: { error: string | undefined }) {
 	let [emailSent, setEmailSent] = React.useState(false);
@@ -132,7 +132,7 @@ function Login({ error }: { error: string | undefined }) {
 								},
 							})}
 						/>
-						{errors.email && <ErrorText>{errors.email.message}</ErrorText>}
+						{errors.email && <FormErrorText>{errors.email.message}</FormErrorText>}
 					</InputWrapper>
 					<EmailButton variant='fill' onClick={handleSubmit(onSubmit)} disabled={emailLoggingLoading || oauthLoggingLoading}>
 						{emailLoggingLoading ? <Loading description='Signing in' /> : <Icon id='enter' />}
@@ -195,13 +195,6 @@ var LabelText = styled.label`
 	font-size: ${14 / 16}rem;
 	font-weight: 500;
 	color: var(--text-tertiary);
-	text-align: left;
-`;
-
-var ErrorText = styled.span`
-	transform: translateX(5px);
-	color: var(--text-status-warning);
-	font-size: ${12 / 16}rem;
 	text-align: left;
 `;
 

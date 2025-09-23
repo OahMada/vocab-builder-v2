@@ -43,7 +43,7 @@ var checkSentenceUniqueness = unstable_cache(
 		return { data: sentenceExisted };
 	},
 	[],
-	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG] }
+	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG.SENTENCES] }
 );
 
 export default checkSentenceUniqueness;

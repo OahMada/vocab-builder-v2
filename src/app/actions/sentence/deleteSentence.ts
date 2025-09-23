@@ -62,6 +62,6 @@ export default async function deleteSentence(data: unknown): Promise<{ error: st
 		return { error: 'failed to delete sentence' };
 	}
 
-	revalidateTag(UNSTABLE_CACHE_TAG);
+	revalidateTag(UNSTABLE_CACHE_TAG.SENTENCES);
 	return { data: dbResult.value[1] };
 }

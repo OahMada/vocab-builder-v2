@@ -27,11 +27,11 @@ export var DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
 	user-select: none;
 
 	&[data-highlighted] {
-		background-color: var(--bg-tertiary);
+		background-color: var(--bg-primary-hover);
 	}
 
 	&:active {
-		background-color: var(--bg-tertiary);
+		background-color: var(--bg-primary-hover);
 	}
 
 	/* replaced with a custom background color */

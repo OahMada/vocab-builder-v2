@@ -1,11 +1,23 @@
 'use client';
 import * as React from 'react';
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useSession } from 'next-auth/react';
+
+import updateUser from '@/app/actions/user/updateUser';
+
+import { UserInfoInputSchema, UserInfoInput } from '@/lib';
+
 import Modal, { Title } from '@/components/Modal';
 import InputBox from '@/components/InputBox';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import Spacer from '@/components/Spacer';
+import FormErrorText from '@/components/FormErrorText';
+import { USER_UPDATE_ACTION } from '@/constants';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import Loading from '@/components/Loading';
 
 interface EditUserInfoProps {
 	isShowing: boolean;
@@ -13,24 +25,48 @@ interface EditUserInfoProps {
 }
 
 function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
-	let [email, setEmail] = React.useState('');
+	let { data: session, update: updateSession } = useSession();
+	let [isLoading, startTransition] = React.useTransition();
+	let { addToToast } = useGlobalToastContext();
+	let {
+		register,
+		formState: { errors },
+		clearErrors,
+		handleSubmit,
+	} = useForm<UserInfoInput>({
+		resolver: zodResolver(UserInfoInputSchema),
+		reValidateMode: 'onSubmit',
+		values: {
+			name: session?.user.name || '',
+			email: session?.user.email || '',
+		},
+	});
 
-	function clearEmail() {
-		setEmail('');
-	}
+	function onSubmit(data: UserInfoInput) {
+		console.log(data);
+		startTransition(async () => {
+			let result = await updateUser({
+				...data,
+				userId: session?.user.id,
+				action: USER_UPDATE_ACTION.USER_INFO,
+			});
 
-	function onEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
-		setEmail(e.target.value);
-	}
-
-	let [username, setUserName] = React.useState('');
-
-	function clearUsername() {
-		setUserName('');
-	}
-
-	function onUsernameChange(e: React.ChangeEvent<HTMLInputElement>) {
-		setUserName(e.target.value);
+			if ('error' in result) {
+				addToToast({
+					contentType: 'error',
+					content: result.error,
+					id: 'user_update',
+				});
+				return;
+			}
+			addToToast({
+				id: 'user_update',
+				contentType: 'notice',
+				content: 'Account Updated',
+			});
+			await updateSession(result.data);
+			onDismiss();
+		});
 	}
 
 	return (
@@ -38,22 +74,30 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 			<Wrapper>
 				<Label>Name:</Label>
 				<InputBox
-					value={username}
-					clearInput={clearUsername}
-					onChange={onUsernameChange}
 					id='username'
 					style={{ '--bg-color': 'transparent' } as React.CSSProperties}
+					{...register('name', {
+						onChange: () => {
+							clearErrors('name');
+						},
+					})}
+					placeholder='John Doe'
 				/>
+				{errors.name && <FormErrorText>{errors.name.message}</FormErrorText>}
 			</Wrapper>
 			<Wrapper>
 				<Label>Email:</Label>
 				<InputBox
-					value={email}
-					clearInput={clearEmail}
-					onChange={onEmailChange}
 					id='email'
 					style={{ '--bg-color': 'transparent' } as React.CSSProperties}
+					{...register('email', {
+						onChange: () => {
+							clearErrors('email');
+						},
+					})}
+					placeholder='example@email.com'
 				/>
+				{errors.email && <FormErrorText>{errors.email.message}</FormErrorText>}
 			</Wrapper>
 			<Spacer size={1} />
 			<Actions>
@@ -61,8 +105,8 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 					<Icon id='x' />
 					&nbsp;Cancel
 				</CancelButton>
-				<SaveButton variant='fill'>
-					<Icon id='save' />
+				<SaveButton variant='fill' onClick={handleSubmit(onSubmit)} disabled={isLoading}>
+					{isLoading ? <Loading description='updating user' /> : <Icon id='save' />}
 					&nbsp;Save
 				</SaveButton>
 			</Actions>

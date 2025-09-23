@@ -109,7 +109,7 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 		return { error: 'Failed to save sentence' };
 	}
 
-	revalidateTag(UNSTABLE_CACHE_TAG);
+	revalidateTag(UNSTABLE_CACHE_TAG.SENTENCES);
 	(await cookies()).delete(COOKIE_KEY);
 	return { data: dbResult.value };
 }

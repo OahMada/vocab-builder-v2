@@ -11,7 +11,7 @@ import { EMAIL_FROM } from '@/constants';
 import { authConfig } from './auth.config';
 import { handleZodError } from '@/utils';
 
-export var { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
+export var { handlers, signIn, signOut, auth } = NextAuth({
 	...authConfig,
 	adapter: PrismaAdapter(prisma),
 	providers: [

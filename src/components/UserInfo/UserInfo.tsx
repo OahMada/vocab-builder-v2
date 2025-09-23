@@ -1,11 +1,14 @@
 'use client';
+import * as React from 'react';
+import styled from 'styled-components';
+import { useSession } from 'next-auth/react';
+
 import Button from '@/components/Button';
 import EditUserInfo from '@/components/EditUserInfo';
 import Icon from '@/components/Icon';
-import * as React from 'react';
-import styled from 'styled-components';
 
 function UserInfo() {
+	let { data: session } = useSession();
 	let [isShowing, setIsShowing] = React.useState(false);
 
 	function dismissModal() {
@@ -19,8 +22,8 @@ function UserInfo() {
 	return (
 		<>
 			<Wrapper>
-				<Name>Adam Hao</Name>
-				<p>haozg44@gmail.com</p>
+				<Name>{session?.user.name}</Name>
+				<p>{session?.user.email}</p>
 				<Button variant='outline' onClick={showModal}>
 					<EditIcon id='edit' size={16} />
 					&nbsp;Edit Info

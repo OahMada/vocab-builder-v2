@@ -57,10 +57,10 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 			<TextArea
 				value={translation}
 				clearInput={clearInput}
-				{...register(INPUT_NAME.TRANSLATION, {
+				{...register('translation', {
 					onChange: () => {
 						removeFromToast(TOAST_ID.TRANSLATION_EDITING);
-						clearErrors(INPUT_NAME.TRANSLATION);
+						clearErrors('translation');
 					},
 				})}
 				placeholder='Input translation text here'

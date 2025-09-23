@@ -5,6 +5,8 @@ import { auth } from '@/auth';
 
 import PersonalizeUser from '@/components/PersonalizeUser';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import { Title, Wrapper } from './StyledComponents';
+import Spacer from '@/components/Spacer';
 
 // reference https://stackoverflow.com/questions/68103612/how-to-drop-the-query-parameters-after-a-redirect-with-nextjs?rq=2
 
@@ -16,9 +18,22 @@ export default async function PersonalizePage() {
 		redirect('/');
 	}
 
+
+	let { learningLanguage, nativeLanguage, EnglishIPAFlavour, name } = session.user;
+
 	return (
 		<MaxWidthWrapper>
-			<PersonalizeUser hasName={Boolean(session.user.name)} />
+			<Wrapper>
+				<Title>Before you start...</Title>
+				<Spacer size={0} />
+				<PersonalizeUser
+					showSubmitButton={true}
+					learningLanguage={learningLanguage || undefined}
+					nativeLanguage={nativeLanguage || undefined}
+					EnglishIPAFlavour={EnglishIPAFlavour || undefined}
+					name={name || undefined}
+				/>
+			</Wrapper>
 		</MaxWidthWrapper>
 	);
 }

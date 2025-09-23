@@ -6,6 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useDebouncer } from '@tanstack/react-pacer';
 
 import updateUser from '@/app/actions/user/updateUser';
 
@@ -19,10 +20,27 @@ import InputBox from '@/components/InputBox';
 import Icon from '@/components/Icon';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Loading from '@/components/Loading';
+import FormErrorText from '@/components/FormErrorText';
 
 // reference https://stackoverflow.com/questions/68103612/how-to-drop-the-query-parameters-after-a-redirect-with-nextjs?rq=2
 
-export default function PersonalizeUser({ hasName }: { hasName: boolean }) {
+var defaultFormValues = {
+	learningLanguage: 'English',
+	EnglishIPAFlavour: 'UK',
+	nativeLanguage: 'Chinese',
+	name: '',
+} as const;
+
+interface PersonalizeUserProps {
+	showSubmitButton: boolean;
+	learningLanguage?: PersonalizeInput['learningLanguage'];
+	nativeLanguage?: PersonalizeInput['nativeLanguage'];
+	EnglishIPAFlavour?: PersonalizeInput['EnglishIPAFlavour'];
+	name?: PersonalizeInput['name'];
+}
+
+// pass parts of the session data from server components directly because it's tricky to use the session data returned from useSession, updated data won't persist after a page refresh, and a useEffect must be used to set back the values.
+export default function PersonalizeUser({ showSubmitButton, EnglishIPAFlavour, learningLanguage, name, nativeLanguage }: PersonalizeUserProps) {
 	let { data: session, update: updateSession } = useSession();
 	let { addToToast } = useGlobalToastContext();
 	let router = useRouter();
@@ -32,22 +50,24 @@ export default function PersonalizeUser({ hasName }: { hasName: boolean }) {
 		control,
 		register,
 		clearErrors,
-		formState: { errors },
+		formState: { errors, dirtyFields },
 		handleSubmit,
 	} = useForm<PersonalizeInput>({
 		resolver: zodResolver(PersonalizeInputSchema),
 		reValidateMode: 'onSubmit',
 		defaultValues: {
-			learningLanguage: 'English',
-			EnglishIPAFlavour: 'UK',
-			nativeLanguage: 'Chinese',
+			learningLanguage: learningLanguage || defaultFormValues.learningLanguage,
+			nativeLanguage: nativeLanguage || defaultFormValues.nativeLanguage,
+			EnglishIPAFlavour: EnglishIPAFlavour || defaultFormValues.EnglishIPAFlavour,
+			name: name || defaultFormValues.name,
 		},
 		shouldUnregister: true,
 	});
-
-	let learningLanguage = watch('learningLanguage');
+	let learningLanguageValue = watch('learningLanguage');
 
 	function onSubmit(data: PersonalizeInput) {
+		if (data.learningLanguage === learningLanguage && data.nativeLanguage === nativeLanguage && data.EnglishIPAFlavour === EnglishIPAFlavour) return;
+
 		startTransition(async () => {
 			let result = await updateUser({
 				...data,
@@ -69,15 +89,30 @@ export default function PersonalizeUser({ hasName }: { hasName: boolean }) {
 				contentType: 'notice',
 				content: 'Account Updated',
 			});
-			router.replace('/');
+			if (showSubmitButton) {
+				router.replace('/');
+			} else {
+				// force page reload to update component properties, so that dirtyFields always accurate
+				window.location.reload();
+			}
 		});
 	}
 
+	// handle language setting update on account page
+	let debouncer = useDebouncer(handleSubmit(onSubmit), { wait: 2000 });
+
+	React.useEffect(() => {
+		if (showSubmitButton) return;
+		if (dirtyFields.EnglishIPAFlavour || dirtyFields.learningLanguage || dirtyFields.nativeLanguage) {
+			debouncer.cancel(); // so that the waiting time is consistent
+			debouncer.maybeExecute();
+		}
+	}, [debouncer, dirtyFields.EnglishIPAFlavour, dirtyFields.learningLanguage, dirtyFields.nativeLanguage, showSubmitButton]);
+
 	return (
-		<Wrapper>
-			<Title>Before you start...</Title>
+		<>
 			<InnerWrapper>
-				{!hasName && (
+				{!name && (
 					<NameInputWrapper>
 						<Label htmlFor='name'>Name:</Label>
 						<InputBox
@@ -88,8 +123,9 @@ export default function PersonalizeUser({ hasName }: { hasName: boolean }) {
 									clearErrors('name');
 								},
 							})}
+							disabled={isLoading}
 						/>
-						{errors.name && <ErrorText>{errors.name.message}</ErrorText>}
+						{errors.name && <FormErrorText>{errors.name.message}</FormErrorText>}
 					</NameInputWrapper>
 				)}
 				<Controller
@@ -99,6 +135,7 @@ export default function PersonalizeUser({ hasName }: { hasName: boolean }) {
 					}}
 					control={control}
 					name='learningLanguage'
+					disabled={isLoading}
 				/>
 
 				<Controller
@@ -108,8 +145,9 @@ export default function PersonalizeUser({ hasName }: { hasName: boolean }) {
 					}}
 					control={control}
 					name='nativeLanguage'
+					disabled={isLoading}
 				/>
-				{learningLanguage === 'English' && (
+				{learningLanguageValue === 'English' && (
 					<Controller
 						render={({ field }) => {
 							let { onChange, ...rest } = field;
@@ -117,31 +155,19 @@ export default function PersonalizeUser({ hasName }: { hasName: boolean }) {
 						}}
 						control={control}
 						name='EnglishIPAFlavour'
+						disabled={isLoading}
 					/>
 				)}
 			</InnerWrapper>
-			<SubmitButton variant='outline' onClick={handleSubmit(onSubmit)} disabled={isLoading}>
-				{isLoading ? <Loading description='updating user' /> : <Icon id='enter' />}
-				&nbsp; Submit
-			</SubmitButton>
-		</Wrapper>
+			{showSubmitButton && (
+				<SubmitButton variant='outline' onClick={handleSubmit(onSubmit)} disabled={isLoading}>
+					{isLoading ? <Loading description='updating user' /> : <Icon id='enter' />}
+					&nbsp; Submit
+				</SubmitButton>
+			)}
+		</>
 	);
 }
-
-var Wrapper = styled.div`
-	height: 100%;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	gap: 20px;
-`;
-
-var Title = styled.h2`
-	font-size: ${24 / 16}rem;
-	font-weight: 600;
-	text-align: center;
-`;
 
 var InnerWrapper = styled.div`
 	width: 100%;
@@ -173,10 +199,4 @@ var Label = styled.label`
 var SubmitButton = styled(Button)`
 	margin-top: 10px;
 	align-self: center;
-`;
-
-var ErrorText = styled.span`
-	transform: translateX(5px);
-	color: var(--text-status-warning);
-	font-size: ${12 / 16}rem;
 `;

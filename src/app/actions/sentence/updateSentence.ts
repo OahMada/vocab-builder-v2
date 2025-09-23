@@ -55,7 +55,7 @@ export default async function updateSentence(data: unknown): Promise<{ error: st
 			select: sentenceReadSelect,
 		});
 
-		revalidateTag(UNSTABLE_CACHE_TAG);
+		revalidateTag(UNSTABLE_CACHE_TAG.SENTENCES);
 		return { data: updatedSentence };
 	} catch (error) {
 		console.error('sentence update failed', error);

@@ -111,7 +111,7 @@ export var searchSentences = unstable_cache(
 		}
 	},
 	[],
-	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG] }
+	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG.SENTENCES] }
 );
 
 export var countSearchResults = unstable_cache(
@@ -148,5 +148,5 @@ export var countSearchResults = unstable_cache(
 		}
 	},
 	[],
-	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG] }
+	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG.SENTENCES] }
 );

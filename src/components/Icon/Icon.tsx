@@ -27,6 +27,7 @@ import {
 	Menu,
 	Pause,
 	Globe,
+	Link,
 } from 'react-feather';
 
 var icons = {
@@ -54,6 +55,7 @@ var icons = {
 	'mobile-menu': Menu,
 	stop: Pause,
 	globe: Globe,
+	link: Link,
 };
 
 interface IconProps {

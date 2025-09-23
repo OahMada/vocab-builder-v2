@@ -34,7 +34,7 @@ var readOneSentenceById = unstable_cache(
 		}
 	},
 	[],
-	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG] }
+	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG.SENTENCES] }
 );
 
 export default readOneSentenceById;

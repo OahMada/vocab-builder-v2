@@ -37,7 +37,7 @@ export var readAllSentences = unstable_cache(
 		}
 	},
 	[],
-	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG] }
+	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG.SENTENCES] }
 );
 
 export var countSentences = unstable_cache(
@@ -58,5 +58,5 @@ export var countSentences = unstable_cache(
 		}
 	},
 	[],
-	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG] }
+	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG.SENTENCES] }
 );

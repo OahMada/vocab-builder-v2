@@ -7,14 +7,13 @@ import { auth } from '@/auth';
 import Wrapper from '@/components/PageWrapper';
 import UserInfo from '@/components/UserInfo';
 import UserPhoto from '@/components/UserPhoto';
-import ChooseLanguage from '@/components/ChooseLanguage';
-import ChooseIPAFlavour from '@/components/ChooseIPAFlavour';
 import ExportData from '@/components/ExportData';
 import DeleteAccount from '@/components/DeleteAccount';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import InnerWrapper from './InnerWrapper';
 import Breadcrumb from './CustomBreadcrumb';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
+import PersonalizeUser from '@/components/PersonalizeUser';
+import GoogleAccountLink from '@/components/GoogleAccountLink';
 
 export var metadata: Metadata = {
 	title: 'Account | Vocab Builder',
@@ -32,17 +31,22 @@ export default async function AccountPage() {
 		redirect('/');
 	}
 
+	let { EnglishIPAFlavour, learningLanguage, nativeLanguage, name } = session.user;
+
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>
 				<Breadcrumb />
 				<UserPhoto />
 				<UserInfo />
-				<InnerWrapper>
-					<ChooseLanguage type='learning' />
-					<ChooseLanguage type='translation' />
-					{session.user.EnglishIPAFlavour && <ChooseIPAFlavour />}
-				</InnerWrapper>
+				<GoogleAccountLink userId={session.user.id} />
+				<PersonalizeUser
+					showSubmitButton={false}
+					learningLanguage={learningLanguage}
+					nativeLanguage={nativeLanguage}
+					EnglishIPAFlavour={EnglishIPAFlavour || undefined}
+					name={name || undefined}
+				/>
 				<ExportData />
 				<DeleteAccount />
 			</Wrapper>

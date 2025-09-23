@@ -63,6 +63,7 @@ export const TOAST_ID = {
 	SENTENCE_FETCHING: 'sentence_fetching',
 	LOGIN: 'login',
 	USER_UPDATE: 'user_update',
+	ACCOUNT_LINK: 'account_link',
 } as const;
 
 export const INPUT_NAME = {
@@ -85,15 +86,16 @@ export const LOCAL_STORAGE_KEY = {
 	TRANSLATION: INPUT_NAME.TRANSLATION,
 } as const;
 
-export const LOCAL_STORAGE_OBJ = 'vocab-builder';
+export const LOCAL_STORAGE_OBJ = 'vocab_builder';
 
 export const COOKIE_KEY = 'sentence';
 
 export const LOCAL_DB_KEY = 'audio';
 
-// export const LANGUAGE_OPTIONS =
-
-export const UNSTABLE_CACHE_TAG = 'sentences';
+export const UNSTABLE_CACHE_TAG = {
+	SENTENCES: 'sentences',
+	ACCOUNT_LINK_STATUS: 'account_link_status',
+} as const;
 
 export const SENTENCE_FETCHING_LIMIT = 15;
 export const MAX_QUERY_LEN = 50;
@@ -106,7 +108,6 @@ export const ENGLISH_IPA_FLAVOUR = ['UK', 'US'] as const;
 
 export const USER_UPDATE_ACTION = {
 	PERSONALIZE: 'personalize',
-	USER_INFO: 'user-info',
-	LANGUAGE_SETTING: 'language-setting',
+	USER_INFO: 'user_info',
 	IMAGE: 'image',
 } as const;

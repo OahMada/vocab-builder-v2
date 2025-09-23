@@ -184,11 +184,7 @@ export var UserInfoInputSchema = z.object({
 	[INPUT_NAME.EMAIL]: UpdateUserSchemaFields[INPUT_NAME.EMAIL],
 });
 
-export var LanguageSettingInputSchema = z.object({
-	[INPUT_NAME.LEARNING_LANGUAGE]: UpdateUserSchemaFields[INPUT_NAME.LEARNING_LANGUAGE].optional(),
-	[INPUT_NAME.NATIVE_LANGUAGE]: UpdateUserSchemaFields[INPUT_NAME.NATIVE_LANGUAGE].optional(),
-	[INPUT_NAME.ENGLISH_IPA_FLAVOUR]: UpdateUserSchemaFields[INPUT_NAME.ENGLISH_IPA_FLAVOUR].optional(),
-});
+export type UserInfoInput = z.infer<typeof UserInfoInputSchema>;
 
 export var UpdateUserImageSchema = z.object({
 	image: UpdateUserSchemaFields.imageUrl,
@@ -197,6 +193,5 @@ export var UpdateUserImageSchema = z.object({
 export var UpdateUserInputSchema = z.discriminatedUnion('action', [
 	PersonalizeInputSchema.extend({ action: z.literal('personalize') }),
 	UserInfoInputSchema.extend({ action: z.literal('user-info') }),
-	LanguageSettingInputSchema.extend({ action: z.literal('language-setting') }),
 	UpdateUserImageSchema.extend({ action: z.literal('image') }),
 ]);

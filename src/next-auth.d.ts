@@ -1,10 +1,11 @@
 import NextAuth, { type DefaultSession } from 'next-auth';
+import { LEARNING_LANGUAGE, NATIVE_LANGUAGE, ENGLISH_IPA_FLAVOUR } from '@/constants';
 
 interface UserFields {
 	id: string;
-	learningLanguage: string | null;
-	nativeLanguage: string | null;
-	EnglishIPAFlavour: string | null;
+	learningLanguage: (typeof LEARNING_LANGUAGE)[number] | null;
+	nativeLanguage: (typeof NATIVE_LANGUAGE)[number] | null;
+	EnglishIPAFlavour: (typeof ENGLISH_IPA_FLAVOUR)[number] | null;
 }
 
 declare module 'next-auth' {
