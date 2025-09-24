@@ -13,13 +13,16 @@ import { getBlockBlobClient } from './helpers';
 import { handleZodError } from '@/utils';
 import { COOKIE_KEY, UNSTABLE_CACHE_TAG } from '@/constants';
 
-async function saveToBlobStorage(blockBlobClient: BlockBlobClient, audioBlob: Blob) {
+async function saveToBlobStorage(blockBlobClient: BlockBlobClient, audioBlob: Blob, userId: string) {
 	// convert blob to buffer
 	let arrayBuffer = await audioBlob.arrayBuffer();
 	let buffer = Buffer.from(arrayBuffer);
 
 	await blockBlobClient.uploadData(buffer, {
 		blobHTTPHeaders: { blobContentType: 'audio/mpeg' },
+		metadata: {
+			userId,
+		},
 	});
 }
 
@@ -52,10 +55,6 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 	// prepare for saving to blob storage
 	let blobName = sentenceId + '.mp3';
 	let blockBlobClient = getBlockBlobClient(blobName);
-	blockBlobClient.setMetadata({
-		userId,
-	});
-
 	let audioUrl = blockBlobClient.url;
 
 	// prepare for saving to database
@@ -82,7 +81,10 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 	// return { error: 'test error' };
 
 	// handle saving logics
-	let [blobResult, dbResult] = await Promise.allSettled([saveToBlobStorage(blockBlobClient, audioBlob), createDatabaseEntry(sentenceCreateInput)]);
+	let [blobResult, dbResult] = await Promise.allSettled([
+		saveToBlobStorage(blockBlobClient, audioBlob, userId),
+		createDatabaseEntry(sentenceCreateInput),
+	]);
 	if (blobResult.status === 'rejected' || dbResult.status === 'rejected') {
 		if (blobResult.status === 'rejected' && dbResult.status === 'fulfilled') {
 			console.error('Azure Blob upload error:', blobResult.reason);

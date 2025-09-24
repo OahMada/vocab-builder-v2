@@ -40,11 +40,7 @@ function MobileMenu() {
 				</DropdownMenuTrigger>
 				<DropdownMenuContent>
 					<AvatarWrapper>
-						<Avatar
-							src='https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80'
-							style={{ '--avatar-size': '35px', '--fallback-font-size': '14px' } as React.CSSProperties}
-							fallbackStyle='outline'
-						/>
+						<Avatar style={{ '--avatar-size': '35px', '--fallback-font-size': '14px' } as React.CSSProperties} fallbackStyle='outline' />
 					</AvatarWrapper>
 					<DropdownMenuItem asChild={true}>
 						<DropdownItemButton variant='icon' href='/account'>

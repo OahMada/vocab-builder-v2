@@ -84,6 +84,7 @@ export var { handlers, signIn, signOut, auth } = NextAuth({
 			session.user.EnglishIPAFlavour = token.EnglishIPAFlavour;
 			session.user.learningLanguage = token.learningLanguage;
 			session.user.nativeLanguage = token.nativeLanguage;
+			session.user.image = token.image;
 			return session;
 		},
 	},

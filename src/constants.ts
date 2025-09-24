@@ -64,6 +64,7 @@ export const TOAST_ID = {
 	LOGIN: 'login',
 	USER_UPDATE: 'user_update',
 	ACCOUNT_LINK: 'account_link',
+	IMAGE_UPLOAD: 'image_upload',
 } as const;
 
 export const INPUT_NAME = {

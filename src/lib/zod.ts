@@ -159,7 +159,7 @@ var UpdateUserSchemaFields = {
 	[INPUT_NAME.LEARNING_LANGUAGE]: z.enum(LEARNING_LANGUAGE),
 	[INPUT_NAME.NATIVE_LANGUAGE]: z.enum(NATIVE_LANGUAGE),
 	[INPUT_NAME.ENGLISH_IPA_FLAVOUR]: z.enum(ENGLISH_IPA_FLAVOUR),
-	imageUrl: z.url({
+	image: z.url({
 		protocol: /^https?$/,
 		// TODO maybe use a specific domain
 		hostname: z.regexes.domain,
@@ -187,11 +187,21 @@ export var UserInfoInputSchema = z.object({
 export type UserInfoInput = z.infer<typeof UserInfoInputSchema>;
 
 export var UpdateUserImageSchema = z.object({
-	image: UpdateUserSchemaFields.imageUrl,
+	image: UpdateUserSchemaFields.image,
+	action: z.literal('image'),
 });
 
 export var UpdateUserInputSchema = z.discriminatedUnion('action', [
 	PersonalizeInputSchema.extend({ action: z.literal('personalize') }),
 	UserInfoInputSchema.extend({ action: z.literal('user-info') }),
-	UpdateUserImageSchema.extend({ action: z.literal('image') }),
 ]);
+
+// Basic file schema
+export var ImageFileSchema = z
+	.instanceof(File)
+	.refine((file) => file.size <= 5 * 1024 * 1024, { error: 'File must be ≤ 5MB' })
+	.refine((file) => ['image/jpeg', 'image/png', 'image/webp'].includes(file.type), { error: 'Only JPEG, PNG, or WebP allowed' })
+	// Optional: filename length
+	.refine((file) => file.name.length <= 50, { error: 'Filename must be ≤ 50 characters' })
+	// Optional: allowed extensions
+	.refine((file) => /\.(jpe?g|png|webp)$/i.test(file.name), { error: 'Filename must have a valid extension (jpg, jpeg, png, webp)' });

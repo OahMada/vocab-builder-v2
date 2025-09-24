@@ -12,7 +12,7 @@ import { auth } from '@/auth';
 
 export var POST = auth(async function (request: NextAuthRequest) {
 	if (!request.auth) {
-		return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
+		return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 	}
 	let body = await request.json();
 	let result = SentenceSchema.safeParse(body);

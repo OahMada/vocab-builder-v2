@@ -7,10 +7,7 @@ import { useSession } from 'next-auth/react';
 
 import { getNameInitials } from '@/helpers';
 
-function Avatar({
-	fallbackStyle,
-	...delegated
-}: { src: string; fallbackStyle: 'fill' | 'outline' } & React.ComponentProps<typeof AvatarPrimitives.Root>) {
+function Avatar({ fallbackStyle, ...delegated }: { fallbackStyle: 'fill' | 'outline' } & React.ComponentProps<typeof AvatarPrimitives.Root>) {
 	let { data: session } = useSession();
 	let [nameInitials, setNameInitials] = React.useState<string | undefined>(undefined);
 

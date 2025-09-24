@@ -63,6 +63,7 @@
 		"remark-gfm": "^4.0.1",
 		"resend": "^6.0.3",
 		"server-only": "^0.0.1",
+		"sharp": "^0.34.4",
 		"styled-components": "^6.1.19",
 		"swr": "^2.3.4",
 		"ts-node": "^10.9.2",

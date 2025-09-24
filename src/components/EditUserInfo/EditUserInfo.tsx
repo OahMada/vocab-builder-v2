@@ -43,7 +43,6 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 	});
 
 	function onSubmit(data: UserInfoInput) {
-		console.log(data);
 		startTransition(async () => {
 			let result = await updateUser({
 				...data,

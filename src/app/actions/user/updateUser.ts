@@ -46,14 +46,13 @@ export default async function updateUser(data: unknown): Promise<{ error: string
 						name,
 						email,
 					},
+					select: userSelect,
 				});
 				return { data: updatedUser };
 			} catch (error) {
 				console.error('user update failed', error);
 				return { error: 'Failed to update user' };
 			}
-		// case 'image':
-		// 	break;
 		default:
 			return { error: `Unhandled user update action: ${result.data['action']}` };
 	}
