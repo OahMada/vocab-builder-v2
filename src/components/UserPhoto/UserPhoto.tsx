@@ -2,26 +2,29 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import { createId } from '@paralleldrive/cuid2';
+import { useSession } from 'next-auth/react';
+import axios from 'axios';
 
-import uploadImage from '@/app/actions/user/uploadImage';
+import getBlobStorageSASToken from '@/app/actions/user/getBlobStorageSASToken';
 
+import { handleError, handleZodError } from '@/utils';
 import { ImageFileSchema } from '@/lib';
+import { TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
 
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import Loading from '@/components/Loading';
-import { handleZodError } from '@/utils';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
-import { TOAST_ID } from '@/constants';
-import { useSession } from 'next-auth/react';
+import updateUserImage from '@/app/actions/user/updateUserImage';
 
 function UserPhoto() {
 	let [isLoading, startTransition] = React.useTransition();
 	let { addToToast } = useGlobalToastContext();
-	let { update: updateSession } = useSession();
+	let { update: updateSession, data: session } = useSession();
 
-	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+	async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		let file = e.target.files?.[0];
 		if (!file) return;
 
@@ -36,14 +39,46 @@ function UserPhoto() {
 			return;
 		}
 
-		// Prepare FormData
-		let formData = new FormData();
-		formData.append('file', file);
+		let fileExt = file.name.split('.').pop();
+		let blobName = createId() + '.' + fileExt;
 
-		// Trigger the server action
 		startTransition(async () => {
-			let result = await uploadImage(formData);
-			if ('error' in result) {
+			// upload image
+			let sasToken: string, containerName: string, storageAccountName: string;
+			try {
+				({ sasToken, containerName, storageAccountName } = await getBlobStorageSASToken());
+				let uploadUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?${sasToken}`;
+				await axios.put(uploadUrl, result.data, {
+					headers: {
+						'x-ms-blob-type': 'BlockBlob',
+						'Content-Type': result.data.type,
+					},
+					maxBodyLength: Infinity, // important for large files
+				});
+				let metaDataUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?comp=metadata&${sasToken}`;
+				await axios.put(
+					metaDataUrl,
+					null, // no body needed
+					{
+						headers: {
+							'x-ms-meta-userid': session?.user.id,
+						},
+					}
+				);
+			} catch (error) {
+				let errMsg = handleError(error);
+				addToToast({
+					contentType: 'error',
+					content: errMsg,
+					id: TOAST_ID.IMAGE_UPLOAD,
+				});
+				return;
+			}
+
+			// update user image link
+			let imageUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}`;
+			let updateResult = await updateUserImage({ action: USER_UPDATE_ACTION.IMAGE, image: imageUrl });
+			if ('error' in updateResult) {
 				addToToast({
 					contentType: 'error',
 					content: result.error,
@@ -52,7 +87,8 @@ function UserPhoto() {
 				return;
 			}
 
-			await updateSession({ image: result.data });
+			// update session
+			await updateSession({ image: updateResult.data });
 			addToToast({
 				contentType: 'notice',
 				content: 'Image uploaded',

@@ -2,7 +2,10 @@ import 'server-only';
 
 import { BlobServiceClient, BlockBlobClient, ContainerClient } from '@azure/storage-blob';
 
-export default function getBlockBlobClient(blobName: string, type: 'audio' | 'image'): [BlockBlobClient, ContainerClient] {
+export default function getBlockBlobClient(
+	type: 'audio' | 'image',
+	blobName?: string
+): { blockBlobClient: BlockBlobClient | undefined; containerClient: ContainerClient } {
 	let storageAccountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
 	if (!storageAccountName) throw new Error('Azure Storage account name not found');
 	let storageAccountConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
@@ -18,6 +21,9 @@ export default function getBlockBlobClient(blobName: string, type: 'audio' | 'im
 	}
 	if (!containerName) throw new Error('Azure Storage containerName not found.');
 	let containerClient = blobServiceClient.getContainerClient(containerName);
-	let blockBlobClient: BlockBlobClient = containerClient.getBlockBlobClient(blobName);
-	return [blockBlobClient, containerClient];
+	let blockBlobClient: BlockBlobClient | undefined = undefined;
+	if (blobName) {
+		blockBlobClient = containerClient.getBlockBlobClient(blobName);
+	}
+	return { blockBlobClient, containerClient };
 }
