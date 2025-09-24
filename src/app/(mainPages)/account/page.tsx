@@ -31,8 +31,6 @@ export default async function AccountPage() {
 		redirect('/');
 	}
 
-	let { EnglishIPAFlavour, learningLanguage, nativeLanguage, name } = session.user;
-
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>
@@ -40,13 +38,7 @@ export default async function AccountPage() {
 				<UserPhoto />
 				<UserInfo />
 				<GoogleAccountLink userId={session.user.id} />
-				<PersonalizeUser
-					showSubmitButton={false}
-					learningLanguage={learningLanguage}
-					nativeLanguage={nativeLanguage}
-					EnglishIPAFlavour={EnglishIPAFlavour || undefined}
-					name={name || undefined}
-				/>
+				<PersonalizeUser showSubmitButton={false} hasName={Boolean(session.user.name)} />
 				<ExportData />
 				<DeleteAccount />
 			</Wrapper>

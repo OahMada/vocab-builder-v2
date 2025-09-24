@@ -18,21 +18,12 @@ export default async function PersonalizePage() {
 		redirect('/');
 	}
 
-
-	let { learningLanguage, nativeLanguage, EnglishIPAFlavour, name } = session.user;
-
 	return (
 		<MaxWidthWrapper>
 			<Wrapper>
 				<Title>Before you start...</Title>
 				<Spacer size={0} />
-				<PersonalizeUser
-					showSubmitButton={true}
-					learningLanguage={learningLanguage || undefined}
-					nativeLanguage={nativeLanguage || undefined}
-					EnglishIPAFlavour={EnglishIPAFlavour || undefined}
-					name={name || undefined}
-				/>
+				<PersonalizeUser showSubmitButton={true} hasName={Boolean(session.user.name)} />
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

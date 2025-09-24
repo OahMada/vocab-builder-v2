@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, FieldValues, Path, UseControllerReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -33,41 +33,48 @@ var defaultFormValues = {
 
 interface PersonalizeUserProps {
 	showSubmitButton: boolean;
-	learningLanguage?: PersonalizeInput['learningLanguage'];
-	nativeLanguage?: PersonalizeInput['nativeLanguage'];
-	EnglishIPAFlavour?: PersonalizeInput['EnglishIPAFlavour'];
-	name?: PersonalizeInput['name'];
+	hasName: boolean;
 }
 
-// pass parts of the session data from server components directly because it's tricky to use the session data returned from useSession, updated data won't persist after a page refresh, and a useEffect must be used to set back the values.
-export default function PersonalizeUser({ showSubmitButton, EnglishIPAFlavour, learningLanguage, name, nativeLanguage }: PersonalizeUserProps) {
+type RHFOnChange = UseControllerReturn<FieldValues, Path<FieldValues>>['field']['onChange'];
+
+export default function PersonalizeUser({ showSubmitButton, hasName }: PersonalizeUserProps) {
 	let { data: session, update: updateSession } = useSession();
 	let { addToToast } = useGlobalToastContext();
 	let router = useRouter();
 	let [isLoading, startTransition] = React.useTransition();
 	let {
+		setValue,
 		watch,
 		control,
 		register,
 		clearErrors,
-		formState: { errors, dirtyFields },
+		formState: { errors },
 		handleSubmit,
 	} = useForm<PersonalizeInput>({
 		resolver: zodResolver(PersonalizeInputSchema),
 		reValidateMode: 'onSubmit',
-		defaultValues: {
-			learningLanguage: learningLanguage || defaultFormValues.learningLanguage,
-			nativeLanguage: nativeLanguage || defaultFormValues.nativeLanguage,
-			EnglishIPAFlavour: EnglishIPAFlavour || defaultFormValues.EnglishIPAFlavour,
-			name: name || defaultFormValues.name,
-		},
+		defaultValues: defaultFormValues,
 		shouldUnregister: true,
 	});
-	let learningLanguageValue = watch('learningLanguage');
+	let learningLanguage = watch('learningLanguage');
+
+	// robustly display the session data
+	React.useEffect(() => {
+		if (!session?.user) return;
+		let { learningLanguage, nativeLanguage, EnglishIPAFlavour } = session.user;
+		if (learningLanguage) {
+			setValue('learningLanguage', learningLanguage);
+		}
+		if (nativeLanguage) {
+			setValue('nativeLanguage', nativeLanguage);
+		}
+		if (EnglishIPAFlavour) {
+			setValue('EnglishIPAFlavour', EnglishIPAFlavour);
+		}
+	}, [session?.user, setValue]);
 
 	function onSubmit(data: PersonalizeInput) {
-		if (data.learningLanguage === learningLanguage && data.nativeLanguage === nativeLanguage && data.EnglishIPAFlavour === EnglishIPAFlavour) return;
-
 		startTransition(async () => {
 			let result = await updateUser({
 				...data,
@@ -91,9 +98,6 @@ export default function PersonalizeUser({ showSubmitButton, EnglishIPAFlavour, l
 			});
 			if (showSubmitButton) {
 				router.replace('/');
-			} else {
-				// force page reload to update component properties, so that dirtyFields always accurate
-				window.location.reload();
 			}
 		});
 	}
@@ -101,18 +105,20 @@ export default function PersonalizeUser({ showSubmitButton, EnglishIPAFlavour, l
 	// handle language setting update on account page
 	let debouncer = useDebouncer(handleSubmit(onSubmit), { wait: 2000 });
 
-	React.useEffect(() => {
-		if (showSubmitButton) return;
-		if (dirtyFields.EnglishIPAFlavour || dirtyFields.learningLanguage || dirtyFields.nativeLanguage) {
-			debouncer.cancel(); // so that the waiting time is consistent
-			debouncer.maybeExecute();
-		}
-	}, [debouncer, dirtyFields.EnglishIPAFlavour, dirtyFields.learningLanguage, dirtyFields.nativeLanguage, showSubmitButton]);
+	function handleChange(fn: RHFOnChange) {
+		return (value: string) => {
+			fn(value);
+			if (!showSubmitButton) {
+				debouncer.cancel(); // so that the waiting time is consistent
+				debouncer.maybeExecute();
+			}
+		};
+	}
 
 	return (
 		<>
 			<InnerWrapper>
-				{!name && (
+				{!hasName && (
 					<NameInputWrapper>
 						<Label htmlFor='name'>Name:</Label>
 						<InputBox
@@ -131,7 +137,7 @@ export default function PersonalizeUser({ showSubmitButton, EnglishIPAFlavour, l
 				<Controller
 					render={({ field }) => {
 						let { onChange, ...rest } = field;
-						return <ChooseLanguage type='learning' {...rest} onValueChange={onChange} defaultValue={field.value} />;
+						return <ChooseLanguage type='learning' {...rest} onValueChange={handleChange(onChange)} defaultValue={field.value} />;
 					}}
 					control={control}
 					name='learningLanguage'
@@ -141,17 +147,17 @@ export default function PersonalizeUser({ showSubmitButton, EnglishIPAFlavour, l
 				<Controller
 					render={({ field }) => {
 						let { onChange, ...rest } = field;
-						return <ChooseLanguage type='translation' {...rest} onValueChange={onChange} defaultValue={field.value} />;
+						return <ChooseLanguage type='translation' {...rest} onValueChange={handleChange(onChange)} defaultValue={field.value} />;
 					}}
 					control={control}
 					name='nativeLanguage'
 					disabled={isLoading}
 				/>
-				{learningLanguageValue === 'English' && (
+				{learningLanguage === 'English' && (
 					<Controller
 						render={({ field }) => {
 							let { onChange, ...rest } = field;
-							return <ChooseIPAFlavour {...rest} onValueChange={onChange} defaultValue={field.value || 'UK'} />;
+							return <ChooseIPAFlavour {...rest} onValueChange={handleChange(onChange)} defaultValue={field.value || 'UK'} />;
 						}}
 						control={control}
 						name='EnglishIPAFlavour'
