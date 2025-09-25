@@ -3,14 +3,19 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { createId } from '@paralleldrive/cuid2';
+import axios from 'axios';
 
 import createSentence from '@/app/actions/sentence/createSentence';
 import updateSentence from '@/app/actions/sentence/updateSentence';
+import getBlobStorageSASToken from '@/app/actions/lib/getBlobStorageSASToken';
 
 import { deleteLocalData } from '@/helpers';
 import { useSentenceData } from '@/hooks';
 import { SentenceCreateInputType, SentenceUpdateInputType, SentenceWithPieces, deleteCookie } from '@/lib';
-import { COOKIE_KEY, TOAST_ID } from '@/constants';
+import { BLOB_CONTAINER_TYPE, COOKIE_KEY, TOAST_ID } from '@/constants';
+import { handleError } from '@/utils';
 
 import Button from '@/components/Button';
 import VisuallyHidden from '@/components/VisuallyHidden';
@@ -27,23 +32,9 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	let router = useRouter();
 	let [isModalShowing, setIsModalShowing] = React.useState(false);
 	let [isLoading, startTransition] = React.useTransition();
+	let { data: session } = useSession();
 
-	let [sentenceDataReady, data] = useSentenceData();
-
-	let sentenceCreateInput: SentenceCreateInputType;
-	let sentenceUpdateInput: SentenceUpdateInputType;
-	if (sentenceId) {
-		sentenceUpdateInput = {
-			...(data as Omit<SentenceUpdateInputType, 'id'>),
-			id: sentenceId,
-		};
-	} else {
-		sentenceCreateInput = {
-			...(data as Omit<SentenceCreateInputType, 'sentence'>),
-			sentence,
-		};
-	}
-
+	let [sentenceDataReady, sentenceData] = useSentenceData();
 	function dismissModal() {
 		setIsModalShowing(false);
 	}
@@ -74,8 +65,74 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 		startTransition(async () => {
 			let result: { error: string } | { data: SentenceWithPieces };
 			if (sentenceId) {
+				let sentenceUpdateInput = {
+					...(sentenceData as Omit<SentenceUpdateInputType, 'id'>),
+					id: sentenceId,
+				};
 				result = await updateSentence(sentenceUpdateInput);
 			} else {
+				let audioBlob: Blob | undefined;
+				let restSentenceData: Omit<SentenceCreateInputType, 'sentence' | 'audioUrl'> | undefined;
+
+				if ('audioBlob' in sentenceData) {
+					({ audioBlob, ...restSentenceData } = sentenceData);
+				}
+
+				if (!audioBlob || !restSentenceData) return;
+				let sasToken: string, containerName: string, storageAccountName: string;
+				// get sasToken
+				try {
+					({ sasToken, containerName, storageAccountName } = await getBlobStorageSASToken(BLOB_CONTAINER_TYPE.AUDIO));
+				} catch (error) {
+					let errMsg = handleError(error);
+					addToToast({
+						contentType: 'error',
+						content: errMsg,
+						id: TOAST_ID.SAS_TOKEN,
+					});
+					return;
+				}
+
+				// upload
+				let blobName = createId() + '.mp3';
+				let uploadUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?${sasToken}`;
+				let updateMetaDataUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?comp=metadata&${sasToken}`;
+
+				try {
+					await axios.put(uploadUrl, audioBlob!, {
+						headers: {
+							'x-ms-blob-type': 'BlockBlob',
+							'Content-Type': 'audio/mpeg',
+						},
+					});
+
+					await axios.put(
+						updateMetaDataUrl,
+						null, // no body needed
+						{
+							headers: {
+								'x-ms-meta-userid': session?.user.id,
+							},
+						}
+					);
+				} catch (error) {
+					// clean up. for example metadata update failed
+					await axios.delete(uploadUrl);
+					let errMsg = handleError(error);
+					addToToast({
+						contentType: 'error',
+						content: errMsg,
+						id: TOAST_ID.AUDIO_UPLOAD,
+					});
+					return;
+				}
+				let audioUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}`;
+				let sentenceCreateInput: SentenceCreateInputType = {
+					...restSentenceData,
+					sentence,
+					audioUrl,
+				};
+
 				result = await createSentence(sentenceCreateInput);
 			}
 

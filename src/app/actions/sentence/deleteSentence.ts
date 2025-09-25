@@ -7,7 +7,8 @@ import verifySession from '@/lib/dal';
 import { sentenceReadSelect, SentenceWithPieces, DeleteSentenceInputSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { UNSTABLE_CACHE_TAG } from '@/constants';
-import { getBlobNameFromUrl, getBlockBlobClient } from './helpers';
+import getBlockBlobClient from '@/lib/getBlockBlobClient';
+import getBlobNameFromUrl from '@/helpers/getBlobNamaFromUrl';
 
 async function deleteDatabaseEntry(sentenceId: string, userId: string) {
 	let deletedSentence = await prisma.$transaction([
@@ -34,7 +35,7 @@ export default async function deleteSentence(data: unknown): Promise<{ error: st
 	let { audioUrl, sentenceId } = result.data;
 
 	let blobName = getBlobNameFromUrl(audioUrl);
-	let blockBlobClient = getBlockBlobClient(blobName);
+	let { blockBlobClient } = getBlockBlobClient('audio', blobName);
 
 	let [dbResult, blobResult] = await Promise.allSettled([deleteDatabaseEntry(sentenceId, userId), blockBlobClient.deleteIfExists()]);
 

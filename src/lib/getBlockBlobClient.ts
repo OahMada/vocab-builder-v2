@@ -4,6 +4,14 @@ import { BlobServiceClient, BlockBlobClient, ContainerClient } from '@azure/stor
 
 export default function getBlockBlobClient(
 	type: 'audio' | 'image',
+	blobName: string
+): { blockBlobClient: BlockBlobClient; containerClient: ContainerClient };
+export default function getBlockBlobClient(
+	type: 'audio' | 'image',
+	blobName?: undefined
+): { blockBlobClient: undefined; containerClient: ContainerClient };
+export default function getBlockBlobClient(
+	type: 'audio' | 'image',
 	blobName?: string
 ): { blockBlobClient: BlockBlobClient | undefined; containerClient: ContainerClient } {
 	let storageAccountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;

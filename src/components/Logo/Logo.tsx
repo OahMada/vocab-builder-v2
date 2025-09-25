@@ -3,15 +3,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
 function Logo() {
-	let pathname = usePathname();
-
-	if (pathname === '/') {
-		return;
-	}
-
 	return (
 		<Wrapper href='/'>
 			<span>VOCAB</span>

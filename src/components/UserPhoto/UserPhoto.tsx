@@ -6,11 +6,11 @@ import { createId } from '@paralleldrive/cuid2';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
 
-import getBlobStorageSASToken from '@/app/actions/user/getBlobStorageSASToken';
+import getBlobStorageSASToken from '@/app/actions/lib/getBlobStorageSASToken';
 
 import { handleError, handleZodError } from '@/utils';
 import { ImageFileSchema } from '@/lib';
-import { TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
+import { BLOB_CONTAINER_TYPE, TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
 
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
@@ -45,9 +45,22 @@ function UserPhoto() {
 		startTransition(async () => {
 			// upload image
 			let sasToken: string, containerName: string, storageAccountName: string;
+			// get sasToken
 			try {
-				({ sasToken, containerName, storageAccountName } = await getBlobStorageSASToken());
-				let uploadUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?${sasToken}`;
+				({ sasToken, containerName, storageAccountName } = await getBlobStorageSASToken(BLOB_CONTAINER_TYPE.AUDIO));
+			} catch (error) {
+				let errMsg = handleError(error);
+				addToToast({
+					contentType: 'error',
+					content: errMsg,
+					id: TOAST_ID.SAS_TOKEN,
+				});
+				return;
+			}
+
+			let uploadUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?${sasToken}`;
+			let metaDataUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?comp=metadata&${sasToken}`;
+			try {
 				await axios.put(uploadUrl, result.data, {
 					headers: {
 						'x-ms-blob-type': 'BlockBlob',
@@ -55,7 +68,6 @@ function UserPhoto() {
 					},
 					maxBodyLength: Infinity, // important for large files
 				});
-				let metaDataUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?comp=metadata&${sasToken}`;
 				await axios.put(
 					metaDataUrl,
 					null, // no body needed
@@ -66,6 +78,9 @@ function UserPhoto() {
 					}
 				);
 			} catch (error) {
+				// clean up. for example metadata update failed
+				await axios.delete(uploadUrl);
+
 				let errMsg = handleError(error);
 				addToToast({
 					contentType: 'error',

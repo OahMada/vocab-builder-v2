@@ -1,4 +1,4 @@
-import { MAX_QUERY_LEN, SENTENCE_FETCHING_LIMIT } from '@/constants';
+import { BLOB_CONTAINER_TYPE, MAX_QUERY_LEN, SENTENCE_FETCHING_LIMIT } from '@/constants';
 import * as z from 'zod';
 import { INPUT_NAME, NATIVE_LANGUAGE, LEARNING_LANGUAGE, ENGLISH_IPA_FLAVOUR } from '@/constants';
 
@@ -83,7 +83,12 @@ export var SentenceCreateInputSchema = z.object({
 	pieces: z.array(PiecesCreateInputSchema),
 	translation: TranslationSchema.shape.translation.min(3),
 	note: NoteSchema.shape.note.optional(),
-	audioBlob: z.instanceof(Blob).refine((blob) => blob.type.startsWith('audio/'), { error: 'Must be an audio Blob' }),
+	audioUrl: z.url({
+		protocol: /^https?$/,
+		// TODO maybe use a specific domain
+		hostname: z.regexes.domain,
+	}),
+	// audioBlob: z.instanceof(Blob).refine((blob) => blob.type.startsWith('audio/'), { error: 'Must be an audio Blob' }),
 });
 
 export type SentenceCreateInputType = z.infer<typeof SentenceCreateInputSchema>;
@@ -205,3 +210,5 @@ export var ImageFileSchema = z
 	.refine((file) => file.name.length <= 50, { error: 'Filename must be ≤ 50 characters' })
 	// Optional: allowed extensions
 	.refine((file) => /\.(jpe?g|png|webp)$/i.test(file.name), { error: 'Filename must have a valid extension (jpg, jpeg, png, webp)' });
+
+export var GetBlobStorageSASTokenInputSchema = z.union([z.literal(BLOB_CONTAINER_TYPE.AUDIO), z.literal(BLOB_CONTAINER_TYPE.IMAGE)]);

@@ -4,7 +4,11 @@ import { useNoteContext } from '@/components/NoteProvider';
 import { useAudioDataContext } from '@/components/AudioDataProvider';
 import { SentenceCreateInputType, SentenceUpdateInputType } from '@/lib';
 
-type SentenceData = Omit<SentenceCreateInputType, 'sentence'> | Omit<SentenceUpdateInputType, 'id'>;
+type SentenceData =
+	| (Omit<SentenceCreateInputType, 'sentence' | 'audioUrl'> & {
+			audioBlob: Blob;
+	  })
+	| Omit<SentenceUpdateInputType, 'id'>;
 type UseSentenceDataReturnType = [boolean, SentenceData];
 
 export function useSentenceData(): UseSentenceDataReturnType {

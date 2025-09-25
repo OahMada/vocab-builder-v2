@@ -65,6 +65,8 @@ export const TOAST_ID = {
 	USER_UPDATE: 'user_update',
 	ACCOUNT_LINK: 'account_link',
 	IMAGE_UPLOAD: 'image_upload',
+	AUDIO_UPLOAD: 'audio_upload',
+	SAS_TOKEN: 'sas_token',
 } as const;
 
 export const INPUT_NAME = {
@@ -111,4 +113,9 @@ export const USER_UPDATE_ACTION = {
 	PERSONALIZE: 'personalize',
 	USER_INFO: 'user_info',
 	IMAGE: 'image',
+} as const;
+
+export const BLOB_CONTAINER_TYPE = {
+	IMAGE: 'image',
+	AUDIO: 'audio',
 } as const;
