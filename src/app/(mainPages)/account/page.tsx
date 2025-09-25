@@ -37,7 +37,7 @@ export default async function AccountPage() {
 				<Breadcrumb />
 				<UserPhoto />
 				<UserInfo />
-				<GoogleAccountLink userId={session.user.id} />
+				<GoogleAccountLink />
 				<PersonalizeUser showSubmitButton={false} hasName={Boolean(session.user.name)} />
 				<ExportData />
 				<DeleteAccount />

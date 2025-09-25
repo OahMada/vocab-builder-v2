@@ -23,7 +23,7 @@ interface TTSArg {
 
 var url = '/api/tts';
 
-function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sentence: string }) {
+function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean; sentence: string }) {
 	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, TTSArg>(url, postFetcher);
 	let { isLocalDataLoading, audioBlob, updateBlob, audioUrl } = useAudioDataContext();
 	let { isPlaying, playAudio, stopAudio, isAudioLoading } = usePlayAudio();
@@ -42,10 +42,10 @@ function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sent
 	}, [audioBlob, audioUrl, isLocalDataLoading, sentence, trigger, updateBlob]);
 
 	React.useEffect(() => {
-		if (isSubmitting) {
+		if (shouldStopAudio) {
 			stopAudio();
 		}
-	}, [isSubmitting, stopAudio]);
+	}, [shouldStopAudio, stopAudio]);
 
 	async function retryTTS() {
 		reset();
@@ -81,7 +81,7 @@ function SentenceAudio({ isSubmitting, sentence }: { isSubmitting: boolean; sent
 				<AudioButton
 					variant='outline'
 					onClick={() => playAudio((audioUrl || audioBlob) as string | Blob)}
-					disabled={(!audioBlob && !audioUrl) || isSubmitting || isAudioLoading}
+					disabled={(!audioBlob && !audioUrl) || shouldStopAudio || isAudioLoading}
 				>
 					{isAudioLoading ? (
 						<Loading description='loading audio data' />

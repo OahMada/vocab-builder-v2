@@ -6,7 +6,6 @@ interface UserFields {
 	learningLanguage: (typeof LEARNING_LANGUAGE)[number] | null;
 	nativeLanguage: (typeof NATIVE_LANGUAGE)[number] | null;
 	EnglishIPAFlavour: (typeof ENGLISH_IPA_FLAVOUR)[number] | null;
-	image: string | null;
 }
 
 declare module 'next-auth' {
@@ -19,5 +18,7 @@ declare module 'next-auth' {
 import { JWT } from 'next-auth/jwt';
 
 declare module 'next-auth/jwt' {
-	interface JWT extends UserFields {}
+	interface JWT extends UserFields {
+		image: string | null;
+	}
 }

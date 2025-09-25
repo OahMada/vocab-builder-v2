@@ -8,7 +8,6 @@ import AlertDialog from '@/components/AlertDialog';
 import InputBox from '@/components/InputBox';
 
 function DeleteAccount() {
-	let [isLoading, startTransition] = React.useTransition();
 	let [email, setEmail] = React.useState('');
 
 	function clearEmail() {
@@ -38,8 +37,7 @@ function DeleteAccount() {
 		<AlertDialog
 			description='This action cannot be undone. Your data will be deleted and can not be restored. Enter your email address to continue.'
 			extra={extra}
-			handleDeleteAction={handleDeleteAction}
-			isDeleting={isLoading}
+			handleAction={handleDeleteAction}
 		>
 			<DeleteAccountButton variant='outline'>
 				<Icon id='delete' />

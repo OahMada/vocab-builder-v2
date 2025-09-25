@@ -14,24 +14,16 @@ import Loading from '@/components/Loading';
 
 function MobileMenu() {
 	let [isLoading, startTransition] = React.useTransition();
-	let [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-	function onOpenChange(open: boolean) {
-		if (!isLoading) {
-			setIsMenuOpen(open);
-		}
-	}
 
 	function handleLogout() {
 		startTransition(async () => {
 			await logout();
-			setIsMenuOpen(false);
 		});
 	}
 
 	return (
 		<Wrapper>
-			<DropdownMenu open={isMenuOpen} onOpenChange={onOpenChange}>
+			<DropdownMenu>
 				<DropdownMenuTrigger asChild={true}>
 					<Button variant='icon'>
 						<Icon id='mobile-menu' />
@@ -43,20 +35,26 @@ function MobileMenu() {
 						<Avatar style={{ '--avatar-size': '35px', '--fallback-font-size': '14px' } as React.CSSProperties} fallbackStyle='outline' />
 					</AvatarWrapper>
 					<DropdownMenuItem asChild={true}>
-						<DropdownItemButton variant='icon' href='/account'>
+						<DropdownItemButton variant='icon' href='/account' disabled={isLoading}>
 							Account
 						</DropdownItemButton>
 					</DropdownMenuItem>
-					<DropdownMenuItem asChild={true}>
-						<DropdownItemButton variant='icon' onClick={handleLogout} disabled={isLoading}>
+					<DropdownMenuItem
+						asChild={true}
+						onSelect={(event) => {
+							// Prevent Radix from automatically closing the menu
+							event.preventDefault();
+						}}
+					>
+						<LogoutButton variant='icon' onClick={handleLogout} disabled={isLoading}>
 							{isLoading && (
 								<>
-									<Loading description='Logging out' />
+									<Loading description='Logging out' size={16} />
 									&nbsp;
 								</>
 							)}
-							Logout
-						</DropdownItemButton>
+							Log Out
+						</LogoutButton>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
@@ -80,4 +78,8 @@ var DropdownItemButton = styled(Button)`
 	&::after {
 		--tap-increment: 0;
 	}
+`;
+
+var LogoutButton = styled(DropdownItemButton)`
+	color: var(--text-status-warning);
 `;

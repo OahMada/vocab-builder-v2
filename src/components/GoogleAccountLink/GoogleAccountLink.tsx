@@ -4,8 +4,8 @@ import checkAccountLinkStatus from '@/app/actions/auth/checkAccountLinkStatus';
 
 import ChangeAccountLinkStatus from './ChangeAccountLinkStatus';
 
-async function GoogleAccountLink({ userId }: { userId: string }) {
-	let result = await checkAccountLinkStatus(userId);
+async function GoogleAccountLink() {
+	let result = await checkAccountLinkStatus();
 
 	if ('error' in result) {
 		return 'Error checking Google account link status';

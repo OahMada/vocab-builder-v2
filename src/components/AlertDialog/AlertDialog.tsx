@@ -11,18 +11,17 @@ import Loading from '@/components/Loading';
 
 export default function AlertDialog({
 	description,
-	handleDeleteAction,
-	isDeleting,
+	handleAction,
 	extra,
 	children,
 	...delegated
 }: {
 	description: string;
-	handleDeleteAction: () => Promise<void>;
-	isDeleting: boolean;
+	handleAction: () => Promise<void>;
 	extra?: React.ReactNode;
 } & React.ComponentProps<typeof AlertDialogPrimitives.Content>) {
 	let [open, setOpen] = React.useState(false);
+	let [isLoading, startTransition] = React.useTransition();
 	return (
 		<AlertDialogPrimitives.Root open={open} onOpenChange={setOpen}>
 			<AlertDialogPrimitives.Trigger asChild={true}>{children}</AlertDialogPrimitives.Trigger>
@@ -37,7 +36,7 @@ export default function AlertDialog({
 					<Spacer size={1} />
 					<ActionWrapper>
 						<AlertDialogPrimitives.Cancel asChild={true}>
-							<Button variant='outline' disabled={isDeleting}>
+							<Button variant='outline' disabled={isLoading}>
 								<Icon id='x' />
 								&nbsp;Cancel
 							</Button>
@@ -46,12 +45,14 @@ export default function AlertDialog({
 							type='button'
 							variant='outline'
 							onClick={async () => {
-								await handleDeleteAction();
-								setOpen(false);
+								startTransition(async () => {
+									await handleAction();
+									setOpen(false);
+								});
 							}}
-							disabled={isDeleting}
+							disabled={isLoading}
 						>
-							{isDeleting ? <Loading description='action ongoing' /> : <Icon id='enter' />}
+							{isLoading ? <Loading description='action ongoing' /> : <Icon id='enter' />}
 							&nbsp;I&apos;m sure
 						</ConfirmButton>
 					</ActionWrapper>

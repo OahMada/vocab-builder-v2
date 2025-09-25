@@ -15,7 +15,7 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import Spacer from '@/components/Spacer';
 import FormErrorText from '@/components/FormErrorText';
-import { USER_UPDATE_ACTION } from '@/constants';
+import { TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Loading from '@/components/Loading';
 
@@ -54,12 +54,12 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 				addToToast({
 					contentType: 'error',
 					content: result.error,
-					id: 'user_update',
+					id: TOAST_ID.USER_UPDATE,
 				});
 				return;
 			}
 			addToToast({
-				id: 'user_update',
+				id: TOAST_ID.USER_UPDATE,
 				contentType: 'notice',
 				content: 'Account Updated',
 			});

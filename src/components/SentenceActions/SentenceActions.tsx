@@ -33,6 +33,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	let [isModalShowing, setIsModalShowing] = React.useState(false);
 	let [isLoading, startTransition] = React.useTransition();
 	let { data: session } = useSession();
+	let [shouldStopAudio, setShouldStopAudio] = React.useState(false);
 
 	let [sentenceDataReady, sentenceData] = useSentenceData();
 	function dismissModal() {
@@ -44,6 +45,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	}
 
 	function handleCancel() {
+		setShouldStopAudio(true);
 		if (window.history.length && window.history.length > 1) {
 			// you can login and land on one of the sentence page, in this case, you can't simply go back
 			router.back();
@@ -61,6 +63,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	}
 
 	async function handleSubmit() {
+		setShouldStopAudio(true);
 		setErrorMsg('');
 		startTransition(async () => {
 			let result: { error: string } | { data: SentenceWithPieces };
@@ -173,7 +176,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 					<Icon id='help' />
 					<VisuallyHidden>Ask Any Questions</VisuallyHidden>
 				</HelpButton>
-				<SentenceAudio isSubmitting={isLoading} sentence={sentence} />
+				<SentenceAudio shouldStopAudio={shouldStopAudio} sentence={sentence} />
 				<CancelButton variant='outline' onClick={handleCancel} disabled={isLoading}>
 					<Icon id='x' />
 					&nbsp;Cancel

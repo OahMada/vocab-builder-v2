@@ -36,16 +36,13 @@ function SentenceListingEntry({
 }: SentenceListingEntryProps) {
 	let { addToToast } = useGlobalToastContext();
 	let sentencePieces = constructSentence(sentence, pieces);
-	let [isLoading, setIsLoading] = React.useState(false);
 	let { isPlaying, playAudio, stopAudio, isAudioLoading } = usePlayAudio();
 	let router = useRouter();
 
 	async function handleDeleteAction() {
-		setIsLoading(true);
 		// not wrapped in startTransition because I need this function to be an async one
 		let result = await deleteSentence({ sentenceId: id, audioUrl });
 		if ('error' in result) {
-			setIsLoading(false);
 			addToToast({
 				id: TOAST_ID.SENTENCE_DELETION,
 				contentType: 'error',
@@ -54,7 +51,6 @@ function SentenceListingEntry({
 			return;
 		}
 		onDeleteSentence(id);
-		setIsLoading(false);
 	}
 
 	return (
@@ -86,7 +82,7 @@ function SentenceListingEntry({
 						</InnerWrapper>
 					)}
 					<ActionWrapper>
-						<AlertDialog description='This action cannot be undone.' handleDeleteAction={handleDeleteAction} isDeleting={isLoading}>
+						<AlertDialog description='This action cannot be undone.' handleAction={handleDeleteAction}>
 							<Button
 								variant='fill'
 								style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties}
@@ -100,7 +96,6 @@ function SentenceListingEntry({
 						</AlertDialog>
 						<Button
 							variant='fill'
-							disabled={isLoading}
 							onClick={() => {
 								stopAudio();
 								router.push(`/sentence/${id}`);

@@ -12,6 +12,9 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	if (!request.auth) {
 		return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 	}
+
+	let EnglishIPAFlavour = request.auth.user.EnglishIPAFlavour;
+
 	let body = await request.json();
 
 	let result = FetchIPAInputSchema.safeParse(body);
@@ -20,14 +23,14 @@ export var POST = auth(async function (request: NextAuthRequest) {
 		return NextResponse.json({ error: errors }, { status: 400 });
 	}
 
-	// TODO ready IPA flavour from user data
-
 	let { word, sentence } = result.data;
 
 	try {
 		let { text } = await generateText({
 			model: openai.responses('gpt-4.1'),
-			system: `Provide the UK IPA (phonetic transcription) for each word you receive, and enclose the result in slashes (e.g., /ˈwɜːd/). Provide the IPA according to the context of the sentence: ${sentence}. If a word has multiple IPA options, provide the one that best fits the context.`,
+			system: `Provide the precise IPA (phonetic transcription) for each word, enclosing each in slashes (e.g., /ˈwɜːd/). Use the context of the sentence to determine the appropriate transcription: ${sentence}. If a word has multiple possible IPA forms, choose the one that best fits the context.  ${
+				EnglishIPAFlavour ? `If the sentence is in English, provide the IPA in ${EnglishIPAFlavour} flavour.` : ''
+			}`,
 			prompt: word,
 			abortSignal: AbortSignal.timeout(API_ABORT_TIMEOUT),
 		});

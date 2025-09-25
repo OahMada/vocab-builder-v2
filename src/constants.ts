@@ -97,7 +97,6 @@ export const LOCAL_DB_KEY = 'audio';
 
 export const UNSTABLE_CACHE_TAG = {
 	SENTENCES: 'sentences',
-	ACCOUNT_LINK_STATUS: 'account_link_status',
 } as const;
 
 export const SENTENCE_FETCHING_LIMIT = 15;
@@ -119,3 +118,10 @@ export const BLOB_CONTAINER_TYPE = {
 	IMAGE: 'image',
 	AUDIO: 'audio',
 } as const;
+
+export const TTS_SPEECH_VOICE: Record<(typeof LEARNING_LANGUAGE)[number], string> = {
+	English: 'en-US-AriaNeural',
+	French: 'fr-FR-DeniseNeural',
+	German: 'de-DE-ElkeNeural',
+	Spanish: 'es-ES-ElviraNeural',
+};

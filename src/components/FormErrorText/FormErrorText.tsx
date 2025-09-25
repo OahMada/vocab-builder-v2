@@ -2,7 +2,7 @@
 
 import styled from 'styled-components';
 
-var FormErrorText = styled.span`
+var FormErrorText = styled.p`
 	transform: translateX(5px);
 	color: var(--text-status-warning);
 	font-size: ${12 / 16}rem;

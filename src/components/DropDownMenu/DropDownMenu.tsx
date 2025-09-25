@@ -25,6 +25,7 @@ export var DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
 	border-radius: 4px;
 	padding: 5px;
 	user-select: none;
+	min-width: 90px;
 
 	&[data-highlighted] {
 		background-color: var(--bg-primary-hover);

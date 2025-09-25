@@ -1,4 +1,4 @@
-import { BLOB_CONTAINER_TYPE, MAX_QUERY_LEN, SENTENCE_FETCHING_LIMIT } from '@/constants';
+import { BLOB_CONTAINER_TYPE, MAX_QUERY_LEN, SENTENCE_FETCHING_LIMIT, USER_UPDATE_ACTION } from '@/constants';
 import * as z from 'zod';
 import { INPUT_NAME, NATIVE_LANGUAGE, LEARNING_LANGUAGE, ENGLISH_IPA_FLAVOUR } from '@/constants';
 
@@ -88,7 +88,6 @@ export var SentenceCreateInputSchema = z.object({
 		// TODO maybe use a specific domain
 		hostname: z.regexes.domain,
 	}),
-	// audioBlob: z.instanceof(Blob).refine((blob) => blob.type.startsWith('audio/'), { error: 'Must be an audio Blob' }),
 });
 
 export type SentenceCreateInputType = z.infer<typeof SentenceCreateInputSchema>;
@@ -193,12 +192,12 @@ export type UserInfoInput = z.infer<typeof UserInfoInputSchema>;
 
 export var UpdateUserImageSchema = z.object({
 	image: UpdateUserSchemaFields.image,
-	action: z.literal('image'),
+	action: z.literal(USER_UPDATE_ACTION.IMAGE),
 });
 
 export var UpdateUserInputSchema = z.discriminatedUnion('action', [
-	PersonalizeInputSchema.extend({ action: z.literal('personalize') }),
-	UserInfoInputSchema.extend({ action: z.literal('user-info') }),
+	PersonalizeInputSchema.extend({ action: z.literal(USER_UPDATE_ACTION.PERSONALIZE) }),
+	UserInfoInputSchema.extend({ action: z.literal(USER_UPDATE_ACTION.USER_INFO) }),
 ]);
 
 // Basic file schema

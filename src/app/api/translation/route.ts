@@ -8,12 +8,16 @@ import { handleZodError } from '@/utils';
 import { API_ABORT_TIMEOUT } from '@/constants';
 import { auth } from '@/auth';
 
-// TODO load language setting from user setting
-
 export var POST = auth(async function (request: NextAuthRequest) {
 	if (!request.auth) {
 		return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 	}
+
+	let nativeLanguage = request.auth.user.nativeLanguage;
+	if (!nativeLanguage) {
+		return NextResponse.json({ error: 'Translation language not set' }, { status: 400 });
+	}
+
 	let body = await request.json();
 	let result = SentenceSchema.safeParse(body);
 	if (!result.success) {
@@ -24,7 +28,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	try {
 		let { text } = await generateText({
 			model: openai.responses('gpt-4.1'),
-			system: `Translate the sentence you receive into ${'Chinese'}. If the sentence is already in ${'Chinese'}, do nothing and simply return it as is.`,
+			system: `Translate the sentence you receive into ${nativeLanguage}. If the sentence is already in ${nativeLanguage}, do nothing and simply return it as is.`,
 			prompt: result.data.sentence,
 			abortSignal: AbortSignal.timeout(API_ABORT_TIMEOUT),
 		});

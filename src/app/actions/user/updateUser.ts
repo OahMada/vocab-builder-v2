@@ -37,7 +37,7 @@ export default async function updateUser(data: unknown): Promise<{ error: string
 				console.error('user update failed', error);
 				return { error: 'Failed to update user' };
 			}
-		case 'user-info':
+		case 'user_info':
 			try {
 				let { name, email } = result.data;
 				let updatedUser = await prisma.user.update({

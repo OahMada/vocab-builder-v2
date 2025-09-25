@@ -11,8 +11,10 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import AlertDialog from '@/components/AlertDialog';
 
 export default function ChangeAccountLinkStatus({ accountLinked }: { accountLinked: boolean }) {
+	let [isAccountLinked, setIsAccountLinked] = React.useState(accountLinked);
 	let [isLoading, startTransition] = React.useTransition();
 	let { addToToast } = useGlobalToastContext();
 
@@ -31,30 +33,34 @@ export default function ChangeAccountLinkStatus({ accountLinked }: { accountLink
 		});
 	}
 
-	function handleUnlinkAccount() {
-		startTransition(async () => {
-			let result = await unlinkGoogleAccount();
-			if ('error' in result) {
-				addToToast({
-					content: result.error,
-					contentType: 'error',
-					id: TOAST_ID.ACCOUNT_LINK,
-				});
-				return;
-			}
+	async function handleUnlinkAccount() {
+		let result = await unlinkGoogleAccount();
+		if ('error' in result) {
 			addToToast({
-				contentType: 'notice',
-				content: result.data,
+				content: result.error,
+				contentType: 'error',
 				id: TOAST_ID.ACCOUNT_LINK,
 			});
+			return;
+		}
+		addToToast({
+			contentType: 'notice',
+			content: result.data,
+			id: TOAST_ID.ACCOUNT_LINK,
 		});
+		setIsAccountLinked(false);
 	}
 
-	return accountLinked ? (
-		<Button variant='outline' disabled={isLoading} onClick={handleUnlinkAccount}>
-			{isLoading ? <Loading description='Unlinking google account' /> : <Icon id='link' />}
-			&nbsp; Unlink Google Account
-		</Button>
+	return isAccountLinked ? (
+		<AlertDialog
+			description='Are you sure? You will no longer be able to log in with Google if you disconnect your account.'
+			handleAction={handleUnlinkAccount}
+		>
+			<Button variant='outline' disabled={isLoading}>
+				<Icon id='link' />
+				&nbsp; Unlink Google Account
+			</Button>
+		</AlertDialog>
 	) : (
 		<Button variant='outline' disabled={isLoading} onClick={handleLinkAccount}>
 			{isLoading ? <Loading description='Linking google account' /> : <Icon id='link' />}

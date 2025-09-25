@@ -63,6 +63,7 @@ export var { handlers, signIn, signOut, auth } = NextAuth({
 					nativeLanguage: user.nativeLanguage,
 					EnglishIPAFlavour: user.EnglishIPAFlavour,
 					id: user.id!,
+					image: user.image || null,
 				};
 			}
 			// updating session with client update call
