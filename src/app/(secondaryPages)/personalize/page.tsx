@@ -5,8 +5,8 @@ import { auth } from '@/auth';
 
 import PersonalizeUser from '@/components/PersonalizeUser';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import { Title, Wrapper } from './StyledComponents';
 import Spacer from '@/components/Spacer';
+import { Title, Wrapper } from './StyledComponents';
 
 // reference https://stackoverflow.com/questions/68103612/how-to-drop-the-query-parameters-after-a-redirect-with-nextjs?rq=2
 

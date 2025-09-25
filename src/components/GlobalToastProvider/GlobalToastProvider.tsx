@@ -1,10 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import Toast, { ToastProvider, ToastViewport } from '@/components/Toast';
 
 import { ToastMsgs, ToastMsg } from './types';
 import GlobalToastContext from './GlobalToastContext';
+
+import Toast, { ToastProvider, ToastViewport } from '@/components/Toast';
 
 function GlobalToastProvider({ children }: { children: React.ReactNode }) {
 	let [toasts, setToasts] = React.useState<ToastMsgs>([]);

@@ -3,13 +3,15 @@
 import * as React from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import useSWRMutation from 'swr/mutation';
-import Button from '@/components/Button';
-import PhoneticSymbol from './PhoneticSymbol';
+
 import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
+import { TOAST_ID } from '@/constants';
+
+import Button from '@/components/Button';
+import PhoneticSymbol from './PhoneticSymbol';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
-import { TOAST_ID } from '@/constants';
 
 type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA?: string | null; id: string; sentence: string };
 

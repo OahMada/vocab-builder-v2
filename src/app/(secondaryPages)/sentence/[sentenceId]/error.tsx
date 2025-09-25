@@ -1,7 +1,8 @@
 'use client';
 
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import styled from 'styled-components';
+
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Button from '@/components/Button';
 import Spacer from '@/components/Spacer';
 import Icon from '@/components/Icon';

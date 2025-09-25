@@ -1,8 +1,9 @@
+import { SentenceCreateInputType, SentenceUpdateInputType } from '@/lib';
+
 import { useTranslationContext } from '@/components/TranslationProvider';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 import { useNoteContext } from '@/components/NoteProvider';
 import { useAudioDataContext } from '@/components/AudioDataProvider';
-import { SentenceCreateInputType, SentenceUpdateInputType } from '@/lib';
 
 type SentenceData =
 	| (Omit<SentenceCreateInputType, 'sentence' | 'audioUrl'> & {

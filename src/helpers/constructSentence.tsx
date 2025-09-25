@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Piece } from '@prisma/client';
+
 import { segmentSentence } from '@/helpers';
-import WordWithPhoneticSymbol, { CombinedLastTwoPieces } from '@/components/WordWithPhoneticSymbol';
 import { SentenceWithPieces } from '@/lib';
+
+import WordWithPhoneticSymbol, { CombinedLastTwoPieces } from '@/components/WordWithPhoneticSymbol';
 import SearchMatchedWord from '@/components/SearchMatchedWord';
 
 export function constructSentence(wholeSentence: string, pieces: SentenceWithPieces['pieces']) {

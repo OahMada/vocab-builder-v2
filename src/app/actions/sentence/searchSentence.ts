@@ -1,11 +1,12 @@
 'use server';
 
 import { unstable_cache } from 'next/cache';
+import { Document } from 'mongodb';
+
 import prisma from '@/lib/prisma';
 import { SearchSentencesInputSchema, SentenceWithPieces, CountSearchResultSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { SENTENCE_FETCHING_LIMIT, UNSTABLE_CACHE_TAG } from '@/constants';
-import { Document } from 'mongodb';
 
 type SearchResultsWithPaginationToken = SentenceWithPieces & { paginationToken: string };
 

@@ -1,7 +1,8 @@
 'use client';
 
-import Button from '@/components/Button';
 import styled from 'styled-components';
+
+import Button from '@/components/Button';
 
 export var Wrapper = styled.div`
 	position: sticky;

@@ -2,9 +2,11 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+
+import { useGetClipboard } from '@/hooks';
+
 import Icon from '@/components/Icon';
 import Button from '@/components/Button';
-import { useGetClipboard } from '@/hooks';
 import Loading from '@/components/Loading';
 
 interface ActionButtonProps {

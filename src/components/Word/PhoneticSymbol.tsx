@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+
 import Button from '@/components/Button';
 
 function PhoneticSymbol({ symbol, ...delegated }: React.ComponentProps<'button'> & { symbol: string }) {

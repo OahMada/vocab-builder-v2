@@ -2,6 +2,7 @@ import 'server-only';
 
 import { EmailProviderSendVerificationRequestParams } from 'next-auth/providers';
 import resend from '@/lib/resend';
+
 import Email from '@/components/Email';
 
 var sendVerificationRequest = async (params: EmailProviderSendVerificationRequestParams) => {

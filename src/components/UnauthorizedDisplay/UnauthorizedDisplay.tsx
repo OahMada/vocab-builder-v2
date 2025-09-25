@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Metadata } from 'next';
+
 import Redirect, { RedirectTitle, Wrapper } from '@/components/RedirectComponents';
 import Spacer from '@/components/Spacer';
 

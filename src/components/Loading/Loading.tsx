@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import styled, { keyframes } from 'styled-components';
+
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 

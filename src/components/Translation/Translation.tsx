@@ -2,16 +2,18 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import Icon from '@/components/Icon';
-import Button from '@/components/Button';
 import useSWRMutation from 'swr/mutation';
+
 import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
+import { TOAST_ID } from '@/constants';
+
+import Icon from '@/components/Icon';
+import Button from '@/components/Button';
 import EditTranslation from '@/components/Translation/EditTranslation';
 import { useTranslationContext } from '@/components/TranslationProvider';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
-import { TOAST_ID } from '@/constants';
 
 interface TranslationResponse {
 	data: string;

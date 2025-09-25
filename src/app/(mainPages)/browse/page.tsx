@@ -3,9 +3,9 @@ import { redirect } from 'next/navigation';
 
 import { auth } from '@/auth';
 
+import Search from '@/components/SearchSentence';
 import { ChildrenWrapper } from './StyledComponents';
 import Breadcrumb from './CustomBreadcrumb';
-import Search from '@/components/SearchSentence';
 
 export default async function Page() {
 	let session = await auth();

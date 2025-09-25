@@ -1,5 +1,6 @@
-import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_OBJ } from '@/constants';
 import * as React from 'react';
+
+import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_OBJ } from '@/constants';
 
 type LocalStorageKey = (typeof LOCAL_STORAGE_KEY)[keyof typeof LOCAL_STORAGE_KEY];
 

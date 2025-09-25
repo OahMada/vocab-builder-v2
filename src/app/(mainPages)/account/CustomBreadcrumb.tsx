@@ -1,7 +1,8 @@
 'use client';
 
-import { Breadcrumbs, Crumb } from '@/components/Breadcrumbs';
 import styled from 'styled-components';
+
+import { Breadcrumbs, Crumb } from '@/components/Breadcrumbs';
 
 var CustomBreadcrumbs = styled(Breadcrumbs)`
 	align-self: flex-start;

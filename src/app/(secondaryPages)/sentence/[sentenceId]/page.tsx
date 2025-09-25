@@ -23,8 +23,8 @@ import AudioDataProvider from '@/components/AudioDataProvider';
 import { ToastProvider, ToastViewport } from '@/components/Toast';
 import Spacer from '@/components/Spacer';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
+import CardWrapper from '@/components/CardWrapper';
 import Title from './Title';
-import CardWrapper from './CardWrapper';
 
 export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',

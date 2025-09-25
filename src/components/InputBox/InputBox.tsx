@@ -1,10 +1,11 @@
 'use client';
 
+import * as React from 'react';
+import styled from 'styled-components';
+
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
-import * as React from 'react';
-import styled from 'styled-components';
 
 function InputBox({
 	value,

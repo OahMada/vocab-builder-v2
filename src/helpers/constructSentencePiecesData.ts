@@ -1,7 +1,8 @@
 import { Piece } from '@prisma/client';
+
 import { PiecesType } from '@/types';
-import { segmentSentence } from './segmentSentence';
 import { SentenceWithPieces } from '@/lib';
+import { segmentSentence } from './segmentSentence';
 
 export function constructSentencePiecesData(wholeSentence: string, pieces: SentenceWithPieces['pieces']) {
 	let result = segmentSentence(wholeSentence);

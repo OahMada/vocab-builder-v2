@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { LoadingInnerWrapper, LoadingSpinner, LoadingWrapper } from '../StyledComponents';
 import NoticeText from '@/components/BrowsePageNoticeText';
+import { LoadingInnerWrapper, LoadingSpinner, LoadingWrapper } from '../StyledComponents';
 
 export default function Loading() {
 	return (

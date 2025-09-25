@@ -1,6 +1,7 @@
 'use client';
 
 import styled from 'styled-components';
+
 import Loading from '@/components/Loading';
 
 export var ChildrenWrapper = styled.div`

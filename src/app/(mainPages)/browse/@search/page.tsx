@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { SearchParams } from 'nuqs/server';
 
+import { searchSentences, countSearchResults } from '@/app/actions/sentence/searchSentence';
+
 import searchParamsCache from '@/lib/searchParamsCache';
 import { SentenceWithPieces } from '@/lib';
 import { markSearchMatchesInSentencePieces } from '@/helpers';
 import { auth } from '@/auth';
 
-import { searchSentences, countSearchResults } from '@/app/actions/sentence/searchSentence';
 import SentenceListing from '@/components/SentenceListing';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
 

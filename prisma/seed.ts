@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import { createId } from '@paralleldrive/cuid2';
+
 import { segmentSentence } from '../src/helpers/segmentSentence';
 import { ENGLISH_IPA } from '../src/constants';
 

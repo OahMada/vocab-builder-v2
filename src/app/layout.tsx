@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { SessionProvider } from 'next-auth/react';
 
-import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import { roboto, inter } from '@/lib/getFont';
+
+import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import GlobalStyles from '@/components/GlobalStyles';
 import GlobalToastProvider from '@/components/GlobalToastProvider';
 

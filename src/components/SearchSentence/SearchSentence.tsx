@@ -1,11 +1,12 @@
 'use client';
 
-import VisuallyHidden from '@/components/VisuallyHidden';
 import * as React from 'react';
 import styled from 'styled-components';
+import { useDebouncedCallback } from '@tanstack/react-pacer';
+
+import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import InputBox from '@/components/InputBox';
-import { useDebouncedCallback } from '@tanstack/react-pacer';
 import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 
 function SearchSentence() {

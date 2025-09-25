@@ -1,5 +1,6 @@
-import { LOCAL_DB_KEY } from '@/constants';
 import { set, del } from 'idb-keyval';
+
+import { LOCAL_DB_KEY } from '@/constants';
 
 export async function updateLocalDB(action: 'set', val: Blob): Promise<void>;
 export async function updateLocalDB(action: 'delete'): Promise<void>;

@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+
 import SearchParamsContext from './SearchParamsContext';
 import { useNuqsSearchParams } from '@/hooks';
 

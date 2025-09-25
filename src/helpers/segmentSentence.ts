@@ -1,5 +1,6 @@
-import { PiecesType, Piece } from '@/types';
 import { createId } from '@paralleldrive/cuid2';
+
+import { PiecesType, Piece } from '@/types';
 
 function segmentSentence(sentence: string): PiecesType {
 	let segmenter = new Intl.Segmenter([], { granularity: 'word' });

@@ -1,7 +1,9 @@
-import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import * as React from 'react';
+
 import { TOAST_ID } from '@/constants';
 import { handleError } from '@/utils';
-import * as React from 'react';
+
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 var currentAudio: HTMLAudioElement | null = null;
 

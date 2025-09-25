@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import { auth } from '@/auth';
 
-import { Wrapper, StyledHeader, LoginButton } from './StyledComponents';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Logo from '@/components/Logo';
 import MobileMenu from '@/components/MobileMenu';
+import { Wrapper, StyledHeader, LoginButton } from './StyledComponents';
 
 async function Header() {
 	let session = await auth();

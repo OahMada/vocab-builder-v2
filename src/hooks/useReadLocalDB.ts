@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { get } from 'idb-keyval';
+
 import { LOCAL_DB_KEY } from '@/constants';
 
 export function useReadLocalDB<T>(updater: (data: T) => void): boolean {

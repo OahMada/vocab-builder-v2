@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+
 import Word from '@/components/Word';
 import DescriptionText from '@/components/DescriptionText';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/Popover';

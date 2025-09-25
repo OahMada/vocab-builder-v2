@@ -1,6 +1,7 @@
-import { useQueryState, parseAsString } from 'nuqs';
-import { INPUT_NAME } from '@/constants';
 import * as React from 'react';
+import { useQueryState, parseAsString } from 'nuqs';
+
+import { INPUT_NAME } from '@/constants';
 
 export function useNuqsSearchParams() {
 	let [isPending, startTransition] = React.useTransition();

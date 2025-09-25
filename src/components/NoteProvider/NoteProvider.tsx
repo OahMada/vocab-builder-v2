@@ -1,10 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import NoteContext from './NoteContext';
+
 import { useReadLocalStorage } from '@/hooks';
 import { updateLocalStorage } from '@/helpers';
 import { LOCAL_STORAGE_KEY } from '@/constants';
+import NoteContext from './NoteContext';
 
 function NoteProvider({ databaseNote, children }: { databaseNote?: string; children: React.ReactNode }) {
 	let [note, setNote] = React.useState(databaseNote || undefined);

@@ -2,8 +2,10 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { useTimeout, useInterval } from '@/hooks';
 import { useRouter } from 'next/navigation';
+
+import { useTimeout, useInterval } from '@/hooks';
+
 import NavLink from '@/components/NavLink';
 
 var RedirectUrlMap = {

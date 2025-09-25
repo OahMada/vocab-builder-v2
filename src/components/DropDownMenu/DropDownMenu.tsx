@@ -23,7 +23,7 @@ export var DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
 	display: flex;
 	justify-content: flex-end;
 	border-radius: 4px;
-	padding: 5px;
+	padding: 4px 5px;
 	user-select: none;
 	min-width: 90px;
 

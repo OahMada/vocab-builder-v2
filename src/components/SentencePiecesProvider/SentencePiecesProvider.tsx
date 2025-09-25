@@ -1,13 +1,14 @@
 'use client';
 
 import * as React from 'react';
-import SentencePiecesContext from './SentencePiecesContext';
-import { Action, RemoveIPAParams, AddIPAParams } from './types';
-import { PiecesType } from '@/types';
 import { produce } from 'immer';
+
+import { PiecesType } from '@/types';
 import { segmentSentence, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';
 import { LOCAL_STORAGE_KEY } from '@/constants';
+import { Action, RemoveIPAParams, AddIPAParams } from './types';
+import SentencePiecesContext from './SentencePiecesContext';
 
 function reducer(state: PiecesType, action: Action) {
 	return produce(state, (draft) => {

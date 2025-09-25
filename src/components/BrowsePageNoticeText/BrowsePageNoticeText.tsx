@@ -1,6 +1,7 @@
 'use client';
 
 import styled, { css } from 'styled-components';
+
 import DescriptionText from '@/components/DescriptionText';
 
 var NoticeText = styled(DescriptionText)<{ $hasError?: boolean }>`

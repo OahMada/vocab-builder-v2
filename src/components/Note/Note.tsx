@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { NoteSchema, NoteType } from '@/lib';
 import { INPUT_NAME } from '@/constants';
 
-import CardWrapper from '@/app/(secondaryPages)/sentence/[sentenceId]/CardWrapper';
+import CardWrapper from '@/components/CardWrapper';
 import TextArea from '@/components/TextArea';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';

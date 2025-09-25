@@ -10,10 +10,10 @@ import UserPhoto from '@/components/UserPhoto';
 import ExportData from '@/components/ExportData';
 import DeleteAccount from '@/components/DeleteAccount';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import Breadcrumb from './CustomBreadcrumb';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
 import PersonalizeUser from '@/components/PersonalizeUser';
 import GoogleAccountLink from '@/components/GoogleAccountLink';
+import Breadcrumb from './CustomBreadcrumb';
 
 export var metadata: Metadata = {
 	title: 'Account | Vocab Builder',

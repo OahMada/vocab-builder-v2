@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+
 import GlobalToastContext from './GlobalToastContext';
 
 export function useGlobalToastContext() {

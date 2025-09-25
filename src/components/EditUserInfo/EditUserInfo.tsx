@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import updateUser from '@/app/actions/user/updateUser';
 
 import { UserInfoInputSchema, UserInfoInput } from '@/lib';
+import { TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
 
 import Modal, { Title } from '@/components/Modal';
 import InputBox from '@/components/InputBox';
@@ -15,7 +16,6 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import Spacer from '@/components/Spacer';
 import FormErrorText from '@/components/FormErrorText';
-import { TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Loading from '@/components/Loading';
 

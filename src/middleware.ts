@@ -1,6 +1,7 @@
 // https://blog.logrocket.com/auth-js-client-side-authentication-next-js/#protecting-routes-middleware
 
 import NextAuth from 'next-auth';
+
 import { authConfig } from '@/auth.config';
 
 var { auth } = NextAuth(authConfig);
