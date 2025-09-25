@@ -117,6 +117,7 @@ export default EditUserInfo;
 
 var Label = styled.label`
 	font-size: 0.8rem;
+	transform: translateX(3px);
 `;
 
 var Wrapper = styled.div`

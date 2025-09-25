@@ -2,21 +2,22 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { FieldErrors, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import TextArea from '@/components/TextArea';
+
+import { NoteSchema, NoteType } from '@/lib';
+import { INPUT_NAME } from '@/constants';
+
 import CardWrapper from '@/app/(secondaryPages)/sentence/[sentenceId]/CardWrapper';
+import TextArea from '@/components/TextArea';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import TextareaActionButtons from '@/components/TextareaActionButtons';
-import { NoteSchema, NoteType } from '@/lib';
 import { useNoteContext } from '@/components/NoteProvider';
-import { useGlobalToastContext } from '@/components/GlobalToastProvider';
-import { TOAST_ID, INPUT_NAME } from '@/constants';
+import FormErrorText from '@/components/FormErrorText';
 
 function Note({ title }: { title: React.ReactNode }) {
 	let { note, updateNote, isEditing, updateEditingStatus } = useNoteContext();
-	let { addToToast, removeFromToast } = useGlobalToastContext();
 
 	let {
 		register,
@@ -35,7 +36,6 @@ function Note({ title }: { title: React.ReactNode }) {
 
 	function clearInput() {
 		clearErrors(INPUT_NAME.NOTE);
-		removeFromToast(TOAST_ID.NOTE);
 		setValue(INPUT_NAME.NOTE, '');
 	}
 
@@ -52,33 +52,26 @@ function Note({ title }: { title: React.ReactNode }) {
 		cancelEditing();
 	}
 
-	function onError(errors: FieldErrors<NoteType>) {
-		let msg = errors.note!.message as string;
-		addToToast({
-			contentType: 'error',
-			content: msg,
-			id: TOAST_ID.NOTE,
-		});
-	}
-
 	return isEditing ? (
 		<>
 			<CardWrapper>
 				{title}
 
-				<TextArea
-					{...register(INPUT_NAME.NOTE, {
-						onChange: () => {
-							clearErrors(INPUT_NAME.NOTE);
-							removeFromToast(TOAST_ID.NOTE);
-						},
-					})}
-					value={noteValue}
-					clearInput={clearInput}
-					placeholder='Input note text here'
-					autoFocus={true}
-				/>
-				<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit, onError)} submitDisabled={!!errors.note} />
+				<InnerWrapper>
+					<TextArea
+						{...register(INPUT_NAME.NOTE, {
+							onChange: () => {
+								clearErrors(INPUT_NAME.NOTE);
+							},
+						})}
+						value={noteValue}
+						clearInput={clearInput}
+						placeholder='Input note text here'
+						autoFocus={true}
+					/>
+					{errors.note && <FormErrorText>{errors.note.message}</FormErrorText>}
+				</InnerWrapper>
+				<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit)} submitDisabled={!!errors.note} />
 			</CardWrapper>
 		</>
 	) : note ? (
@@ -116,4 +109,10 @@ var EditButton = styled(Button)`
 var EditIcon = styled(Icon)`
 	/* optical alignment */
 	transform: translateY(-0.5px);
+`;
+
+var InnerWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
 `;

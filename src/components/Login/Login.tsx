@@ -187,11 +187,11 @@ var Wrapper = styled.div`
 var InputWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
+	gap: 5px;
 `;
 
 var LabelText = styled.label`
-	transform: translateX(5px);
+	transform: translateX(3px);
 	font-size: ${14 / 16}rem;
 	font-weight: 500;
 	color: var(--text-tertiary);

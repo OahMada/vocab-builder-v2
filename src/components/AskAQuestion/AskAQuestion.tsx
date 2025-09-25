@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useCompletion } from '@ai-sdk/react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+
 import Modal from '@/components/Modal';
 import ModalTitle from './ModalTitle';
 import QuestionInput from './QuestionInput';
@@ -33,10 +34,6 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 		});
 	}
 
-	function updateError(msg: string) {
-		setErrorMsg(msg);
-	}
-
 	function onClearInput() {
 		if (isLoading) {
 			stop();
@@ -47,7 +44,7 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 
 	return (
 		<Modal isOpen={isShowing} onDismiss={onDismiss} title={<ModalTitle />} isOverlayTransparent={true} contentPosition='bottom'>
-			{completion && (
+			{(completion || errorMsg) && (
 				<>
 					<SmallHeading>Answer:</SmallHeading>
 					<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
@@ -68,7 +65,7 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 				</>
 			)}
 			<SmallHeading>Question:</SmallHeading>
-			<QuestionInput triggerComplete={triggerComplete} updateError={updateError} onClearInput={onClearInput} isLoading={isLoading} />
+			<QuestionInput triggerComplete={triggerComplete} onClearInput={onClearInput} isLoading={isLoading} />
 		</Modal>
 	);
 }

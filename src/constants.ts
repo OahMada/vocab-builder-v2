@@ -51,11 +51,9 @@ export const ENGLISH_IPA = [
 	'ʊə',
 ];
 export const TOAST_ID = {
-	NOTE: 'note',
 	SENTENCE_CREATION: 'sentence_creation',
 	SENTENCE: 'sentence',
 	SENTENCE_DELETION: 'sentence_deletion',
-	TRANSLATION_EDITING: 'translation_editing',
 	TRANSLATION_FETCHING: 'translation_fetching',
 	IPA_FETCHING: 'IPA_',
 	AUDIO_PLAYING: 'audio_playing_',

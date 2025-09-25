@@ -2,24 +2,25 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as React from 'react';
-import { FieldErrors, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+
 import { QuestionInputSchema, QuestionInputType } from '@/lib';
+import { INPUT_NAME } from '@/constants';
+
 import TextArea from '@/components/TextArea';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Loading from '@/components/Loading';
-import { INPUT_NAME } from '@/constants';
+import FormErrorText from '@/components/FormErrorText';
 
 export default function QuestionInput({
 	triggerComplete,
-	updateError,
 	onClearInput,
 	isLoading,
 }: {
 	triggerComplete: (text: string) => void;
-	updateError: (msg: string) => void;
 	onClearInput: () => void;
 	isLoading: boolean;
 }) {
@@ -40,7 +41,6 @@ export default function QuestionInput({
 
 	function clearInput() {
 		clearErrors(INPUT_NAME.QUESTION);
-		updateError('');
 		setValue(INPUT_NAME.QUESTION, '');
 		onClearInput();
 	}
@@ -48,45 +48,52 @@ export default function QuestionInput({
 	function onSubmit(data: QuestionInputType) {
 		triggerComplete(data.question);
 	}
-	function onError(errors: FieldErrors<QuestionInputType>) {
-		let msg = errors.question!.message as string;
-		updateError(msg);
-	}
 
 	return (
 		<Wrapper>
-			<TextArea
-				autoFocus={true}
-				placeholder='Input your question'
-				value={questionText}
-				{...register(INPUT_NAME.QUESTION, {
-					onChange: () => {
-						clearErrors(INPUT_NAME.QUESTION);
-						updateError('');
-					},
-				})}
-				clearInput={clearInput}
-			/>
-			<EnterButton
-				variant='fill'
-				onClick={handleSubmit(onSubmit, onError)}
-				disabled={!!errors.question || isLoading}
-				style={{ '--textarea-padding': '10px' } as React.CSSProperties}
-			>
-				{isLoading ? (
-					<Loading description='answer is loading' />
-				) : (
-					<>
-						<Icon id='enter' />
-						<VisuallyHidden>submit question</VisuallyHidden>
-					</>
-				)}
-			</EnterButton>
+			<InnerWrapper>
+				<TextArea
+					autoFocus={true}
+					placeholder='Input your question'
+					value={questionText}
+					{...register(INPUT_NAME.QUESTION, {
+						onChange: () => {
+							clearErrors(INPUT_NAME.QUESTION);
+						},
+					})}
+					clearInput={clearInput}
+				/>
+				<EnterButton
+					variant='fill'
+					onClick={handleSubmit(
+						onSubmit
+						// onError
+					)}
+					disabled={!!errors.question || isLoading}
+					style={{ '--textarea-padding': '10px' } as React.CSSProperties}
+				>
+					{isLoading ? (
+						<Loading description='answer is loading' />
+					) : (
+						<>
+							<Icon id='enter' />
+							<VisuallyHidden>submit question</VisuallyHidden>
+						</>
+					)}
+				</EnterButton>
+			</InnerWrapper>
+			{errors.question && <FormErrorText>{errors.question.message}</FormErrorText>}
 		</Wrapper>
 	);
 }
 
 var Wrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+`;
+
+var InnerWrapper = styled.div`
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr auto;

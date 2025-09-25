@@ -2,16 +2,18 @@
 
 import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FieldErrors, useForm } from 'react-hook-form';
+import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+
+import { TranslationSchema, TranslationType } from '@/lib';
+import { INPUT_NAME } from '@/constants';
+
 import TextareaActionButtons from '@/components/TextareaActionButtons';
 import TextArea from '@/components/TextArea';
-import { TranslationSchema, TranslationType } from '@/lib';
 import { useTranslationContext } from '@/components/TranslationProvider';
-import { useGlobalToastContext } from '@/components/GlobalToastProvider';
-import { TOAST_ID, INPUT_NAME } from '@/constants';
+import FormErrorText from '@/components/FormErrorText';
 
 export default function EditTranslation({ translationText, cancelEditing }: { translationText: string; cancelEditing: () => void }) {
-	let { addToToast, removeFromToast } = useGlobalToastContext();
 	let { updateTranslation } = useTranslationContext();
 
 	let {
@@ -30,7 +32,6 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 	let translation = watch(INPUT_NAME.TRANSLATION);
 
 	function clearInput() {
-		removeFromToast(TOAST_ID.TRANSLATION_EDITING);
 		clearErrors(INPUT_NAME.TRANSLATION);
 		setValue(INPUT_NAME.TRANSLATION, translationText);
 	}
@@ -44,29 +45,29 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 		cancelEditing();
 	}
 
-	function onError(errors: FieldErrors<TranslationType>) {
-		addToToast({
-			id: TOAST_ID.TRANSLATION_EDITING,
-			contentType: 'error',
-			content: errors.translation!.message,
-		});
-	}
-
 	return (
 		<>
-			<TextArea
-				value={translation}
-				clearInput={clearInput}
-				{...register('translation', {
-					onChange: () => {
-						removeFromToast(TOAST_ID.TRANSLATION_EDITING);
-						clearErrors('translation');
-					},
-				})}
-				placeholder='Input translation text here'
-				autoFocus={true}
-			/>
-			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit, onError)} submitDisabled={!!errors.translation} />
+			<InnerWrapper>
+				<TextArea
+					value={translation}
+					clearInput={clearInput}
+					{...register('translation', {
+						onChange: () => {
+							clearErrors('translation');
+						},
+					})}
+					placeholder='Input translation text here'
+					autoFocus={true}
+				/>
+				{errors.translation && <FormErrorText>{errors.translation.message}</FormErrorText>}
+			</InnerWrapper>
+			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit)} submitDisabled={!!errors.translation} />
 		</>
 	);
 }
+
+var InnerWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+`;
