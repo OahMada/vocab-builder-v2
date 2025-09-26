@@ -47,7 +47,7 @@ function UserPhoto() {
 			let sasToken: string, containerName: string, storageAccountName: string;
 			// get sasToken
 			try {
-				({ sasToken, containerName, storageAccountName } = await getBlobStorageSASToken(BLOB_CONTAINER_TYPE.AUDIO));
+				({ sasToken, containerName, storageAccountName } = await getBlobStorageSASToken(BLOB_CONTAINER_TYPE.IMAGE));
 			} catch (error) {
 				let errMsg = handleError(error);
 				addToToast({

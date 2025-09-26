@@ -27,7 +27,7 @@ export default function getBlockBlobClient(
 	} else if (type === 'image') {
 		containerName = process.env.AZURE_STORAGE_IMAGE_CONTAINER_NAME;
 	}
-	if (!containerName) throw new Error('Azure Storage containerName not found.');
+	if (!containerName) throw new Error('Azure Storage containerName not found');
 	let containerClient = blobServiceClient.getContainerClient(containerName);
 	let blockBlobClient: BlockBlobClient | undefined = undefined;
 	if (blobName) {

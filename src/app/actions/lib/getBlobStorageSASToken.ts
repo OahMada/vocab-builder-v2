@@ -29,7 +29,7 @@ export default async function getBlobStorageSASToken(type: unknown) {
 		containerName = process.env.AZURE_STORAGE_AUDIO_CONTAINER_NAME;
 	}
 
-	if (!containerName) throw new Error('Azure Storage containerName not found.');
+	if (!containerName) throw new Error('Azure Storage containerName not found');
 	let sharedKeyCredential = new StorageSharedKeyCredential(storageAccountName, storageAccountKey);
 	let expiresOn = new Date(new Date().valueOf() + 15 * 60 * 1000); // 15 min
 	let sasToken = generateBlobSASQueryParameters(
