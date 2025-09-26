@@ -120,7 +120,11 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 					);
 				} catch (error) {
 					// clean up. for example metadata update failed
-					await axios.delete(uploadUrl);
+					try {
+						await axios.delete(uploadUrl);
+					} catch (error) {
+						console.error('trying to delete from blob storage but failed', error);
+					}
 					let errMsg = handleError(error);
 					addToToast({
 						contentType: 'error',
