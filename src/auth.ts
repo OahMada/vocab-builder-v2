@@ -3,6 +3,7 @@ import Resend from 'next-auth/providers/resend';
 import Google from 'next-auth/providers/google';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { createId } from '@paralleldrive/cuid2';
+// import axios from 'axios';
 
 import prisma from '@/lib/prisma';
 import { UpdataSessionSchema } from '@/lib';
@@ -54,23 +55,26 @@ export var { handlers, signIn, signOut, auth } = NextAuth({
 			}
 			return true;
 		},
-		jwt({ token, user, trigger, session }) {
+		async jwt({
+			token,
+			user,
+			trigger,
+			session,
+			// account
+		}) {
 			if (user) {
 				// User is available during sign-in
-				return {
-					...token,
-					learningLanguage: user.learningLanguage,
-					nativeLanguage: user.nativeLanguage,
-					EnglishIPAFlavour: user.EnglishIPAFlavour,
-					id: user.id!,
-					image: user.image || null,
-				};
+				token.id = user.id!;
+				token.learningLanguage = user.learningLanguage;
+				token.nativeLanguage = user.nativeLanguage;
+				token.EnglishIPAFlavour = user.EnglishIPAFlavour;
+				token.image = user.image || null;
 			}
 			// updating session with client update call
 			if (trigger === 'update' && session) {
 				let result = UpdataSessionSchema.safeParse(session);
 				if (result.success) {
-					return {
+					token = {
 						...token,
 						...result.data,
 					};
@@ -78,15 +82,63 @@ export var { handlers, signIn, signOut, auth } = NextAuth({
 					console.error('Invalid session update payload', handleZodError(result.error, 'prettify'));
 				}
 			}
+			// if (account && account.provider === 'google') {
+			// 	token.access_token = account.access_token;
+			// 	token.expires_at = account.expires_at;
+			// 	if (account.refresh_token) {
+			// 		token.refresh_token = account.refresh_token;
+			// 	}
+			// }
+			// // refresh token rotation
+			// if (token.expires_at && Date.now() >= (token.expires_at - 60) * 1000) {
+			// 	// Subsequent logins, but the `access_token` has expired, try to refresh it
+			// 	try {
+			// 		let response = await axios.post(
+			// 			'https://oauth2.googleapis.com/token',
+			// 			new URLSearchParams({
+			// 				client_id: process.env.AUTH_GOOGLE_ID!,
+			// 				client_secret: process.env.AUTH_GOOGLE_SECRET!,
+			// 				grant_type: 'refresh_token',
+			// 				refresh_token: token.refresh_token!,
+			// 			}),
+			// 			{
+			// 				headers: {
+			// 					'Content-Type': 'application/x-www-form-urlencoded',
+			// 				},
+			// 			}
+			// 		);
+
+			// 		let newTokens = response.data as {
+			// 			access_token: string;
+			// 			expires_in: number;
+			// 			refresh_token?: string;
+			// 		};
+
+			// 		token.access_token = newTokens.access_token;
+			// 		token.expires_at = Math.floor(Date.now() / 1000 + newTokens.expires_in);
+			// 		// Some providers only issue refresh tokens once, so preserve if we did not get a new one
+			// 		token.refresh_token = newTokens.refresh_token ?? token.refresh_token;
+			// 	} catch (error) {
+			// 		console.error('Error refreshing access_token', error);
+			// 		// If we fail to refresh the token, return an error so we can handle it on the page
+			// 		token.error = 'RefreshTokenError';
+			// 	}
+			// }
 			return token;
 		},
 		session({ session, token }) {
-			session.user.id = token.id;
-			session.user.EnglishIPAFlavour = token.EnglishIPAFlavour;
-			session.user.learningLanguage = token.learningLanguage;
-			session.user.nativeLanguage = token.nativeLanguage;
-			session.user.image = token.image;
-			return session;
+			return {
+				...session,
+				user: {
+					...session.user,
+					id: token.id,
+					EnglishIPAFlavour: token.EnglishIPAFlavour,
+					learningLanguage: token.learningLanguage,
+					nativeLanguage: token.nativeLanguage,
+					image: token.image,
+				},
+				error: token.error,
+			};
 		},
 	},
 	debug: process.env.NODE_ENV === 'development',

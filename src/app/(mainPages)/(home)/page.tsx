@@ -11,6 +11,10 @@ import { Title, BrowseButton } from './StyledComponents';
 
 export default async function Home() {
 	let session = await auth();
+	// if (session?.error === 'RefreshTokenError') {
+	// 	await googleLogin(); // Force sign in to obtain a new set of access and refresh tokens
+	// }
+
 	if (!session?.user) {
 		redirect('/intro');
 	} else if (!session.user.learningLanguage || !session.user.nativeLanguage) {

@@ -4,7 +4,7 @@ import { CallbackSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { signIn } from '@/auth';
 
-export default async function login(data: unknown): Promise<{ error: string } | undefined> {
+export default async function login(data?: unknown): Promise<{ error: string } | undefined> {
 	let result = CallbackSchema.safeParse(data);
 
 	if (!result.success) {

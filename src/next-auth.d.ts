@@ -12,6 +12,7 @@ declare module 'next-auth' {
 	interface User extends UserFields {}
 	interface Session {
 		user: UserFields & DefaultSession['user'];
+		// error?: 'RefreshTokenError';
 	}
 }
 
@@ -20,5 +21,9 @@ import { JWT } from 'next-auth/jwt';
 declare module 'next-auth/jwt' {
 	interface JWT extends UserFields {
 		image: string | null;
+		// access_token?: string;
+		// expires_at?: number;
+		// refresh_token?: string;
+		// error?: 'RefreshTokenError';
 	}
 }
