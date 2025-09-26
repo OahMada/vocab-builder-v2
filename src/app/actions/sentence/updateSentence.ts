@@ -27,20 +27,15 @@ export default async function updateSentence(data: unknown): Promise<{ error: st
 	let { id, note, translation, pieces } = result.data;
 
 	// prepare for saving to database
-	let piecesCreateInput = pieces
-		.filter((item) => typeof item !== 'string')
-		.map((item) => {
-			return { ...item, IPA: item.IPA ?? null };
-		});
+	let piecesUpdateInput = pieces.filter(
+		(item): item is { id: string; word: string; index: number; IPA: string } => typeof item !== 'string' && Boolean(item.IPA)
+	);
+
 	let sentenceUpdateInput: Prisma.SentenceUpdateInput = {
 		note: note ?? null,
 		pieces: {
 			deleteMany: {}, // remove all existing pieces
-			create: piecesCreateInput.map((p) => ({
-				id: p.id,
-				word: p.word,
-				IPA: p.IPA,
-			})),
+			create: piecesUpdateInput,
 		},
 		translation,
 	};

@@ -5,8 +5,7 @@ import { redirect, notFound } from 'next/navigation';
 import readOneSentenceById from '@/app/actions/sentence/readOneSentenceById';
 
 import { COOKIE_KEY } from '@/constants';
-import { constructSentencePiecesData } from '@/helpers';
-import { SentenceCreateInputType } from '@/lib';
+import { SentenceWithPieces } from '@/lib';
 import getCookie from '@/lib/getCookie';
 import { auth } from '@/auth';
 
@@ -30,8 +29,6 @@ export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',
 };
 
-type ClientSentenceData = (Omit<SentenceCreateInputType, 'audioBlob'> & { audioUrl: string; id: string }) | null;
-
 export default async function Sentence({ params }: { params: Promise<{ sentenceId: string }> }) {
 	let { sentenceId } = await params;
 	let session = await auth();
@@ -47,7 +44,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 	let userId = session.user.id;
 
 	let sentence: string | undefined = undefined;
-	let sentenceData: ClientSentenceData = null;
+	let sentenceData: SentenceWithPieces | null = null;
 	if (sentenceId === 'new') {
 		let data = await getCookie(COOKIE_KEY);
 		if (!data) {
@@ -61,20 +58,15 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 		} else if (!result.data) {
 			notFound();
 		}
-		// convert null to undefined to better suit client code
-		let sentencePiecesData = constructSentencePiecesData(result.data.sentence, result.data.pieces);
-		sentenceData = {
-			...result.data,
-			note: result.data.note ?? undefined,
-			pieces: sentencePiecesData,
-		};
+
+		sentenceData = result.data;
 	}
 
 	return (
 		<MaxWidthWrapper>
-			<SentencePiecesProvider newSentence={sentence} databasePieces={sentenceData?.pieces}>
+			<SentencePiecesProvider sentence={(sentence || sentenceData?.sentence) as string} databasePieces={sentenceData?.pieces}>
 				<TranslationProvider databaseTranslation={sentenceData?.translation}>
-					<NoteProvider databaseNote={sentenceData?.note}>
+					<NoteProvider databaseNote={sentenceData?.note || undefined}>
 						<Wrapper $position='flex-start'>
 							<Spacer size={0} />
 							<CardWrapper>

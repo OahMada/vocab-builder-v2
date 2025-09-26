@@ -13,7 +13,7 @@ import PhoneticSymbol from './PhoneticSymbol';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
-type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA?: string | null; id: string; sentence: string };
+type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA: string | undefined; id: string; sentence: string };
 
 interface IPAResponse {
 	data: string;

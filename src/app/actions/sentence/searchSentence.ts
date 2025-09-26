@@ -62,6 +62,22 @@ function buildSearchPipeline(search: string, userId: string, nextCursor?: string
 				as: 'pieces',
 			},
 		},
+		{
+			$addFields: {
+				pieces: {
+					$map: {
+						input: '$pieces',
+						as: 'p',
+						in: {
+							id: '$$p._id', // map _id to id
+							word: '$$p.word',
+							IPA: '$$p.IPA',
+							index: '$$p.index',
+						},
+					},
+				},
+			},
+		},
 		{ $limit: SENTENCE_FETCHING_LIMIT + 1 },
 		{
 			$project: {

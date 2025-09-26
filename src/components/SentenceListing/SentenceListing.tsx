@@ -10,7 +10,7 @@ import { searchSentences } from '@/app/actions/sentence/searchSentence';
 
 import { useIntersectionObserver } from '@/hooks';
 import { SentenceWithPieces } from '@/lib';
-import { markSearchMatchesInSentencePieces } from '@/helpers';
+import { SENTENCE_FETCHING_LIMIT } from '@/constants';
 
 import { AccordionRoot } from '@/components/Accordion';
 import SentenceListingEntry from '@/components/SentenceListingEntry';
@@ -77,17 +77,15 @@ function SentenceListing({
 					if (search) {
 						result = await searchSentences({ search, cursor: nextCursor, userId });
 					} else {
-						result = await readAllSentences({ cursor: nextCursor, userId });
+						result = await readAllSentences({ cursor: nextCursor, userId, limit: SENTENCE_FETCHING_LIMIT });
 					}
 					if ('error' in result) {
 						setError(result.error);
 						return;
 					}
 					let { data, nextCursor: newCursor } = result;
-					let markedData = markSearchMatchesInSentencePieces(data, search);
-
 					setError('');
-					setCurrentSentences((prev) => [...prev, ...markedData]);
+					setCurrentSentences((prev) => [...prev, ...data]);
 					setNextCursor(newCursor ?? undefined);
 				}
 			});

@@ -14,18 +14,18 @@ export var readAllSentences = unstable_cache(
 			let error = handleZodError(result.error, 'prettify');
 			return { error: error };
 		}
-		let { cursor, limit, userId } = result.data;
 
+		let { cursor, limit, userId } = result.data;
 		try {
 			let sentences = await prisma.sentence.findMany({
 				where: { userId },
 				select: sentenceReadSelect,
 				orderBy: { updatedAt: 'desc' },
-				take: limit + 1,
+				...(limit && { take: limit + 1 }),
 				...(cursor && { cursor: { id: cursor } }),
 			});
 			let nextCursor: string | null = null;
-			if (sentences.length > limit) {
+			if (limit && sentences.length > limit) {
 				let nextItem = sentences.pop();
 				nextCursor = nextItem!.id;
 			}

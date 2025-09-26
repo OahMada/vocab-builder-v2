@@ -6,6 +6,7 @@ import { readAllSentences, countSentences } from '@/app/actions/sentence/readAll
 import { SentenceWithPieces } from '@/lib/prismaSelect';
 import searchParamsCache from '@/lib/searchParamsCache';
 import { auth } from '@/auth';
+import { SENTENCE_FETCHING_LIMIT } from '@/constants';
 
 import SentenceListing from '@/components/SentenceListing';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
@@ -27,7 +28,7 @@ export default async function BrowseList({ searchParams }: { searchParams: Promi
 	let cursor: string | undefined = undefined;
 	let count: number = 0;
 	let countError: string | undefined = undefined;
-	let [dataResult, countResult] = await Promise.allSettled([readAllSentences({ userId }), countSentences(userId)]);
+	let [dataResult, countResult] = await Promise.allSettled([readAllSentences({ userId, limit: SENTENCE_FETCHING_LIMIT }), countSentences(userId)]);
 	if (dataResult.status === 'fulfilled') {
 		let value = dataResult.value;
 		if ('error' in value) {

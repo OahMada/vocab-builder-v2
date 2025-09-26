@@ -11,6 +11,7 @@ export var sentenceReadSelect = {
 			id: true,
 			IPA: true,
 			word: true,
+			index: true,
 		},
 	},
 } satisfies Prisma.SentenceSelect;

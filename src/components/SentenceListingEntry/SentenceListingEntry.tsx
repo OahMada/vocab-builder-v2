@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import { usePlayAudio } from '@/hooks';
 import { TOAST_ID } from '@/constants';
-import { constructSentence } from '@/helpers';
+import { constructSentence, constructSentencePiecesData, markSearchMatchesInSentencePieces } from '@/helpers';
 import { SentenceWithPieces } from '@/lib';
 
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/Accordion';
@@ -16,6 +16,7 @@ import PlayAudioFromUrl from '@/components/PlayAudioFromUrl';
 import deleteSentence from '@/app/actions/sentence/deleteSentence';
 import AlertDialog from '@/components/AlertDialog';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 
 type SentenceListingEntryProps = {
 	index: number;
@@ -34,8 +35,22 @@ function SentenceListingEntry({
 	onDeleteSentence,
 	...delegated
 }: SentenceListingEntryProps) {
+	let { search } = useSearchParamsContext();
+
 	let { addToToast } = useGlobalToastContext();
-	let sentencePieces = constructSentence(sentence, pieces);
+	// merge database pieces data with other sentence parts
+	let sentencePieces = constructSentencePiecesData(sentence, pieces);
+
+	let finalPieces: React.ReactNode[] = [];
+	if (search) {
+		// mark search queries in pieces data
+		let sentenceMarkedPieces = markSearchMatchesInSentencePieces(sentencePieces, search);
+		// construct the whole sentence
+		finalPieces = constructSentence(sentenceMarkedPieces);
+	} else {
+		finalPieces = constructSentence(sentencePieces);
+	}
+
 	let { isPlaying, playAudio, stopAudio, isAudioLoading } = usePlayAudio();
 	let router = useRouter();
 
@@ -58,7 +73,7 @@ function SentenceListingEntry({
 			<AccordionTrigger>
 				<SentenceWrapper>
 					<Index>{`${index + 1}. `}</Index>
-					{sentencePieces}
+					{finalPieces}
 					<AudioButton
 						style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
 						isPlaying={isPlaying}

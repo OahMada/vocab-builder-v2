@@ -4,11 +4,12 @@ import * as React from 'react';
 import { produce } from 'immer';
 
 import { PiecesType } from '@/types';
-import { segmentSentence, updateLocalStorage } from '@/helpers';
+import { constructSentencePiecesData, segmentSentence, updateLocalStorage } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';
 import { LOCAL_STORAGE_KEY } from '@/constants';
 import { Action, RemoveIPAParams, AddIPAParams } from './types';
 import SentencePiecesContext from './SentencePiecesContext';
+import { SentenceWithPieces } from '@/lib';
 
 function reducer(state: PiecesType, action: Action) {
 	return produce(state, (draft) => {
@@ -38,20 +39,20 @@ function reducer(state: PiecesType, action: Action) {
 
 function SentencePiecesProvider({
 	databasePieces,
-	newSentence,
+	sentence,
 	children,
 }: {
-	databasePieces?: PiecesType;
-	newSentence?: string;
+	databasePieces?: SentenceWithPieces['pieces'];
+	sentence: string;
 	children: React.ReactNode;
 }) {
-	let defaultState: PiecesType = [];
-	if (newSentence) {
-		defaultState = segmentSentence(newSentence);
+	let defaultState: PiecesType = segmentSentence(sentence);
+	let state: PiecesType | undefined = undefined;
+	if (databasePieces) {
+		state = constructSentencePiecesData(sentence, databasePieces);
 	}
 
-	let [pieces, dispatch] = React.useReducer(reducer, databasePieces || defaultState);
-
+	let [pieces, dispatch] = React.useReducer(reducer, state || defaultState);
 	function loadLocalPiecesData(data: PiecesType) {
 		dispatch({ type: 'loadFromStorage', payload: data });
 	}

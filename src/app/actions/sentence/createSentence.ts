@@ -32,11 +32,10 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 	let { audioUrl, note, pieces, ...rest } = result.data;
 
 	// prepare for saving to database
-	let piecesCreateInput = pieces
-		.filter((item) => typeof item !== 'string')
-		.map((item) => {
-			return { ...item, IPA: item.IPA ?? null };
-		});
+	let piecesCreateInput = pieces.filter(
+		(item): item is { id: string; word: string; index: number; IPA: string } => typeof item !== 'string' && Boolean(item.IPA)
+	);
+
 	let sentenceCreateInput: Prisma.SentenceCreateInput = {
 		...rest,
 		id: sentenceId,

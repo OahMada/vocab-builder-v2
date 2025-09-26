@@ -83,6 +83,7 @@ var PieceSchema = z.object({
 	id: z.cuid2(),
 	word: z.string().min(1),
 	IPA: z.string().optional(),
+	index: z.number(),
 });
 
 var PiecesCreateInputSchema = z.union([PieceSchema, z.string()]);
@@ -132,7 +133,7 @@ export var SearchSentencesInputSchema = CountSearchResultSchema.extend({
 
 export var ReadSentencesInputSchema = z.object({
 	cursor: IdSchema.optional(),
-	limit: SearchSentencesInputSchema.shape.limit,
+	limit: z.number().optional(),
 	userId: UserIdSchema,
 });
 

@@ -5,7 +5,6 @@ import { searchSentences, countSearchResults } from '@/app/actions/sentence/sear
 
 import searchParamsCache from '@/lib/searchParamsCache';
 import { SentenceWithPieces } from '@/lib';
-import { markSearchMatchesInSentencePieces } from '@/helpers';
 import { auth } from '@/auth';
 
 import SentenceListing from '@/components/SentenceListing';
@@ -34,7 +33,7 @@ export default async function SearchList({ searchParams }: { searchParams: Promi
 		if ('error' in value) {
 			dataError = value.error;
 		} else if ('data' in value) {
-			sentences = markSearchMatchesInSentencePieces(value.data, search);
+			sentences = value.data;
 			cursor = value.nextCursor ?? undefined;
 		}
 	}

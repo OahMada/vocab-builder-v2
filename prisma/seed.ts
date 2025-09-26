@@ -4,6 +4,7 @@ import { createId } from '@paralleldrive/cuid2';
 
 import { segmentSentence } from '../src/helpers/segmentSentence';
 import { ENGLISH_IPA } from '../src/constants';
+import { SentenceWithPieces } from '../src/lib';
 
 type DataType = Prisma.SentenceCreateInput;
 
@@ -19,7 +20,8 @@ var uniqueSentences = faker.helpers.uniqueArray(() => {
 for (let pair of uniqueSentences) {
 	let words = segmentSentence(pair.sentence)
 		.filter((item) => typeof item !== 'string')
-		.map((item) => ({ ...item, IPA: Math.random() < 0.2 ? faker.string.fromCharacters(ENGLISH_IPA, { min: 5, max: 10 }) : null }));
+		.map((item) => ({ ...item, IPA: Math.random() < 0.2 ? faker.string.fromCharacters(ENGLISH_IPA, { min: 5, max: 10 }) : null }))
+		.filter((item) => Boolean(item.IPA));
 
 	let data: DataType = {
 		id: createId(),
@@ -28,7 +30,7 @@ for (let pair of uniqueSentences) {
 		note: Math.random() < 0.5 ? null : faker.lorem.sentence(),
 		audioUrl: faker.internet.url(),
 		pieces: {
-			create: words,
+			create: words as SentenceWithPieces['pieces'],
 		},
 		user: {
 			connect: {

@@ -6,8 +6,11 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 
 function ExportData() {
+	function handleExport() {
+		window.location.href = '/api/download';
+	}
 	return (
-		<Button variant='outline'>
+		<Button variant='outline' onClick={handleExport}>
 			<Icon id='export' />
 			&nbsp; Export Data
 		</Button>
