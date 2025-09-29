@@ -179,7 +179,11 @@ var UpdateUserSchemaFields = {
 };
 
 export var UpdataSessionSchema = z
-	.object({ ...UpdateUserSchemaFields, [INPUT_NAME.ENGLISH_IPA_FLAVOUR]: z.enum(ENGLISH_IPA_FLAVOUR).nullable() })
+	.object({
+		...UpdateUserSchemaFields,
+		[INPUT_NAME.ENGLISH_IPA_FLAVOUR]: z.enum(ENGLISH_IPA_FLAVOUR).nullable(),
+		image: UpdateUserSchemaFields.image.nullable(),
+	})
 	.partial();
 
 export var PersonalizeInputSchema = z.object({
@@ -219,3 +223,9 @@ export var ImageFileSchema = z
 	.refine((file) => /\.(jpe?g|png|webp)$/i.test(file.name), { error: 'Filename must have a valid extension (jpg, jpeg, png, webp)' });
 
 export var GetBlobStorageSASTokenInputSchema = z.union([z.literal(BLOB_CONTAINER_TYPE.AUDIO), z.literal(BLOB_CONTAINER_TYPE.IMAGE)]);
+
+export var DeleteUserInputSchema = z.object({
+	email: EmailSchema,
+});
+
+export type DeleteUserInput = z.infer<typeof DeleteUserInputSchema>;

@@ -15,16 +15,22 @@ export default function AlertDialog({
 	handleAction,
 	extra,
 	children,
+	openState,
+	onOpenChange,
+	actionDisabled,
 	...delegated
 }: {
 	description: string;
 	handleAction: () => Promise<void>;
 	extra?: React.ReactNode;
+	openState?: boolean;
+	onOpenChange?: (value: boolean) => void;
+	actionDisabled?: boolean;
 } & React.ComponentProps<typeof AlertDialogPrimitives.Content>) {
 	let [open, setOpen] = React.useState(false);
 	let [isLoading, startTransition] = React.useTransition();
 	return (
-		<AlertDialogPrimitives.Root open={open} onOpenChange={setOpen}>
+		<AlertDialogPrimitives.Root open={openState || open} onOpenChange={onOpenChange || setOpen}>
 			<AlertDialogPrimitives.Trigger asChild={true}>{children}</AlertDialogPrimitives.Trigger>
 			<AlertDialogPrimitives.Portal>
 				<Overlay />
@@ -48,10 +54,12 @@ export default function AlertDialog({
 							onClick={async () => {
 								startTransition(async () => {
 									await handleAction();
-									setOpen(false);
+									if (openState === undefined) {
+										setOpen(false);
+									}
 								});
 							}}
-							disabled={isLoading}
+							disabled={isLoading || actionDisabled === true}
 						>
 							{isLoading ? <Loading description='action ongoing' /> : <Icon id='enter' />}
 							&nbsp;I&apos;m sure

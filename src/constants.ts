@@ -66,6 +66,7 @@ export const TOAST_ID = {
 	AUDIO_UPLOAD: 'audio_upload',
 	SAS_TOKEN: 'sas_token',
 	EXPORT_DATA: 'export_data',
+	DELETE_USER: 'delete_user',
 } as const;
 
 export const INPUT_NAME = {
