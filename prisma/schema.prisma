@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Sentence {
-  id          String   @id @default(cuid()) @map("_id")
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   sentence    String   @unique
   translation String
   note        String?
@@ -31,7 +31,7 @@ model Piece {
   word       String
   IPA        String
   sentence   Sentence @relation(fields: [sentenceId], references: [id])
-  sentenceId String
+  sentenceId String   @db.ObjectId
   index      Int
 }
 

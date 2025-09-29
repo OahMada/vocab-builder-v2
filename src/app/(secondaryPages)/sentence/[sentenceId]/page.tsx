@@ -44,7 +44,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 	let userId = session.user.id;
 
 	let sentence: string | undefined = undefined;
-	let sentenceData: SentenceWithPieces | null = null;
+	let sentenceData: SentenceWithPieces | undefined = undefined;
 	if (sentenceId === 'new') {
 		let data = await getCookie(COOKIE_KEY);
 		if (!data) {

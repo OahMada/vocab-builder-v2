@@ -3,7 +3,6 @@
 import { Prisma } from '@prisma/client';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
-import { createId } from '@paralleldrive/cuid2';
 
 import { SentenceCreateInputSchema, sentenceReadSelect, SentenceWithPieces } from '@/lib';
 import prisma from '@/lib/prisma';
@@ -22,7 +21,6 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 
 	let userId = session.id;
 
-	let sentenceId = createId();
 	let result = SentenceCreateInputSchema.safeParse(data);
 	if (!result.success) {
 		let error = handleZodError(result.error, 'prettify');
@@ -38,7 +36,6 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 
 	let sentenceCreateInput: Prisma.SentenceCreateInput = {
 		...rest,
-		id: sentenceId,
 		audioUrl,
 		note: note ?? null,
 		pieces: {

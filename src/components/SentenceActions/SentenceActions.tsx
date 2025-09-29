@@ -80,8 +80,8 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				if ('audioBlob' in sentenceData) {
 					({ audioBlob, ...restSentenceData } = sentenceData);
 				}
-
 				if (!audioBlob || !restSentenceData) return;
+
 				let sasToken: string, containerName: string, storageAccountName: string;
 				// get sasToken
 				try {

@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { PieceWithSearchMatch } from '@/types';
+import { PiecesType, PieceWithSearchMatch } from '@/types';
 
 import WordWithPhoneticSymbol, { CombinedLastTwoPieces } from '@/components/WordWithPhoneticSymbol';
 import SearchMatchedWord from '@/components/SearchMatchedWord';
 
-export function constructSentence(pieces: PieceWithSearchMatch[]) {
+export function constructSentence(pieces: PieceWithSearchMatch[] | PiecesType) {
 	let constructedSentence: React.ReactNode[] = [];
 	let lastItem = pieces.at(-1);
 	let lastIsPunctuation = typeof lastItem === 'string';
@@ -16,7 +16,7 @@ export function constructSentence(pieces: PieceWithSearchMatch[]) {
 			constructedSentence.push(item);
 		} else {
 			let wordEle: React.ReactNode;
-			if (item.isSearchMatch) {
+			if ('isSearchMatch' in item && item.isSearchMatch) {
 				if (item.IPA) {
 					wordEle = (
 						<WordWithPhoneticSymbol key={item.id} symbol={item.IPA}>

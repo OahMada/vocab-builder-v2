@@ -102,7 +102,7 @@ export var SentenceCreateInputSchema = z.object({
 
 export type SentenceCreateInputType = z.infer<typeof SentenceCreateInputSchema>;
 
-export var IdSchema = z.cuid2();
+export var IdSchema = z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ObjectId');
 
 export var SentenceUpdateInputSchema = z.object({
 	id: IdSchema,
@@ -113,14 +113,12 @@ export var SentenceUpdateInputSchema = z.object({
 
 export type SentenceUpdateInputType = z.infer<typeof SentenceUpdateInputSchema>;
 
-export var UserIdSchema = z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ObjectId');
-
 export var CountSearchResultSchema = z.object({
 	[INPUT_NAME.SEARCH]: z
 		.string()
 		.trim()
 		.transform((val) => val.slice(0, MAX_QUERY_LEN)),
-	userId: UserIdSchema,
+	userId: IdSchema,
 });
 
 export var SearchSentencesInputSchema = CountSearchResultSchema.extend({
@@ -134,17 +132,17 @@ export var SearchSentencesInputSchema = CountSearchResultSchema.extend({
 export var ReadSentencesInputSchema = z.object({
 	cursor: IdSchema.optional(),
 	limit: z.number().optional(),
-	userId: UserIdSchema,
+	userId: IdSchema,
 });
 
 export var CheckSentenceInputSchema = z.object({
 	sentence: SentenceSchema.shape.sentence,
-	userId: UserIdSchema,
+	userId: IdSchema,
 });
 
 export var ReadOneSentenceInputSchema = z.object({
 	sentenceId: IdSchema,
-	userId: UserIdSchema,
+	userId: IdSchema,
 });
 
 export var DeleteSentenceInputSchema = z.object({

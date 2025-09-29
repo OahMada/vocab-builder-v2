@@ -5,30 +5,23 @@ import { handleError } from '@/utils';
 
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
-var currentAudio: HTMLAudioElement | null = null;
-
 export function usePlayAudio() {
+	let AudioRef = React.useRef<null | HTMLAudioElement>(null);
 	let [isPlaying, setIsPlaying] = React.useState(false);
 	let [isAudioLoading, setIsAudioLoading] = React.useState(false);
 	let { addToToast } = useGlobalToastContext();
 
 	let stopAudio = React.useCallback(function () {
-		if (currentAudio) {
+		if (AudioRef.current) {
 			setIsPlaying(false);
-			currentAudio.pause();
-			currentAudio.currentTime = 0;
-			currentAudio = null;
+			AudioRef.current.pause();
+			AudioRef.current.currentTime = 0;
+			AudioRef.current = null;
 		}
 	}, []);
 
 	let playAudio = React.useCallback(
 		async function (audioSource: Blob | string) {
-			// stop old one
-			if (currentAudio) {
-				currentAudio.pause();
-				currentAudio.currentTime = 0;
-			}
-
 			// update audio
 			let audioUrl = '';
 			if (typeof audioSource === 'string') {
@@ -36,10 +29,10 @@ export function usePlayAudio() {
 			} else {
 				audioUrl = URL.createObjectURL(audioSource);
 			}
-			currentAudio = new Audio(audioUrl);
+			AudioRef.current = new Audio(audioUrl);
 			setIsAudioLoading(true);
 			try {
-				await currentAudio.play();
+				await AudioRef.current.play();
 				setIsPlaying(true);
 			} catch (error) {
 				addToToast({
@@ -56,22 +49,22 @@ export function usePlayAudio() {
 
 	// update playing state when audio paused or ended
 	React.useEffect(() => {
-		if (!currentAudio || !isPlaying) return;
+		if (!AudioRef.current || !isPlaying) return;
 		function handlePause() {
 			setIsPlaying(false);
 		}
 
 		function handleEnded() {
 			setIsPlaying(false);
-			currentAudio = null;
+			AudioRef.current = null;
 		}
 
-		currentAudio.addEventListener('pause', handlePause);
-		currentAudio.addEventListener('ended', handleEnded);
+		AudioRef.current.addEventListener('pause', handlePause);
+		AudioRef.current.addEventListener('ended', handleEnded);
 		return () => {
-			if (!currentAudio) return;
-			currentAudio.removeEventListener('pause', handlePause);
-			currentAudio.removeEventListener('ended', handleEnded);
+			if (!AudioRef.current) return;
+			AudioRef.current.removeEventListener('pause', handlePause);
+			AudioRef.current.removeEventListener('ended', handleEnded);
 		};
 	}, [isPlaying]);
 

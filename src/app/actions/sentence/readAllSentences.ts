@@ -3,7 +3,7 @@
 import { unstable_cache } from 'next/cache';
 
 import prisma from '@/lib/prisma';
-import { sentenceReadSelect, SentenceWithPieces, ReadSentencesInputSchema, UserIdSchema } from '@/lib';
+import { sentenceReadSelect, SentenceWithPieces, ReadSentencesInputSchema, IdSchema } from '@/lib';
 import { UNSTABLE_CACHE_TAG } from '@/constants';
 import { handleZodError } from '@/utils';
 
@@ -42,7 +42,7 @@ export var readAllSentences = unstable_cache(
 
 export var countSentences = unstable_cache(
 	async function (data: unknown): Promise<{ error: string } | { data: number }> {
-		let result = UserIdSchema.safeParse(data);
+		let result = IdSchema.safeParse(data);
 		if (!result.success) {
 			let errors = handleZodError(result.error);
 			return { error: errors.formErrors[0] };

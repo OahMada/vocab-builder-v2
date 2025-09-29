@@ -36,7 +36,6 @@ function SentenceListingEntry({
 	...delegated
 }: SentenceListingEntryProps) {
 	let { search } = useSearchParamsContext();
-
 	let { addToToast } = useGlobalToastContext();
 	// merge database pieces data with other sentence parts
 	let sentencePieces = constructSentencePiecesData(sentence, pieces);

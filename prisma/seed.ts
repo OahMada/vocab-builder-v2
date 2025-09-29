@@ -1,6 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
-import { createId } from '@paralleldrive/cuid2';
 
 import { segmentSentence } from '../src/helpers/segmentSentence';
 import { ENGLISH_IPA } from '../src/constants';
@@ -24,7 +23,6 @@ for (let pair of uniqueSentences) {
 		.filter((item) => Boolean(item.IPA));
 
 	let data: DataType = {
-		id: createId(),
 		sentence: pair.sentence,
 		translation: pair.translation,
 		note: Math.random() < 0.5 ? null : faker.lorem.sentence(),
