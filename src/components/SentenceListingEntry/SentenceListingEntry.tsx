@@ -4,7 +4,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
 
-import { usePlayAudio } from '@/hooks';
 import { TOAST_ID } from '@/constants';
 import { constructSentence, constructSentencePiecesData, markSearchMatchesInSentencePieces } from '@/helpers';
 import { SentenceWithPieces } from '@/lib';
@@ -21,6 +20,10 @@ import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 type SentenceListingEntryProps = {
 	index: number;
 	onDeleteSentence: (id: string) => void;
+	playAudio: (audioUrl: string, sentenceId: string) => Promise<void>;
+	stopAudio: () => void;
+	isPlaying: boolean;
+	isLoading: boolean;
 } & SentenceWithPieces &
 	React.ComponentProps<'div'>;
 
@@ -33,6 +36,10 @@ function SentenceListingEntry({
 	audioUrl,
 	pieces,
 	onDeleteSentence,
+	playAudio,
+	stopAudio,
+	isPlaying,
+	isLoading,
 	...delegated
 }: SentenceListingEntryProps) {
 	let { search } = useSearchParamsContext();
@@ -50,7 +57,7 @@ function SentenceListingEntry({
 		finalPieces = constructSentence(sentencePieces);
 	}
 
-	let { isPlaying, playAudio, stopAudio, isAudioLoading } = usePlayAudio();
+	// let { isPlaying, playAudio, stopAudio, isAudioLoading } = usePlayAudio();
 	let router = useRouter();
 
 	async function handleDeleteAction() {
@@ -76,10 +83,9 @@ function SentenceListingEntry({
 					<AudioButton
 						style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
 						isPlaying={isPlaying}
-						playAudio={() => playAudio(audioUrl)}
+						playAudio={() => playAudio(audioUrl, id)}
 						stopAudio={stopAudio}
-						disabled={isAudioLoading}
-						isAudioLoading={isAudioLoading}
+						isLoading={isLoading}
 					/>
 				</SentenceWrapper>
 			</AccordionTrigger>

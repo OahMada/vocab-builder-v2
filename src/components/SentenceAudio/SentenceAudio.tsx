@@ -3,6 +3,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import useSWRMutation from 'swr/mutation';
+import { useParams } from 'next/navigation';
 
 import { postFetcher } from '@/lib';
 import { handleError, base64ToBlob } from '@/utils';
@@ -26,9 +27,12 @@ interface TTSArg {
 var url = '/api/tts';
 
 function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean; sentence: string }) {
+	let { sentenceId } = useParams<{ sentenceId: string }>();
 	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, TTSArg>(url, postFetcher);
 	let { isLocalDataLoading, audioBlob, updateBlob, audioUrl } = useAudioDataContext();
-	let { isPlaying, playAudio, stopAudio, isAudioLoading } = usePlayAudio();
+	let { playingId, playAudio, stopAudio, loadingId } = usePlayAudio();
+	let isPlaying = playingId === sentenceId;
+	let isLoading = loadingId === sentenceId;
 
 	React.useEffect(() => {
 		async function activateTrigger() {
@@ -67,7 +71,7 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 					onClick={async () => {
 						let result = await retryTTS();
 						if (result) {
-							playAudio(result);
+							playAudio(result, sentenceId);
 						}
 					}}
 				>
@@ -82,10 +86,10 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 			) : (
 				<AudioButton
 					variant='outline'
-					onClick={() => playAudio((audioUrl || audioBlob) as string | Blob)}
-					disabled={(!audioBlob && !audioUrl) || shouldStopAudio || isAudioLoading}
+					onClick={() => playAudio((audioUrl || audioBlob) as string | Blob, sentenceId)}
+					disabled={(!audioBlob && !audioUrl) || shouldStopAudio || isLoading}
 				>
-					{isAudioLoading ? (
+					{isLoading ? (
 						<Loading description='loading audio data' />
 					) : (
 						<>

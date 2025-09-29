@@ -11,12 +11,9 @@ function PlayAudioFromUrl({
 	isPlaying,
 	playAudio,
 	stopAudio,
-	isAudioLoading,
+	isLoading,
 	...delegated
-}: { isPlaying: boolean; playAudio: () => void; stopAudio: () => void; isAudioLoading: boolean } & Omit<
-	React.ComponentProps<typeof Button>,
-	'variant'
->) {
+}: { isPlaying: boolean; playAudio: () => void; stopAudio: () => void; isLoading: boolean } & Omit<React.ComponentProps<typeof Button>, 'variant'>) {
 	return isPlaying ? (
 		<Button onClick={stopAudio} variant='icon' {...delegated}>
 			<Icon id='stop' size={16} />
@@ -24,7 +21,7 @@ function PlayAudioFromUrl({
 		</Button>
 	) : (
 		<Button onClick={playAudio} variant='icon' {...delegated}>
-			{isAudioLoading ? (
+			{isLoading ? (
 				<Loading description='loading audio data' />
 			) : (
 				<>

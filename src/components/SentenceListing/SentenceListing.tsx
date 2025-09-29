@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 import { readAllSentences } from '@/app/actions/sentence/readAllSentences';
 import { searchSentences } from '@/app/actions/sentence/searchSentence';
 
-import { useIntersectionObserver } from '@/hooks';
+import { useIntersectionObserver, usePlayAudio } from '@/hooks';
 import { SentenceWithPieces } from '@/lib';
 import { SENTENCE_FETCHING_LIMIT } from '@/constants';
 
@@ -114,6 +114,8 @@ function SentenceListing({
 		if (isIntersecting) fetchMoreSentences();
 	}, [nextCursor, fetchMoreSentences, isIntersecting, isLoadingData, error]);
 
+	let { playAudio, stopAudio, playingId, loadingId } = usePlayAudio();
+
 	if (!isAuthenticated) {
 		return <UnauthorizedDisplay callback={search ? `/browse?search=${search}` : '/browse'} />;
 	}
@@ -140,6 +142,10 @@ function SentenceListing({
 								id={id}
 								{...rest}
 								onDeleteSentence={onDeleteSentence}
+								playAudio={playAudio}
+								stopAudio={stopAudio}
+								isPlaying={playingId === id}
+								isLoading={loadingId === id}
 							/>
 						);
 					})}

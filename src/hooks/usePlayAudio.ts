@@ -6,67 +6,75 @@ import { handleError } from '@/utils';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 export function usePlayAudio() {
-	let AudioRef = React.useRef<null | HTMLAudioElement>(null);
-	let [isPlaying, setIsPlaying] = React.useState(false);
-	let [isAudioLoading, setIsAudioLoading] = React.useState(false);
+	let [currentAudio, setCurrentAudio] = React.useState<null | HTMLAudioElement>(null);
+	let [playingId, setPlayingId] = React.useState<string | undefined>(undefined);
+	let [loadingId, setLoadingId] = React.useState<string | undefined>(undefined);
 	let { addToToast } = useGlobalToastContext();
 
-	let stopAudio = React.useCallback(function () {
-		if (AudioRef.current) {
-			setIsPlaying(false);
-			AudioRef.current.pause();
-			AudioRef.current.currentTime = 0;
-			AudioRef.current = null;
-		}
-	}, []);
+	let stopAudio = React.useCallback(
+		function () {
+			if (currentAudio) {
+				currentAudio.pause();
+				currentAudio.currentTime = 0;
+				setCurrentAudio(null);
+				setPlayingId(undefined);
+			}
+		},
+		[currentAudio]
+	);
 
 	let playAudio = React.useCallback(
-		async function (audioSource: Blob | string) {
+		async function (audioSource: Blob | string, sentenceId: string) {
+			// stop old one
+			if (currentAudio) {
+				stopAudio();
+			}
+
 			// update audio
-			let audioUrl = '';
+			let audioUrl: string;
 			if (typeof audioSource === 'string') {
 				audioUrl = audioSource;
 			} else {
 				audioUrl = URL.createObjectURL(audioSource);
 			}
-			AudioRef.current = new Audio(audioUrl);
-			setIsAudioLoading(true);
+			let audio = new Audio(audioUrl);
+			setCurrentAudio(audio);
+			setLoadingId(sentenceId);
 			try {
-				await AudioRef.current.play();
-				setIsPlaying(true);
+				await audio.play();
+				setPlayingId(sentenceId);
 			} catch (error) {
+				// hide abort errors
+				if ((error as Error).name === 'AbortError') return;
 				addToToast({
 					id: `${TOAST_ID.AUDIO_PLAYING}${audioUrl}`,
 					contentType: 'error',
 					content: handleError(error),
 				});
-				stopAudio();
+				setCurrentAudio(null);
 			}
-			setIsAudioLoading(false);
+			setLoadingId(undefined);
 		},
-		[addToToast, stopAudio]
+		[addToToast, currentAudio, stopAudio]
 	);
 
 	// update playing state when audio paused or ended
 	React.useEffect(() => {
-		if (!AudioRef.current || !isPlaying) return;
-		function handlePause() {
-			setIsPlaying(false);
+		if (!currentAudio || !playingId) return;
+
+		function handler() {
+			setPlayingId(undefined);
+			setCurrentAudio(null);
 		}
 
-		function handleEnded() {
-			setIsPlaying(false);
-			AudioRef.current = null;
-		}
-
-		AudioRef.current.addEventListener('pause', handlePause);
-		AudioRef.current.addEventListener('ended', handleEnded);
+		currentAudio.addEventListener('pause', handler);
+		currentAudio.addEventListener('ended', handler);
 		return () => {
-			if (!AudioRef.current) return;
-			AudioRef.current.removeEventListener('pause', handlePause);
-			AudioRef.current.removeEventListener('ended', handleEnded);
+			if (!currentAudio) return;
+			currentAudio.removeEventListener('pause', handler);
+			currentAudio.removeEventListener('ended', handler);
 		};
-	}, [isPlaying]);
+	}, [currentAudio, playingId]);
 
-	return { isPlaying, playAudio, stopAudio, isAudioLoading };
+	return { playAudio, stopAudio, playingId, loadingId };
 }
