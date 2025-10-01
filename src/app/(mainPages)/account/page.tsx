@@ -7,7 +7,7 @@ import { auth } from '@/auth';
 import Wrapper from '@/components/PageWrapper';
 import UserInfo from '@/components/UserInfo';
 import UserPhoto from '@/components/UserPhoto';
-import ExportData from '@/components/ExportData';
+import SyncData from '@/components/SyncData';
 import DeleteAccount from '@/components/DeleteAccount';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
@@ -39,7 +39,8 @@ export default async function AccountPage() {
 				<UserInfo />
 				<GoogleAccountLink />
 				<PersonalizeUser showSubmitButton={false} hasName={Boolean(session.user.name)} />
-				<ExportData />
+				{/* TODO don't show this button on small and medium screen size */}
+				<SyncData />
 				<DeleteAccount />
 			</Wrapper>
 		</MaxWidthWrapper>

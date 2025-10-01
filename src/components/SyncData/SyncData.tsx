@@ -1,9 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { saveAs } from 'file-saver';
 
-import exportData from '@/app/actions/sentence/exportData';
+import syncWithAnki from '@/app/actions/sentence/syncWithAnki';
 
 import { TOAST_ID } from '@/constants';
 
@@ -12,31 +11,33 @@ import Icon from '@/components/Icon';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Loading from '@/components/Loading';
 
-function ExportData() {
+function SyncData() {
 	let [isLoading, startTransition] = React.useTransition();
 	let { addToToast } = useGlobalToastContext();
 	async function handleExport() {
 		startTransition(async () => {
-			let result = await exportData();
-			if ('error' in result) {
+			let result = await syncWithAnki();
+			if (result && 'error' in result) {
 				addToToast({
 					contentType: 'error',
 					content: result.error,
-					id: TOAST_ID.EXPORT_DATA,
+					id: TOAST_ID.SYNC_DATA,
 				});
 				return;
 			}
-
-			let blob = new Blob([result.data], { type: 'text/plain;charset=utf-8' });
-			saveAs(blob, 'data.json');
+			addToToast({
+				contentType: 'notice',
+				content: 'Success',
+				id: TOAST_ID.SYNC_DATA,
+			});
 		});
 	}
 	return (
 		<Button variant='outline' onClick={handleExport} disabled={isLoading}>
 			{isLoading ? <Loading description='exporting data' /> : <Icon id='export' />}
-			&nbsp; Export Data
+			&nbsp; Sync Data
 		</Button>
 	);
 }
 
-export default ExportData;
+export default SyncData;

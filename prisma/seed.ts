@@ -2,8 +2,60 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 
 import { segmentSentence } from '../src/helpers/segmentSentence';
-import { ENGLISH_IPA } from '../src/constants';
 import { SentenceWithPieces } from '../src/lib';
+
+export const ENGLISH_IPA = [
+	// Consonants
+	'p',
+	'b',
+	't',
+	'd',
+	'k',
+	'ɡ',
+	'm',
+	'n',
+	'ŋ',
+	'f',
+	'v',
+	'θ',
+	'ð',
+	's',
+	'z',
+	'ʃ',
+	'ʒ',
+	'h',
+	'tʃ',
+	'dʒ',
+	'r',
+	'j',
+	'w',
+	'l',
+
+	// Monophthong vowels
+	'iː',
+	'ɪ',
+	'e',
+	'æ',
+	'ɑː',
+	'ɒ',
+	'ɔː',
+	'ʊ',
+	'uː',
+	'ʌ',
+	'ɜː',
+	'ə',
+
+	// Diphthongs
+	'eɪ',
+	'aɪ',
+	'ɔɪ',
+	'aʊ',
+	'əʊ',
+	'oʊ',
+	'ɪə',
+	'eə',
+	'ʊə',
+];
 
 type DataType = Prisma.SentenceCreateInput;
 
