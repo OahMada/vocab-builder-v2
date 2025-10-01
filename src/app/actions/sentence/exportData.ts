@@ -3,7 +3,7 @@
 import { readAllSentences } from './readAllSentences';
 import verifySession from '@/lib/dal';
 
-export default async function exportData(): Promise<{ error: string } | { data: string }> {
+export default async function exportAsJSON(): Promise<{ error: string } | { data: string }> {
 	let session = await verifySession();
 	if (!session) {
 		return { error: 'Unauthorized' };

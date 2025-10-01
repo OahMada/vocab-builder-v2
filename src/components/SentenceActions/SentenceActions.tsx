@@ -145,6 +145,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 
 			if ('error' in result) {
 				setErrorMsg(result.error);
+				setShouldStopAudio(false);
 				return;
 			}
 			deleteLocalData(true);

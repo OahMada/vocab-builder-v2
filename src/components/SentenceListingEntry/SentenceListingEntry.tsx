@@ -24,7 +24,7 @@ type SentenceListingEntryProps = {
 	stopAudio: () => void;
 	isPlaying: boolean;
 	isLoading: boolean;
-} & SentenceWithPieces &
+} & Omit<SentenceWithPieces, 'audioHash'> &
 	React.ComponentProps<'div'>;
 
 function SentenceListingEntry({

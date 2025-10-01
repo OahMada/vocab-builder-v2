@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { NextAuthRequest } from 'next-auth';
 import { SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat } from 'microsoft-cognitiveservices-speech-sdk';
+import { createHash } from 'node:crypto';
 
 import { SentenceSchema } from '@/lib';
 import { handleZodError } from '@/utils';
@@ -51,8 +52,9 @@ export var POST = auth(async function (request: NextAuthRequest) {
 			ssml,
 			(result) => {
 				let audioData = Buffer.from(result.audioData);
+				let hash = createHash('sha1').update(audioData).digest().subarray(0, 8).toString('base64');
 				synthesizer.close();
-				resolve(NextResponse.json({ data: audioData.toString('base64') }));
+				resolve(NextResponse.json({ data: { blob: audioData.toString('base64'), hash } }));
 			},
 			(err) => {
 				console.error(err);

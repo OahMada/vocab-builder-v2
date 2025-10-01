@@ -1,5 +1,7 @@
 'use server';
 
+import pLimit from 'p-limit';
+
 import { DeleteUserInputSchema } from '@/lib';
 import verifySession from '@/lib/dal';
 import { handleZodError } from '@/utils';
@@ -73,10 +75,11 @@ export default async function deleteUser(data: unknown): Promise<{ error: string
 			}
 		}
 
-		await Promise.all([
-			...imageBlobsToDelete.map((name) => imageContainerClient.getBlockBlobClient(name).deleteIfExists()),
-			...audioBlobsToDelete.map((name) => audioContainerClient.getBlockBlobClient(name).deleteIfExists()),
-		]);
+		let limit = pLimit(10);
+		// delete image
+		await limit.map(imageBlobsToDelete, (name) => imageContainerClient.getBlockBlobClient(name).deleteIfExists());
+		// Delete audio
+		await limit.map(audioBlobsToDelete, (name) => audioContainerClient.getBlockBlobClient(name).deleteIfExists());
 	} catch (error) {
 		console.error(`delete user blob data failed. Userid: ${userId}.`, error);
 	}

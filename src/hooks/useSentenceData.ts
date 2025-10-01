@@ -18,7 +18,7 @@ export function useSentenceData(): UseSentenceDataReturnType {
 	let { pieces } = useSentencePiecesContext();
 	let { isLocalDataLoading: noteLoading, note, isEditing: isNoteEditing } = useNoteContext();
 	let noteReady = !noteLoading && !isNoteEditing;
-	let { isLocalDataLoading: audioBlobLoading, audioBlob, audioUrl } = useAudioDataContext();
+	let { isLocalDataLoading: audioBlobLoading, audioBlob, audioUrl, audioHash } = useAudioDataContext();
 	let audioBlobReady = !audioBlobLoading && (audioBlob || audioUrl);
 	let sentenceDataReady = Boolean(translationReady && pieces && noteReady && audioBlobReady);
 
@@ -30,6 +30,7 @@ export function useSentenceData(): UseSentenceDataReturnType {
 			note,
 			audioBlob,
 			pieces,
+			audioHash,
 		};
 	} else {
 		sentenceData = {

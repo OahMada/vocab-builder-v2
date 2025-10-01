@@ -35,6 +35,7 @@ for (let pair of uniqueSentences) {
 				id: process.env.DEMO_USERID,
 			},
 		},
+		audioHash: null,
 	};
 
 	dummyData.push(data);

@@ -131,7 +131,7 @@ function SentenceListing({
 				<AccordionRoot style={{ '--transform': `translateY(${virtualizedItems[0]?.start || 0}px)` } as React.CSSProperties}>
 					{virtualizedItems.map((virtualItem) => {
 						let index = virtualItem.index;
-						let { id, ...rest } = currentSentences[index];
+						let { id, audioUrl, note, pieces, sentence, translation } = currentSentences[index];
 
 						return (
 							<SentenceListingEntry
@@ -140,7 +140,11 @@ function SentenceListing({
 								key={id}
 								index={index}
 								id={id}
-								{...rest}
+								audioUrl={audioUrl}
+								note={note}
+								pieces={pieces}
+								sentence={sentence}
+								translation={translation}
 								onDeleteSentence={onDeleteSentence}
 								playAudio={playAudio}
 								stopAudio={stopAudio}

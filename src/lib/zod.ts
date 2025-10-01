@@ -98,6 +98,7 @@ export var SentenceCreateInputSchema = z.object({
 		// TODO maybe use a specific domain
 		hostname: z.regexes.domain,
 	}),
+	audioHash: z.string().length(12), // base64 of 8 bytes is exactly 12 characters
 });
 
 export type SentenceCreateInputType = z.infer<typeof SentenceCreateInputSchema>;
