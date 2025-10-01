@@ -87,7 +87,6 @@ export const LOCAL_STORAGE_KEY = {
 	SENTENCE: INPUT_NAME.SENTENCE,
 	PIECES: 'pieces',
 	TRANSLATION: INPUT_NAME.TRANSLATION,
-	AUDIO_HASH: 'audio_hash',
 } as const;
 
 export const LOCAL_STORAGE_OBJ = 'vocab_builder';

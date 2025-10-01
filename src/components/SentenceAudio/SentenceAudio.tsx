@@ -17,10 +17,7 @@ import Toast from '@/components/Toast';
 import Loading from '@/components/Loading';
 
 interface TTSResponse {
-	data: {
-		blob: string;
-		hash: string;
-	};
+	data: string;
 }
 
 interface TTSArg {
@@ -32,7 +29,7 @@ var url = '/api/tts';
 function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean; sentence: string }) {
 	let { sentenceId } = useParams<{ sentenceId: string }>();
 	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, TTSArg>(url, postFetcher);
-	let { isLocalDataLoading, audioBlob, updateBlob, audioUrl, updateHash } = useAudioDataContext();
+	let { isLocalDataLoading, audioBlob, updateBlob, audioUrl } = useAudioDataContext();
 	let { playingId, playAudio, stopAudio, loadingId } = usePlayAudio();
 	let isPlaying = playingId === sentenceId;
 	let isLoading = loadingId === sentenceId;
@@ -41,16 +38,14 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 		async function activateTrigger() {
 			let result = await trigger({ sentence });
 			if (result) {
-				let { blob, hash } = result.data;
-				let audioBlob = await base64ToBlob(blob);
+				let audioBlob = await base64ToBlob(result.data);
 				updateBlob(audioBlob);
-				updateHash(hash);
 			}
 		}
 		if (!isLocalDataLoading && !audioBlob && !audioUrl) {
 			activateTrigger();
 		}
-	}, [audioBlob, audioUrl, isLocalDataLoading, sentence, trigger, updateBlob, updateHash]);
+	}, [audioBlob, audioUrl, isLocalDataLoading, sentence, trigger, updateBlob]);
 
 	React.useEffect(() => {
 		if (shouldStopAudio) {
@@ -62,10 +57,8 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 		reset();
 		let result = await trigger({ sentence });
 		if (result) {
-			let { blob, hash } = result.data;
-			let audioBlob = await base64ToBlob(blob);
+			let audioBlob = await base64ToBlob(result.data);
 			updateBlob(audioBlob);
-			updateHash(hash);
 			return audioBlob;
 		}
 	}

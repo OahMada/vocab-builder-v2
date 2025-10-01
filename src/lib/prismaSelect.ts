@@ -14,7 +14,6 @@ export var sentenceReadSelect = {
 			index: true,
 		},
 	},
-	audioHash: true,
 } satisfies Prisma.SentenceSelect;
 
 export type SentenceWithPieces = Prisma.SentenceGetPayload<{ select: typeof sentenceReadSelect }>;
