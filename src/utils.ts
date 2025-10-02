@@ -1,5 +1,8 @@
 import axios from 'axios';
 import z, { ZodError } from 'zod';
+import { set, del } from 'idb-keyval';
+
+import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_OBJ, LOCAL_DB_KEY } from '@/constants';
 
 export function handleError(error: unknown): string {
 	let message: string;
@@ -42,4 +45,55 @@ export function handleZodError<T>(error: ZodError<T>, mode: 'flatten' | 'prettif
 export async function base64ToBlob(base64Blob: string) {
 	let audioBlob = await fetch(`data:audio/mpeg;base64,${base64Blob}`).then((r) => r.blob());
 	return audioBlob;
+}
+
+export async function updateLocalDB(action: 'set', val: Blob): Promise<void>;
+export async function updateLocalDB(action: 'delete'): Promise<void>;
+export async function updateLocalDB(action: 'set' | 'delete', val?: Blob): Promise<void> {
+	try {
+		switch (action) {
+			case 'set':
+				await set(LOCAL_DB_KEY, val);
+				break;
+			case 'delete':
+				await del(LOCAL_DB_KEY);
+				break;
+		}
+	} catch (error) {
+		throw error;
+	}
+}
+
+type LocalStorageKey = (typeof LOCAL_STORAGE_KEY)[keyof typeof LOCAL_STORAGE_KEY];
+
+export function updateLocalStorage<T>(action: 'save', key: LocalStorageKey, value: T): void;
+export function updateLocalStorage(action: 'delete', key: LocalStorageKey): void;
+export function updateLocalStorage<T>(action: 'save' | 'delete', key: LocalStorageKey, value?: T) {
+	let raw = window.localStorage.getItem(LOCAL_STORAGE_OBJ);
+	let data = raw ? JSON.parse(raw) : {};
+
+	switch (action) {
+		case 'save':
+			data[key] = value;
+			window.localStorage.setItem(LOCAL_STORAGE_OBJ, JSON.stringify(data));
+			break;
+
+		case 'delete':
+			if (key in data) {
+				delete data[key];
+				window.localStorage.setItem(LOCAL_STORAGE_OBJ, JSON.stringify(data));
+			}
+			break;
+	}
+}
+
+export async function deleteLocalData(includeSentence: boolean = false) {
+	if (!includeSentence) {
+		updateLocalStorage('delete', LOCAL_STORAGE_KEY.TRANSLATION);
+		updateLocalStorage('delete', LOCAL_STORAGE_KEY.PIECES);
+		updateLocalStorage('delete', LOCAL_STORAGE_KEY.NOTE);
+	} else {
+		window.localStorage.removeItem(LOCAL_STORAGE_OBJ);
+	}
+	await updateLocalDB('delete');
 }

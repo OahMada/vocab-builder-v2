@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 import { useReadLocalStorage } from '@/hooks';
-import { updateLocalStorage } from '@/helpers';
+import { updateLocalStorage } from '@/utils';
 import { LOCAL_STORAGE_KEY } from '@/constants';
 import NoteContext from './NoteContext';
 

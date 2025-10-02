@@ -6,13 +6,6 @@ import styled from 'styled-components';
 import Button from '@/components/Button';
 
 function PhoneticSymbol({ symbol, ...delegated }: React.ComponentProps<'button'> & { symbol: string }) {
-	if (!symbol.startsWith('/')) {
-		symbol = `/${symbol}`;
-	}
-	if (!symbol.endsWith('/')) {
-		symbol = `${symbol}/`;
-	}
-
 	return (
 		<SymbolButton variant='outline' {...delegated}>
 			{symbol}

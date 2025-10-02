@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import TranslationContext from './TranslationContext';
 import { useReadLocalStorage } from '@/hooks';
-import { updateLocalStorage } from '@/helpers';
+import { updateLocalStorage } from '@/utils';
 import { LOCAL_STORAGE_KEY } from '@/constants';
 
 function TranslationProvider({ databaseTranslation, children }: { databaseTranslation?: string; children: React.ReactNode }) {

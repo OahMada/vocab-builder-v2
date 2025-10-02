@@ -11,7 +11,7 @@ import checkSentenceUniqueness from '@/app/actions/sentence/checkSentenceUniquen
 
 import { TOAST_ID, INPUT_NAME, LOCAL_STORAGE_KEY, COOKIE_KEY } from '@/constants';
 import { UserInputType, UserInputSchema, setCookie } from '@/lib';
-import { updateLocalStorage } from '@/helpers';
+import { updateLocalStorage } from '@/utils';
 import { useReadLocalStorage } from '@/hooks';
 
 import TextArea from '@/components/TextArea';

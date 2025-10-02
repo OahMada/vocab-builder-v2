@@ -45,6 +45,7 @@
 		"@types/js-cookie": "^3.0.6",
 		"ai": "^5.0.10",
 		"axios": "^1.11.0",
+		"dayjs": "^1.11.18",
 		"file-saver": "^2.0.5",
 		"idb-keyval": "^6.2.2",
 		"immer": "^10.1.1",

@@ -4,12 +4,13 @@ import * as React from 'react';
 import { produce } from 'immer';
 
 import { PiecesType } from '@/types';
-import { constructSentencePiecesData, segmentSentence, updateLocalStorage } from '@/helpers';
+import { constructSentencePiecesData, segmentSentence } from '@/helpers';
 import { useReadLocalStorage } from '@/hooks';
 import { LOCAL_STORAGE_KEY } from '@/constants';
 import { Action, RemoveIPAParams, AddIPAParams } from './types';
 import SentencePiecesContext from './SentencePiecesContext';
 import { SentenceWithPieces } from '@/lib';
+import { updateLocalStorage } from '@/utils';
 
 function reducer(state: PiecesType, action: Action) {
 	return produce(state, (draft) => {

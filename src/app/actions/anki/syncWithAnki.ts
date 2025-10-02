@@ -2,12 +2,14 @@
 
 import pLimit from 'p-limit';
 
-import { readAllSentences } from './readAllSentences';
+import { readAllSentences } from '../sentence/readAllSentences';
+import updateSyncDate from '../user/updateSyncDate';
 
 import verifySession from '@/lib/dal';
 import invoke from '@/lib/invokeAnkiConnect';
 import { SentenceWithPieces } from '@/lib';
 import getBlobNameFromUrl from '@/helpers/getBlobNamaFromUrl';
+import { wrapIPAWithSlashes } from '@/helpers';
 
 interface UpdateFieldsParam {
 	id: number;
@@ -25,14 +27,14 @@ interface AddNoteParam {
 		IPA: string;
 		Audio: string;
 	};
-	audio: {
+	audio?: {
 		url: string;
 		filename: string;
 		fields: string[];
 	}[];
 }
 
-export default async function syncWithAnki(): Promise<{ error: string } | undefined> {
+export default async function syncWithAnki(): Promise<{ error: string } | { data: string }> {
 	let session = await verifySession();
 	if (!session) {
 		return { error: 'Unauthorized' };
@@ -48,7 +50,9 @@ export default async function syncWithAnki(): Promise<{ error: string } | undefi
 		await invoke('version');
 	} catch (error) {
 		console.error(error);
-		return { error: 'AnkiConnect is not set up. Please make sure that AnkiConnect is installed in Anki and that the Anki desktop app is running' };
+		return {
+			error: 'AnkiConnect is not set up. Please make sure the AnkiConnect add-on is installed in Anki and that the Anki desktop app is running',
+		};
 	}
 
 	try {
@@ -120,6 +124,7 @@ export default async function syncWithAnki(): Promise<{ error: string } | undefi
 	for (let item of userData) {
 		let note = existingNotesMap.get(item.id);
 		let IPAFieldValue = createIPAFieldValue(item.pieces);
+		let sentenceNote = item.note ?? '';
 		if (!note) {
 			let audioFileName = getBlobNameFromUrl(item.audioUrl);
 			let noteParam = {
@@ -128,18 +133,17 @@ export default async function syncWithAnki(): Promise<{ error: string } | undefi
 				fields: {
 					Sentence: item.sentence,
 					Translation: item.translation,
-					Note: item.note ?? '',
+					Note: sentenceNote,
 					dbID: item.id,
-					IPA: createIPAFieldValue(item.pieces),
+					IPA: IPAFieldValue,
 					Audio: '',
 				},
-				audio: [{ url: item.audioUrl, filename: audioFileName, fields: ['Audio'] }],
+				// to deal with dummy data in database
+				...(audioFileName.endsWith('.mp3') && { audio: [{ url: item.audioUrl, filename: audioFileName, fields: ['Audio'] }] }),
 			};
 			toAdd.push(noteParam);
 		} else {
 			let fieldsToUpdate: UpdateFieldsParam['fields'] = {};
-			let sentenceNote = item.note ?? '';
-
 			if (note.fields.Translation.value !== item.translation) fieldsToUpdate['Translation'] = item.translation;
 			if (note.fields.Note.value !== sentenceNote) fieldsToUpdate['Note'] = sentenceNote;
 			if (note.fields.IPA.value !== IPAFieldValue) fieldsToUpdate['IPA'] = IPAFieldValue;
@@ -155,8 +159,6 @@ export default async function syncWithAnki(): Promise<{ error: string } | undefi
 			toDelete.push(note.noteId);
 		}
 	}
-
-	console.log('changes to be made', toAdd, toDelete, toUpdate);
 
 	// create/update/delete notes
 	let batchSize = 100;
@@ -190,9 +192,41 @@ export default async function syncWithAnki(): Promise<{ error: string } | undefi
 		console.error('deleteNotes action failed.', error);
 		return { error: 'Failed to delete obsolete notes' };
 	}
+
+	let returnMessage = [];
+
+	if (toAdd.length > 0) {
+		returnMessage.push(`${toAdd.length} ${toAdd.length > 1 ? 'notes' : 'note'} added.`);
+	}
+	if (toUpdate.length > 0) {
+		returnMessage.push(`${toUpdate.length} ${toUpdate.length > 1 ? 'notes' : 'note'} updated.`);
+	}
+	if (toDelete.length > 0) {
+		returnMessage.push(`${toDelete.length} ${toDelete.length > 1 ? 'notes' : 'note'} deleted.`);
+	}
+
+	try {
+		await updateSyncDate(userId);
+	} catch (error) {
+		console.error('update sync date failed', error);
+		return {
+			error: `Synced to Anki successfully${returnMessage.length > 0 ? `: ${returnMessage.join(' ')}` : '.'} but failed to update last synced date`,
+		};
+	}
+
+	return { data: returnMessage.join(' ') };
 }
 
 function createIPAFieldValue(data: SentenceWithPieces['pieces']) {
-	let piecesList = data.map((p) => `<li>${p.word}: ${p.IPA}</li>`).join('');
-	return data.length > 0 ? `<ul>${piecesList}</ul>` : '';
+	if (data.length > 0) {
+		let piecesList = data
+			.map((p) => {
+				let IPA = wrapIPAWithSlashes(p.IPA);
+				return `<li>${p.word}: ${IPA}</li>`;
+			})
+			.join('');
+		return `<ul>${piecesList}</ul>`;
+	} else {
+		return '';
+	}
 }

@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
 import * as React from 'react';
 import { redirect } from 'next/navigation';
+import dayjs from 'dayjs';
+
+import readLastSyncedDate from '@/app/actions/user/readLastSyncedDate';
 
 import { auth } from '@/auth';
 
@@ -31,6 +34,15 @@ export default async function AccountPage() {
 		redirect('/');
 	}
 
+	let errorText: string | undefined = undefined;
+	let lastSynced: string = 'never';
+	let lastSyncedResult = await readLastSyncedDate(session.user.id);
+	if ('error' in lastSyncedResult) {
+		errorText = lastSyncedResult.error;
+	} else if (lastSyncedResult.data) {
+		lastSynced = dayjs(lastSyncedResult.data).format('YYYY-MM-DD HH:mm');
+	}
+
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>
@@ -39,8 +51,7 @@ export default async function AccountPage() {
 				<UserInfo />
 				<GoogleAccountLink />
 				<PersonalizeUser showSubmitButton={false} hasName={Boolean(session.user.name)} />
-				{/* TODO don't show this button on small and medium screen size */}
-				<SyncData />
+				<SyncData errorText={errorText} lastSynced={lastSynced} />
 				<DeleteAccount />
 			</Wrapper>
 		</MaxWidthWrapper>

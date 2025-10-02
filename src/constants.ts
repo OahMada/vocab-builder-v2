@@ -45,6 +45,7 @@ export const LOCAL_DB_KEY = 'audio';
 
 export const UNSTABLE_CACHE_TAG = {
 	SENTENCES: 'sentences',
+	LAST_SYNCED: 'last_synced',
 } as const;
 
 export const SENTENCE_FETCHING_LIMIT = 15;

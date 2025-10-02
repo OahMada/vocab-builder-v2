@@ -11,11 +11,10 @@ import createSentence from '@/app/actions/sentence/createSentence';
 import updateSentence from '@/app/actions/sentence/updateSentence';
 import getBlobStorageSASToken from '@/app/actions/lib/getBlobStorageSASToken';
 
-import { deleteLocalData } from '@/helpers';
 import { useSentenceData } from '@/hooks';
 import { SentenceCreateInputType, SentenceUpdateInputType, SentenceWithPieces, deleteCookie } from '@/lib';
 import { BLOB_CONTAINER_TYPE, COOKIE_KEY, TOAST_ID } from '@/constants';
-import { handleError } from '@/utils';
+import { handleError, deleteLocalData } from '@/utils';
 
 import Button from '@/components/Button';
 import VisuallyHidden from '@/components/VisuallyHidden';
