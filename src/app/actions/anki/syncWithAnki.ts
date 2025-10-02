@@ -1,6 +1,7 @@
 'use server';
 
 import pLimit from 'p-limit';
+import path from 'path';
 
 import { readAllSentences } from '../sentence/readAllSentences';
 import updateSyncDate from '../user/updateSyncDate';
@@ -33,6 +34,128 @@ interface AddNoteParam {
 		fields: string[];
 	}[];
 }
+
+var css = `
+@font-face {
+  font-family: "Roboto";
+  src: url("_Roboto.woff2") format("woff2");
+  font-style: normal;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+html, body {
+	height: 100%;
+}
+
+
+.card {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+	padding: 30px 20px;
+	margin: 0;
+	text-align: start;
+}
+
+.replay-button svg {
+  width: 30px;
+  height: 30px;
+}
+
+.sentence {
+	font-weight: 500;
+	margin-bottom: 10px;
+}
+
+.ipa {
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	padding: 0;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.ipa li {
+	border: 1px solid black;
+	border-radius: 10px;
+	padding: 5px;
+	font-size: 14px;
+}
+
+body.nightMode .ipa li {
+	border: 1px solid lightgrey;
+}
+
+
+.ipa:empty {
+	display: none;
+}
+
+.audio {
+	position: fixed;
+	left: 20px;
+	bottom: 20px;
+	filter: drop-shadow(0px 4px 4px hsla(0, 0%, 0%, 0.3));
+}
+
+.translation {
+	margin-bottom: 10px;
+}
+
+.note {
+	white-space: pre-wrap;
+	background-color: lightgrey;
+	border-radius: 10px;
+	padding: 8px;
+}
+
+body.nightMode .note {
+	background-color: hsl(0, 0%, 12%);
+}
+
+
+.note:empty {
+  display: none;
+}
+
+.input {
+	margin-bottom: 10px;
+}
+`;
 
 export default async function syncWithAnki(): Promise<{ error: string } | { data: string }> {
 	let session = await verifySession();
@@ -67,26 +190,29 @@ export default async function syncWithAnki(): Promise<{ error: string } | { data
 			await invoke('createModel', {
 				modelName: modelName,
 				inOrderFields: ['Sentence', 'Audio', 'IPA', 'Translation', 'Note', 'dbID'],
-				css: 'Optional CSS with default to builtin css',
+				css,
 				isCloze: false,
 				cardTemplates: [
 					{
 						Name: 'Basic',
-						Front: '{{Sentence}} {{Audio}}<br/>{{IPA}}',
-						Back: "{{FrontSide}}<hr id='answer'>{{Translation}}<br/><div class='note-field'>{{Note}}</div>",
+						Front: '<p class="sentence">{{Sentence}}</p><ul class="ipa">{{IPA}}</ul><div class="audio">{{Audio}}</div>',
+						Back: '{{FrontSide}}<hr id="answer"><p class="translation">{{Translation}}</p><p class="note">{{Note}}</p>',
 					},
 					{
 						Name: 'Reverse',
-						Front: '{{Translation}}',
-						Back: "{{FrontSide}}<hr id='answer'>{{Sentence}} {{Audio}}<br/>{{IPA}}<br/><div class='note-field'>{{Note}}</div>",
+						Front: '<p class="translation">{{Translation}}</p>',
+						Back: '{{FrontSide}}<hr id="answer"><p class="sentence">{{Sentence}}</p><ul class="ipa">{{IPA}}</ul><p class="note">{{Note}}</p><div class="audio">{{Audio}}</div>',
 					},
 					{
 						Name: 'Type',
-						Front: '{{type:Sentence}} {{Audio}}',
-						Back: "{{FrontSide}}<hr id='answer'>{{IPA}}<br/>{{Translation}}<br/><div class='note-field'>{{Note}}</div>",
+						Front: '<div class="input">{{type:Sentence}}</div><p class="translation">{{Translation}}</p><div class="audio">{{Audio}}</div>',
+						Back: '{{FrontSide}}<hr id="answer"><ul class="ipa">{{IPA}}</ul><p class="note">{{Note}}</p>',
 					},
 				],
 			});
+
+			let fontPath = path.join(process.cwd(), 'public', 'fonts', 'Roboto.woff2');
+			await invoke('storeMediaFile', { filename: '_Roboto.woff2', path: fontPath });
 		}
 	} catch (error) {
 		console.error('Failed to setup Anki deck:', error);
@@ -225,7 +351,7 @@ function createIPAFieldValue(data: SentenceWithPieces['pieces']) {
 				return `<li>${p.word}: ${IPA}</li>`;
 			})
 			.join('');
-		return `<ul>${piecesList}</ul>`;
+		return piecesList;
 	} else {
 		return '';
 	}
