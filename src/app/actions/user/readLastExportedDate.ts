@@ -7,7 +7,7 @@ import { handleZodError } from '@/utils';
 import prisma from '@/lib/prisma';
 import { UNSTABLE_CACHE_TAG } from '@/constants';
 
-var readLastSyncedDate = unstable_cache(
+var readLastExportedDate = unstable_cache(
 	async function (data: unknown): Promise<{ error: string } | { data: Date | null }> {
 		let result = IdSchema.safeParse(data);
 		if (!result.success) {
@@ -27,14 +27,14 @@ var readLastSyncedDate = unstable_cache(
 			if (!user) {
 				throw new Error(`No user found with id: ${userId}}`);
 			}
-			return { data: user?.lastSynced };
+			return { data: user?.lastExported };
 		} catch (error) {
 			console.error('could not read user data', error);
 			return { error: "Failed to check the user's last synced date" };
 		}
 	},
 	[],
-	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG.LAST_SYNCED] }
+	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG.LAST_EXPORTED] }
 );
 
-export default readLastSyncedDate;
+export default readLastExportedDate;

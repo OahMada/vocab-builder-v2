@@ -13,7 +13,7 @@ export const TOAST_ID = {
 	IMAGE_UPLOAD: 'image_upload',
 	AUDIO_UPLOAD: 'audio_upload',
 	SAS_TOKEN: 'sas_token',
-	SYNC_DATA: 'sync_data',
+	EXPORT_DATA: 'export_data',
 	DELETE_USER: 'delete_user',
 } as const;
 
@@ -45,7 +45,7 @@ export const LOCAL_DB_KEY = 'audio';
 
 export const UNSTABLE_CACHE_TAG = {
 	SENTENCES: 'sentences',
-	LAST_SYNCED: 'last_synced',
+	LAST_EXPORTED: 'last_exported',
 } as const;
 
 export const SENTENCE_FETCHING_LIMIT = 15;
