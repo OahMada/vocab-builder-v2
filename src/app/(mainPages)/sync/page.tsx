@@ -27,7 +27,7 @@ export var metadata: Metadata = {
 	title: 'Sync | Vocab Builder',
 };
 
-export default async function AboutPage() {
+export default async function SyncPage() {
 	let blogPostData = await loadPost('sync');
 	if (!blogPostData) {
 		notFound();
