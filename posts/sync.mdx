@@ -24,8 +24,9 @@ To recap, **here are the steps to sync your Vocab Builder data with Anki**:
 
 1. Install Anki Desktop and the [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on (remember to restart Anki after installing the add-on);
 2. Install [NodeJS](https://nodejs.org/en/download) on your computer;
-3. Export data from Vocab Builder to a `data.json` file;
-4. Open Terminal(macos) or Command Prompt(Win), and run the command shown above:
+3. Download the sync script `anki-sync-cli.js` from `Assets` on this [page](https://github.com/OahMada/anki-sync/releases);
+4. Export data from Vocab Builder to a `data.json` file;
+5. Open Terminal(macos) or Command Prompt(Win), and run the command shown above:
    `node <path-to>/anki-sync-cli.js <path-to>/data.json`;
 
 After syncing with the script, you can use Anki's built-in syncing service to sync your decks to AnkiMobile or other devices.

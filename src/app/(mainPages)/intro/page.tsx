@@ -4,9 +4,9 @@ import * as React from 'react';
 import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import {
-	SloganDescription,
-	Slogan,
 	SloganWrapper,
+	Slogan,
+	SloganDescription,
 	FeaturesWrapper,
 	Feature,
 	FeatureTitle,
@@ -90,9 +90,9 @@ export default async function IntroPage() {
 							<NavLink href='/account' $underScored={true}>
 								account
 							</NavLink>{' '}
-							page and later sync it to Anki.{' '}
+							page and later sync it to Anki. Please{' '}
 							<NavLink href='/sync' $underScored={true}>
-								Read more
+								read more
 							</NavLink>
 							.
 						</FeatureDesc>

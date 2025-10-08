@@ -2,7 +2,7 @@ import 'server-only';
 
 import path from 'path';
 import fs from 'fs/promises';
-import matter, { GrayMatterFile } from 'gray-matter';
+import matter from 'gray-matter';
 
 interface Frontmatter {
 	title: string;
@@ -18,7 +18,7 @@ export default async function loadPost(name: string) {
 		return null;
 	}
 
-	let parsed: GrayMatterFile<string> = matter(rawContent);
+	let parsed = matter(rawContent);
 
 	let { data: frontmatter, content } = parsed as unknown as {
 		data: Frontmatter;

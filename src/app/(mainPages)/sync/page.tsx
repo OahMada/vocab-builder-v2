@@ -9,9 +9,9 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Wrapper from '@/components/PageWrapper';
 import Breadcrumb from '@/components/CustomBreadcrumb';
 import {
-	BlogP,
 	InnerWrapper,
 	BlogTitle,
+	BlogP,
 	InlineCode,
 	CodeBlock,
 	OrderedList,
