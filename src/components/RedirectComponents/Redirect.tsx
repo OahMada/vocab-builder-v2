@@ -48,9 +48,9 @@ function Redirect({ redirectUrl }: { redirectUrl: string }) {
 	return (
 		<RedirectWrapper>
 			You&apos;ll be redirected to {pageName} in {countDown}s. Or you can click{' '}
-			<ReturnLink href={redirectUrl} onClick={clearTimeoutAndInterval}>
+			<NavLink href={redirectUrl} onClick={clearTimeoutAndInterval}>
 				{linkText}
-			</ReturnLink>
+			</NavLink>
 			.
 		</RedirectWrapper>
 	);
@@ -60,10 +60,6 @@ export default Redirect;
 
 var RedirectWrapper = styled.p`
 	color: var(--text-tertiary);
-`;
-
-var ReturnLink = styled(NavLink)`
-	text-decoration: underline;
 `;
 
 export var Wrapper = styled.div`

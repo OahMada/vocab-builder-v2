@@ -5,7 +5,7 @@ import { auth } from '@/auth';
 
 import Search from '@/components/SearchSentence';
 import { ChildrenWrapper } from './StyledComponents';
-import Breadcrumb from './CustomBreadcrumb';
+import Breadcrumb from '@/components/CustomBreadcrumb';
 
 export default async function Page() {
 	let session = await auth();
@@ -17,7 +17,7 @@ export default async function Page() {
 
 	return (
 		<ChildrenWrapper>
-			<Breadcrumb />
+			<Breadcrumb page='Browse' link='/browse' />
 			{/* https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout nuqs's useQueryState mush internally uses useSearchParams */}
 			<Search />
 		</ChildrenWrapper>

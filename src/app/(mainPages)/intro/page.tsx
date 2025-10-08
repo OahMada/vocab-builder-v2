@@ -3,15 +3,102 @@ import * as React from 'react';
 
 import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import {
+	SloganDescription,
+	Slogan,
+	SloganWrapper,
+	FeaturesWrapper,
+	Feature,
+	FeatureTitle,
+	FeatureImage,
+	ImageWrapper,
+	FeatureDesc,
+} from './StyledComponents';
+import Spacer from '@/components/Spacer';
+import NavLink from '@/components/NavLink';
 
 export var metadata: Metadata = {
 	title: 'Intro | Vocab Builder',
 };
 
-export default function IntroPage() {
+export default async function IntroPage() {
 	return (
 		<MaxWidthWrapper>
-			<Wrapper $position='flex-start'>IntroPage</Wrapper>
+			<Wrapper $position='flex-start'>
+				<SloganWrapper>
+					<Slogan>Grow Vocabulary in Context</Slogan>
+					<SloganDescription>
+						Vocab Builder streamlines collecting sentences, adding information, and transferring them to Anki for efficient memorization.
+					</SloganDescription>
+				</SloganWrapper>
+				<Spacer size={48} />
+				<FeaturesWrapper>
+					<Feature>
+						<FeatureTitle>Word Annotation</FeatureTitle>
+						<FeatureDesc>
+							During the sentence-saving process, you can tap or click any words you are not familiar with to include their phonetic symbols (IPA).
+						</FeatureDesc>
+						<ImageWrapper>
+							<FeatureImage
+								src='/images/annotate_words.png'
+								fill={true}
+								alt='annotate words'
+								style={{ '--object-position': 'top' } as React.CSSProperties}
+							/>
+						</ImageWrapper>
+					</Feature>
+					<Feature>
+						<FeatureTitle>Ask Questions</FeatureTitle>
+						<FeatureDesc>
+							If there are parts of the sentence that you don&apos;t quite understand, you can ask about them by tapping the question(?) button.
+						</FeatureDesc>
+						<ImageWrapper>
+							<FeatureImage
+								src='/images/ask_questions.png'
+								fill={true}
+								alt='ask questions'
+								style={{ '--object-position': 'bottom' } as React.CSSProperties}
+							/>
+						</ImageWrapper>
+					</Feature>
+					<Feature>
+						<FeatureTitle>Audio Support</FeatureTitle>
+						<FeatureDesc>The app will automatically generate audio for the sentence.</FeatureDesc>
+					</Feature>
+					<Feature>
+						<FeatureTitle>Browse & Search</FeatureTitle>
+						<FeatureDesc>
+							Navigate to the{' '}
+							<NavLink href='/browse' $underScored={true}>
+								browse
+							</NavLink>{' '}
+							page to view your sentence collection, and do searches.
+						</FeatureDesc>
+						<ImageWrapper>
+							<FeatureImage
+								src='/images/browse_and_search.png'
+								fill={true}
+								alt='browse and search sentence'
+								style={{ '--object-position': '0% 20%' } as React.CSSProperties}
+							/>
+						</ImageWrapper>
+					</Feature>
+					<Feature>
+						<FeatureTitle>Export to Anki</FeatureTitle>
+						<FeatureDesc>
+							You can export your data on the{' '}
+							<NavLink href='/account' $underScored={true}>
+								account
+							</NavLink>{' '}
+							page and later sync it to Anki.{' '}
+							<NavLink href='/sync' $underScored={true}>
+								Read more
+							</NavLink>
+							.
+						</FeatureDesc>
+					</Feature>
+				</FeaturesWrapper>
+			</Wrapper>
 		</MaxWidthWrapper>
 	);
 }

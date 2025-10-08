@@ -85,7 +85,7 @@ var AnswerBox = styled.div`
 	flex: 1;
 	padding: 12px;
 	overflow: auto;
-	max-height: 65dvh;
+	max-height: 45dvh;
 	/* scrollbar-gutter: stable; */
 `;
 

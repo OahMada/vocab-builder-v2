@@ -16,7 +16,7 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
 import PersonalizeUser from '@/components/PersonalizeUser';
 import GoogleAccountLink from '@/components/GoogleAccountLink';
-import Breadcrumb from './CustomBreadcrumb';
+import Breadcrumb from '@/components/CustomBreadcrumb';
 
 export var metadata: Metadata = {
 	title: 'Account | Vocab Builder',
@@ -46,7 +46,7 @@ export default async function AccountPage() {
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>
-				<Breadcrumb />
+				<Breadcrumb page='Account' link='/account' />
 				<UserPhoto />
 				<UserInfo />
 				<GoogleAccountLink />

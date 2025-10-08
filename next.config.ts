@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
 	experimental: {
 		typedEnv: true,
 	},
+	transpilePackages: ['next-mdx-remote'],
 };
 
 export default bundleAnalyzer(nextConfig);

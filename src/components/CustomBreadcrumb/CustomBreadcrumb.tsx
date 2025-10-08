@@ -10,12 +10,12 @@ var CustomBreadcrumbs = styled(Breadcrumbs)`
 	margin-left: 5px;
 `;
 
-function Breadcrumb() {
+function Breadcrumb({ page, link }: { page: string; link: string }) {
 	return (
 		<CustomBreadcrumbs>
 			<Crumb href='/'>Home</Crumb>
-			<Crumb href='/account' isCurrentPage={true}>
-				Account
+			<Crumb href={link} isCurrentPage={true}>
+				{page}
 			</Crumb>
 		</CustomBreadcrumbs>
 	);

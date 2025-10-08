@@ -1,17 +1,21 @@
 'use client';
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Link from 'next/link';
 
-var NavLink = styled(Link)`
-	text-decoration: none;
+var NavLink = styled(Link)<{ $underScored?: boolean }>`
 	color: inherit;
 
-	@media (hover: hover) {
-		&:hover {
-			text-decoration: revert;
-		}
-	}
+	${({ $underScored = false }) =>
+		!$underScored &&
+		css`
+			text-decoration: none;
+			@media (hover: hover) {
+				&:hover {
+					text-decoration: revert;
+				}
+			}
+		`}
 `;
 
 export default NavLink;
