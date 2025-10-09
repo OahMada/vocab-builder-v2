@@ -1,6 +1,5 @@
 import 'server-only';
 
-import path from 'path';
 import fs from 'fs/promises';
 import matter from 'gray-matter';
 
@@ -29,5 +28,5 @@ export default async function loadPost(name: string) {
 }
 
 function readFile(localPath: string) {
-	return fs.readFile(path.join(process.cwd(), localPath), 'utf8');
+	return fs.readFile(localPath, 'utf8');
 }
