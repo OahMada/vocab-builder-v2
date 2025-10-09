@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export var DropdownMenu = DropdownMenuPrimitive.Root;
 export var DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -39,6 +39,17 @@ export var DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
 	outline: none;
 `;
 
+var slideDownAndFade = keyframes`
+	from {
+		opacity: 0;
+		transform: translateY(2px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+`;
+
 var Content = styled(DropdownMenuPrimitive.Content)`
 	background-color: var(--bg-dropdown);
 	box-shadow: var(--shadow-elevation-medium);
@@ -48,6 +59,16 @@ var Content = styled(DropdownMenuPrimitive.Content)`
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation-duration: 400ms;
+		animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+		will-change: transform, opacity;
+
+		&[data-state='open'] {
+			animation-name: ${slideDownAndFade};
+		}
+	}
 `;
 
 var Arrow = styled(DropdownMenuPrimitive.Arrow)`

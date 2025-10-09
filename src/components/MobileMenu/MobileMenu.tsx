@@ -5,8 +5,6 @@ import styled from 'styled-components';
 
 import logout from '@/app/actions/auth/logout';
 
-import { QUERIES } from '@/constants';
-
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
@@ -37,9 +35,9 @@ function MobileMenu() {
 						<Avatar style={{ '--avatar-size': '35px', '--fallback-font-size': '14px' } as React.CSSProperties} fallbackStyle='outline' />
 					</AvatarWrapper>
 					<DropdownMenuItem asChild={true}>
-						<AccountDropdownItemButton variant='icon' href='/account' disabled={isLoading}>
+						<DropdownItemButton variant='icon' href='/account' disabled={isLoading}>
 							Account
-						</AccountDropdownItemButton>
+						</DropdownItemButton>
 					</DropdownMenuItem>
 					<DropdownMenuItem
 						asChild={true}
@@ -80,12 +78,6 @@ var DropdownItemButton = styled(Button)`
 	--hover-bg-color: transparent;
 	&::after {
 		--tap-increment: 0;
-	}
-`;
-
-var AccountDropdownItemButton = styled(DropdownItemButton)`
-	@media ${QUERIES.laptopAndUp} {
-		display: none;
 	}
 `;
 

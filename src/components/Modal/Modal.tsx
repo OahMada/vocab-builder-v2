@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as ModalPrimitives from '@radix-ui/react-dialog';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 import { QUERIES } from '@/constants';
 
@@ -59,10 +59,56 @@ function Modal({
 
 export default Modal;
 
+var overlayShow = keyframes`
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+`;
+
+var contentShow = keyframes`
+	from {
+		opacity: 0;
+		transform: translate(-50%, -48%) scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+`;
+
+var slideUp = keyframes`
+	from {
+		opacity: 0;
+		transform: translateY(100%);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+`;
+
+var slideLeft = keyframes`
+	from {
+		opacity: 0;
+		transform: translateX(calc(100% + var(--viewport-offset)));
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+`;
+
 var OverLay = styled(ModalPrimitives.Overlay)<{ $isOverlayTransparent: boolean }>`
 	position: fixed;
 	inset: 0;
 	background: ${({ $isOverlayTransparent }) => ($isOverlayTransparent ? 'transparent' : 'var(--bg-overlay)')};
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation: ${overlayShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
 `;
 
 var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
@@ -76,6 +122,10 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 				transform: translate(-50%, -50%);
 				width: min(90vw, 500px);
 				border-radius: 16px;
+
+				@media (prefers-reduced-motion: no-preference) {
+					animation: ${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+				}
 			`;
 		} else if ($position === 'bottom') {
 			return css`
@@ -86,12 +136,21 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 				border-top-right-radius: 16px;
 				padding-bottom: 32px;
 
+				@media (prefers-reduced-motion: no-preference) {
+					animation: ${slideUp} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+				}
+
 				@media ${QUERIES.tabletAndUp} {
+					--viewport-offset: 16px;
 					width: 400px;
 					bottom: 20px;
 					right: 20px;
-					border-bottom-left-radius: 16px;
-					border-bottom-right-radius: 16px;
+					border-bottom-left-radius: var(--viewport-offset);
+					border-bottom-right-radius: var(--viewport-offset);
+
+					@media (prefers-reduced-motion: no-preference) {
+						animation: ${slideLeft} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+					}
 				}
 			`;
 		}

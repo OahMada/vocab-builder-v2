@@ -67,5 +67,5 @@ var ClearButton = styled(Button)`
 	position: absolute;
 	/* One line height minus the icon button height, then divide the result by 2. */
 	right: calc((1rem * 1.5 + var(--vertical-padding) * 2 - var(--icon-dimension)) / 2);
-	top: calc((1rem * 1.5 + var(--vertical-padding) * 2 - var(--icon-dimension)) / 2);
+	bottom: calc((1rem * 1.5 + var(--vertical-padding) * 2 - var(--icon-dimension)) / 2);
 `;

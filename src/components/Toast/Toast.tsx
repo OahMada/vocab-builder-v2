@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 
 import Button from '@/components/Button';
@@ -26,7 +26,10 @@ export function Toast({ title, content, contentType, removeToast, ...props }: To
 			onOpenChange={(open) => {
 				setIsOpen(open);
 				if (!open && removeToast) {
-					removeToast();
+					// to let the animation play
+					window.setTimeout(() => {
+						removeToast();
+					}, 100);
 				}
 			}}
 		>
@@ -44,6 +47,33 @@ export function Toast({ title, content, contentType, removeToast, ...props }: To
 
 export default Toast;
 
+var hide = keyframes`
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+`;
+
+var slideIn = keyframes`
+	from {
+		transform: translateX(calc(100% + var(--viewport-padding)));
+	}
+	to {
+		transform: translateX(0);
+	}
+`;
+
+var swipeOut = keyframes`
+	from {
+		transform: translateX(var(--radix-toast-swipe-end-x));
+	}
+	to {
+		transform: translateX(calc(100% + var(--viewport-padding)));
+	}
+`;
+
 var Root = styled(ToastPrimitives.Root)`
 	--root-padding: 12px;
 	background-color: var(--bg-popover);
@@ -54,6 +84,25 @@ var Root = styled(ToastPrimitives.Root)`
 	display: flex;
 	flex-direction: column;
 	position: relative;
+
+	@media (prefers-reduced-motion: no-preference) {
+		&[data-state='open'] {
+			animation: ${slideIn} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+		}
+		&[data-state='closed'] {
+			animation: ${hide} 100ms ease-in;
+		}
+		&[data-swipe='move'] {
+			transform: translateX(var(--radix-toast-swipe-move-x));
+		}
+		&[data-swipe='cancel'] {
+			transform: translateX(0);
+			transition: transform 200ms ease-out;
+		}
+		&[data-swipe='end'] {
+			animation: ${swipeOut} 100ms ease-out;
+		}
+	}
 `;
 
 var Title = styled(ToastPrimitives.Title)<{ $contentType: 'error' | 'notice' }>`
@@ -103,6 +152,7 @@ var CloseButton = styled(Button)`
 
 export var ToastProvider = ToastPrimitives.Provider;
 export var ToastViewport = styled(ToastPrimitives.Viewport)<{ $position: 'top' | 'bottom' }>`
+	--viewport-padding: 16px;
 	position: fixed;
 	${({ $position }) => {
 		if ($position === 'top') {
@@ -116,7 +166,7 @@ export var ToastViewport = styled(ToastPrimitives.Viewport)<{ $position: 'top' |
 		}
 	}}
 	right: 0;
-	padding: 16px;
+	padding: var(--viewport-padding);
 	width: 390px;
 	max-width: 100vw;
 	list-style: none;

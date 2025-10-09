@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import * as AccordionPrimitives from '@radix-ui/react-accordion';
 
 import Icon from '@/components/Icon';
@@ -49,10 +49,32 @@ function AccordionTrigger({ children, ...delegated }: React.ComponentProps<typeo
 }
 
 function AccordionContent({ children }: React.ComponentProps<typeof AccordionPrimitives.Content>) {
-	return <AccordionPrimitives.Content>{children}</AccordionPrimitives.Content>;
+	return <Content>{children}</Content>;
 }
 
 export { AccordionContent, AccordionRoot, AccordionTrigger, AccordionItem };
+
+var slideDown = keyframes`
+	from {
+		opacity: 0;
+		height: 0;
+	}
+	to {
+		opacity: 1;
+		height: var(--radix-accordion-content-height);
+	}
+`;
+
+var slideUp = keyframes`
+	from {
+		opacity: 1;
+		height: var(--radix-accordion-content-height);
+	}
+	to {
+		opacity: 0;
+		height: 0;
+	}
+`;
 
 var Root = styled(AccordionPrimitives.Root)`
 	width: 100%;
@@ -83,11 +105,12 @@ var Header = styled(AccordionPrimitives.Header)`
 	display: flex;
 	align-items: baseline;
 	gap: 5px;
+	transition: border-bottom-left-radius 100ms cubic-bezier(0.87, 0, 0.13, 1), border-bottom-right-radius 100ms cubic-bezier(0.87, 0, 0.13, 1);
 
 	&[data-state='open'] {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
-		border-bottom: 2px solid var(--bg-tertiary);
+		border-bottom: 1px solid var(--bg-tertiary);
 	}
 `;
 
@@ -95,4 +118,17 @@ var ExpandButton = styled(Button)`
 	--hover-bg-color: var(--bg-tertiary);
 	margin-left: auto;
 	transform: translateY(3px);
+`;
+
+var Content = styled(AccordionPrimitives.Content)`
+	@media (prefers-reduced-motion: no-preference) {
+		// hide overlapping content when animating
+		overflow: hidden;
+		&[data-state='open'] {
+			animation: ${slideDown} 100ms cubic-bezier(0.87, 0, 0.13, 1);
+		}
+		&[data-state='closed'] {
+			animation: ${slideUp} 100ms cubic-bezier(0.87, 0, 0.13, 1);
+		}
+	}
 `;

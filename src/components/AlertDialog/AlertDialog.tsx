@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as AlertDialogPrimitives from '@radix-ui/react-alert-dialog';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
@@ -71,10 +71,34 @@ export default function AlertDialog({
 	);
 }
 
+var overlayShow = keyframes`
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+`;
+
+var contentShow = keyframes`
+	from {
+		opacity: 0;
+		transform: translate(-50%, -48%) scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+`;
+
 var Overlay = styled(AlertDialogPrimitives.Overlay)`
 	background-color: var(--bg-overlay);
 	position: fixed;
 	inset: 0;
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation: ${overlayShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
 `;
 var Content = styled(AlertDialogPrimitives.Content)`
 	background-color: var(--bg-modal);
@@ -90,6 +114,10 @@ var Content = styled(AlertDialogPrimitives.Content)`
 	flex-direction: column;
 	gap: 5px;
 	box-shadow: var(--shadow-elevation-high);
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation: ${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
 `;
 
 var ActionWrapper = styled.div`
