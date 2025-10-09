@@ -12,6 +12,7 @@ interface Frontmatter {
 export default async function loadPost(name: string) {
 	let rawContent = '';
 	try {
+		// https://dev.to/martinratinaud/nextjs-on-vercel-missing-files-after-build-when-interpolating-file-names-40bl
 		rawContent = await fs.readFile(path.join(process.cwd(), `/posts/${name}.mdx`), 'utf8');
 	} catch (error) {
 		console.error('failed to read mdx file', error);

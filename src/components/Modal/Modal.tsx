@@ -4,6 +4,8 @@ import * as React from 'react';
 import * as ModalPrimitives from '@radix-ui/react-dialog';
 import styled, { css } from 'styled-components';
 
+import { QUERIES } from '@/constants';
+
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import Button from '@/components/Button';
@@ -83,6 +85,14 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 				border-top-left-radius: 16px;
 				border-top-right-radius: 16px;
 				padding-bottom: 32px;
+
+				@media ${QUERIES.tabletAndUp} {
+					width: 400px;
+					bottom: 20px;
+					right: 20px;
+					border-bottom-left-radius: 16px;
+					border-bottom-right-radius: 16px;
+				}
 			`;
 		}
 	}}

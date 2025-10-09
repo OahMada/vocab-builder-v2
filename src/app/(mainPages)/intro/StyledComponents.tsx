@@ -3,6 +3,10 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 
+import { QUERIES } from '@/constants';
+
+import Button from '@/components/Button';
+
 export var Slogan = styled.h1`
 	font-size: 48px;
 	font-weight: 800;
@@ -10,16 +14,25 @@ export var Slogan = styled.h1`
 `;
 
 export var SloganDescription = styled.p`
-	font-size: 16px;
-	color: var(--text-tertiary);
+	font-size: 20px;
+	color: var(--text-secondary);
 `;
 export var SloganWrapper = styled.section`
 	margin-top: 48px;
+	margin-bottom: 48px;
 	padding: 24px;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	gap: 12px;
+	align-items: flex-start;
+	gap: 24px;
+
+	@media ${QUERIES.tabletAndUp} {
+		align-items: center;
+		text-align: center;
+		padding: 48px;
+		margin-top: 150px;
+		margin-bottom: 150px;
+	}
 `;
 
 export var FeaturesWrapper = styled.section`
@@ -27,6 +40,7 @@ export var FeaturesWrapper = styled.section`
 	display: flex;
 	gap: 60px;
 	flex-direction: column;
+	width: 100%;
 `;
 
 export var Feature = styled.article`
@@ -34,6 +48,7 @@ export var Feature = styled.article`
 	flex-direction: column;
 	gap: 12px;
 	align-items: flex-start;
+	min-height: 150px;
 `;
 
 export var FeatureTitle = styled.h2`
@@ -45,16 +60,29 @@ export var FeatureTitle = styled.h2`
 export var FeatureDesc = styled.p`
 	color: var(--text-tertiary);
 	font-size: 16px;
+
+	@media ${QUERIES.tabletAndUp} {
+		width: 60%;
+	}
 `;
 export var ImageWrapper = styled.div`
 	position: relative;
-	width: 100%;
+	width: 310px;
 	aspect-ratio: 3 / 4;
 	border: 1px solid var(--border-medium);
 	border-radius: 3px;
+
+	@media ${QUERIES.tabletAndUp} {
+		align-self: center;
+	}
 `;
 export var FeatureImage = styled(Image)`
 	object-fit: cover;
 	object-position: var(--object-position);
 	transform: scale(0.9);
+`;
+
+export var LearnMoreButton = styled(Button)`
+	color: var(--text-tertiary);
+	transform: translateX(-5px);
 `;

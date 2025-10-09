@@ -5,7 +5,8 @@ import { auth } from '@/auth';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Logo from '@/components/Logo';
 import MobileMenu from '@/components/MobileMenu';
-import { Wrapper, StyledHeader, LoginButton } from './StyledComponents';
+import { Wrapper, StyledHeader, LoginButton, HeaderNav } from './StyledComponents';
+import NavLink from '@/components/NavLink';
 
 async function Header() {
 	let session = await auth();
@@ -14,6 +15,11 @@ async function Header() {
 			<MaxWidthWrapper>
 				<StyledHeader>
 					<Logo />
+					<HeaderNav>
+						<NavLink href='/browse'>Browse</NavLink>
+						<NavLink href='account'>Account</NavLink>
+						<NavLink href='/sync'>How to Sync</NavLink>
+					</HeaderNav>
 					{!!session?.user ? (
 						<MobileMenu />
 					) : (

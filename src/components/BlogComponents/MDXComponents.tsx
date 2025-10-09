@@ -3,6 +3,8 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 
+import { QUERIES } from '@/constants';
+
 export var BlogP = styled.p`
 	font-size: 1rem;
 	margin-bottom: 1.5rem;
@@ -47,6 +49,10 @@ export var ImageWrapper = styled.div`
 	width: 100%;
 	aspect-ratio: 16/9;
 	position: relative;
+
+	@media ${QUERIES.tabletAndUp} {
+		width: 70%;
+	}
 `;
 
 export var ImageOuterWrapper = styled.div`

@@ -2,6 +2,8 @@
 
 import styled from 'styled-components';
 
+import { QUERIES } from '@/constants';
+
 import Button from '@/components/Button';
 
 export var Wrapper = styled.div`
@@ -28,4 +30,18 @@ export var LoginButton = styled(Button)`
 	font-size: ${14 / 16}rem;
 	font-weight: 500;
 	margin-left: auto;
+`;
+
+export var HeaderNav = styled.nav`
+	flex: 1;
+	align-items: center;
+	gap: 20px;
+	font-size: ${12 / 16}rem;
+	justify-content: center;
+	display: none;
+	color: var(--text-secondary);
+
+	@media ${QUERIES.laptopAndUp} {
+		display: flex;
+	}
 `;

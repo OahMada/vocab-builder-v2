@@ -6,6 +6,8 @@ import { useCompletion } from '@ai-sdk/react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+import { QUERIES } from '@/constants';
+
 import Modal from '@/components/Modal';
 import ModalTitle from './ModalTitle';
 import QuestionInput from './QuestionInput';
@@ -86,7 +88,14 @@ var AnswerBox = styled.div`
 	padding: 12px;
 	overflow: auto;
 	max-height: 45dvh;
-	/* scrollbar-gutter: stable; */
+
+	@media ${QUERIES.tabletAndUp} {
+		max-height: 30dvh;
+	}
+
+	@media ${QUERIES.laptopAndUp} {
+		max-height: 50dvh;
+	}
 `;
 
 var ErrorText = styled.span`

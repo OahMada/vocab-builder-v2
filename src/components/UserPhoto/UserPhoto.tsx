@@ -10,7 +10,7 @@ import getBlobStorageSASToken from '@/app/actions/lib/getBlobStorageSASToken';
 
 import { handleError, handleZodError } from '@/utils';
 import { ImageFileSchema } from '@/lib';
-import { BLOB_CONTAINER_TYPE, TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
+import { BLOB_CONTAINER_TYPE, QUERIES, TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
 
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
@@ -148,6 +148,10 @@ var Wrapper = styled.div`
 	background-color: var(--bg-secondary);
 	margin-bottom: 10px;
 	position: relative;
+
+	@media ${QUERIES.tabletAndUp} {
+		margin-top: 48px;
+	}
 `;
 
 var UploadButton = styled(Button)`

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 export var InnerWrapper = styled.div`
 	padding: 20px;
+	max-width: 100%;
 `;
 
 export function BlogTitle({ title, lastUpdated }: { title: string; lastUpdated?: string }) {

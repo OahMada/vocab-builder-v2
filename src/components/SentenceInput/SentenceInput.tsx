@@ -112,7 +112,7 @@ export default SentenceInput;
 
 var Wrapper = styled.form`
 	background-color: var(--bg-secondary);
-	width: min(100%, 50rem);
+	width: min(100%, 40rem);
 	border-radius: 24px;
 	padding: 12px;
 	box-shadow: var(--shadow-elevation-low);

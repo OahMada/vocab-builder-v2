@@ -13,9 +13,9 @@ import {
 	FeatureImage,
 	ImageWrapper,
 	FeatureDesc,
+	LearnMoreButton,
 } from './StyledComponents';
-import Spacer from '@/components/Spacer';
-import NavLink from '@/components/NavLink';
+import Icon from '@/components/Icon';
 
 export var metadata: Metadata = {
 	title: 'Intro | Vocab Builder',
@@ -31,7 +31,6 @@ export default async function IntroPage() {
 						Vocab Builder streamlines collecting sentences, adding information, and transferring them to Anki for efficient memorization.
 					</SloganDescription>
 				</SloganWrapper>
-				<Spacer size={48} />
 				<FeaturesWrapper>
 					<Feature>
 						<FeatureTitle>Word Annotation</FeatureTitle>
@@ -67,13 +66,7 @@ export default async function IntroPage() {
 					</Feature>
 					<Feature>
 						<FeatureTitle>Browse & Search</FeatureTitle>
-						<FeatureDesc>
-							Navigate to the{' '}
-							<NavLink href='/browse' $underScored={true}>
-								browse
-							</NavLink>{' '}
-							page to view your sentence collection, and do searches.
-						</FeatureDesc>
+						<FeatureDesc>Navigate to the Browse page to view your sentence collection, and do searches.</FeatureDesc>
 						<ImageWrapper>
 							<FeatureImage
 								src='/images/browse_and_search.png'
@@ -85,17 +78,11 @@ export default async function IntroPage() {
 					</Feature>
 					<Feature>
 						<FeatureTitle>Export to Anki</FeatureTitle>
-						<FeatureDesc>
-							You can export your data on the{' '}
-							<NavLink href='/account' $underScored={true}>
-								account
-							</NavLink>{' '}
-							page and later sync it to Anki. Please{' '}
-							<NavLink href='/sync' $underScored={true}>
-								read more
-							</NavLink>
-							.
-						</FeatureDesc>
+						<FeatureDesc>You can export your data on the Account page and later sync it to Anki.</FeatureDesc>
+						<LearnMoreButton variant='icon' href='/sync'>
+							<Icon id='forward' />
+							&nbsp; Learn more
+						</LearnMoreButton>
 					</Feature>
 				</FeaturesWrapper>
 			</Wrapper>

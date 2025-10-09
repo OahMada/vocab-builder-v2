@@ -45,7 +45,7 @@ export default async function AccountPage() {
 
 	return (
 		<MaxWidthWrapper>
-			<Wrapper $position='center'>
+			<Wrapper $position='flex-start'>
 				<Breadcrumb page='Account' link='/account' />
 				<UserPhoto />
 				<UserInfo />
