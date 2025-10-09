@@ -1,5 +1,6 @@
 import 'server-only';
 
+import path from 'path';
 import fs from 'fs/promises';
 import matter from 'gray-matter';
 
@@ -11,7 +12,7 @@ interface Frontmatter {
 export default async function loadPost(name: string) {
 	let rawContent = '';
 	try {
-		rawContent = await readFile(`/posts/${name}.mdx`);
+		rawContent = await fs.readFile(path.join(process.cwd(), `/posts/${name}.mdx`), 'utf8');
 	} catch (error) {
 		console.error('failed to read mdx file', error);
 		return null;
@@ -25,8 +26,4 @@ export default async function loadPost(name: string) {
 	};
 
 	return { frontmatter, content };
-}
-
-function readFile(localPath: string) {
-	return fs.readFile(localPath, 'utf8');
 }
