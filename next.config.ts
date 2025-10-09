@@ -14,6 +14,15 @@ const nextConfig: NextConfig = {
 		typedEnv: true,
 	},
 	transpilePackages: ['next-mdx-remote'],
+	images: {
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'vbprojectstorage.blob.core.windows.net',
+				pathname: '/image/**',
+			},
+		],
+	},
 };
 
 export default bundleAnalyzer(nextConfig);

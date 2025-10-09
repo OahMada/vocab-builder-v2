@@ -72,6 +72,7 @@ var AvatarWrapper = styled.div`
 	border-radius: 100%;
 	margin-left: auto;
 	margin-bottom: 5px;
+	position: relative;
 `;
 
 var DropdownItemButton = styled(Button)`

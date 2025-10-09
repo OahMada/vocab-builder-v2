@@ -10,9 +10,8 @@ import {
 	FeaturesWrapper,
 	Feature,
 	FeatureTitle,
-	FeatureImage,
-	ImageWrapper,
 	FeatureDesc,
+	FeatureVideo,
 	LearnMoreButton,
 } from './StyledComponents';
 import Icon from '@/components/Icon';
@@ -37,28 +36,14 @@ export default async function IntroPage() {
 						<FeatureDesc>
 							During the sentence-saving process, you can tap or click any words you are not familiar with to include their phonetic symbols (IPA).
 						</FeatureDesc>
-						<ImageWrapper>
-							<FeatureImage
-								src='/images/annotate_words.png'
-								fill={true}
-								alt='annotate words'
-								style={{ '--object-position': 'top' } as React.CSSProperties}
-							/>
-						</ImageWrapper>
+						<FeatureVideo src='/media/word_annotation.mp4' playsInline={true} autoPlay={true} loop={true} muted={true} />
 					</Feature>
 					<Feature>
 						<FeatureTitle>Ask Questions</FeatureTitle>
 						<FeatureDesc>
 							If there are parts of the sentence that you don&apos;t quite understand, you can ask about them by tapping the question(?) button.
 						</FeatureDesc>
-						<ImageWrapper>
-							<FeatureImage
-								src='/images/ask_questions.png'
-								fill={true}
-								alt='ask questions'
-								style={{ '--object-position': 'bottom' } as React.CSSProperties}
-							/>
-						</ImageWrapper>
+						<FeatureVideo src='/media/ask_questions.mp4' playsInline={true} autoPlay={true} loop={true} muted={true} />
 					</Feature>
 					<Feature>
 						<FeatureTitle>Audio Support</FeatureTitle>
@@ -67,14 +52,7 @@ export default async function IntroPage() {
 					<Feature>
 						<FeatureTitle>Browse & Search</FeatureTitle>
 						<FeatureDesc>Navigate to the Browse page to view your sentence collection, and do searches.</FeatureDesc>
-						<ImageWrapper>
-							<FeatureImage
-								src='/images/browse_and_search.png'
-								fill={true}
-								alt='browse and search sentence'
-								style={{ '--object-position': '0% 20%' } as React.CSSProperties}
-							/>
-						</ImageWrapper>
+						<FeatureVideo src='/media/browse_and_search.mp4' playsInline={true} autoPlay={true} loop={true} muted={true} />
 					</Feature>
 					<Feature>
 						<FeatureTitle>Export to Anki</FeatureTitle>

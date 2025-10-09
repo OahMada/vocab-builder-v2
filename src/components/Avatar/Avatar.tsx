@@ -4,13 +4,18 @@ import * as React from 'react';
 import * as AvatarPrimitives from '@radix-ui/react-avatar';
 import styled, { css } from 'styled-components';
 import { useSession } from 'next-auth/react';
+import { getImageProps } from 'next/image';
 
 import { getNameInitials } from '@/helpers';
 
 function Avatar({ fallbackStyle, ...delegated }: { fallbackStyle: 'fill' | 'outline' } & React.ComponentProps<typeof AvatarPrimitives.Root>) {
 	let { data: session } = useSession();
 	let [nameInitials, setNameInitials] = React.useState<string | undefined>(undefined);
+	let src = session?.user.image ?? '',
+		alt = session?.user.name as string;
 
+	// https://github.com/radix-ui/primitives/issues/2230#issuecomment-2568587173
+	let { props } = getImageProps({ src, alt, fill: true });
 	React.useEffect(() => {
 		if (session?.user.name) {
 			let initials = getNameInitials(session.user.name);
@@ -19,7 +24,7 @@ function Avatar({ fallbackStyle, ...delegated }: { fallbackStyle: 'fill' | 'outl
 	}, [session?.user.name]);
 	return (
 		<Root {...delegated}>
-			<Image src={session?.user.image || '#'} alt={session?.user.name || undefined} />
+			<Image {...props} alt={alt} />
 			<Fallback delayMs={400} $style={fallbackStyle}>
 				{nameInitials}
 			</Fallback>

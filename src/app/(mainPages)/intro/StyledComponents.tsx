@@ -1,7 +1,6 @@
 'use client';
 
 import styled from 'styled-components';
-import Image from 'next/image';
 
 import { QUERIES } from '@/constants';
 
@@ -65,24 +64,16 @@ export var FeatureDesc = styled.p`
 		width: 60%;
 	}
 `;
-export var ImageWrapper = styled.div`
-	position: relative;
-	width: 310px;
-	aspect-ratio: 3 / 4;
-	border: 1px solid var(--border-medium);
-	border-radius: 3px;
-
-	@media ${QUERIES.tabletAndUp} {
-		align-self: center;
-	}
-`;
-export var FeatureImage = styled(Image)`
-	object-fit: cover;
-	object-position: var(--object-position);
-	transform: scale(0.9);
-`;
 
 export var LearnMoreButton = styled(Button)`
 	color: var(--text-tertiary);
 	transform: translateX(-5px);
+`;
+
+export var FeatureVideo = styled.video`
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	border: 1px solid var(--border-medium);
+	border-radius: 3px;
 `;
