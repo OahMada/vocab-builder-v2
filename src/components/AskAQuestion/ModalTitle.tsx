@@ -32,7 +32,7 @@ function ModalTitle() {
 						} as React.CSSProperties
 					}
 				>
-					<DescriptionText>You don&apos;t have to repeat the sentence itself.</DescriptionText>
+					<DescriptionText>You don&apos;t have to repeat the sentence itself. You can hit Shift + Enter to submit.</DescriptionText>
 				</PopoverContent>
 			</Popover>
 		</Wrapper>

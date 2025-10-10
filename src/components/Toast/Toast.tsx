@@ -123,7 +123,7 @@ var Title = styled(ToastPrimitives.Title)<{ $contentType: 'error' | 'notice' }>`
 `;
 
 var Description = styled(ToastPrimitives.Description)<{ $contentType: 'error' | 'notice' }>`
-	font-size: 13px;
+	font-size: 16px;
 	${({ $contentType }) => {
 		if ($contentType === 'error') {
 			return css`

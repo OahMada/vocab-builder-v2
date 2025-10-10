@@ -45,6 +45,8 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 		cancelEditing();
 	}
 
+	let submitHandler = handleSubmit(onSubmit);
+
 	return (
 		<>
 			<InnerWrapper>
@@ -58,10 +60,11 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 					})}
 					placeholder='Input translation text here'
 					autoFocus={true}
+					keydownSubmit={submitHandler}
 				/>
 				{errors.translation && <FormErrorText>{errors.translation.message}</FormErrorText>}
 			</InnerWrapper>
-			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit)} submitDisabled={!!errors.translation} />
+			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={submitHandler} submitDisabled={!!errors.translation} />
 		</>
 	);
 }

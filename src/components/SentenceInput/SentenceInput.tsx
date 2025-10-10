@@ -99,10 +99,19 @@ function SentenceInput() {
 		});
 	}
 
+	let submitHandler = handleSubmit(onSubmit, onError);
+
 	return (
-		<Wrapper onSubmit={handleSubmit(onSubmit, onError)}>
+		<Wrapper onSubmit={submitHandler}>
 			<Spacer size={4} />
-			<TextArea placeholder='Enter or paste in a sentence' clearInput={clearInput} {...rest} ref={ref} value={userInput} />
+			<TextArea
+				placeholder='Enter or paste in a sentence'
+				clearInput={clearInput}
+				{...rest}
+				ref={ref}
+				value={userInput}
+				keydownSubmit={submitHandler}
+			/>
 			<ActionButtons handlePaste={updateInput} submitDisabled={!!errors[INPUT_NAME.SENTENCE] || isLoading} isLoading={isLoading} />
 		</Wrapper>
 	);

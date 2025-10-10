@@ -41,7 +41,7 @@ export var HeaderNav = styled.nav`
 	display: none;
 	color: var(--text-secondary);
 
-	@media ${QUERIES.laptopAndUp} {
+	@media ${QUERIES.tabletAndUp} {
 		display: flex;
 	}
 `;

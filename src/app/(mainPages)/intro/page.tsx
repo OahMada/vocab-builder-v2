@@ -11,10 +11,13 @@ import {
 	Feature,
 	FeatureTitle,
 	FeatureDesc,
-	FeatureVideo,
+	FeatureVideoWrapper,
 	LearnMoreButton,
+	FeatureImage,
+	ImageWrapper,
 } from './StyledComponents';
 import Icon from '@/components/Icon';
+import Video from '@/components/Video';
 
 export var metadata: Metadata = {
 	title: 'Intro | Vocab Builder',
@@ -32,18 +35,29 @@ export default async function IntroPage() {
 				</SloganWrapper>
 				<FeaturesWrapper>
 					<Feature>
+						<FeatureTitle>Sentence Input</FeatureTitle>
+						<FeatureDesc>Type or paste in a sentence you want to keep.</FeatureDesc>
+						<ImageWrapper>
+							<FeatureImage src='/media/home_page.png' fill={true} alt='home page' />
+						</ImageWrapper>
+					</Feature>
+					<Feature>
 						<FeatureTitle>Word Annotation</FeatureTitle>
 						<FeatureDesc>
 							During the sentence-saving process, you can tap or click any words you are not familiar with to include their phonetic symbols (IPA).
 						</FeatureDesc>
-						<FeatureVideo src='/media/word_annotation.mp4' playsInline={true} autoPlay={true} loop={true} muted={true} />
+						<FeatureVideoWrapper>
+							<Video src='/media/word_annotation.mp4' />
+						</FeatureVideoWrapper>
 					</Feature>
 					<Feature>
 						<FeatureTitle>Ask Questions</FeatureTitle>
 						<FeatureDesc>
 							If there are parts of the sentence that you don&apos;t quite understand, you can ask about them by tapping the question(?) button.
 						</FeatureDesc>
-						<FeatureVideo src='/media/ask_questions.mp4' playsInline={true} autoPlay={true} loop={true} muted={true} />
+						<FeatureVideoWrapper>
+							<Video src='/media/ask_questions.mp4' />
+						</FeatureVideoWrapper>
 					</Feature>
 					<Feature>
 						<FeatureTitle>Audio Support</FeatureTitle>
@@ -52,7 +66,9 @@ export default async function IntroPage() {
 					<Feature>
 						<FeatureTitle>Browse & Search</FeatureTitle>
 						<FeatureDesc>Navigate to the Browse page to view your sentence collection, and do searches.</FeatureDesc>
-						<FeatureVideo src='/media/browse_and_search.mp4' playsInline={true} autoPlay={true} loop={true} muted={true} />
+						<FeatureVideoWrapper>
+							<Video src='/media/browse_and_search.mp4' />
+						</FeatureVideoWrapper>
 					</Feature>
 					<Feature>
 						<FeatureTitle>Export to Anki</FeatureTitle>

@@ -52,6 +52,8 @@ function Note({ title }: { title: React.ReactNode }) {
 		cancelEditing();
 	}
 
+	let submitHandler = handleSubmit(onSubmit);
+
 	return isEditing ? (
 		<>
 			<CardWrapper>
@@ -68,10 +70,11 @@ function Note({ title }: { title: React.ReactNode }) {
 						clearInput={clearInput}
 						placeholder='Input note text here'
 						autoFocus={true}
+						keydownSubmit={submitHandler}
 					/>
 					{errors.note && <FormErrorText>{errors.note.message}</FormErrorText>}
 				</InnerWrapper>
-				<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={handleSubmit(onSubmit)} submitDisabled={!!errors.note} />
+				<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={submitHandler} submitDisabled={!!errors.note} />
 			</CardWrapper>
 		</>
 	) : note ? (

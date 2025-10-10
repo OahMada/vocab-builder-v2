@@ -49,6 +49,8 @@ export default function QuestionInput({
 		triggerComplete(data.question);
 	}
 
+	let submitHandler = handleSubmit(onSubmit);
+
 	return (
 		<Wrapper>
 			<InnerWrapper>
@@ -62,13 +64,11 @@ export default function QuestionInput({
 						},
 					})}
 					clearInput={clearInput}
+					keydownSubmit={submitHandler}
 				/>
 				<EnterButton
 					variant='fill'
-					onClick={handleSubmit(
-						onSubmit
-						// onError
-					)}
+					onClick={submitHandler}
 					disabled={!!errors.question || isLoading}
 					style={{ '--textarea-padding': '10px' } as React.CSSProperties}
 				>

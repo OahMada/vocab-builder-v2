@@ -1,6 +1,7 @@
 'use client';
 
 import styled from 'styled-components';
+import Image from 'next/image';
 
 import { QUERIES } from '@/constants';
 
@@ -70,10 +71,15 @@ export var LearnMoreButton = styled(Button)`
 	transform: translateX(-5px);
 `;
 
-export var FeatureVideo = styled.video`
-	display: block;
+export var FeatureVideoWrapper = styled.div`
+	aspect-ratio: 4 / 3;
+`;
+
+export var ImageWrapper = styled.div`
+	position: relative;
 	width: 100%;
 	aspect-ratio: 4 / 3;
 	border: 1px solid var(--border-medium);
 	border-radius: 3px;
 `;
+export var FeatureImage = styled(Image)``;

@@ -12,12 +12,21 @@ import Button from '@/components/Button';
 interface TextAreaProps {
 	clearInput: () => void;
 	value: string;
+	keydownSubmit?: () => void;
 }
 
-function TextArea({ value, clearInput, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
+function TextArea({ value, clearInput, keydownSubmit, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
+	function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+		if (!keydownSubmit) return;
+		if (e.shiftKey && e.key === 'Enter') {
+			e.preventDefault(); // stop newline
+			keydownSubmit();
+		}
+	}
+
 	return (
 		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
-			<InputArea as='textarea' {...delegated} rows={1} />
+			<InputArea as='textarea' {...delegated} rows={1} onKeyDown={handleKeyDown} />
 			<Overlay aria-hidden='true'>{value + ' '}</Overlay>
 			{value && (
 				<ClearButton variant='icon' onClick={clearInput}>

@@ -28,6 +28,7 @@ import {
 	Pause,
 	Globe,
 	Link,
+	Play,
 } from 'react-feather';
 
 var icons = {
@@ -56,6 +57,7 @@ var icons = {
 	stop: Pause,
 	globe: Globe,
 	link: Link,
+	play: Play,
 };
 
 interface IconProps {
