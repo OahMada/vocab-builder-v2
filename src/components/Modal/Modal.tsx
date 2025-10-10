@@ -11,45 +11,35 @@ import Icon from '@/components/Icon';
 import Button from '@/components/Button';
 
 interface ModalProps {
-	title: React.ReactNode;
+	heading: React.ReactNode;
 	isOverlayTransparent?: boolean;
 	contentPosition?: 'bottom' | 'middle';
 	onDismiss: () => void;
 	isOpen: boolean;
+	children: React.ReactNode;
 }
 
-var Title = styled(ModalPrimitives.Title)`
-	font-size: 1.5rem;
-	font-weight: 350;
-	line-height: 1;
-`;
-
-export { Title };
-
 function Modal({
-	title,
+	heading,
 	children,
 	isOverlayTransparent = false,
 	contentPosition = 'middle',
 	onDismiss,
 	isOpen,
-}: ModalProps & React.ComponentProps<typeof ModalPrimitives.Root>) {
+	...delegated
+}: ModalProps & React.ComponentProps<typeof ModalPrimitives.Content>) {
 	return (
 		<ModalPrimitives.Root open={isOpen} onOpenChange={onDismiss}>
 			<ModalPrimitives.Portal>
 				<OverLay $isOverlayTransparent={isOverlayTransparent} />
-				<Content $position={contentPosition}>
+				<Content $position={contentPosition} {...delegated} aria-describedby={undefined}>
 					<TitleWrapper>
-						<ModalPrimitives.Title asChild={true}>{title}</ModalPrimitives.Title>
+						<ModalPrimitives.Title asChild={true}>{heading}</ModalPrimitives.Title>
 						<CloseButton variant='icon' onClick={onDismiss}>
-							<Icon id='x' />
+							<Icon id='x' size={16} />
 							<VisuallyHidden>Dismiss menu</VisuallyHidden>
 						</CloseButton>
 					</TitleWrapper>
-					{/* to suppress the warning, because applying aria-describedby={undefined} to ModalContent couldn't solve the problem */}
-					<VisuallyHidden>
-						<ModalPrimitives.Description></ModalPrimitives.Description>
-					</VisuallyHidden>
 					{children}
 				</Content>
 			</ModalPrimitives.Portal>
@@ -112,6 +102,7 @@ var OverLay = styled(ModalPrimitives.Overlay)<{ $isOverlayTransparent: boolean }
 `;
 
 var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
+	--background-color: var(--bg-modal);
 	position: fixed;
 	padding: 16px;
 	${({ $position }) => {
@@ -155,7 +146,7 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 			`;
 		}
 	}}
-	background: var(--bg-modal);
+	background: var(--background-color);
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
@@ -164,12 +155,13 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 `;
 
 var CloseButton = styled(Button)`
+	--hover-bg-color: var(--bg-tertiary);
 	margin-left: auto;
 	position: relative;
-	top: 3px;
 `;
 
 var TitleWrapper = styled.div`
 	display: flex;
-	align-items: baseline;
+	align-items: center;
+	gap: 5px;
 `;

@@ -44,7 +44,7 @@ var Root = styled(AvatarPrimitives.Root)`
 	height: var(--avatar-size);
 	border-radius: 100%;
 	display: block;
-	border: 1px solid var(--border-light);
+	border: 1px solid var(--border);
 `;
 
 var Image = styled(AvatarPrimitives.Image)`

@@ -29,6 +29,7 @@ export default function EmptyDisplay() {
 var InnerWrapper = styled.div`
 	display: flex;
 	align-items: center;
+	color: var(--text-secondary);
 `;
 
 var Text = styled.p`
@@ -37,7 +38,6 @@ var Text = styled.p`
 
 var MessageWrapper = styled.div`
 	align-self: center;
-	color: var(--text-secondary);
 	display: flex;
 	flex-direction: column;
 	align-items: center;

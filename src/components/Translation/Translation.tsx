@@ -118,7 +118,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 export default Translation;
 
 var TranslationText = styled.p<{ $isLoading: boolean }>`
-	opacity: ${({ $isLoading }) => ($isLoading ? 0.6 : 1)};
+	opacity: ${({ $isLoading }) => ($isLoading ? 0.75 : 1)};
 `;
 var ButtonWrapper = styled.span`
 	align-self: flex-end;

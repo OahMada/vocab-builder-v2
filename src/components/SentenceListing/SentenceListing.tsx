@@ -199,7 +199,6 @@ var InnerWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	color: var(--text-secondary);
 	gap: 5px;
 `;
 var ErrorMsg = styled.p`
@@ -211,7 +210,7 @@ var ErrorMsg = styled.p`
 var Overlay = styled.div`
 	height: 100%;
 	width: 100%;
-	background-color: var(--bg-loading-overlay);
+	background-color: var(--bg-transparent);
 	position: absolute;
 	top: 0;
 	left: 0;

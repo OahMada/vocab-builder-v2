@@ -33,7 +33,7 @@ var Wrapper = styled.span`
 var WordButton = styled(Button)`
 	--hover-bg-color: var(--bg-tertiary);
 	padding: 4px 2px 2px;
-	border-bottom: 2px dashed var(--border-medium);
+	border-bottom: 2px dashed var(--border);
 	line-height: 1;
 	border-radius: 4px;
 	color: inherit;

@@ -56,8 +56,6 @@ export default Video;
 
 var Wrapper = styled.div`
 	position: relative;
-	border: 1px solid var(--border-medium);
-	border-radius: 3px;
 `;
 
 var VideoEle = styled.video`
@@ -79,7 +77,7 @@ var PlayButtonSquare = styled.div`
 	display: grid;
 	place-content: center;
 	border-radius: 100%;
-	background-color: var(--bg-loading-overlay);
+	background-color: var(--bg-transparent);
 	opacity: 0;
 	transition: opacity 150ms ease-out;
 	pointer-events: none;

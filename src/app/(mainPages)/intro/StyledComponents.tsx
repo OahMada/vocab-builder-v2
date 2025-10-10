@@ -5,8 +5,6 @@ import Image from 'next/image';
 
 import { QUERIES } from '@/constants';
 
-import Button from '@/components/Button';
-
 export var Slogan = styled.h1`
 	font-size: 48px;
 	font-weight: 800;
@@ -58,7 +56,7 @@ export var FeatureTitle = styled.h2`
 `;
 
 export var FeatureDesc = styled.p`
-	color: var(--text-tertiary);
+	color: var(--text-secondary);
 	font-size: 16px;
 
 	@media ${QUERIES.tabletAndUp} {
@@ -66,20 +64,27 @@ export var FeatureDesc = styled.p`
 	}
 `;
 
-export var LearnMoreButton = styled(Button)`
-	color: var(--text-tertiary);
-	transform: translateX(-5px);
+export var LearnMore = styled.div`
+	color: var(--text-secondary);
+	display: flex;
+	gap: 5px;
+	align-items: center;
 `;
 
 export var FeatureVideoWrapper = styled.div`
 	aspect-ratio: 4 / 3;
+	width: 100%;
+	border: 1px solid var(--border);
+	border-radius: 3px;
 `;
 
 export var ImageWrapper = styled.div`
 	position: relative;
 	width: 100%;
 	aspect-ratio: 4 / 3;
-	border: 1px solid var(--border-medium);
+	border: 1px solid var(--border);
 	border-radius: 3px;
 `;
-export var FeatureImage = styled(Image)``;
+export var FeatureImage = styled(Image)`
+	border-radius: 3px;
+`;

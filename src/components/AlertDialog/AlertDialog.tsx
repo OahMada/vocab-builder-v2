@@ -43,10 +43,10 @@ export default function AlertDialog({
 					<Spacer size={1} />
 					<ActionWrapper>
 						<AlertDialogPrimitives.Cancel asChild={true}>
-							<Button variant='outline' disabled={isLoading}>
+							<CancelButton variant='outline' disabled={isLoading}>
 								<Icon id='x' />
 								&nbsp;Cancel
-							</Button>
+							</CancelButton>
 						</AlertDialogPrimitives.Cancel>
 						<ConfirmButton
 							type='button'
@@ -134,4 +134,9 @@ var Title = styled(AlertDialogPrimitives.Title)`
 
 var ConfirmButton = styled(Button)`
 	--text-color: var(--text-status-warning);
+	--hover-bg-color: var(--bg-secondary);
+`;
+
+var CancelButton = styled(Button)`
+	--hover-bg-color: var(--bg-secondary);
 `;

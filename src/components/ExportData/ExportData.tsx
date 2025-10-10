@@ -52,6 +52,6 @@ var Wrapper = styled.div`
 `;
 
 var TimeStamp = styled(DescriptionText)`
-	color: var(--text-tertiary);
+	color: var(--text-secondary);
 	font-size: 12px;
 `;

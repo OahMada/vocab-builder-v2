@@ -97,7 +97,7 @@ function SentenceListingEntry({
 					</InnerWrapper>
 					{note && (
 						<InnerWrapper>
-							<NoteTitle>Note:</NoteTitle>
+							<Title>Note:</Title>
 							<Note>{note}</Note>
 						</InnerWrapper>
 					)}
@@ -153,7 +153,6 @@ var ContentWrapper = styled.div`
 	background-color: var(--bg-secondary);
 	border-bottom-left-radius: var(--border-radius);
 	border-bottom-right-radius: var(--border-radius);
-	color: var(--text-secondary);
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
@@ -176,9 +175,8 @@ var Note = styled.p`
 
 var Title = styled.h4`
 	font-weight: 500;
+	color: var(--text-secondary);
 `;
-
-var NoteTitle = styled(Title)``;
 
 var ActionWrapper = styled.div`
 	display: flex;

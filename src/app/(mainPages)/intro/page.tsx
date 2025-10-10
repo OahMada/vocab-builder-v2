@@ -12,12 +12,13 @@ import {
 	FeatureTitle,
 	FeatureDesc,
 	FeatureVideoWrapper,
-	LearnMoreButton,
 	FeatureImage,
 	ImageWrapper,
+	LearnMore,
 } from './StyledComponents';
 import Icon from '@/components/Icon';
 import Video from '@/components/Video';
+import NavLink from '@/components/NavLink';
 
 export var metadata: Metadata = {
 	title: 'Intro | Vocab Builder',
@@ -73,10 +74,12 @@ export default async function IntroPage() {
 					<Feature>
 						<FeatureTitle>Export to Anki</FeatureTitle>
 						<FeatureDesc>You can export your data on the Account page and later sync it to Anki.</FeatureDesc>
-						<LearnMoreButton variant='icon' href='/sync'>
-							<Icon id='forward' />
-							&nbsp; Learn more
-						</LearnMoreButton>
+						<LearnMore>
+							<NavLink href='/sync' prefetch={true}>
+								Learn more
+							</NavLink>
+							<Icon id='forward' size={14} />
+						</LearnMore>
 					</Feature>
 				</FeaturesWrapper>
 			</Wrapper>

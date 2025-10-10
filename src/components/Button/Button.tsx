@@ -95,7 +95,7 @@ var FillButton = styled(Base)`
 `;
 var OutlineButton = styled(Base)`
 	--hover-bg-color: var(--bg-primary-hover);
-	border: 1px solid var(--border-medium);
+	border: 1px solid var(--border);
 	@media (hover: hover) {
 		&:hover {
 			background-color: var(--hover-bg-color);

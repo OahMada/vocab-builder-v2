@@ -25,10 +25,10 @@ function MobileMenu() {
 		<Wrapper>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild={true}>
-					<Button variant='icon'>
+					<MenuButton variant='icon'>
 						<Icon id='mobile-menu' />
 						<VisuallyHidden>Click to expand the menu</VisuallyHidden>
-					</Button>
+					</MenuButton>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent>
 					<AvatarWrapper>
@@ -66,6 +66,10 @@ export default MobileMenu;
 
 var Wrapper = styled.div`
 	margin-left: auto;
+`;
+
+var MenuButton = styled(Button)`
+	--hover-bg-color: var(--bg-secondary);
 `;
 
 var AvatarWrapper = styled.div`

@@ -194,7 +194,7 @@ var LabelText = styled.label`
 	transform: translateX(3px);
 	font-size: ${14 / 16}rem;
 	font-weight: 500;
-	color: var(--text-tertiary);
+	color: var(--text-secondary);
 	text-align: left;
 `;
 
@@ -208,7 +208,7 @@ var Divider = styled.div`
 	align-items: center;
 	display: flex;
 	gap: 16px;
-	color: var(--text-tertiary);
+	color: var(--text-secondary);
 	padding: 0 16px;
 `;
 

@@ -12,7 +12,10 @@ function Footer() {
 			<Wrapper>
 				<p>&copy; 2025-present Adam Hao. All rights reserved.</p>
 				<FooterNav>
-					<Link href='/intro'>Intro</Link> &middot; <Link href='/'>Home</Link> &middot; <Link href='/about'>About</Link>
+					<Link href='/intro'>Intro</Link> &middot; <Link href='/'>Home</Link> &middot;{' '}
+					<Link href='/about' prefetch={true}>
+						About
+					</Link>
 				</FooterNav>
 			</Wrapper>
 		</MaxWidthWrapper>

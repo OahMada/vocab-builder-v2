@@ -45,7 +45,7 @@ var Wrapper = styled.div`
 	--vertical-padding: 10px;
 	--horizontal-padding: 12px;
 	display: grid;
-	border: 1px solid var(--border-medium);
+	border: 1px solid var(--border);
 	border-radius: 12px;
 	position: relative;
 `;

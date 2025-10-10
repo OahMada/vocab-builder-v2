@@ -18,7 +18,9 @@ async function Header() {
 					<HeaderNav>
 						<NavLink href='/browse'>Browse</NavLink>
 						<NavLink href='account'>Account</NavLink>
-						<NavLink href='/sync'>How to Sync</NavLink>
+						<NavLink href='/sync' prefetch={true}>
+							How to Sync
+						</NavLink>
 					</HeaderNav>
 					{!!session?.user ? (
 						<MobileMenu />

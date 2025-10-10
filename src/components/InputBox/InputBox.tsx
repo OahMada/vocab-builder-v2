@@ -35,13 +35,6 @@ export default InputBox;
 var Wrapper = styled.div`
 	position: relative;
 	--icon-dimension: calc(var(--icon-size) + 2 * var(--icon-padding));
-	color: var(--text-secondary);
-
-	@media (hover: hover) {
-		&:hover {
-			color: revert;
-		}
-	}
 `;
 
 var Input = styled.input`
@@ -50,12 +43,19 @@ var Input = styled.input`
 
 	--bg-color: var(--bg-secondary);
 	background-color: var(--bg-color);
-	border: 1px solid var(--border-medium);
+	border: 1px solid var(--border);
 	border-radius: 12px;
 	width: 100%;
 	padding: var(--vertical-padding) var(--horizontal-padding);
 	padding-right: calc(var(--icon-dimension) + var(--horizontal-padding));
-	color: inherit;
+	color: var(--text-secondary);
+
+	@media (hover: hover) {
+		&:hover,
+		&:focus {
+			color: inherit;
+		}
+	}
 `;
 
 var ClearButton = styled(Button)`

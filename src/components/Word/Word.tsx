@@ -98,7 +98,7 @@ var InactiveWordButton = styled.span`
 	font-weight: 500;
 	display: block;
 	padding: 4px;
-	border-bottom: 1px dashed var(--border-medium);
+	border-bottom: 1px dashed var(--border);
 `;
 
 var shimmer = keyframes`

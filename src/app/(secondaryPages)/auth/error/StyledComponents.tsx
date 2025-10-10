@@ -24,5 +24,5 @@ export var ErrorCode = styled.code`
 `;
 
 export var SecondaryText = styled.p`
-	color: var(--text-tertiary);
+	color: var(--text-secondary);
 `;

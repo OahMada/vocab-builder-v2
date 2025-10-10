@@ -10,7 +10,7 @@ import updateUser from '@/app/actions/user/updateUser';
 import { UserInfoInputSchema, UserInfoInput } from '@/lib';
 import { TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
 
-import Modal, { Title } from '@/components/Modal';
+import Modal from '@/components/Modal';
 import InputBox from '@/components/InputBox';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
@@ -69,7 +69,7 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 	}
 
 	return (
-		<Modal isOpen={isShowing} onDismiss={onDismiss} title={<Title>Edit User Info</Title>}>
+		<Modal isOpen={isShowing} onDismiss={onDismiss} heading={<Title>Edit User Info</Title>}>
 			<Wrapper>
 				<Label>Name:</Label>
 				<InputBox
@@ -114,6 +114,12 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 }
 
 export default EditUserInfo;
+
+var Title = styled.h2`
+	font-size: 1.5rem;
+	font-weight: 450;
+	line-height: 1;
+`;
 
 var Label = styled.label`
 	font-size: 0.8rem;

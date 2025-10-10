@@ -6,14 +6,13 @@ import styled from 'styled-components';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/Popover';
 import Button from '@/components/Button';
 import DescriptionText from '@/components/DescriptionText';
-import { Title } from '@/components/Modal';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 
-function ModalTitle() {
+function ModalTitle({ ...delegated }) {
 	return (
-		<Wrapper>
-			<Title>Ask Anything</Title>
+		<>
+			<Title {...delegated}>Ask Anything</Title>
 			<Popover>
 				<PopoverTrigger asChild={true}>
 					<InfoButton variant='icon'>
@@ -35,20 +34,22 @@ function ModalTitle() {
 					<DescriptionText>You don&apos;t have to repeat the sentence itself. You can hit Shift + Enter to submit.</DescriptionText>
 				</PopoverContent>
 			</Popover>
-		</Wrapper>
+		</>
 	);
 }
 
-var Wrapper = styled.div`
-	display: flex;
-	align-items: baseline;
-	gap: 5px;
-`;
-
 var InfoButton = styled(Button)`
+	--hover-bg-color: var(--bg-tertiary);
 	position: relative;
 	/* optical alignment */
 	top: 2px;
+	transform: translateY(-1px);
+`;
+
+var Title = styled.h2`
+	font-size: 1.5rem;
+	font-weight: 450;
+	line-height: 1;
 `;
 
 export default ModalTitle;

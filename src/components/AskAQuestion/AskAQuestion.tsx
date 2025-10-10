@@ -45,7 +45,14 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	}
 
 	return (
-		<Modal isOpen={isShowing} onDismiss={onDismiss} title={<ModalTitle />} isOverlayTransparent={true} contentPosition='bottom'>
+		<Modal
+			isOpen={isShowing}
+			onDismiss={onDismiss}
+			heading={<ModalTitle />}
+			isOverlayTransparent={true}
+			contentPosition='bottom'
+			style={{ '--background-color': 'var(--bg-secondary)' } as React.CSSProperties}
+		>
 			{(completion || errorMsg) && (
 				<>
 					<SmallHeading>Answer:</SmallHeading>

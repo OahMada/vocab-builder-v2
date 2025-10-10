@@ -39,7 +39,6 @@ export var HeaderNav = styled.nav`
 	font-size: ${12 / 16}rem;
 	justify-content: center;
 	display: none;
-	color: var(--text-secondary);
 
 	@media ${QUERIES.tabletAndUp} {
 		display: flex;
