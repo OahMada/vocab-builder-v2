@@ -2,15 +2,26 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import Image from 'next/image';
+
+import browse_and_search_thumbnail from '@/../public/media/browse_and_search_thumbnail.png';
+import sentence_page_thumbnail from '@/../public/media/sentence_page_thumbnail.png';
 
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 
-function Video({ ...delegated }: React.ComponentProps<'video'>) {
+var ImageMap = {
+	sentence_page_thumbnail,
+	browse_and_search_thumbnail,
+};
+
+function Video({ placeholderFileName, ...delegated }: { placeholderFileName: keyof typeof ImageMap } & React.ComponentProps<'video'>) {
 	let [isPlaying, setIsPlaying] = React.useState(true);
 	let videoEleRef = React.useRef<null | HTMLVideoElement>(null);
+	let [loaded, setLoaded] = React.useState(false);
 
 	function toggleVideoPlay() {
+		if (!loaded) return;
 		let video = videoEleRef.current;
 		if (!video) return;
 		if (video.paused) {
@@ -24,20 +35,33 @@ function Video({ ...delegated }: React.ComponentProps<'video'>) {
 
 	return (
 		<Wrapper style={{ '--overlay-opacity': isPlaying ? '0' : '1' } as React.CSSProperties}>
-			<VideoEle as='video' playsInline={true} loop={true} autoPlay={true} muted={true} ref={videoEleRef} onClick={toggleVideoPlay} {...delegated} />
-			<PlayButtonSquare>
-				{isPlaying ? (
-					<>
-						<PauseIcon id='stop' size={25} strokeWidth={2} />
-						<VisuallyHidden>play video</VisuallyHidden>
-					</>
-				) : (
-					<>
-						<PlayIcon id='play' size={25} strokeWidth={2} />
-						<VisuallyHidden>stop video</VisuallyHidden>
-					</>
-				)}
-			</PlayButtonSquare>
+			{!loaded && <Poster fill={true} src={ImageMap[placeholderFileName]} alt='browse and search thumbnail' placeholder='blur' />}
+			<VideoEle
+				as='video'
+				playsInline={true}
+				loop={true}
+				autoPlay={true}
+				muted={true}
+				ref={videoEleRef}
+				onClick={toggleVideoPlay}
+				{...delegated}
+				onLoadedData={() => setLoaded(true)}
+			/>
+			{loaded && (
+				<PlayButtonSquare>
+					{isPlaying ? (
+						<>
+							<PauseIcon id='stop' size={25} strokeWidth={2} />
+							<VisuallyHidden>play video</VisuallyHidden>
+						</>
+					) : (
+						<>
+							<PlayIcon id='play' size={25} strokeWidth={2} />
+							<VisuallyHidden>stop video</VisuallyHidden>
+						</>
+					)}
+				</PlayButtonSquare>
+			)}
 		</Wrapper>
 	);
 }
@@ -46,6 +70,7 @@ export default Video;
 
 var Wrapper = styled.div`
 	position: relative;
+	aspect-ratio: 4 / 3;
 	&::after {
 		content: '';
 		position: absolute;
@@ -97,4 +122,8 @@ var PlayIcon = styled(Icon)`
 
 var PauseIcon = styled(Icon)`
 	color: hsl(0 0% 100%);
+`;
+
+var Poster = styled(Image)`
+	border-radius: 3px;
 `;

@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import * as React from 'react';
 
+import home_page from '@/../public/media/home_page.png';
+
 import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import {
@@ -39,7 +41,7 @@ export default async function IntroPage() {
 						<FeatureTitle>Sentence Input</FeatureTitle>
 						<FeatureDesc>Type or paste in a sentence you want to keep.</FeatureDesc>
 						<ImageWrapper>
-							<FeatureImage src='/media/home_page.png' fill={true} alt='home page' />
+							<FeatureImage src={home_page} alt='home page' placeholder='blur' fill={true} />
 						</ImageWrapper>
 					</Feature>
 					<Feature>
@@ -48,7 +50,7 @@ export default async function IntroPage() {
 							During the sentence-saving process, you can tap or click any words you are not familiar with to include their phonetic symbols (IPA).
 						</FeatureDesc>
 						<FeatureVideoWrapper>
-							<Video src='/media/word_annotation.mp4' />
+							<Video src='/media/word_annotation.mp4' placeholderFileName='sentence_page_thumbnail' />
 						</FeatureVideoWrapper>
 					</Feature>
 					<Feature>
@@ -57,7 +59,7 @@ export default async function IntroPage() {
 							If there are parts of the sentence that you don&apos;t quite understand, you can ask about them by tapping the question(?) button.
 						</FeatureDesc>
 						<FeatureVideoWrapper>
-							<Video src='/media/ask_questions.mp4' />
+							<Video src='/media/ask_questions.mp4' placeholderFileName='sentence_page_thumbnail' />
 						</FeatureVideoWrapper>
 					</Feature>
 					<Feature>
@@ -68,7 +70,7 @@ export default async function IntroPage() {
 						<FeatureTitle>Browse & Search</FeatureTitle>
 						<FeatureDesc>Navigate to the Browse page to view your sentence collection, and do searches.</FeatureDesc>
 						<FeatureVideoWrapper>
-							<Video src='/media/browse_and_search.mp4' />
+							<Video src='/media/browse_and_search.mp4' placeholderFileName='browse_and_search_thumbnail' />
 						</FeatureVideoWrapper>
 					</Feature>
 					<Feature>
