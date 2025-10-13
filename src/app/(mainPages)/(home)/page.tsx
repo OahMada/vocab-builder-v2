@@ -6,7 +6,7 @@ import Wrapper from '@/components/PageWrapper';
 import SentenceInput from '@/components/SentenceInput';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Icon from '@/components/Icon';
-import { Title, BrowseButton, InnerWrapper, GroupWrapper } from './StyledComponents';
+import { Title, BrowseButton } from './StyledComponents';
 
 export default async function Home() {
 	let session = await auth();
@@ -23,18 +23,12 @@ export default async function Home() {
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>
-				<InnerWrapper>
-					<Title>Vocab Builder</Title>
-					<GroupWrapper>
-						<SentenceInput />
-						<BrowseButton variant='outline' href='/browse'>
-							<Icon id='forward' />
-							&nbsp;Browse
-						</BrowseButton>
-					</GroupWrapper>
-					{/* to make sure the title and the GroupWrapper each occupy one-third of the total height */}
-					<div></div>
-				</InnerWrapper>
+				<Title>Vocab Builder</Title>
+				<SentenceInput />
+				<BrowseButton variant='outline' href='/browse'>
+					<Icon id='forward' />
+					&nbsp;Browse
+				</BrowseButton>
 			</Wrapper>
 		</MaxWidthWrapper>
 	);
