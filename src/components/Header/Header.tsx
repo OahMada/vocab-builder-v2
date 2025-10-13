@@ -16,6 +16,7 @@ async function Header() {
 
 	let savedTheme = await getCookie('color-theme');
 	let theme = savedTheme || 'dark';
+
 	return (
 		<Wrapper>
 			<MaxWidthWrapper>

@@ -5,9 +5,8 @@ import { auth } from '@/auth';
 import Wrapper from '@/components/PageWrapper';
 import SentenceInput from '@/components/SentenceInput';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import Spacer from '@/components/Spacer';
 import Icon from '@/components/Icon';
-import { Title, BrowseButton } from './StyledComponents';
+import { Title, BrowseButton, InnerWrapper, GroupWrapper } from './StyledComponents';
 
 export default async function Home() {
 	let session = await auth();
@@ -24,14 +23,18 @@ export default async function Home() {
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>
-				<Title>Vocab Builder</Title>
-				<Spacer size={24} />
-				<SentenceInput />
-				<Spacer size={0} />
-				<BrowseButton variant='outline' href='/browse'>
-					<Icon id='forward' />
-					&nbsp;Browse
-				</BrowseButton>
+				<InnerWrapper>
+					<Title>Vocab Builder</Title>
+					<GroupWrapper>
+						<SentenceInput />
+						<BrowseButton variant='outline' href='/browse'>
+							<Icon id='forward' />
+							&nbsp;Browse
+						</BrowseButton>
+					</GroupWrapper>
+					{/* to make sure the title and the GroupWrapper each occupy one-third of the total height */}
+					<div></div>
+				</InnerWrapper>
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

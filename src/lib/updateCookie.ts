@@ -9,3 +9,7 @@ export function setCookie(name: string, value: string) {
 export function deleteCookie(name: string) {
 	Cookies.remove(name);
 }
+
+export function readCookie(name: string) {
+	return Cookies.get(name);
+}

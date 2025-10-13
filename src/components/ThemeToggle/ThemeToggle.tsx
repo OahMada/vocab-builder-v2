@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { LIGHT_COLORS, DARK_COLORS } from '@/constants';
 import { setCookie } from '@/lib';
 import { Theme } from '@/types';
+import { readCookie } from '@/lib';
 
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Button from '@/components/Button';
@@ -13,6 +14,13 @@ import Icon from '@/components/Icon';
 
 function ThemeToggle({ initialTheme }: { initialTheme: Theme }) {
 	let [theme, setTheme] = React.useState<Theme>(initialTheme);
+
+	React.useEffect(() => {
+		let currentTheme = readCookie('color-theme');
+		if (currentTheme) {
+			setTheme(currentTheme as Theme);
+		}
+	}, []);
 
 	// https://github.com/joy-of-react/next-dark-mode/blob/main/src/components/DarkLightToggle/DarkLightToggle.js
 	function handleClick() {
