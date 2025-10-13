@@ -12,7 +12,6 @@ export var ChildrenWrapper = styled.div`
 	flex-direction: column;
 	gap: 12px;
 	background-color: var(--bg-primary);
-	box-shadow: var(--shadow-elevation-low);
 
 	/* turn the parent flex gap into padding */
 	padding-bottom: 12px;

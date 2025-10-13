@@ -48,7 +48,7 @@ function Redirect({ redirectUrl }: { redirectUrl: string }) {
 	return (
 		<RedirectWrapper>
 			You&apos;ll be redirected to {pageName} in {countDown}s. Or you can click{' '}
-			<NavLink href={redirectUrl} onClick={clearTimeoutAndInterval}>
+			<NavLink href={redirectUrl} onClick={clearTimeoutAndInterval} $underScored={true}>
 				{linkText}
 			</NavLink>
 			.

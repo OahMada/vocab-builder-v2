@@ -137,7 +137,9 @@ export default function PersonalizeUser({ showSubmitButton, hasName }: Personali
 				<Controller
 					render={({ field }) => {
 						let { onChange, ...rest } = field;
-						return <ChooseLanguage type='learning' {...rest} onValueChange={handleChange(onChange)} defaultValue={field.value} />;
+						return (
+							<ChooseLanguage id='learning-language' type='learning' {...rest} onValueChange={handleChange(onChange)} defaultValue={field.value} />
+						);
 					}}
 					control={control}
 					name='learningLanguage'
@@ -147,7 +149,9 @@ export default function PersonalizeUser({ showSubmitButton, hasName }: Personali
 				<Controller
 					render={({ field }) => {
 						let { onChange, ...rest } = field;
-						return <ChooseLanguage type='translation' {...rest} onValueChange={handleChange(onChange)} defaultValue={field.value} />;
+						return (
+							<ChooseLanguage id='native-language' type='translation' {...rest} onValueChange={handleChange(onChange)} defaultValue={field.value} />
+						);
 					}}
 					control={control}
 					name='nativeLanguage'

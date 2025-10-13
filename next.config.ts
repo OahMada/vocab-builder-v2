@@ -21,6 +21,10 @@ const nextConfig: NextConfig = {
 				hostname: 'vbprojectstorage.blob.core.windows.net',
 				pathname: '/image/**',
 			},
+			{
+				protocol: 'https',
+				hostname: 'lh3.googleusercontent.com',
+			},
 		],
 	},
 };

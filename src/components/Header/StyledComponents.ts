@@ -20,6 +20,7 @@ export var StyledHeader = styled.header`
 	align-items: center;
 	justify-content: space-between;
 	height: 100%;
+	gap: 5px;
 `;
 
 export var LoginButton = styled(Button)`
@@ -29,7 +30,6 @@ export var LoginButton = styled(Button)`
 	border-radius: 24px;
 	font-size: ${14 / 16}rem;
 	font-weight: 500;
-	margin-left: auto;
 `;
 
 export var HeaderNav = styled.nav`

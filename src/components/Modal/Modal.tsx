@@ -108,6 +108,13 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 	${({ $position }) => {
 		if ($position === 'middle') {
 			return css`
+				html[data-theme='light'] & {
+					--shadow-color: 0 0% 45%;
+					--shadow-elevation-high: 0px 1px 1px hsl(var(--shadow-color) / 0.28), 0px 2.8px 2.7px -0.5px hsl(var(--shadow-color) / 0.26),
+						0px 5.1px 5px -1px hsl(var(--shadow-color) / 0.24), 0px 8.9px 8.7px -1.5px hsl(var(--shadow-color) / 0.22),
+						-0.1px 15.3px 14.9px -2px hsl(var(--shadow-color) / 0.2), -0.1px 25.2px 24.6px -2.5px hsl(var(--shadow-color) / 0.18),
+						-0.2px 39.8px 38.8px -3px hsl(var(--shadow-color) / 0.16), -0.3px 60px 58.5px -3.5px hsl(var(--shadow-color) / 0.14);
+				}
 				top: 50%;
 				left: 50%;
 				transform: translate(-50%, -50%);
@@ -146,7 +153,7 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 			`;
 		}
 	}}
-	background: var(--background-color);
+	background-color: var(--background-color);
 	display: flex;
 	flex-direction: column;
 	gap: 12px;

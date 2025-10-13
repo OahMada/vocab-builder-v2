@@ -39,7 +39,7 @@ export var Aside = styled.aside`
 	border-left: 4px solid var(--border);
 	padding-left: 1rem;
 	font-style: italic;
-	border-radius: 4px;
+	border-radius: 1px;
 	color: var(--text-tertiary);
 `;
 export var BlogImage = styled(Image)`

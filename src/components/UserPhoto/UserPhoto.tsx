@@ -23,6 +23,11 @@ function UserPhoto() {
 	let [isLoading, startTransition] = React.useTransition();
 	let { addToToast } = useGlobalToastContext();
 	let { update: updateSession, data: session } = useSession();
+	let inputRef = React.useRef<HTMLInputElement | null>(null);
+
+	function handleClick() {
+		inputRef.current?.click();
+	}
 
 	async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		let file = e.target.files?.[0];
@@ -122,7 +127,8 @@ function UserPhoto() {
 	return (
 		<Wrapper>
 			<Avatar fallbackStyle='fill' />
-			<UploadButton variant='outline' disabled={isLoading}>
+			<Input type='file' accept='.jpg,.jpeg,.gif,.png,.webp' onChange={handleChange} disabled={isLoading} ref={inputRef} />
+			<UploadButton variant='outline' disabled={isLoading} onClick={handleClick}>
 				{isLoading ? (
 					<>
 						<Loading description='Uploading' />
@@ -135,7 +141,6 @@ function UserPhoto() {
 					</>
 				)}
 			</UploadButton>
-			<Input type='file' accept='.jpg,.jpeg,.gif,.png,.webp' onChange={handleChange} disabled={isLoading} />
 		</Wrapper>
 	);
 }
@@ -156,14 +161,32 @@ var Wrapper = styled.div`
 
 var UploadButton = styled(Button)`
 	--bg-color: var(--bg-secondary);
-	--hover-bg-color: var(--bg-secondary-hover);
+	--hover-bg-color: unset;
 	position: absolute;
 	bottom: -10px;
 	left: 50%;
 	transform: translateX(-50%);
 	font-size: 0.8rem;
-	box-shadow: var(--shadow-elevation-low);
-	backdrop-filter: blur(15px);
+	cursor: pointer;
+
+	html[data-theme='light'] & {
+		backdrop-filter: blur(5px);
+	}
+	html[data-theme='dark'] & {
+		backdrop-filter: blur(8px);
+	}
+
+	@media (hover: hover) {
+		&:hover {
+			html[data-theme='light'] & {
+				backdrop-filter: blur(8px);
+			}
+
+			html[data-theme='dark'] & {
+				backdrop-filter: blur(11px);
+			}
+		}
+	}
 `;
 
 var Input = styled.input`
@@ -172,4 +195,5 @@ var Input = styled.input`
 	height: calc(100% + 10px);
 	opacity: 0;
 	top: 0;
+	cursor: pointer;
 `;

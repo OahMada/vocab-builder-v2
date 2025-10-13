@@ -21,7 +21,7 @@ var LanguageMap = {
 	},
 } as const;
 
-function ChooseLanguage({ type, ...delegated }: { type: 'learning' | 'translation' } & Omit<React.ComponentProps<typeof Select>, 'id'>) {
+function ChooseLanguage({ type, id, ...delegated }: { type: 'learning' | 'translation' } & React.ComponentProps<typeof Select>) {
 	let { labelText, desc } = LanguageMap[type];
 
 	return (
@@ -40,7 +40,7 @@ function ChooseLanguage({ type, ...delegated }: { type: 'learning' | 'translatio
 					</PopoverContent>
 				</Popover>
 			</Label>
-			<Select id='language' {...delegated}>
+			<Select id={id} {...delegated}>
 				{type === 'translation' && <SelectItem value='Chinese'>Chinese</SelectItem>}
 				<SelectItem value='English'>English</SelectItem>
 				<SelectItem value='French'>French</SelectItem>

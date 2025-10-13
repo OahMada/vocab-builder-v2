@@ -20,17 +20,7 @@ function ModalTitle({ ...delegated }) {
 						<VisuallyHidden>Tip</VisuallyHidden>
 					</InfoButton>
 				</PopoverTrigger>
-				<PopoverContent
-					style={
-						{
-							'--shadow-color': '0deg 0% 1%',
-							'--shadow-elevation-medium': `0px 0.7px 0.6px hsl(var(--shadow-color) / 0.46),
-              0px 1.5px 1.4px -1.3px hsl(var(--shadow-color) / 0.37),
-              0px 4.4px 4px -2.7px hsl(var(--shadow-color) / 0.29),
-              -0.1px 12px 10.8px -4px hsl(var(--shadow-color) / 0.2);`,
-						} as React.CSSProperties
-					}
-				>
+				<PopoverContent>
 					<DescriptionText>You don&apos;t have to repeat the sentence itself. You can hit Shift + Enter to submit.</DescriptionText>
 				</PopoverContent>
 			</Popover>

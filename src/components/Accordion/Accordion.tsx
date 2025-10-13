@@ -125,10 +125,10 @@ var Content = styled(AccordionPrimitives.Content)`
 		// hide overlapping content when animating
 		overflow: hidden;
 		&[data-state='open'] {
-			animation: ${slideDown} 100ms cubic-bezier(0.87, 0, 0.13, 1);
+			animation: ${slideDown} 200ms cubic-bezier(0.87, 0, 0.13, 1);
 		}
 		&[data-state='closed'] {
-			animation: ${slideUp} 100ms cubic-bezier(0.87, 0, 0.13, 1);
+			animation: ${slideUp} 200ms cubic-bezier(0.87, 0, 0.13, 1);
 		}
 	}
 `;

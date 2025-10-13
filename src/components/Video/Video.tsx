@@ -23,22 +23,12 @@ function Video({ ...delegated }: React.ComponentProps<'video'>) {
 	}
 
 	return (
-		<Wrapper>
-			<VideoEle
-				as='video'
-				playsInline={true}
-				loop={true}
-				autoPlay={true}
-				muted={true}
-				ref={videoEleRef}
-				onClick={toggleVideoPlay}
-				style={{ '--opacity': isPlaying ? '1' : '0.75' } as React.CSSProperties}
-				{...delegated}
-			/>
+		<Wrapper style={{ '--overlay-opacity': isPlaying ? '0' : '1' } as React.CSSProperties}>
+			<VideoEle as='video' playsInline={true} loop={true} autoPlay={true} muted={true} ref={videoEleRef} onClick={toggleVideoPlay} {...delegated} />
 			<PlayButtonSquare>
 				{isPlaying ? (
 					<>
-						<Icon id='stop' size={25} strokeWidth={2} />
+						<PauseIcon id='stop' size={25} strokeWidth={2} />
 						<VisuallyHidden>play video</VisuallyHidden>
 					</>
 				) : (
@@ -56,6 +46,14 @@ export default Video;
 
 var Wrapper = styled.div`
 	position: relative;
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		opacity: var(--overlay-opacity);
+		pointer-events: none;
+		background-color: hsl(0 0% 0% / 25%);
+	}
 `;
 
 var VideoEle = styled.video`
@@ -63,7 +61,6 @@ var VideoEle = styled.video`
 	height: 100%;
 	width: 100%;
 	cursor: pointer;
-	opacity: var(--opacity);
 `;
 
 var PlayButtonSquare = styled.div`
@@ -77,10 +74,12 @@ var PlayButtonSquare = styled.div`
 	display: grid;
 	place-content: center;
 	border-radius: 100%;
-	background-color: var(--bg-transparent);
+	background-color: hsl(0 0% 0% / 0.5);
 	opacity: 0;
 	transition: opacity 150ms ease-out;
 	pointer-events: none;
+	// to place above overlay
+	z-index: 2;
 
 	@media (hover: hover) {
 		${Wrapper}:hover & {
@@ -93,4 +92,9 @@ var PlayButtonSquare = styled.div`
 var PlayIcon = styled(Icon)`
 	// optical alignment
 	transform: translateX(2px);
+	color: hsl(0 0% 100%);
+`;
+
+var PauseIcon = styled(Icon)`
+	color: hsl(0 0% 100%);
 `;

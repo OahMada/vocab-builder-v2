@@ -116,7 +116,7 @@ var Title = styled(ToastPrimitives.Title)<{ $contentType: 'error' | 'notice' }>`
 			`;
 		} else if ($contentType === 'notice') {
 			return css`
-				color: inherit;
+				color: var(--text-secondary);
 			`;
 		}
 	}}
@@ -131,7 +131,6 @@ var Description = styled(ToastPrimitives.Description)<{ $contentType: 'error' | 
 			`;
 		} else if ($contentType === 'notice') {
 			return css`
-				color: var(--text-secondary);
 				white-space: nowrap;
 				text-overflow: ellipsis;
 				/* hide text that are more than one lines */
@@ -144,7 +143,7 @@ var Description = styled(ToastPrimitives.Description)<{ $contentType: 'error' | 
 var CloseButton = styled(Button)`
 	--hover-bg-color: var(--bg-tertiary-hover);
 	--button-size: calc(var(--icon-size) + var(--padding) * 2);
-	--button-offset: calc((13px * 1.5 + var(--root-padding) * 2 - var(--button-size)) / 2);
+	--button-offset: calc((16px * 1.5 + var(--root-padding) * 2 - var(--button-size)) / 2);
 	position: absolute;
 	top: var(--button-offset);
 	right: var(--button-offset);

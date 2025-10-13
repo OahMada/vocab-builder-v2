@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Html, Button, Head, Body, Container, Preview, Text, Heading, CodeInline } from '@react-email/components';
 
-// TODO align the colors with App web pages
-
 function Email({ url }: { url: string }) {
 	return (
 		<Html lang='en'>
@@ -27,7 +25,7 @@ function Email({ url }: { url: string }) {
 export default Email;
 
 var main = {
-	backgroundColor: '#f6f9fc',
+	backgroundColor: 'hsl(210, 50%, 98%)',
 	padding: '40px 0',
 };
 
@@ -47,12 +45,12 @@ var button = {
 	textAlign: 'center' as const,
 	display: 'inline-block',
 	padding: '10px 20px',
-	color: '#fff',
-	backgroundColor: '#313131',
+	color: 'hsl(0, 0%, 100%)',
+	backgroundColor: 'hsl(0, 0%, 19%)',
 };
 
 var heading = {
-	color: '#111',
+	color: 'hsl(0, 0%, 7%)',
 	fontSize: '24px',
 	fontWeight: '700',
 	margin: '0 0 24px',
@@ -63,13 +61,13 @@ var heading = {
 var text = {
 	fontSize: '16px',
 	lineHeight: '24px',
-	color: '#444',
+	color: 'hsl(0, 0%, 27%)',
 	margin: '16px 0',
 	fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
 };
 
 var footer = {
-	color: '#898989',
+	color: 'hsl(0, 0%, 54%)',
 	fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
 	fontSize: '12px',
 	lineHeight: '22px',
@@ -80,8 +78,8 @@ var fallbackUrl = {
 	fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
 	fontSize: '14px',
 	lineHeight: '20px',
-	color: '#111',
-	backgroundColor: '#f5f5f5',
+	color: 'hsl(0, 0%, 7%)',
+	backgroundColor: 'hsl(0, 0%, 96%)',
 	padding: '2px 0',
 	borderRadius: '4px',
 	wordBreak: 'break-all' as const,

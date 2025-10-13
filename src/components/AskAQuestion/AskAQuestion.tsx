@@ -90,7 +90,7 @@ var SmallHeading = styled.h3`
 var AnswerBox = styled.div`
 	width: 100%;
 	border-radius: 12px;
-	background-color: var(--bg-secondary);
+	background-color: var(--bg-tertiary);
 	flex: 1;
 	padding: 12px;
 	overflow: auto;

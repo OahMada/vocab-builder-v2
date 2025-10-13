@@ -3,6 +3,8 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { SessionProvider } from 'next-auth/react';
 
 import { roboto, inter } from '@/lib/getFont';
+import { LIGHT_COLORS, DARK_COLORS } from '@/constants';
+import getCookie from '@/lib/getCookie';
 
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import GlobalStyles from '@/components/GlobalStyles';
@@ -13,13 +15,17 @@ export var metadata: Metadata = {
 	description: 'A tool for building your vocabulary while learning a foreign language.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	let savedTheme = await getCookie('color-theme');
+	let theme = savedTheme || 'dark';
+	let themeColors = theme === 'light' ? LIGHT_COLORS : DARK_COLORS;
+
 	return (
-		<html lang='en' className={`${roboto.className} ${inter.className}`}>
+		<html lang='en' className={`${roboto.className} ${inter.className}`} data-theme={theme} style={themeColors as React.CSSProperties}>
 			<body>
 				<StyledComponentsRegistry>
 					<GlobalStyles />

@@ -22,51 +22,45 @@ function MobileMenu() {
 	}
 
 	return (
-		<Wrapper>
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild={true}>
-					<MenuButton variant='icon'>
-						<Icon id='mobile-menu' />
-						<VisuallyHidden>Click to expand the menu</VisuallyHidden>
-					</MenuButton>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent>
-					<AvatarWrapper>
-						<Avatar style={{ '--avatar-size': '35px', '--fallback-font-size': '14px' } as React.CSSProperties} fallbackStyle='outline' />
-					</AvatarWrapper>
-					<DropdownMenuItem asChild={true}>
-						<DropdownItemButton variant='icon' href='/account' disabled={isLoading}>
-							Account
-						</DropdownItemButton>
-					</DropdownMenuItem>
-					<DropdownMenuItem
-						asChild={true}
-						onSelect={(event) => {
-							// Prevent Radix from automatically closing the menu
-							event.preventDefault();
-						}}
-					>
-						<LogoutButton variant='icon' onClick={handleLogout} disabled={isLoading}>
-							{isLoading && (
-								<>
-									<Loading description='Logging out' size={16} />
-									&nbsp;
-								</>
-							)}
-							Log Out
-						</LogoutButton>
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
-		</Wrapper>
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild={true}>
+				<MenuButton variant='icon'>
+					<Icon id='mobile-menu' />
+					<VisuallyHidden>Click to expand the menu</VisuallyHidden>
+				</MenuButton>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent>
+				<AvatarWrapper>
+					<Avatar style={{ '--avatar-size': '35px', '--fallback-font-size': '14px' } as React.CSSProperties} fallbackStyle='outline' />
+				</AvatarWrapper>
+				<DropdownMenuItem asChild={true}>
+					<DropdownItemButton variant='icon' href='/account' disabled={isLoading}>
+						Account
+					</DropdownItemButton>
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					asChild={true}
+					onSelect={(event) => {
+						// Prevent Radix from automatically closing the menu
+						event.preventDefault();
+					}}
+				>
+					<LogoutButton variant='icon' onClick={handleLogout} disabled={isLoading}>
+						{isLoading && (
+							<>
+								<Loading description='Logging out' size={16} />
+								&nbsp;
+							</>
+						)}
+						Log Out
+					</LogoutButton>
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	);
 }
 
 export default MobileMenu;
-
-var Wrapper = styled.div`
-	margin-left: auto;
-`;
 
 var MenuButton = styled(Button)`
 	--hover-bg-color: var(--bg-secondary);

@@ -29,6 +29,8 @@ import {
 	Globe,
 	Link,
 	Play,
+	Sun,
+	Moon,
 } from 'react-feather';
 
 var icons = {
@@ -58,6 +60,8 @@ var icons = {
 	globe: Globe,
 	link: Link,
 	play: Play,
+	dark: Moon,
+	light: Sun,
 };
 
 interface IconProps {
