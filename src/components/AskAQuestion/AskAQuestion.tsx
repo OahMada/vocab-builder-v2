@@ -56,21 +56,23 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 			{(completion || errorMsg) && (
 				<>
 					<SmallHeading>Answer:</SmallHeading>
-					<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
-						<Markdown
-							remarkPlugins={[remarkGfm]}
-							components={{
-								table: (props) => (
-									<TableWrapper>
-										<table {...props} />
-									</TableWrapper>
-								),
-							}}
-						>
-							{completion}
-						</Markdown>
-						{errorMsg && <ErrorText>{errorMsg}</ErrorText>}
-					</AnswerBox>
+					<AnswerBoxWrapper>
+						<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
+							<Markdown
+								remarkPlugins={[remarkGfm]}
+								components={{
+									table: (props) => (
+										<TableWrapper>
+											<table {...props} />
+										</TableWrapper>
+									),
+								}}
+							>
+								{completion}
+							</Markdown>
+							{errorMsg && <ErrorText>{errorMsg}</ErrorText>}
+						</AnswerBox>
+					</AnswerBoxWrapper>
 				</>
 			)}
 			<SmallHeading>Question:</SmallHeading>
@@ -89,7 +91,6 @@ var SmallHeading = styled.h3`
 
 var AnswerBox = styled.div`
 	width: 100%;
-	border-radius: 12px;
 	background-color: var(--bg-tertiary);
 	flex: 1;
 	padding: 12px;
@@ -103,6 +104,12 @@ var AnswerBox = styled.div`
 	@media ${QUERIES.laptopAndUp} {
 		max-height: 50dvh;
 	}
+`;
+
+var AnswerBoxWrapper = styled.div`
+	border-radius: 12px;
+	// to trim off the scroll bar corners
+	overflow: hidden;
 `;
 
 var ErrorText = styled.span`

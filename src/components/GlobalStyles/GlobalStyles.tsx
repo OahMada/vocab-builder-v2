@@ -57,7 +57,9 @@ html {
   scrollbar-color: var(--bg-tertiary-hover) transparent;
   scrollbar-width: thin;
   height: 100%;
-  scrollbar-gutter: stable;
+  
+  // cause issues with fixed modal on sentence editing page in Safari and Firefox
+  /* scrollbar-gutter: stable; */
 }
 
 /* Vendor prefix for other browsers */
