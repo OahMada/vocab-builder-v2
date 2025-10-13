@@ -9,7 +9,7 @@ import Button from '@/components/Button';
 export var Title = styled.h1`
 	font-size: ${24 / 16}rem;
 	font-weight: 600;
-	margin-top: -56px;
+	margin-top: -24px;
 
 	@media ${QUERIES.tabletAndUp} {
 		font-size: ${36 / 16}rem;

@@ -25,7 +25,7 @@ export default async function Home() {
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>
 				<Title>Vocab Builder</Title>
-				<Spacer size={48} />
+				<Spacer size={24} />
 				<SentenceInput />
 				<Spacer size={0} />
 				<BrowseButton variant='outline' href='/browse'>
