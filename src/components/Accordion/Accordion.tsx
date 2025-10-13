@@ -105,7 +105,7 @@ var Header = styled(AccordionPrimitives.Header)`
 	display: flex;
 	align-items: baseline;
 	gap: 5px;
-	transition: border-bottom-left-radius 100ms cubic-bezier(0.87, 0, 0.13, 1), border-bottom-right-radius 100ms cubic-bezier(0.87, 0, 0.13, 1);
+	transition: border-bottom-left-radius 100ms cubic-bezier(0.4, 0, 0.2, 1), border-bottom-right-radius 100ms cubic-bezier(0.4, 0, 0.2, 1);
 
 	&[data-state='open'] {
 		border-bottom-left-radius: 0;
@@ -125,10 +125,10 @@ var Content = styled(AccordionPrimitives.Content)`
 		// hide overlapping content when animating
 		overflow: hidden;
 		&[data-state='open'] {
-			animation: ${slideDown} 200ms cubic-bezier(0.87, 0, 0.13, 1);
+			animation: ${slideDown} 200ms cubic-bezier(0.4, 0, 0.2, 1);
 		}
 		&[data-state='closed'] {
-			animation: ${slideUp} 200ms cubic-bezier(0.87, 0, 0.13, 1);
+			animation: ${slideUp} 200ms cubic-bezier(0.4, 0, 0.2, 1);
 		}
 	}
 `;

@@ -133,12 +133,14 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 				border-top-left-radius: 16px;
 				border-top-right-radius: 16px;
 				padding-bottom: 32px;
+				border-top: 1px solid var(--border);
 
 				@media (prefers-reduced-motion: no-preference) {
 					animation: ${slideUp} 150ms cubic-bezier(0.16, 1, 0.3, 1);
 				}
 
 				@media ${QUERIES.tabletAndUp} {
+					border-top: unset;
 					--viewport-offset: 16px;
 					width: 400px;
 					bottom: 20px;

@@ -141,7 +141,7 @@ export var CheckSentenceInputSchema = z.object({
 });
 
 export var ReadOneSentenceInputSchema = z.object({
-	sentenceId: IdSchema,
+	sentenceId: z.string(),
 	userId: IdSchema,
 });
 
