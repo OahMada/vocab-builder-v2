@@ -60,7 +60,6 @@ export default ThemeToggle;
 
 var ThemeButton = styled(Button)`
 	--hover-bg-color: var(--bg-secondary);
-	margin-left: auto;
 `;
 
 var DarkIcon = styled(Icon)`

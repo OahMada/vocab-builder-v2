@@ -7,7 +7,7 @@ import getCookie from '@/lib/getCookie';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Logo from '@/components/Logo';
 import MobileMenu from '@/components/MobileMenu';
-import { Wrapper, StyledHeader, LoginButton, HeaderNav } from './StyledComponents';
+import { Wrapper, StyledHeader, LoginButton, HeaderNav, InnerWrapper } from './StyledComponents';
 import NavLink from '@/components/NavLink';
 import ThemeToggle from '@/components/ThemeToggle';
 
@@ -29,14 +29,16 @@ async function Header() {
 							How to Sync
 						</NavLink>
 					</HeaderNav>
-					<ThemeToggle initialTheme={theme as Theme} />
-					{!!session?.user ? (
-						<MobileMenu />
-					) : (
-						<LoginButton variant='fill' href='/auth/login'>
-							Log in
-						</LoginButton>
-					)}
+					<InnerWrapper>
+						<ThemeToggle initialTheme={theme as Theme} />
+						{!!session?.user ? (
+							<MobileMenu />
+						) : (
+							<LoginButton variant='fill' href='/auth/login'>
+								Log in
+							</LoginButton>
+						)}
+					</InnerWrapper>
 				</StyledHeader>
 			</MaxWidthWrapper>
 		</Wrapper>

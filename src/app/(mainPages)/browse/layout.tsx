@@ -19,14 +19,14 @@ export default function SentenceBrowse({
 	children: React.ReactNode;
 }) {
 	return (
-		<Wrapper $position='flex-start'>
-			<SearchParamsProvider>
-				{children}
-				<MaxWidthWrapper>
+		<MaxWidthWrapper>
+			<Wrapper $position='flex-start'>
+				<SearchParamsProvider>
+					{children}
 					{search}
 					{browse}
-				</MaxWidthWrapper>
-			</SearchParamsProvider>
-		</Wrapper>
+				</SearchParamsProvider>
+			</Wrapper>
+		</MaxWidthWrapper>
 	);
 }

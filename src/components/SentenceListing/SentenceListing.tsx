@@ -174,7 +174,6 @@ function SentenceListing({
 export default SentenceListing;
 
 var Wrapper = styled.div`
-	isolation: isolate;
 	width: 100%;
 	flex: 1;
 	display: flex;

@@ -14,7 +14,6 @@ export var ChildrenWrapper = styled.div`
 	/* turn the parent flex gap into padding */
 	padding-bottom: 12px;
 	margin-bottom: -12px;
-	z-index: 9;
 `;
 
 export var LoadingWrapper = styled.div`

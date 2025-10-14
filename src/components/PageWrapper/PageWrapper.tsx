@@ -10,6 +10,7 @@ var Wrapper = styled.main<{ $position?: 'flex-start' | 'center' }>`
 	gap: 12px;
 	height: 100%;
 	position: relative;
+	isolation: isolate; // group the whole page content to sit below header
 `;
 
 export default Wrapper;
