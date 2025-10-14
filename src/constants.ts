@@ -1,11 +1,9 @@
 export const TOAST_ID = {
-	SENTENCE_CREATION: 'sentence_creation',
 	SENTENCE: 'sentence',
 	SENTENCE_DELETION: 'sentence_deletion',
 	TRANSLATION_FETCHING: 'translation_fetching',
 	IPA_FETCHING: 'IPA_',
 	AUDIO_PLAYING: 'audio_playing_',
-	SENTENCE_UPDATING: 'sentence_updating',
 	SENTENCE_FETCHING: 'sentence_fetching',
 	LOGIN: 'login',
 	USER_UPDATE: 'user_update',
@@ -15,6 +13,8 @@ export const TOAST_ID = {
 	SAS_TOKEN: 'sas_token',
 	EXPORT_DATA: 'export_data',
 	DELETE_USER: 'delete_user',
+	SENTENCE_ACTIONS: 'sentence_actions', // both create and update
+	SENTENCE_AUDIO: 'sentence_audio',
 } as const;
 
 export const INPUT_NAME = {

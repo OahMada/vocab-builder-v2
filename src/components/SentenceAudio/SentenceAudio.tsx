@@ -8,13 +8,14 @@ import { useParams } from 'next/navigation';
 import { postFetcher } from '@/lib';
 import { handleError, base64ToBlob } from '@/utils';
 import { usePlayAudio } from '@/hooks';
+import { TOAST_ID } from '@/constants';
 
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import { useAudioDataContext } from '@/components/AudioDataProvider';
-import Toast from '@/components/Toast';
 import Loading from '@/components/Loading';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 interface TTSResponse {
 	data: string;
@@ -28,7 +29,16 @@ var url = '/api/tts';
 
 function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean; sentence: string }) {
 	let { sentenceId } = useParams<{ sentenceId: string }>();
-	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, TTSArg>(url, postFetcher);
+	let { addToToast } = useGlobalToastContext();
+	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, TTSArg>(url, postFetcher, {
+		onError: (err) => {
+			addToToast({
+				id: TOAST_ID.SENTENCE_AUDIO,
+				contentType: 'error',
+				content: handleError(err),
+			});
+		},
+	});
 	let { isLocalDataLoading, audioBlob, updateBlob, audioUrl } = useAudioDataContext();
 	let { playingId, playAudio, stopAudio, loadingId } = usePlayAudio();
 	let isPlaying = playingId === sentenceId;
@@ -63,44 +73,39 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 		}
 	}
 
-	return (
-		<>
-			{error ? (
-				<RetryButton
-					variant='outline'
-					onClick={async () => {
-						let result = await retryTTS();
-						if (result) {
-							playAudio(result, sentenceId);
-						}
-					}}
-				>
-					<Icon id='retry' />
-					<VisuallyHidden>Retry generating speech</VisuallyHidden>
-				</RetryButton>
-			) : isPlaying ? (
-				<StopPlayButton variant='outline' onClick={stopAudio}>
-					<Icon id='stop' />
-					<VisuallyHidden>stop play audio </VisuallyHidden>
-				</StopPlayButton>
+	return error ? (
+		<RetryButton
+			variant='outline'
+			onClick={async () => {
+				let result = await retryTTS();
+				if (result) {
+					playAudio(result, sentenceId);
+				}
+			}}
+		>
+			<Icon id='retry' />
+			<VisuallyHidden>Retry generating speech</VisuallyHidden>
+		</RetryButton>
+	) : isPlaying ? (
+		<StopPlayButton variant='outline' onClick={stopAudio}>
+			<Icon id='stop' />
+			<VisuallyHidden>stop play audio </VisuallyHidden>
+		</StopPlayButton>
+	) : (
+		<AudioButton
+			variant='outline'
+			onClick={() => playAudio((audioUrl || audioBlob) as string | Blob, sentenceId)}
+			disabled={(!audioBlob && !audioUrl) || shouldStopAudio || isLoading}
+		>
+			{isLoading ? (
+				<Loading description='loading audio data' />
 			) : (
-				<AudioButton
-					variant='outline'
-					onClick={() => playAudio((audioUrl || audioBlob) as string | Blob, sentenceId)}
-					disabled={(!audioBlob && !audioUrl) || shouldStopAudio || isLoading}
-				>
-					{isLoading ? (
-						<Loading description='loading audio data' />
-					) : (
-						<>
-							<Icon id='audio' />
-							<VisuallyHidden>Play sentence audio</VisuallyHidden>
-						</>
-					)}
-				</AudioButton>
+				<>
+					<Icon id='audio' />
+					<VisuallyHidden>Play sentence audio</VisuallyHidden>
+				</>
 			)}
-			{error && <Toast content={handleError(error)} contentType='error' />}
-		</>
+		</AudioButton>
 	);
 }
 

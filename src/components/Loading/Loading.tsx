@@ -6,7 +6,7 @@ import styled, { keyframes } from 'styled-components';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 
-function Loading({ description, ...delegated }: { description: string; size?: number } & Omit<React.ComponentProps<typeof Icon>, 'id'>) {
+function Loading({ description, ...delegated }: { description: string } & Omit<React.ComponentProps<typeof Icon>, 'id'>) {
 	return (
 		<>
 			<LoadingIcon id='load' {...delegated} />

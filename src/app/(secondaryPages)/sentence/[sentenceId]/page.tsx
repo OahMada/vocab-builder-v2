@@ -19,7 +19,6 @@ import NoteProvider from '@/components/NoteProvider';
 import TranslationProvider from '@/components/TranslationProvider';
 import SentencePiecesProvider from '@/components/SentencePiecesProvider';
 import AudioDataProvider from '@/components/AudioDataProvider';
-import { ToastProvider, ToastViewport } from '@/components/Toast';
 import Spacer from '@/components/Spacer';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
 import CardWrapper from '@/components/CardWrapper';
@@ -77,10 +76,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 							</CardWrapper>
 							<Note title={<Title>Note</Title>} />
 							<AudioDataProvider audioUrl={sentenceData?.audioUrl}>
-								<ToastProvider>
-									<ToastViewport $position='top' />
-									<SentenceActions sentence={(sentenceData?.sentence || sentence) as string} sentenceId={sentenceData?.id} />
-								</ToastProvider>
+								<SentenceActions sentence={(sentenceData?.sentence || sentence) as string} sentenceId={sentenceData?.id} />
 							</AudioDataProvider>
 							<Spacer size={0} />
 						</Wrapper>

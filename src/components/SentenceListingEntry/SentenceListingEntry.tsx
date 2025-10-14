@@ -102,18 +102,27 @@ function SentenceListingEntry({
 						</InnerWrapper>
 					)}
 					<ActionWrapper>
-						<AlertDialog description='This action cannot be undone.' handleAction={handleDeleteAction}>
-							<Button
-								variant='fill'
-								style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties}
-								onClick={() => {
-									stopAudio();
-								}}
-							>
-								<Icon id='delete' />
-								&nbsp;Delete
-							</Button>
-						</AlertDialog>
+						<React.Suspense
+							fallback={
+								<Button variant='fill' style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties} disabled={true}>
+									<Icon id='delete' />
+									&nbsp;Delete
+								</Button>
+							}
+						>
+							<AlertDialog description='This action cannot be undone.' handleAction={handleDeleteAction}>
+								<Button
+									variant='fill'
+									style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties}
+									onClick={() => {
+										stopAudio();
+									}}
+								>
+									<Icon id='delete' />
+									&nbsp;Delete
+								</Button>
+							</AlertDialog>
+						</React.Suspense>
 						<Button
 							variant='fill'
 							onClick={() => {

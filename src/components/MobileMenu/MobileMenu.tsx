@@ -30,9 +30,11 @@ function MobileMenu() {
 				</MenuButton>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
-				<AvatarWrapper>
-					<Avatar style={{ '--avatar-size': '35px', '--fallback-font-size': '14px' } as React.CSSProperties} fallbackStyle='outline' />
-				</AvatarWrapper>
+				<React.Suspense fallback={<AvatarLoadingFallback />}>
+					<AvatarWrapper>
+						<Avatar style={{ '--avatar-size': '35px', '--fallback-font-size': '14px' } as React.CSSProperties} fallbackStyle='outline' />
+					</AvatarWrapper>
+				</React.Suspense>
 				<DropdownMenuItem asChild={true}>
 					<DropdownItemButton variant='icon' href='/account' disabled={isLoading}>
 						Account
@@ -71,6 +73,7 @@ var AvatarWrapper = styled.div`
 	margin-left: auto;
 	margin-bottom: 5px;
 	position: relative;
+	margin-right: 5px;
 `;
 
 var DropdownItemButton = styled(Button)`
@@ -82,4 +85,11 @@ var DropdownItemButton = styled(Button)`
 
 var LogoutButton = styled(DropdownItemButton)`
 	color: var(--text-status-warning);
+`;
+
+var AvatarLoadingFallback = styled(AvatarWrapper)`
+	width: 35px;
+	height: 35px;
+	background-color: var(--bg-tertiary);
+	border: 1px solid var(--border);
 `;

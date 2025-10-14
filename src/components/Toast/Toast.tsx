@@ -15,7 +15,7 @@ type ToastProps = {
 	removeToast?: () => void;
 } & React.ComponentProps<typeof ToastPrimitives.Root>;
 
-export function Toast({ title, content, contentType, removeToast, ...props }: ToastProps) {
+function Toast({ title, content, contentType, removeToast, ...props }: ToastProps) {
 	let [open, setIsOpen] = React.useState(true);
 
 	return (
@@ -150,20 +150,10 @@ var CloseButton = styled(Button)`
 `;
 
 export var ToastProvider = ToastPrimitives.Provider;
-export var ToastViewport = styled(ToastPrimitives.Viewport)<{ $position: 'top' | 'bottom' }>`
+export var ToastViewport = styled(ToastPrimitives.Viewport)`
 	--viewport-padding: 16px;
 	position: fixed;
-	${({ $position }) => {
-		if ($position === 'top') {
-			return css`
-				top: 20px;
-			`;
-		} else if ($position === 'bottom') {
-			return css`
-				bottom: 20px;
-			`;
-		}
-	}}
+	bottom: 20px;
 	right: 0;
 	padding: var(--viewport-padding);
 	width: 390px;

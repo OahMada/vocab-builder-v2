@@ -21,6 +21,7 @@ import { useSearchParamsContext } from '@/components/SearchParamsProvider';
 import NoticeText from '@/components/BrowsePageNoticeText';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
 import EmptyDisplay from './EmptyDisplay';
+import BottomRightSpinner from '@/components/BottomRightSpinner';
 
 function SentenceListing({
 	sentences,
@@ -163,7 +164,7 @@ function SentenceListing({
 			)}
 			{isPending && (
 				<Overlay>
-					<OverlaySpinner description='updating page with/without search results' size={25} strokeWidth={1} />
+					<BottomRightSpinner description='updating page with/without search results' />
 				</Overlay>
 			)}
 		</Wrapper>
@@ -214,11 +215,4 @@ var Overlay = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
-`;
-
-var OverlaySpinner = styled(Spinner)`
-	position: fixed;
-	right: 20px;
-	/* 4rem is the height of footer */
-	bottom: calc(16px + 4rem);
 `;

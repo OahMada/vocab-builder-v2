@@ -2,8 +2,6 @@
 
 import styled from 'styled-components';
 
-import Loading from '@/components/Loading';
-
 export var ChildrenWrapper = styled.div`
 	position: sticky;
 	top: 4rem;
@@ -27,15 +25,17 @@ export var LoadingWrapper = styled.div`
 	gap: 12px;
 `;
 
-export var LoadingInnerWrapper = styled.div`
+export var LoadingFallback = styled.div`
 	height: 100%;
 	position: relative;
 	background-color: var(--bg-primary-hover);
 	border-radius: 12px;
+	display: grid;
+	place-items: center;
 `;
 
-export var LoadingSpinner = styled(Loading)`
-	position: absolute;
-	right: 16px;
-	bottom: 16px;
+export var LoadingText = styled.p`
+	font-size: 0.8rem;
+	font-weight: 350;
+	color: var(--text-tertiary);
 `;

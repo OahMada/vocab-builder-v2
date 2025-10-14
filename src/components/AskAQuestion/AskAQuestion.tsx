@@ -3,14 +3,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useCompletion } from '@ai-sdk/react';
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
 import { QUERIES } from '@/constants';
 
 import Modal from '@/components/Modal';
 import ModalTitle from './ModalTitle';
 import QuestionInput from './QuestionInput';
+import BottomRightSpinner from '@/components/BottomRightSpinner';
+import ClientMarkdown from '@/components/ClientMarkdown';
 
 interface AskAQuestionProps {
 	isShowing: boolean;
@@ -45,39 +45,32 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	}
 
 	return (
-		<Modal
-			isOpen={isShowing}
-			onDismiss={onDismiss}
-			heading={<ModalTitle />}
-			isOverlayTransparent={true}
-			contentPosition='bottom'
-			style={{ '--background-color': 'var(--bg-secondary)' } as React.CSSProperties}
-		>
-			{(completion || errorMsg) && (
-				<>
-					<SmallHeading>Answer:</SmallHeading>
-					<AnswerBoxWrapper>
-						<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
-							<Markdown
-								remarkPlugins={[remarkGfm]}
-								components={{
-									table: (props) => (
-										<TableWrapper>
-											<table {...props} />
-										</TableWrapper>
-									),
-								}}
-							>
-								{completion}
-							</Markdown>
-							{errorMsg && <ErrorText>{errorMsg}</ErrorText>}
-						</AnswerBox>
-					</AnswerBoxWrapper>
-				</>
-			)}
-			<SmallHeading>Question:</SmallHeading>
-			<QuestionInput triggerComplete={triggerComplete} onClearInput={onClearInput} isLoading={isLoading} />
-		</Modal>
+		<React.Suspense fallback={<BottomRightSpinner description='loading modal component' />}>
+			<Modal
+				isOpen={isShowing}
+				onDismiss={onDismiss}
+				heading={<ModalTitle />}
+				isOverlayTransparent={true}
+				contentPosition='bottom'
+				style={{ '--background-color': 'var(--bg-secondary)' } as React.CSSProperties}
+			>
+				{(completion || errorMsg) && (
+					<>
+						<SmallHeading>Answer:</SmallHeading>
+						<AnswerBoxWrapper>
+							<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
+								<React.Suspense fallback={completion}>
+									<ClientMarkdown>{completion}</ClientMarkdown>
+								</React.Suspense>
+								{errorMsg && <ErrorText>{errorMsg}</ErrorText>}
+							</AnswerBox>
+						</AnswerBoxWrapper>
+					</>
+				)}
+				<SmallHeading>Question:</SmallHeading>
+				<QuestionInput triggerComplete={triggerComplete} onClearInput={onClearInput} isLoading={isLoading} />
+			</Modal>
+		</React.Suspense>
 	);
 }
 
@@ -114,9 +107,4 @@ var AnswerBoxWrapper = styled.div`
 
 var ErrorText = styled.span`
 	color: var(--text-status-warning);
-`;
-
-var TableWrapper = styled.div`
-	overflow-x: auto;
-	margin: 10px 0;
 `;

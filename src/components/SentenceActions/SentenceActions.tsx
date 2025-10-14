@@ -22,12 +22,10 @@ import Icon from '@/components/Icon';
 import AskAQuestion from '@/components/AskAQuestion';
 import SentenceAudio from '@/components/SentenceAudio';
 import Loading from '@/components/Loading';
-import { Toast } from '@/components/Toast';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
 function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceId?: string }) {
 	let { addToToast } = useGlobalToastContext();
-	let [errorMsg, setErrorMsg] = React.useState('');
 	let router = useRouter();
 	let [isModalShowing, setIsModalShowing] = React.useState(false);
 	let [isLoading, startTransition] = React.useTransition();
@@ -63,7 +61,6 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 
 	async function handleSubmit() {
 		setShouldStopAudio(true);
-		setErrorMsg('');
 		startTransition(async () => {
 			let result: { error: string } | { data: SentenceWithPieces };
 			if (sentenceId) {
@@ -143,14 +140,14 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 			}
 
 			if ('error' in result) {
-				setErrorMsg(result.error);
+				addToToast({ contentType: 'error', id: TOAST_ID.SENTENCE_ACTIONS, content: result.error });
 				setShouldStopAudio(false);
 				return;
 			}
 			deleteLocalData(true);
 			if (sentenceId) {
 				addToToast({
-					id: TOAST_ID.SENTENCE_UPDATING,
+					id: TOAST_ID.SENTENCE_ACTIONS,
 					contentType: 'notice',
 					content: sentence,
 					title: 'Sentence Updated',
@@ -163,7 +160,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				}
 			} else {
 				addToToast({
-					id: TOAST_ID.SENTENCE_CREATION,
+					id: TOAST_ID.SENTENCE_ACTIONS,
 					contentType: 'notice',
 					content: sentence,
 					title: 'Sentence Created',
@@ -191,7 +188,6 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				</DoneButton>
 			</Wrapper>
 			{isModalShowing && <AskAQuestion isShowing={isModalShowing} onDismiss={dismissModal} sentence={sentence} />}
-			{errorMsg && <Toast content={errorMsg} contentType='error' />}
 		</>
 	);
 }

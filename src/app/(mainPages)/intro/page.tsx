@@ -38,7 +38,7 @@ export default async function IntroPage() {
 				</SloganWrapper>
 				<FeaturesWrapper>
 					<Feature>
-						<FeatureTitle>Sentence Input</FeatureTitle>
+						<FeatureTitle>Input a Sentence</FeatureTitle>
 						<FeatureDesc>Type or paste in a sentence you want to keep.</FeatureDesc>
 						<ImageWrapper>
 							<FeatureImage src={home_page} alt='home page' placeholder='blur' fill={true} />

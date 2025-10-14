@@ -18,6 +18,7 @@ import Spacer from '@/components/Spacer';
 import FormErrorText from '@/components/FormErrorText';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Loading from '@/components/Loading';
+import BottomRightSpinner from '@/components/BottomRightSpinner';
 
 interface EditUserInfoProps {
 	isShowing: boolean;
@@ -69,47 +70,49 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 	}
 
 	return (
-		<Modal isOpen={isShowing} onDismiss={onDismiss} heading={<Title>Edit User Info</Title>}>
-			<Wrapper>
-				<Label>Name:</Label>
-				<InputBox
-					id='username'
-					style={{ '--bg-color': 'transparent' } as React.CSSProperties}
-					{...register('name', {
-						onChange: () => {
-							clearErrors('name');
-						},
-					})}
-					placeholder='John Doe'
-				/>
-				{errors.name && <FormErrorText>{errors.name.message}</FormErrorText>}
-			</Wrapper>
-			<Wrapper>
-				<Label>Email:</Label>
-				<InputBox
-					id='email'
-					style={{ '--bg-color': 'transparent' } as React.CSSProperties}
-					{...register('email', {
-						onChange: () => {
-							clearErrors('email');
-						},
-					})}
-					placeholder='example@email.com'
-				/>
-				{errors.email && <FormErrorText>{errors.email.message}</FormErrorText>}
-			</Wrapper>
-			<Spacer size={1} />
-			<Actions>
-				<CancelButton variant='fill' onClick={onDismiss}>
-					<Icon id='x' />
-					&nbsp;Cancel
-				</CancelButton>
-				<SaveButton variant='fill' onClick={handleSubmit(onSubmit)} disabled={isLoading}>
-					{isLoading ? <Loading description='updating user' /> : <Icon id='save' />}
-					&nbsp;Save
-				</SaveButton>
-			</Actions>
-		</Modal>
+		<React.Suspense fallback={<BottomRightSpinner description='loading modal component' />}>
+			<Modal isOpen={isShowing} onDismiss={onDismiss} heading={<Title>Edit User Info</Title>}>
+				<Wrapper>
+					<Label>Name:</Label>
+					<InputBox
+						id='username'
+						style={{ '--bg-color': 'transparent' } as React.CSSProperties}
+						{...register('name', {
+							onChange: () => {
+								clearErrors('name');
+							},
+						})}
+						placeholder='John Doe'
+					/>
+					{errors.name && <FormErrorText>{errors.name.message}</FormErrorText>}
+				</Wrapper>
+				<Wrapper>
+					<Label>Email:</Label>
+					<InputBox
+						id='email'
+						style={{ '--bg-color': 'transparent' } as React.CSSProperties}
+						{...register('email', {
+							onChange: () => {
+								clearErrors('email');
+							},
+						})}
+						placeholder='example@email.com'
+					/>
+					{errors.email && <FormErrorText>{errors.email.message}</FormErrorText>}
+				</Wrapper>
+				<Spacer size={1} />
+				<Actions>
+					<CancelButton variant='fill' onClick={onDismiss}>
+						<Icon id='x' />
+						&nbsp;Cancel
+					</CancelButton>
+					<SaveButton variant='fill' onClick={handleSubmit(onSubmit)} disabled={isLoading}>
+						{isLoading ? <Loading description='updating user' /> : <Icon id='save' />}
+						&nbsp;Save
+					</SaveButton>
+				</Actions>
+			</Modal>
+		</React.Suspense>
 	);
 }
 

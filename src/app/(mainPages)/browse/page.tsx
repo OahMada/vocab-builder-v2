@@ -6,6 +6,7 @@ import { auth } from '@/auth';
 import Search from '@/components/SearchSentence';
 import { ChildrenWrapper } from './StyledComponents';
 import Breadcrumb from '@/components/CustomBreadcrumb';
+import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 
 export default async function Page() {
 	let session = await auth();
@@ -17,9 +18,11 @@ export default async function Page() {
 
 	return (
 		<ChildrenWrapper>
-			<Breadcrumb page='Browse' link='/browse' />
-			{/* https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout nuqs's useQueryState mush internally uses useSearchParams */}
-			<Search />
+			<MaxWidthWrapper>
+				<Breadcrumb page='Browse' link='/browse' />
+				{/* https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout nuqs's useQueryState mush internally uses useSearchParams */}
+				<Search />
+			</MaxWidthWrapper>
 		</ChildrenWrapper>
 	);
 }
