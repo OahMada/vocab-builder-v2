@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import NextAuth, { type DefaultSession } from 'next-auth';
 import { LEARNING_LANGUAGE, NATIVE_LANGUAGE, ENGLISH_IPA_FLAVOUR } from '@/constants';

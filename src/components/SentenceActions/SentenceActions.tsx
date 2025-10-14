@@ -12,9 +12,10 @@ import updateSentence from '@/app/actions/sentence/updateSentence';
 import getBlobStorageSASToken from '@/app/actions/lib/getBlobStorageSASToken';
 
 import { useSentenceData } from '@/hooks';
-import { SentenceCreateInputType, SentenceUpdateInputType, SentenceWithPieces, deleteCookie } from '@/lib';
+import { SentenceWithPieces, deleteCookie } from '@/lib';
 import { BLOB_CONTAINER_TYPE, COOKIE_KEY, TOAST_ID } from '@/constants';
 import { handleError, deleteLocalData } from '@/utils';
+import { SentenceDataType } from '@/types';
 
 import Button from '@/components/Button';
 import VisuallyHidden from '@/components/VisuallyHidden';
@@ -65,13 +66,13 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 			let result: { error: string } | { data: SentenceWithPieces };
 			if (sentenceId) {
 				let sentenceUpdateInput = {
-					...(sentenceData as Omit<SentenceUpdateInputType, 'id'>),
+					...(sentenceData as SentenceDataType),
 					id: sentenceId,
 				};
 				result = await updateSentence(sentenceUpdateInput);
 			} else {
 				let audioBlob: Blob | undefined;
-				let restSentenceData: Omit<SentenceCreateInputType, 'sentence' | 'audioUrl'> | undefined;
+				let restSentenceData: SentenceDataType | undefined;
 
 				if ('audioBlob' in sentenceData) {
 					({ audioBlob, ...restSentenceData } = sentenceData);
@@ -130,7 +131,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 					return;
 				}
 				let audioUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}`;
-				let sentenceCreateInput: SentenceCreateInputType = {
+				let sentenceCreateInput = {
 					...restSentenceData,
 					sentence,
 					audioUrl,

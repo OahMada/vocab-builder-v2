@@ -1,4 +1,4 @@
-import { SentenceCreateInputType, SentenceUpdateInputType } from '@/lib';
+import { SentenceDataType } from '@/types';
 
 import { useTranslationContext } from '@/components/TranslationProvider';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
@@ -6,10 +6,10 @@ import { useNoteContext } from '@/components/NoteProvider';
 import { useAudioDataContext } from '@/components/AudioDataProvider';
 
 type SentenceData =
-	| (Omit<SentenceCreateInputType, 'sentence' | 'audioUrl'> & {
+	| (SentenceDataType & {
 			audioBlob: Blob;
 	  })
-	| Omit<SentenceUpdateInputType, 'id'>;
+	| SentenceDataType;
 type UseSentenceDataReturnType = [boolean, SentenceData];
 
 export function useSentenceData(): UseSentenceDataReturnType {

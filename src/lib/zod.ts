@@ -100,8 +100,6 @@ export var SentenceCreateInputSchema = z.object({
 	}),
 });
 
-export type SentenceCreateInputType = z.infer<typeof SentenceCreateInputSchema>;
-
 export var IdSchema = z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ObjectId');
 
 export var SentenceUpdateInputSchema = z.object({
@@ -110,8 +108,6 @@ export var SentenceUpdateInputSchema = z.object({
 	note: SentenceCreateInputSchema.shape.note,
 	pieces: z.array(PiecesCreateInputSchema),
 });
-
-export type SentenceUpdateInputType = z.infer<typeof SentenceUpdateInputSchema>;
 
 export var CountSearchResultSchema = z.object({
 	[INPUT_NAME.SEARCH]: z
