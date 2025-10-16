@@ -4,7 +4,7 @@ import { openai } from '@ai-sdk/openai';
 import { NextAuthRequest } from 'next-auth';
 
 import { FetchIPAInputSchema } from '@/lib';
-import { handleZodError } from '@/utils';
+import { delay, handleZodError } from '@/utils';
 import { API_ABORT_TIMEOUT } from '@/constants';
 import { auth } from '@/auth';
 
@@ -26,17 +26,19 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	let { word, sentence } = result.data;
 
 	try {
-		let { text } = await generateText({
-			model: openai.responses('gpt-4.1'),
-			system: `Provide the precise IPA (phonetic transcription) for each word, enclosing each in slashes (e.g., /ˈwɜːd/). Use the context of the sentence to determine the appropriate transcription: ${sentence}. If a word has multiple possible IPA forms, choose the one that best fits the context.  ${
-				EnglishIPAFlavour ? `If the sentence is in English, provide the IPA in ${EnglishIPAFlavour} flavour.` : ''
-			}
-			Make sure you only return IPA and nothing else.
-			`,
-			prompt: word,
-			abortSignal: AbortSignal.timeout(API_ABORT_TIMEOUT),
-		});
-		return NextResponse.json({ data: text });
+		// throw new Error('test');
+		// let { text } = await generateText({
+		// 	model: openai.responses('gpt-4.1'),
+		// 	system: `Provide the precise IPA (phonetic transcription) for each word, enclosing each in slashes (e.g., /ˈwɜːd/). Use the context of the sentence to determine the appropriate transcription: ${sentence}. If a word has multiple possible IPA forms, choose the one that best fits the context.  ${
+		// 		EnglishIPAFlavour ? `If the sentence is in English, provide the IPA in ${EnglishIPAFlavour} flavour.` : ''
+		// 	}
+		// 	Make sure you only return IPA and nothing else.
+		// 	`,
+		// 	prompt: word,
+		// 	abortSignal: AbortSignal.timeout(API_ABORT_TIMEOUT),
+		// });
+		await delay(1500);
+		return NextResponse.json({ data: '/ˈdɛməʊ/ ' });
 	} catch (error) {
 		console.error('Generate IPA init error:', error);
 		if (error instanceof DOMException && error.name === 'TimeoutError') {

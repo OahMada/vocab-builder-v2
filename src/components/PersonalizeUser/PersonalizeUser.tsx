@@ -111,7 +111,7 @@ function PersonalizeUser({ showSubmitButton, hasName }: PersonalizeUserProps) {
 			fn(value);
 			if (!showSubmitButton) {
 				debouncer.cancel(); // so that the waiting time is consistent
-				debouncer.maybeExecute();
+				// debouncer.maybeExecute();
 			}
 		};
 	}

@@ -89,7 +89,7 @@ var AnswerBox = styled.div`
 	padding: 12px;
 	overflow: auto;
 	max-height: 45dvh;
-
+	white-space: pre-wrap;
 	@media ${QUERIES.tabletAndUp} {
 		max-height: 30dvh;
 	}

@@ -7,9 +7,10 @@ import getCookie from '@/lib/getCookie';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Logo from '@/components/Logo';
 import MobileMenu from '@/components/MobileMenu';
-import { Wrapper, StyledHeader, LoginButton, HeaderNav, InnerWrapper } from './StyledComponents';
+import { Wrapper, StyledHeader, HeaderNav, InnerWrapper } from './StyledComponents';
 import NavLink from '@/components/NavLink';
 import ThemeToggle from '@/components/ThemeToggle';
+import DemoLoginButton from '@/components/DemoLoginButton';
 
 async function Header() {
 	let session = await auth();
@@ -31,13 +32,7 @@ async function Header() {
 					</HeaderNav>
 					<InnerWrapper>
 						<ThemeToggle initialTheme={theme as Theme} />
-						{!!session?.user ? (
-							<MobileMenu />
-						) : (
-							<LoginButton variant='fill' href='/auth/login'>
-								Log in
-							</LoginButton>
-						)}
+						{!!session?.user ? <MobileMenu /> : <DemoLoginButton />}
 					</InnerWrapper>
 				</StyledHeader>
 			</MaxWidthWrapper>

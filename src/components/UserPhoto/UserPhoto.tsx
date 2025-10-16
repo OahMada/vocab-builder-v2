@@ -130,7 +130,7 @@ function UserPhoto() {
 		<Wrapper>
 			<Avatar fallbackStyle='fill' />
 			<Input type='file' accept='.jpg,.jpeg,.gif,.png,.webp' onChange={handleChange} disabled={isLoading} ref={inputRef} />
-			<UploadButton variant='outline' disabled={isLoading} onClick={handleClick}>
+			<UploadButton variant='outline' disabled={true} onClick={handleClick}>
 				{isLoading ? (
 					<>
 						<Loading description='Uploading' />

@@ -183,7 +183,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 					<Icon id='x' />
 					&nbsp;Cancel
 				</CancelButton>
-				<DoneButton variant='outline' disabled={!sentenceDataReady || isLoading} onClick={handleSubmit}>
+				<DoneButton variant='outline' disabled={true} onClick={handleSubmit}>
 					{isLoading ? <Loading description='submitting data' /> : <Icon id='enter' />}
 					&nbsp;Done
 				</DoneButton>

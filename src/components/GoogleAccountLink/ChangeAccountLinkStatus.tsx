@@ -62,7 +62,7 @@ export default function ChangeAccountLinkStatus({ accountLinked }: { accountLink
 			</Button>
 		</AlertDialog>
 	) : (
-		<Button variant='outline' disabled={isLoading} onClick={handleLinkAccount}>
+		<Button variant='outline' disabled={true} onClick={handleLinkAccount}>
 			{isLoading ? <Loading description='Linking google account' /> : <Icon id='link' />}
 			&nbsp; Link Google Account
 		</Button>

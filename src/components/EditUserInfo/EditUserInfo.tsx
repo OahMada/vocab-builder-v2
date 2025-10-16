@@ -106,7 +106,7 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 						<Icon id='x' />
 						&nbsp;Cancel
 					</CancelButton>
-					<SaveButton variant='fill' onClick={handleSubmit(onSubmit)} disabled={isLoading}>
+					<SaveButton variant='fill' onClick={handleSubmit(onSubmit)} disabled={true}>
 						{isLoading ? <Loading description='updating user' /> : <Icon id='save' />}
 						&nbsp;Save
 					</SaveButton>

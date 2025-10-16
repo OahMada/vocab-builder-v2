@@ -59,7 +59,7 @@ export default function AlertDialog({
 									}
 								});
 							}}
-							disabled={isLoading || actionDisabled === true}
+							disabled={true}
 						>
 							{isLoading ? <Loading description='action ongoing' /> : <Icon id='enter' />}
 							&nbsp;I&apos;m sure

@@ -75,7 +75,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 								<Translation title={<Title>Translation</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
 							</CardWrapper>
 							<Note title={<Title>Note</Title>} />
-							<AudioDataProvider audioUrl={sentenceData?.audioUrl}>
+							<AudioDataProvider audioUrl={sentenceId === 'new' ? process.env.DEMO_AUDIO_URL! : sentenceData?.audioUrl}>
 								<SentenceActions sentence={(sentenceData?.sentence || sentence) as string} sentenceId={sentenceData?.id} />
 							</AudioDataProvider>
 							<Spacer size={16} />

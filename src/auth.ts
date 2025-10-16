@@ -1,8 +1,10 @@
-import NextAuth from 'next-auth';
+import NextAuth, { User } from 'next-auth';
 import Resend from 'next-auth/providers/resend';
 import Google from 'next-auth/providers/google';
+import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { createId } from '@paralleldrive/cuid2';
+
 // import axios from 'axios';
 
 import prisma from '@/lib/prisma';
@@ -38,6 +40,27 @@ export var { handlers, signIn, signOut, auth } = NextAuth({
 			},
 			generateVerificationToken() {
 				return createId();
+			},
+		}),
+		Credentials({
+			async authorize() {
+				let user = null;
+				let demoUserEmail = process.env.DEMO_EMAIL!;
+				let demoUserPassword = process.env.DEMO_PASSWORD!;
+				try {
+					user = (await prisma.user.findUnique({
+						where: {
+							email: demoUserEmail,
+							password: demoUserPassword,
+						},
+					})) as User;
+				} catch (error) {
+					console.error('failed to find the user', error);
+				}
+				if (!user) {
+					throw new Error('Invalid credentials.');
+				}
+				return user;
 			},
 		}),
 	],
