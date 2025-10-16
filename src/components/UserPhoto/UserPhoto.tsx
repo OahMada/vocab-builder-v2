@@ -5,8 +5,10 @@ import styled from 'styled-components';
 import { createId } from '@paralleldrive/cuid2';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
+import { FallbackProps, withErrorBoundary } from 'react-error-boundary';
 
 import getBlobStorageSASToken from '@/app/actions/lib/getBlobStorageSASToken';
+import updateUserImage from '@/app/actions/user/updateUserImage';
 
 import { handleError, handleZodError } from '@/utils';
 import { ImageFileSchema } from '@/lib';
@@ -17,7 +19,7 @@ import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
-import updateUserImage from '@/app/actions/user/updateUserImage';
+import { ErrorTitle, ErrorText } from '@/components/ErrorDisplay';
 
 function UserPhoto() {
 	let [isLoading, startTransition] = React.useTransition();
@@ -145,7 +147,21 @@ function UserPhoto() {
 	);
 }
 
-export default UserPhoto;
+var UserPhotoWithErrorBoundary = withErrorBoundary(UserPhoto, {
+	FallbackComponent: Fallback,
+});
+
+export default UserPhotoWithErrorBoundary;
+
+function Fallback({ error }: FallbackProps) {
+	let errorMsg = handleError(error);
+	return (
+		<ErrorWrapper>
+			<ErrorTitle>An Error Occurred</ErrorTitle>
+			<ErrorText>{errorMsg}</ErrorText>
+		</ErrorWrapper>
+	);
+}
 
 var Wrapper = styled.div`
 	position: relative;
@@ -196,4 +212,15 @@ var Input = styled.input`
 	opacity: 0;
 	top: 0;
 	cursor: pointer;
+`;
+
+var ErrorWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	align-items: center;
+
+	@media ${QUERIES.tabletAndUp} {
+		margin-top: 48px;
+	}
 `;

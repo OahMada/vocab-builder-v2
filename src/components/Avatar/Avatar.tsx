@@ -22,6 +22,7 @@ function Avatar({ fallbackStyle, ...delegated }: { fallbackStyle: 'fill' | 'outl
 			setNameInitials(initials);
 		}
 	}, [session?.user.name]);
+
 	return (
 		<Root {...delegated}>
 			<Image {...props} alt={alt} />

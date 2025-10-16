@@ -18,7 +18,6 @@ export default async function Page() {
 	return (
 		<ChildrenWrapper>
 			<Breadcrumb page='Browse' link='/browse' />
-			{/* https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout nuqs's useQueryState mush internally uses useSearchParams */}
 			<Search />
 		</ChildrenWrapper>
 	);

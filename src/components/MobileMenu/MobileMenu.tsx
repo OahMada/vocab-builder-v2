@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import logout from '@/app/actions/auth/logout';
 
@@ -31,9 +32,11 @@ function MobileMenu() {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<React.Suspense fallback={<AvatarLoadingFallback />}>
-					<AvatarWrapper>
-						<Avatar style={{ '--avatar-size': '35px', '--fallback-font-size': '14px' } as React.CSSProperties} fallbackStyle='outline' />
-					</AvatarWrapper>
+					<ErrorBoundary fallback={<ErrorItem disabled={true}>Error</ErrorItem>}>
+						<AvatarWrapper>
+							<Avatar style={{ '--avatar-size': '35px', '--fallback-font-size': '14px' } as React.CSSProperties} fallbackStyle='outline' />
+						</AvatarWrapper>
+					</ErrorBoundary>
 				</React.Suspense>
 				<DropdownMenuItem asChild={true}>
 					<DropdownItemButton variant='icon' href='/account' disabled={isLoading}>
@@ -92,4 +95,8 @@ var AvatarLoadingFallback = styled(AvatarWrapper)`
 	height: 35px;
 	background-color: var(--bg-tertiary);
 	border: 1px solid var(--border);
+`;
+
+var ErrorItem = styled(DropdownMenuItem)`
+	color: var(--text-status-warning);
 `;

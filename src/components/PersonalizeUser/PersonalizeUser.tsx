@@ -7,11 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useDebouncer } from '@tanstack/react-pacer';
+import { FallbackProps, withErrorBoundary } from 'react-error-boundary';
 
 import updateUser from '@/app/actions/user/updateUser';
 
 import { PersonalizeInputSchema, PersonalizeInput } from '@/lib';
 import { USER_UPDATE_ACTION } from '@/constants';
+import { handleError } from '@/utils';
 
 import ChooseLanguage from '@/components/ChooseLanguage';
 import ChooseIPAFlavour from '@/components/ChooseIPAFlavour';
@@ -21,8 +23,7 @@ import Icon from '@/components/Icon';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Loading from '@/components/Loading';
 import FormErrorText from '@/components/FormErrorText';
-
-// reference https://stackoverflow.com/questions/68103612/how-to-drop-the-query-parameters-after-a-redirect-with-nextjs?rq=2
+import { ErrorTitle, ErrorText } from '@/components/ErrorDisplay';
 
 var defaultFormValues = {
 	learningLanguage: 'English',
@@ -38,7 +39,7 @@ interface PersonalizeUserProps {
 
 type RHFOnChange = UseControllerReturn<FieldValues, Path<FieldValues>>['field']['onChange'];
 
-export default function PersonalizeUser({ showSubmitButton, hasName }: PersonalizeUserProps) {
+function PersonalizeUser({ showSubmitButton, hasName }: PersonalizeUserProps) {
 	let { data: session, update: updateSession } = useSession();
 	let { addToToast } = useGlobalToastContext();
 	let router = useRouter();
@@ -179,6 +180,22 @@ export default function PersonalizeUser({ showSubmitButton, hasName }: Personali
 	);
 }
 
+var PersonalizeUserWithErrorBoundary = withErrorBoundary(PersonalizeUser, {
+	FallbackComponent: Fallback,
+});
+
+export default PersonalizeUserWithErrorBoundary;
+
+function Fallback({ error }: FallbackProps) {
+	let errorMsg = handleError(error);
+	return (
+		<ErrorWrapper>
+			<ErrorTitle>An Error Occurred</ErrorTitle>
+			<ErrorText>{errorMsg}</ErrorText>
+		</ErrorWrapper>
+	);
+}
+
 var InnerWrapper = styled.div`
 	width: 100%;
 	border-radius: 24px;
@@ -209,4 +226,8 @@ var Label = styled.label`
 var SubmitButton = styled(Button)`
 	margin-top: 10px;
 	align-self: center;
+`;
+
+var ErrorWrapper = styled(InnerWrapper)`
+	gap: 8px;
 `;

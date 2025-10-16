@@ -18,6 +18,7 @@ export var Title = styled.h1`
 `;
 
 export var BrowseButton = styled(Button)`
+	margin-top: 10px;
 	@media (hover: hover) {
 		&:hover {
 			text-decoration: none;

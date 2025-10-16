@@ -53,7 +53,7 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 	} else {
 		let result = await readOneSentenceById({ sentenceId, userId });
 		if ('error' in result) {
-			throw new Error('Failed to load the sentence data.');
+			throw new Error(result.error);
 		} else if (!result.data) {
 			notFound();
 		}

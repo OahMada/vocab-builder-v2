@@ -6,18 +6,20 @@ import { useRouter } from 'next/navigation';
 import { FieldErrors, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
+import { FallbackProps, withErrorBoundary } from 'react-error-boundary';
 
 import checkSentenceUniqueness from '@/app/actions/sentence/checkSentenceUniqueness';
 
 import { TOAST_ID, INPUT_NAME, LOCAL_STORAGE_KEY, COOKIE_KEY } from '@/constants';
 import { UserInputType, UserInputSchema, setCookie } from '@/lib';
-import { updateLocalStorage } from '@/utils';
+import { handleError, updateLocalStorage } from '@/utils';
 import { useReadLocalStorage } from '@/hooks';
 
 import TextArea from '@/components/TextArea';
 import Spacer from '@/components/Spacer';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import ActionButtons from './ActionButtons';
+import { ErrorText, ErrorTitle } from '@/components/ErrorDisplay';
 
 function SentenceInput() {
 	let { data: session, update: updateSession } = useSession();
@@ -117,7 +119,21 @@ function SentenceInput() {
 	);
 }
 
-export default SentenceInput;
+function Fallback({ error }: FallbackProps) {
+	let errorMsg = handleError(error);
+	return (
+		<ErrorWrapper>
+			<ErrorTitle>An Error Occurred</ErrorTitle>
+			<ErrorText>{errorMsg}</ErrorText>
+		</ErrorWrapper>
+	);
+}
+
+var SentenceInputWithErrorBoundary = withErrorBoundary(SentenceInput, {
+	FallbackComponent: Fallback,
+});
+
+export default SentenceInputWithErrorBoundary;
 
 var Wrapper = styled.form`
 	background-color: var(--bg-secondary);
@@ -125,4 +141,11 @@ var Wrapper = styled.form`
 	border-radius: 24px;
 	padding: 12px;
 	box-shadow: var(--shadow-elevation-low);
+`;
+
+var ErrorWrapper = styled(Wrapper)`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
 `;
