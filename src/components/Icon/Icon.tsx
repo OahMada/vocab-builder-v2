@@ -31,6 +31,7 @@ import {
 	Play,
 	Sun,
 	Moon,
+	XCircle,
 } from 'react-feather';
 
 var icons = {
@@ -62,6 +63,7 @@ var icons = {
 	play: Play,
 	dark: Moon,
 	light: Sun,
+	close: XCircle,
 };
 
 interface IconProps {

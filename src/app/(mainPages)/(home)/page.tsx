@@ -7,6 +7,7 @@ import SentenceInput from '@/components/SentenceInput';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Icon from '@/components/Icon';
 import { Title, BrowseButton } from './StyledComponents';
+import DemoNotice from '@/components/DemoNotice';
 
 export default async function Home() {
 	let session = await auth();
@@ -23,6 +24,7 @@ export default async function Home() {
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='center'>
+				<DemoNotice />
 				<Title>Vocab Builder</Title>
 				<SentenceInput />
 				<BrowseButton variant='outline' href='/browse'>
