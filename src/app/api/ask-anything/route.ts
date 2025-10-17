@@ -6,7 +6,6 @@ import { NextAuthRequest } from 'next-auth';
 import { auth } from '@/auth';
 import { FetchAnswerInputSchema } from '@/lib';
 import { handleZodError } from '@/utils';
-import { API_ABORT_TIMEOUT } from '@/constants';
 
 function toErrorStream(errorText: string) {
 	let data = { type: 'error', errorText };
@@ -41,7 +40,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 			model: openai.responses('gpt-4.1'),
 			system: `You are a language teacher, the user is gonna ask you a question about a specific sentence: ${parseResult.data.sentence}. Answer the question in a precise, professional, detailed manner. Answer the question in the same language as the question. Structure the answer a bit for clarity. Don't repeat the sentence in your response.`,
 			prompt: parseResult.data.question,
-			abortSignal: AbortSignal.any([AbortSignal.timeout(API_ABORT_TIMEOUT), request.signal]),
+			abortSignal: request.signal,
 		});
 
 		return result.toUIMessageStreamResponse();

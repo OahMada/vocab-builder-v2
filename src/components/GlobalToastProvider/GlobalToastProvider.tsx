@@ -37,7 +37,7 @@ function GlobalToastProvider({ children }: { children: React.ReactNode }) {
 			{toasts.map(({ id, ...rest }) => (
 				<Toast key={id} {...rest} id={id} removeToast={() => removeFromToast(id)} />
 			))}
-			<ToastViewport />
+			<ToastViewport id='toast' />
 		</ToastProvider>
 	);
 }

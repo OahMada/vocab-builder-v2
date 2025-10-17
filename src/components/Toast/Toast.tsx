@@ -25,6 +25,8 @@ function Toast({ title, content, contentType, removeToast, ...props }: ToastProp
 			open={open}
 			onOpenChange={(open) => {
 				setIsOpen(open);
+				// https://github.com/radix-ui/primitives/issues/2233#issuecomment-1821222005
+				if (!open) document.getElementById('toast')?.blur();
 				if (!open && removeToast) {
 					// to let the animation play
 					window.setTimeout(() => {
