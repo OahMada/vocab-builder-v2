@@ -1,7 +1,6 @@
 import { openai } from '@ai-sdk/openai';
 import { NextResponse } from 'next/server';
-import { streamText, simulateReadableStream } from 'ai';
-import { MockLanguageModelV2 } from 'ai/test';
+import { streamText } from 'ai';
 import { NextAuthRequest } from 'next-auth';
 
 import { auth } from '@/auth';
