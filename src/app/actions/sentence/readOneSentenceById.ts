@@ -18,7 +18,6 @@ var readOneSentenceById = unstable_cache(
 		let { sentenceId, userId } = result.data;
 
 		try {
-			// throw new Error('');
 			let sentenceData = await prisma.sentence.findUnique({
 				where: {
 					id: sentenceId,

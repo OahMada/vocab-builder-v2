@@ -120,7 +120,6 @@ export var searchSentences = unstable_cache(
 				return rest;
 			});
 
-			// return { error: 'Failed to search sentences' };
 			return { data: sentences, nextCursor };
 		} catch (error) {
 			console.error('could not perform search action', error);

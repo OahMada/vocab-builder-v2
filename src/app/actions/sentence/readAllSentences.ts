@@ -29,7 +29,6 @@ export var readAllSentences = unstable_cache(
 				let nextItem = sentences.pop();
 				nextCursor = nextItem!.id;
 			}
-			// return { error: 'Failed to fetch sentences' };
 			return { data: sentences, nextCursor };
 		} catch (error) {
 			console.error('fetch all sentences failed', error);
@@ -50,7 +49,6 @@ export var countSentences = unstable_cache(
 
 		try {
 			let count = await prisma.sentence.count({ where: { userId: result.data } });
-			// throw new Error('error');
 			return { data: count };
 		} catch (error) {
 			console.error('count sentences amount failed', error);
