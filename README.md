@@ -1,4 +1,4 @@
-This is a demo app for [Vocab Builder](https://github.com/OahMada/vocab-builder-v2).
+A demo of the project can be found [here](https://demo-vocab-builder-v2.vercel.app/intro).
 
 Demo limitations:
 
