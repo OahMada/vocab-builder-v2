@@ -21,7 +21,7 @@ function ModalTitle({ ...delegated }) {
 					</InfoButton>
 				</PopoverTrigger>
 				<PopoverContent>
-					<DescriptionText>You don&apos;t have to repeat the sentence itself. You can hit Shift + Enter to submit.</DescriptionText>
+					<DescriptionText>You don&apos;t have to repeat the sentence itself. With a keyboard, you can press Ctrl + Enter to submit.</DescriptionText>
 				</PopoverContent>
 			</Popover>
 		</>

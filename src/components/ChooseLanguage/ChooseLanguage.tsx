@@ -46,6 +46,7 @@ function ChooseLanguage({ type, id, ...delegated }: { type: 'learning' | 'transl
 				<SelectItem value='French'>French</SelectItem>
 				<SelectItem value='Spanish'>Spanish</SelectItem>
 				<SelectItem value='German'>German</SelectItem>
+				<SelectItem value='Japanese'>Japanese</SelectItem>
 			</Select>
 		</Wrapper>
 	);

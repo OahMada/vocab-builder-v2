@@ -13,9 +13,10 @@ export var POST = auth(async function (request: NextAuthRequest) {
 		return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 	}
 
+	let learningLanguage = request.auth.user.learningLanguage;
 	let nativeLanguage = request.auth.user.nativeLanguage;
-	if (!nativeLanguage) {
-		return NextResponse.json({ error: 'Translation language not set' }, { status: 400 });
+	if (!learningLanguage || !nativeLanguage) {
+		return NextResponse.json({ error: 'Leaning language or native language is not set' }, { status: 400 });
 	}
 
 	let body = await request.json();
@@ -28,7 +29,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	try {
 		let { text } = await generateText({
 			model: openai.responses('gpt-4.1'),
-			system: `Translate the sentence you receive into ${nativeLanguage}. If the sentence is already in ${nativeLanguage}, do nothing and simply return it as is.`,
+			system: `Translate the sentence you receive into ${nativeLanguage}. Be careful: Chinese characters can appear in Japanese, but it is still Japanese, not Chinese. Otherwise, if the sentence is already in ${nativeLanguage}, do nothing and simply return it as is. Do not return anything other than the translation text.`,
 			prompt: result.data.sentence,
 			abortSignal: AbortSignal.timeout(API_ABORT_TIMEOUT),
 		});

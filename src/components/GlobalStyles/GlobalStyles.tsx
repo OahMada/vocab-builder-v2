@@ -58,8 +58,14 @@ html {
   scrollbar-width: thin;
   height: 100%;
   
-  // cause issues with fixed modal on sentence editing page in Safari and Firefox
-  /* scrollbar-gutter: stable; */
+  // cause issues with fixed modal on sentence editing page in Safari and Firefox, fix below
+  scrollbar-gutter: stable both-edges;
+}
+
+// https://github.com/radix-ui/primitives/issues/1496#issuecomment-1962839229
+html body[data-scroll-locked] {
+    --removed-body-scroll-bar-size: 0 !important;
+    margin-right: 0 !important;
 }
 
 /* Vendor prefix for other browsers */

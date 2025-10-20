@@ -16,6 +16,7 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import { useAudioDataContext } from '@/components/AudioDataProvider';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import Tooltip from '@/components/Tooltip';
 
 interface TTSResponse {
 	data: string;
@@ -44,6 +45,7 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 	let isPlaying = playingId === sentenceId;
 	let isLoading = loadingId === sentenceId;
 
+	// fetch audio
 	React.useEffect(() => {
 		async function activateTrigger() {
 			let result = await trigger({ sentence });
@@ -63,49 +65,79 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 		}
 	}, [shouldStopAudio, stopAudio]);
 
-	async function retryTTS() {
-		reset();
-		let result = await trigger({ sentence });
-		if (result) {
-			let audioBlob = await base64ToBlob(result.data);
-			updateBlob(audioBlob);
-			return audioBlob;
-		}
-	}
+	let handleRetryTTS = React.useCallback(
+		async function () {
+			reset();
+			let result = await trigger({ sentence });
+			if (result) {
+				let audioBlob = await base64ToBlob(result.data);
+				updateBlob(audioBlob);
+				playAudio(audioBlob, sentenceId);
+			}
+		},
+		[playAudio, reset, sentence, sentenceId, trigger, updateBlob]
+	);
 
-	return error ? (
-		<RetryButton
-			variant='outline'
-			onClick={async () => {
-				let result = await retryTTS();
-				if (result) {
-					playAudio(result, sentenceId);
+	let handlePlayAudio = React.useCallback(
+		function () {
+			playAudio((audioUrl || audioBlob) as string | Blob, sentenceId);
+		},
+		[audioBlob, audioUrl, playAudio, sentenceId]
+	);
+
+	let handleStopAudio = React.useCallback(
+		function () {
+			stopAudio();
+		},
+		[stopAudio]
+	);
+
+	// Cmd/Ctrl + Shift + P to trigger audio
+	React.useEffect(() => {
+		async function handleKeyDown(e: KeyboardEvent) {
+			if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+				if (error) {
+					await handleRetryTTS();
+					return;
 				}
-			}}
-		>
-			<Icon id='retry' />
-			<VisuallyHidden>Retry generating speech</VisuallyHidden>
-		</RetryButton>
-	) : isPlaying ? (
-		<StopPlayButton variant='outline' onClick={stopAudio}>
-			<Icon id='stop' />
-			<VisuallyHidden>stop play audio </VisuallyHidden>
-		</StopPlayButton>
-	) : (
-		<AudioButton
-			variant='outline'
-			onClick={() => playAudio((audioUrl || audioBlob) as string | Blob, sentenceId)}
-			disabled={(!audioBlob && !audioUrl) || shouldStopAudio || isLoading}
-		>
-			{isLoading ? (
-				<Loading description='loading audio data' />
+				if (isPlaying) {
+					handleStopAudio();
+					return;
+				}
+				handlePlayAudio();
+			}
+		}
+		document.addEventListener('keydown', handleKeyDown);
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [error, handlePlayAudio, handleRetryTTS, handleStopAudio, isPlaying]);
+
+	return (
+		<Tooltip tip={'Ctrl + Shift + P'}>
+			{error ? (
+				<RetryButton variant='outline' onClick={handleRetryTTS}>
+					<Icon id='retry' />
+					<VisuallyHidden>Retry generating speech</VisuallyHidden>
+				</RetryButton>
+			) : isPlaying ? (
+				<StopPlayButton variant='outline' onClick={handleStopAudio}>
+					<Icon id='stop' />
+					<VisuallyHidden>stop play audio </VisuallyHidden>
+				</StopPlayButton>
 			) : (
-				<>
-					<Icon id='audio' />
-					<VisuallyHidden>Play sentence audio</VisuallyHidden>
-				</>
+				<AudioButton variant='outline' onClick={handlePlayAudio} disabled={(!audioBlob && !audioUrl) || shouldStopAudio || isLoading}>
+					{isLoading ? (
+						<Loading description='loading audio data' />
+					) : (
+						<>
+							<Icon id='audio' />
+							<VisuallyHidden>Play sentence audio</VisuallyHidden>
+						</>
+					)}
+				</AudioButton>
 			)}
-		</AudioButton>
+		</Tooltip>
 	);
 }
 

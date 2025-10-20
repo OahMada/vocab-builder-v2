@@ -9,6 +9,7 @@ import getCookie from '@/lib/getCookie';
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import GlobalStyles from '@/components/GlobalStyles';
 import GlobalToastProvider from '@/components/GlobalToastProvider';
+import { TooltipProvider } from '@/components/Tooltip';
 
 export var metadata: Metadata = {
 	title: 'Vocab Builder',
@@ -31,7 +32,9 @@ export default async function RootLayout({
 					<GlobalStyles />
 					<SessionProvider>
 						<NuqsAdapter>
-							<GlobalToastProvider>{children}</GlobalToastProvider>
+							<GlobalToastProvider>
+								<TooltipProvider>{children}</TooltipProvider>
+							</GlobalToastProvider>
 						</NuqsAdapter>
 					</SessionProvider>
 				</StyledComponentsRegistry>

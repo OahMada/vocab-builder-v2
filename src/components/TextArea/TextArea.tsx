@@ -18,7 +18,7 @@ interface TextAreaProps {
 function TextArea({ value, clearInput, keydownSubmit, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
 	function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
 		if (!keydownSubmit) return;
-		if (e.shiftKey && e.key === 'Enter') {
+		if (e.ctrlKey && e.key === 'Enter') {
 			e.preventDefault(); // stop newline
 			keydownSubmit();
 		}

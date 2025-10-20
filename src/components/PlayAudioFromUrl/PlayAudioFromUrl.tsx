@@ -22,7 +22,7 @@ function PlayAudioFromUrl({
 	) : (
 		<Button onClick={playAudio} variant='icon' {...delegated}>
 			{isLoading ? (
-				<Loading description='loading audio data' />
+				<Loading description='loading audio data' size={16} />
 			) : (
 				<>
 					<Icon id='audio' size={16} />

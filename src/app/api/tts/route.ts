@@ -17,8 +17,16 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	}
 
 	let learningLanguage = request.auth.user.learningLanguage;
+	let EnglishIPAFlavour = request.auth.user.EnglishIPAFlavour;
 	if (!learningLanguage) {
 		return NextResponse.json({ error: 'Leaning language not set' }, { status: 400 });
+	}
+
+	let TTSVoice: string;
+	if (learningLanguage === 'English' && EnglishIPAFlavour) {
+		TTSVoice = TTS_SPEECH_VOICE[learningLanguage][EnglishIPAFlavour];
+	} else {
+		TTSVoice = TTS_SPEECH_VOICE[learningLanguage] as string;
 	}
 
 	let body = await request.json();
@@ -38,7 +46,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 
 	let ssml = `
 	<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
-		<voice name="${TTS_SPEECH_VOICE[learningLanguage]}">
+		<voice name="${TTSVoice}">
 			<prosody rate="-20%" pitch="low">
 				${escapeForSSML(sentenceResult.data.sentence)}
 			</prosody>

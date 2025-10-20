@@ -53,7 +53,7 @@ export const MAX_QUERY_LEN = 50;
 export const API_ABORT_TIMEOUT = 15000;
 export const EMAIL_FROM = 'no-reply@vocab-builder.app';
 
-export const LEARNING_LANGUAGE = ['English', 'French', 'Spanish', 'German'] as const;
+export const LEARNING_LANGUAGE = ['English', 'French', 'Spanish', 'German', 'Japanese'] as const;
 export const NATIVE_LANGUAGE = [...LEARNING_LANGUAGE, 'Chinese'] as const;
 export const ENGLISH_IPA_FLAVOUR = ['UK', 'US'] as const;
 
@@ -68,12 +68,13 @@ export const BLOB_CONTAINER_TYPE = {
 	AUDIO: 'audio',
 } as const;
 
-export const TTS_SPEECH_VOICE: Record<(typeof LEARNING_LANGUAGE)[number], string> = {
-	English: 'en-US-AriaNeural',
+export const TTS_SPEECH_VOICE = {
+	English: { UK: 'en-GB-SoniaNeural', US: 'en-US-AriaNeural' },
 	French: 'fr-FR-DeniseNeural',
 	German: 'de-DE-ElkeNeural',
 	Spanish: 'es-ES-ElviraNeural',
-};
+	Japanese: 'ja-JP-NanamiNeural',
+} as const;
 
 export const BREAKPOINTS = {
 	tabletMin: 550,

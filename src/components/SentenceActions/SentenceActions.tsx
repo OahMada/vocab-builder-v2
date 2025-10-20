@@ -24,6 +24,7 @@ import AskAQuestion from '@/components/AskAQuestion';
 import SentenceAudio from '@/components/SentenceAudio';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import Tooltip from '@/components/Tooltip';
 
 function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceId?: string }) {
 	let { addToToast } = useGlobalToastContext();
@@ -171,13 +172,32 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 		});
 	}
 
+	// Cmd/Ctrl + Shift + A to trigger Ask Anything Dialog
+	React.useEffect(() => {
+		async function handleKeyDown(e: KeyboardEvent) {
+			if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+				if (isModalShowing) {
+					dismissModal();
+				} else {
+					showModal();
+				}
+			}
+		}
+		document.addEventListener('keydown', handleKeyDown);
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [isModalShowing]);
+
 	return (
 		<>
 			<Wrapper>
-				<HelpButton variant='outline' onClick={showModal} disabled={isLoading}>
-					<Icon id='help' />
-					<VisuallyHidden>Ask Any Questions</VisuallyHidden>
-				</HelpButton>
+				<Tooltip tip={'Ctrl + Shift + A'}>
+					<HelpButton variant='outline' onClick={showModal} disabled={isLoading}>
+						<Icon id='help' />
+						<VisuallyHidden>Ask Any Questions</VisuallyHidden>
+					</HelpButton>
+				</Tooltip>
 				<SentenceAudio shouldStopAudio={shouldStopAudio} sentence={sentence} />
 				<CancelButton variant='outline' onClick={handleCancel} disabled={isLoading}>
 					<Icon id='x' />

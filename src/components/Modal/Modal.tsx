@@ -40,6 +40,10 @@ function Modal({
 							<VisuallyHidden>Dismiss menu</VisuallyHidden>
 						</CloseButton>
 					</TitleWrapper>
+					{/* to suppress the warning, because applying aria-describedby={undefined} to ModalContent couldn't solve the problem */}
+					<VisuallyHidden>
+						<ModalPrimitives.Description />
+					</VisuallyHidden>
 					{children}
 				</Content>
 			</ModalPrimitives.Portal>
