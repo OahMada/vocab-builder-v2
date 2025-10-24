@@ -9,11 +9,11 @@ import logout from '@/app/actions/auth/logout';
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/DropDownMenu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, MobileDropdownMenuItem } from '@/components/DropDownMenu';
 import Avatar from '@/components/Avatar';
 import Loading from '@/components/Loading';
 
-function MobileMenu() {
+function MenuButton() {
 	let [isLoading, startTransition] = React.useTransition();
 
 	function handleLogout() {
@@ -25,10 +25,10 @@ function MobileMenu() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild={true}>
-				<MenuButton variant='icon'>
+				<MenuIcon variant='icon'>
 					<Icon id='mobile-menu' />
 					<VisuallyHidden>Click to expand the menu</VisuallyHidden>
-				</MenuButton>
+				</MenuIcon>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<React.Suspense fallback={<AvatarLoadingFallback />}>
@@ -38,6 +38,11 @@ function MobileMenu() {
 						</AvatarWrapper>
 					</ErrorBoundary>
 				</React.Suspense>
+				<MobileDropdownMenuItem asChild={true}>
+					<DropdownItemButton variant='icon' href='/account' disabled={isLoading}>
+						Account
+					</DropdownItemButton>
+				</MobileDropdownMenuItem>
 				<DropdownMenuItem
 					asChild={true}
 					onSelect={(event) => {
@@ -60,9 +65,9 @@ function MobileMenu() {
 	);
 }
 
-export default MobileMenu;
+export default MenuButton;
 
-var MenuButton = styled(Button)`
+var MenuIcon = styled(Button)`
 	--hover-bg-color: var(--bg-secondary);
 `;
 

@@ -4,6 +4,8 @@ import * as React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import styled, { keyframes } from 'styled-components';
 
+import { QUERIES } from '@/constants';
+
 export var DropdownMenu = DropdownMenuPrimitive.Root;
 export var DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 
@@ -37,6 +39,12 @@ export var DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
 
 	/* replaced with a custom background color */
 	outline: none;
+`;
+
+export var MobileDropdownMenuItem = styled(DropdownMenuItem)`
+	@media ${QUERIES.tabletAndUp} {
+		display: none;
+	}
 `;
 
 var slideDownAndFade = keyframes`

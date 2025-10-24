@@ -36,7 +36,7 @@ function Modal({
 					<TitleWrapper>
 						<ModalPrimitives.Title asChild={true}>{heading}</ModalPrimitives.Title>
 						<CloseButton variant='icon' onClick={onDismiss}>
-							<Icon id='x' size={16} />
+							<Icon id='x' />
 							<VisuallyHidden>Dismiss menu</VisuallyHidden>
 						</CloseButton>
 					</TitleWrapper>

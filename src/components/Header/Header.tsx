@@ -6,7 +6,7 @@ import getCookie from '@/lib/getCookie';
 
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Logo from '@/components/Logo';
-import MobileMenu from '@/components/MobileMenu';
+import MenuButton from '@/components/MenuButton';
 import { Wrapper, StyledHeader, LoginButton, HeaderNav, InnerWrapper } from './StyledComponents';
 import NavLink from '@/components/NavLink';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -32,7 +32,7 @@ async function Header() {
 					<InnerWrapper>
 						<ThemeToggle initialTheme={theme as Theme} />
 						{!!session?.user ? (
-							<MobileMenu />
+							<MenuButton />
 						) : (
 							<LoginButton variant='fill' href='/auth/login'>
 								Log in

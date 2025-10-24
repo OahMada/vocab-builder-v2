@@ -16,7 +16,7 @@ function ModalTitle({ ...delegated }) {
 			<Popover>
 				<PopoverTrigger asChild={true}>
 					<InfoButton variant='icon'>
-						<Icon id='info' size={16} />
+						<Icon id='info' />
 						<VisuallyHidden>Tip</VisuallyHidden>
 					</InfoButton>
 				</PopoverTrigger>
