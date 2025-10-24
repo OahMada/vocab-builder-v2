@@ -26,7 +26,7 @@ function ChooseLanguage({ type, id, ...delegated }: { type: 'learning' | 'transl
 
 	return (
 		<Wrapper>
-			<Label htmlFor='language'>
+			<Label htmlFor={id}>
 				<LabelText>{labelText}</LabelText>
 				<Popover>
 					<PopoverTrigger asChild={true}>

@@ -107,7 +107,7 @@ function SentenceInput() {
 		<Wrapper onSubmit={submitHandler}>
 			<Spacer size={4} />
 			<TextArea
-				placeholder='Enter or paste in a sentence'
+				placeholder='Input or paste in a sentence'
 				clearInput={clearInput}
 				{...rest}
 				ref={ref}

@@ -36,12 +36,13 @@ var Content = styled(TooltipPrimitive.Content)`
 	background-color: var(--bg-popover);
 	padding: 8px 12px;
 	border-radius: 8px;
-	width: max-content;
 	box-shadow: var(--shadow-elevation-medium);
 	user-select: none;
 	font-size: 0.8rem;
 	color: var(--text-secondary);
 	font-weight: 500;
+	max-width: 500px;
+	text-align: center;
 
 	@media (prefers-reduced-motion: no-preference) {
 		animation-duration: 400ms;

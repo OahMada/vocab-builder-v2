@@ -11,7 +11,7 @@ export const TOAST_ID = {
 	IMAGE_UPLOAD: 'image_upload',
 	AUDIO_UPLOAD: 'audio_upload',
 	SAS_TOKEN: 'sas_token',
-	EXPORT_DATA: 'export_data',
+	SYNC_DATA: 'sync_data',
 	DELETE_USER: 'delete_user',
 	SENTENCE_ACTIONS: 'sentence_actions', // both create and update
 	SENTENCE_AUDIO: 'sentence_audio',
@@ -45,7 +45,7 @@ export const LOCAL_DB_KEY = 'audio';
 
 export const UNSTABLE_CACHE_TAG = {
 	SENTENCES: 'sentences',
-	LAST_EXPORTED: 'last_exported',
+	LAST_SYNCED: 'last_synced',
 } as const;
 
 export const SENTENCE_FETCHING_LIMIT = 15;
@@ -75,6 +75,8 @@ export const TTS_SPEECH_VOICE = {
 	Spanish: 'es-ES-ElviraNeural',
 	Japanese: 'ja-JP-NanamiNeural',
 } as const;
+
+export var EXTENSION_RESPONSE_TYPE = 'sync_result';
 
 export const BREAKPOINTS = {
 	tabletMin: 550,

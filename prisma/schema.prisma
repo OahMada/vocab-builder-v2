@@ -47,10 +47,10 @@ model User {
   nativeLanguage    String?
   EnglishIPAFlavour String? // only when learning language is English
 
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  Sentence     Sentence[]
-  lastExported DateTime?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  Sentence   Sentence[]
+  lastSynced DateTime?
 }
 
 model Account {

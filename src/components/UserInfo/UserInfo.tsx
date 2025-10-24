@@ -25,7 +25,7 @@ function UserInfo() {
 				<Name>{session?.user.name}</Name>
 				<p>{session?.user.email}</p>
 				<Button variant='outline' onClick={showModal}>
-					<EditIcon id='edit' size={16} />
+					<EditIcon id='edit' size={15} />
 					&nbsp;Edit Info
 				</Button>
 			</Wrapper>

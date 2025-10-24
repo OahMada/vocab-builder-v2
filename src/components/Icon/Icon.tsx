@@ -20,7 +20,6 @@ import {
 	Info,
 	Volume2,
 	Upload,
-	Download,
 	ChevronDown,
 	ChevronUp,
 	Save,
@@ -31,6 +30,7 @@ import {
 	Play,
 	Sun,
 	Moon,
+	Send,
 } from 'react-feather';
 
 var icons = {
@@ -51,7 +51,6 @@ var icons = {
 	info: Info,
 	audio: Volume2,
 	upload: Upload,
-	export: Download,
 	'chevron-down': ChevronDown,
 	'chevron-up': ChevronUp,
 	save: Save,
@@ -62,6 +61,7 @@ var icons = {
 	play: Play,
 	dark: Moon,
 	light: Sun,
+	sync: Send,
 };
 
 interface IconProps {

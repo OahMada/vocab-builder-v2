@@ -3,14 +3,14 @@ import * as React from 'react';
 import { redirect } from 'next/navigation';
 import dayjs from 'dayjs';
 
-import readLastExportedDate from '@/app/actions/user/readLastExportedDate';
+import readLastSyncedDate from '@/app/actions/user/readLastSyncedDate';
 
 import { auth } from '@/auth';
 
 import Wrapper from '@/components/PageWrapper';
 import UserInfo from '@/components/UserInfo';
 import UserPhoto from '@/components/UserPhoto';
-import ExportData from '@/components/ExportData';
+import SyncData from '@/components/SyncData';
 import DeleteAccount from '@/components/DeleteAccount';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
@@ -35,12 +35,12 @@ export default async function AccountPage() {
 	}
 
 	let errorText: string | undefined = undefined;
-	let lastExported: string = 'never';
-	let lastExportedResult = await readLastExportedDate(session.user.id);
-	if ('error' in lastExportedResult) {
-		errorText = lastExportedResult.error;
-	} else if (lastExportedResult.data) {
-		lastExported = dayjs(lastExportedResult.data).format('YYYY-MM-DD HH:mm');
+	let lastSynced: string = 'never';
+	let lastSyncedResult = await readLastSyncedDate(session.user.id);
+	if ('error' in lastSyncedResult) {
+		errorText = lastSyncedResult.error;
+	} else if (lastSyncedResult.data) {
+		lastSynced = dayjs(lastSyncedResult.data).format('YYYY-MM-DD HH:mm');
 	}
 
 	return (
@@ -51,7 +51,7 @@ export default async function AccountPage() {
 				<UserInfo />
 				<GoogleAccountLink />
 				<PersonalizeUser showSubmitButton={false} hasName={Boolean(session.user.name)} />
-				<ExportData errorText={errorText} lastExported={lastExported} />
+				<SyncData errorText={errorText} lastSynced={lastSynced} />
 				<DeleteAccount />
 			</Wrapper>
 		</MaxWidthWrapper>

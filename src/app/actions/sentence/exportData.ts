@@ -1,6 +1,6 @@
 'use server';
 
-import updateSyncDate from '../user/updateExportedDate';
+import updateSyncDate from '../user/updateSyncDate';
 import { readAllSentences } from './readAllSentences';
 import verifySession from '@/lib/dal';
 
@@ -20,9 +20,9 @@ export default async function exportData(): Promise<{ error: string } | { data: 
 	try {
 		await updateSyncDate(userId);
 	} catch (error) {
-		console.error('update export date failed', error);
+		console.error('update sync date failed', error);
 		return {
-			error: `Failed to update last exported date`,
+			error: `Failed to update last synced date`,
 		};
 	}
 

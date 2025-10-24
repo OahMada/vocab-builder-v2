@@ -57,7 +57,7 @@ export default function ChangeAccountLinkStatus({ accountLinked }: { accountLink
 			handleAction={handleUnlinkAccount}
 		>
 			<Button variant='outline' disabled={isLoading}>
-				<Icon id='link' />
+				<Icon id='link' size={15} />
 				&nbsp; Unlink Google Account
 			</Button>
 		</AlertDialog>

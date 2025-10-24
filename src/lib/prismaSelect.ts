@@ -25,7 +25,7 @@ export var userSelect = {
 	image: true,
 	learningLanguage: true,
 	nativeLanguage: true,
-	lastExported: true,
+	lastSynced: true,
 } satisfies Prisma.UserSelect;
 
 export type User = Prisma.UserGetPayload<{ select: typeof userSelect }>;

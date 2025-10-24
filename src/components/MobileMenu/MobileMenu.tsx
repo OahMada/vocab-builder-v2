@@ -38,11 +38,6 @@ function MobileMenu() {
 						</AvatarWrapper>
 					</ErrorBoundary>
 				</React.Suspense>
-				<DropdownMenuItem asChild={true}>
-					<DropdownItemButton variant='icon' href='/account' disabled={isLoading}>
-						Account
-					</DropdownItemButton>
-				</DropdownMenuItem>
 				<DropdownMenuItem
 					asChild={true}
 					onSelect={(event) => {

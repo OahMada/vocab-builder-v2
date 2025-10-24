@@ -1,38 +1,34 @@
 ---
 title: Sync data with Anki
-lastUpdated: 2025-10-07 16:25
+lastUpdated: 2025-10-24 23:30
 ---
 
 Vocab Builder utilizes [AnkiConnect](https://ankiweb.net/shared/info/2055492159) to sync data with Anki. AnkiConnect is an Anki add-on that exposes an HTTP API, allowing other applications, scripts, or web apps to interact programmatically with Anki.
 
-Since only the Anki Desktop app supports add-ons, you'll need a computer to perform syncing. Moreover, because AnkiConnect only works in a local environment, you must first export your data from Vocab Builder to a file (the default filename is data.json), and then use a separate script to process the exported data and perform the actual syncing.
+Since only the Anki Desktop app supports add-ons, you'll need a computer to perform syncing. Moreover, because AnkiConnect only works in a local environment, you'll need to install a browser extension to perform syncing.
 
-The script can be found on this [page](https://github.com/OahMada/anki-sync/releases). Simply click the `sync-anki-cli.js` file, and your browser will start downloading it.
+The extension, called `Vocab Builder Sync`, can be found on these link:
 
-It would be much more user-friendly if the script were an executable, but I'm not an expert in Node.js, and I haven't figured out how to do that yet. For now, you'll need to have a Node.js environment to run the script. You can visit the [Node.js download page](https://nodejs.org/en/download) to install it on your computer. Once installed, you can run the script using the following command:
-
-```
-$ node <path-to>/anki-sync-cli.js <path-to>/data.json
-```
-
-For example, if both files are in Downloads folder, you can run:
-
-- macos: `$ node ~/Downloads/anki-sync-cli.js ~/Downloads/data.json`
-- Win: `$ cd %USERPROFILE%\Downloads && node anki-sync-cli.js data.json`
+- Chrome: To be updated
+- Edge: To be updated
+- Firefox: To be updated
 
 <Aside>
-	If you know how to package the script into an executable and would like to help, please contact me at [haozg44@gmail.com](mailto:haozg44@gmail.com).
+	The extension displays syncing status through system notifications, so please ensure that your browser has notification permissions enabled.
 </Aside>
 
 To recap, **here are the steps to sync your Vocab Builder data with Anki**:
 
 1. Install Anki Desktop and the [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on (remember to restart Anki after installing the add-on);
-2. Install [NodeJS](https://nodejs.org/en/download) on your computer;
-3. Download the sync script `anki-sync-cli.js` from `Assets` on this [page](https://github.com/OahMada/anki-sync/releases);
-4. Export data from Vocab Builder to a `data.json` file;
-5. Open Terminal(macos) or Command Prompt(Win), and run the command shown above.
+2. Install `Vocab Builder Sync` in the browser;
+3. Click the `Sync With Anki` button on Vocab Builder's account page.
 
-After syncing with the script, you can use Anki's built-in syncing service to sync your decks to AnkiMobile or other devices.
+<Aside>
+	During syncing, AnkiConnect will download audio files for new notes, which may cause Anki to lag temporarily. Please be patient and wait for the
+	sync to complete.
+</Aside>
+
+After your data is synced to Anki, you can use Anki's built-in sync service to upload your decks to AnkiMobile or other devices.
 
 Inside Anki, each sentence generates three types of cards:
 
