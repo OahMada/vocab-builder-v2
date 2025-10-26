@@ -20,7 +20,7 @@ var checkSentenceUniqueness = unstable_cache(
 		let sentenceExisted: boolean;
 
 		try {
-			let uniqueSentence = await prisma.sentence.findUnique({
+			let uniqueSentence = await prisma.sentence.findFirst({
 				where: {
 					sentence,
 					userId,

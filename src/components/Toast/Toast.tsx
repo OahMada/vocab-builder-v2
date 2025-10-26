@@ -133,8 +133,9 @@ var Description = styled(ToastPrimitives.Description)<{ $contentType: 'error' | 
 			`;
 		} else if ($contentType === 'notice') {
 			return css`
-				white-space: nowrap;
-				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 2;
 				/* hide text that are more than one lines */
 				overflow: hidden;
 			`;

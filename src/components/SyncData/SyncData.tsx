@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import exportData from '@/app/actions/sentence/exportData';
 
 import { TOAST_ID } from '@/constants';
+import { postMessage } from '@/lib';
 
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
@@ -29,13 +30,22 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: st
 				});
 				return;
 			}
-			window.postMessage(
-				{
-					type: 'sync',
-					payload: result.data,
-				},
-				'*',
-			);
+			let resp = await postMessage(result.data);
+			if (resp?.syncing) {
+				addToToast({
+					contentType: 'notice',
+					content: 'A system notification will appear to show the sync result.',
+					id: TOAST_ID.SYNC_DATA,
+					title: 'Syncing started',
+				});
+			} else {
+				addToToast({
+					contentType: 'error',
+					content: "Please make sure you've installed the Vocab Builder Sync extension.",
+					id: TOAST_ID.SYNC_DATA,
+					title: 'Syncing could not start',
+				});
+			}
 		});
 	}
 
@@ -52,7 +62,7 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: st
 					</PopoverTrigger>
 					<PopoverContent>
 						<DescriptionText>
-							Make sure you&apos;ve installed the Vocab Builder Sync browser extension before syncing, and that you are on a computer..
+							Make sure you&apos;ve installed the Vocab Builder Sync browser extension before syncing, and that you are on a computer.
 						</DescriptionText>
 					</PopoverContent>
 				</Popover>
