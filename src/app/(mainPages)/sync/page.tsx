@@ -22,6 +22,7 @@ import {
 	ImageOuterWrapper,
 } from '@/components/BlogComponents';
 import NavLink from '@/components/NavLink';
+import InnerWidthWrapper from '@/components/InnerWidthWrapper';
 
 export var metadata: Metadata = {
 	title: 'Sync | Vocab Builder',
@@ -42,24 +43,26 @@ export default async function SyncPage() {
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
 				<Breadcrumb page='Sync' link='/sync' />
-				<InnerWrapper>
-					<BlogTitle title={title} lastUpdated={lastUpdated} />
-					<MDXRemote
-						source={content}
-						components={{
-							p: BlogP,
-							a: (props) => <NavLink $underScored={true} {...props} />,
-							code: InlineCode,
-							pre: CodeBlock,
-							ul: UnorderedList,
-							ol: OrderedList,
-							Aside,
-							img: (props) => <BlogImage {...props} fill={true} />,
-							ImageWrapper,
-							ImageOuterWrapper,
-						}}
-					/>
-				</InnerWrapper>
+				<InnerWidthWrapper>
+					<InnerWrapper>
+						<BlogTitle title={title} lastUpdated={lastUpdated} />
+						<MDXRemote
+							source={content}
+							components={{
+								p: BlogP,
+								a: (props) => <NavLink $underScored={true} {...props} />,
+								code: InlineCode,
+								pre: CodeBlock,
+								ul: UnorderedList,
+								ol: OrderedList,
+								Aside,
+								img: (props) => <BlogImage {...props} fill={true} />,
+								ImageWrapper,
+								ImageOuterWrapper,
+							}}
+						/>
+					</InnerWrapper>
+				</InnerWidthWrapper>
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

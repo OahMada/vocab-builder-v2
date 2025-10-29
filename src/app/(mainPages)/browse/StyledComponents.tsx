@@ -8,7 +8,7 @@ export var ChildrenWrapper = styled.div`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: 20px;
 	background-color: var(--bg-primary);
 
 	/* turn the parent flex gap into padding */

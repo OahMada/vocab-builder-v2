@@ -10,6 +10,7 @@ import { SENTENCE_FETCHING_LIMIT } from '@/constants';
 
 import SentenceListing from '@/components/SentenceListing';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
+import InnerWidthWrapper from '@/components/InnerWidthWrapper';
 
 export default async function BrowseList({ searchParams }: { searchParams: Promise<SearchParams> }) {
 	let { search } = searchParamsCache.parse(await searchParams);
@@ -54,5 +55,9 @@ export default async function BrowseList({ searchParams }: { searchParams: Promi
 		countMessage = `There are ${count} sentences in total.`;
 	}
 
-	return <SentenceListing sentences={sentences} cursor={cursor} initialError={dataError} countMessage={countMessage} hasCountError={!!countError} />;
+	return (
+		<InnerWidthWrapper>
+			<SentenceListing sentences={sentences} cursor={cursor} initialError={dataError} countMessage={countMessage} hasCountError={!!countError} />
+		</InnerWidthWrapper>
+	);
 }

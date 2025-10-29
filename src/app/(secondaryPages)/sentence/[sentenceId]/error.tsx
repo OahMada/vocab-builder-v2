@@ -10,7 +10,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
 	function handleReset() {
 		reset();
 	}
-	let errorMsg = error.digest ? error.digest : handleError(error);
+	let errorMsg = error.digest ? `Error: ${error.digest}` : handleError(error);
 
 	return <ErrorDisplay errorMsg={errorMsg} handleReset={handleReset} />;
 }

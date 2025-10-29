@@ -6,6 +6,7 @@ import { auth } from '@/auth';
 import Search from '@/components/SearchSentence';
 import { ChildrenWrapper } from './StyledComponents';
 import Breadcrumb from '@/components/CustomBreadcrumb';
+import InnerWidthWrapper from '@/components/InnerWidthWrapper';
 
 export default async function Page() {
 	let session = await auth();
@@ -18,7 +19,9 @@ export default async function Page() {
 	return (
 		<ChildrenWrapper>
 			<Breadcrumb page='Browse' link='/browse' />
-			<Search />
+			<InnerWidthWrapper>
+				<Search />
+			</InnerWidthWrapper>
 		</ChildrenWrapper>
 	);
 }

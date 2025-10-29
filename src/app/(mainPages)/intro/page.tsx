@@ -26,14 +26,14 @@ export var metadata: Metadata = {
 	title: 'Intro | Vocab Builder',
 };
 
-export default async function IntroPage() {
+export default function IntroPage() {
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
 				<SloganWrapper>
 					<Slogan>Grow Vocabulary in Context</Slogan>
 					<SloganDescription>
-						Vocab Builder streamlines collecting sentences, adding information, and transferring them to Anki for efficient memorization.
+						Vocab Builder simplifies collecting sentences, enriching them with useful information, and syncing them to Anki for memorization.
 					</SloganDescription>
 				</SloganWrapper>
 				<FeaturesWrapper>
@@ -74,10 +74,20 @@ export default async function IntroPage() {
 						</FeatureVideoWrapper>
 					</Feature>
 					<Feature>
-						<FeatureTitle>Export to Anki</FeatureTitle>
-						<FeatureDesc>You can export your data on the Account page and later sync it to Anki.</FeatureDesc>
+						<FeatureTitle>Sync to Anki</FeatureTitle>
+						<FeatureDesc>You can sync your data to Anki with the help of a browser extension called Vocab Builder Sync.</FeatureDesc>
 						<LearnMore>
 							<NavLink href='/sync' prefetch={true}>
+								Learn more
+							</NavLink>
+							<Icon id='forward' size={14} />
+						</LearnMore>
+					</Feature>
+					<Feature>
+						<FeatureTitle>Free Trial</FeatureTitle>
+						<FeatureDesc>Every new user automatically receives a 7-day free trial, try out the app and see if it fits your needs.</FeatureDesc>
+						<LearnMore>
+							<NavLink href='/pricing' prefetch={true}>
 								Learn more
 							</NavLink>
 							<Icon id='forward' size={14} />

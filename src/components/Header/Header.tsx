@@ -24,7 +24,8 @@ async function Header() {
 					<Logo />
 					<HeaderNav>
 						<NavLink href='/browse'>Browse</NavLink>
-						<NavLink href='account'>Account</NavLink>
+						<NavLink href='/account'>Account</NavLink>
+						<NavLink href='/pricing'>Pricing</NavLink>
 						<NavLink href='/sync' prefetch={true}>
 							How to Sync
 						</NavLink>

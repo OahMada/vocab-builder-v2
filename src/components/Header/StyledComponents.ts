@@ -46,7 +46,7 @@ export var HeaderNav = styled.nav`
 `;
 
 export var InnerWrapper = styled.div`
-	flex: 1;
+	flex: 0;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;

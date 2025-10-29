@@ -28,15 +28,15 @@ export var SloganWrapper = styled.section`
 		align-items: center;
 		text-align: center;
 		padding: 48px;
-		margin-top: 150px;
-		margin-bottom: 150px;
+		margin-top: 120px;
+		margin-bottom: 120px;
 	}
 `;
 
 export var FeaturesWrapper = styled.section`
 	padding: 24px;
 	display: flex;
-	gap: 60px;
+	gap: 80px;
 	flex-direction: column;
 	width: 100%;
 `;
@@ -53,15 +53,15 @@ export var FeatureTitle = styled.h2`
 	font-size: 24px;
 	line-height: 1;
 	width: min-content;
+
+	@media ${QUERIES.tabletAndUp} {
+		width: auto;
+	}
 `;
 
 export var FeatureDesc = styled.p`
 	color: var(--text-secondary);
 	font-size: 16px;
-
-	@media ${QUERIES.tabletAndUp} {
-		width: 60%;
-	}
 `;
 
 export var LearnMore = styled.div`
@@ -76,6 +76,7 @@ export var FeatureVideoWrapper = styled.div`
 	width: 100%;
 	border: 1px solid var(--border);
 	border-radius: 3px;
+	margin-top: 48px;
 `;
 
 export var ImageWrapper = styled.div`
@@ -84,6 +85,7 @@ export var ImageWrapper = styled.div`
 	aspect-ratio: 4 / 3;
 	border: 1px solid var(--border);
 	border-radius: 3px;
+	margin-top: 48px;
 `;
 export var FeatureImage = styled(Image)`
 	border-radius: 3px;

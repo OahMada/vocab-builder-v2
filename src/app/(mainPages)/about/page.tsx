@@ -10,6 +10,7 @@ import Wrapper from '@/components/PageWrapper';
 import Breadcrumb from '@/components/CustomBreadcrumb';
 import { BlogP, InnerWrapper, BlogTitle } from '@/components/BlogComponents';
 import NavLink from '@/components/NavLink';
+import InnerWidthWrapper from '@/components/InnerWidthWrapper';
 
 export var metadata: Metadata = {
 	title: 'About | Vocab Builder',
@@ -30,10 +31,12 @@ export default async function AboutPage() {
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
 				<Breadcrumb page='About' link='/about' />
-				<InnerWrapper>
-					<BlogTitle title={title} lastUpdated={lastUpdated} />
-					<MDXRemote source={content} components={{ p: BlogP, a: (props) => <NavLink $underScored={true} {...props} /> }} />
-				</InnerWrapper>
+				<InnerWidthWrapper>
+					<InnerWrapper>
+						<BlogTitle title={title} lastUpdated={lastUpdated} />
+						<MDXRemote source={content} components={{ p: BlogP, a: (props) => <NavLink $underScored={true} {...props} /> }} />
+					</InnerWrapper>
+				</InnerWidthWrapper>
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

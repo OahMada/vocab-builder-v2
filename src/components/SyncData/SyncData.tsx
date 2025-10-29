@@ -15,6 +15,7 @@ import Loading from '@/components/Loading';
 import DescriptionText from '@/components/DescriptionText';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/Popover';
 import VisuallyHidden from '@/components/VisuallyHidden';
+import NavLink from '@/components/NavLink';
 
 function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: string | undefined }) {
 	let [isLoading, startTransition] = React.useTransition();
@@ -62,7 +63,11 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: st
 					</PopoverTrigger>
 					<PopoverContent>
 						<DescriptionText>
-							Make sure you&apos;ve installed the Vocab Builder Sync browser extension before syncing, and that you are on a computer.
+							Make sure you&apos;ve installed the Vocab Builder Sync browser extension before syncing, and that you are on a computer.{' '}
+							<NavLink href='/sync' $underScored={true}>
+								Learn more
+							</NavLink>
+							.
 						</DescriptionText>
 					</PopoverContent>
 				</Popover>

@@ -10,6 +10,7 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Icon from '@/components/Icon';
 import NavLink from '@/components/NavLink';
 import { ErrorCode, InnerWrapper, MessageWrapper, SecondaryText, Title } from './StyledComponents';
+import InnerWidthWrapper from '@/components/InnerWidthWrapper';
 
 export var metadata: Metadata = {
 	title: 'Auth Error | Vocab Builder',
@@ -75,15 +76,17 @@ export default async function AuthErrorPage({ searchParams }: { searchParams: Pr
 
 	return (
 		<MaxWidthWrapper>
-			<Wrapper $position='center'>
-				<Title>Something went wrong</Title>
-				<MessageWrapper>{errorMap[error] || 'Please contact us if this error persists.'}</MessageWrapper>
-				<InnerWrapper>
-					<Icon id='forward' size={14} />
-					&nbsp;
-					<NavLink href='/auth/login'>Retry Login</NavLink>
-				</InnerWrapper>
-			</Wrapper>
+			<InnerWidthWrapper>
+				<Wrapper $position='center'>
+					<Title>Something went wrong</Title>
+					<MessageWrapper>{errorMap[error] || 'Please contact us if this error persists.'}</MessageWrapper>
+					<InnerWrapper>
+						<Icon id='forward' size={14} />
+						&nbsp;
+						<NavLink href='/auth/login'>Retry Login</NavLink>
+					</InnerWrapper>
+				</Wrapper>
+			</InnerWidthWrapper>
 		</MaxWidthWrapper>
 	);
 }

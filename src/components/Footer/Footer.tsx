@@ -13,10 +13,6 @@ function Footer() {
 				<p>&copy; 2025-present Adam Hao. All rights reserved.</p>
 				<FooterNav>
 					<Link href='/intro'>Intro</Link> &middot; <Link href='/'>Home</Link> &middot;{' '}
-					<Link href='/sync' prefetch={true}>
-						Sync
-					</Link>{' '}
-					&middot;{' '}
 					<Link href='/about' prefetch={true}>
 						About
 					</Link>

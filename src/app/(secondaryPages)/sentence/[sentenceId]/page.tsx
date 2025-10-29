@@ -23,6 +23,7 @@ import Spacer from '@/components/Spacer';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
 import CardWrapper from '@/components/CardWrapper';
 import Title from './Title';
+import InnerWidthWrapper from '@/components/InnerWidthWrapper';
 
 export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',
@@ -63,25 +64,27 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 
 	return (
 		<MaxWidthWrapper>
-			<SentencePiecesProvider sentence={(sentence || sentenceData?.sentence) as string} databasePieces={sentenceData?.pieces}>
-				<TranslationProvider databaseTranslation={sentenceData?.translation}>
-					<NoteProvider databaseNote={sentenceData?.note || undefined}>
-						<Wrapper $position='flex-start'>
-							<CardWrapper>
-								<WordListing title={<Title>The Sentence</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
-							</CardWrapper>
-							<CardWrapper>
-								<Translation title={<Title>Translation</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
-							</CardWrapper>
-							<Note title={<Title>Note</Title>} />
-							<AudioDataProvider audioUrl={sentenceData?.audioUrl}>
-								<SentenceActions sentence={(sentenceData?.sentence || sentence) as string} sentenceId={sentenceData?.id} />
-							</AudioDataProvider>
-							<Spacer size={16} />
-						</Wrapper>
-					</NoteProvider>
-				</TranslationProvider>
-			</SentencePiecesProvider>
+			<InnerWidthWrapper>
+				<SentencePiecesProvider sentence={(sentence || sentenceData?.sentence) as string} databasePieces={sentenceData?.pieces}>
+					<TranslationProvider databaseTranslation={sentenceData?.translation}>
+						<NoteProvider databaseNote={sentenceData?.note || undefined}>
+							<Wrapper $position='flex-start'>
+								<CardWrapper>
+									<WordListing title={<Title>The Sentence</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
+								</CardWrapper>
+								<CardWrapper>
+									<Translation title={<Title>Translation</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
+								</CardWrapper>
+								<Note title={<Title>Note</Title>} />
+								<AudioDataProvider audioUrl={sentenceData?.audioUrl}>
+									<SentenceActions sentence={(sentenceData?.sentence || sentence) as string} sentenceId={sentenceData?.id} />
+								</AudioDataProvider>
+								<Spacer size={16} />
+							</Wrapper>
+						</NoteProvider>
+					</TranslationProvider>
+				</SentencePiecesProvider>
+			</InnerWidthWrapper>
 		</MaxWidthWrapper>
 	);
 }

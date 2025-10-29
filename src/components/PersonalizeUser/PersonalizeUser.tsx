@@ -198,6 +198,7 @@ function Fallback({ error }: FallbackProps) {
 
 var InnerWrapper = styled.div`
 	width: 100%;
+	max-width: 600px;
 	border-radius: 24px;
 	background-color: var(--bg-secondary);
 	display: flex;
@@ -206,6 +207,8 @@ var InnerWrapper = styled.div`
 	gap: 18px;
 	padding: 12px;
 	box-shadow: var(--shadow-elevation-low);
+	margin-left: auto;
+	margin-right: auto;
 `;
 
 var NameInputWrapper = styled.div`

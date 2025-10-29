@@ -8,7 +8,7 @@ var MaxWidthWrapper = styled.div`
 	margin-right: auto;
 	padding-left: 16px;
 	padding-right: 16px;
-	width: min(100%, 700px);
+	width: min(100%, 900px);
 	height: 100%;
 	max-width: 100dvw;
 `;

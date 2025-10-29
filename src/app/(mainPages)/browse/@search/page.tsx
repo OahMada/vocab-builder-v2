@@ -9,6 +9,7 @@ import { auth } from '@/auth';
 
 import SentenceListing from '@/components/SentenceListing';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
+import InnerWidthWrapper from '@/components/InnerWidthWrapper';
 
 export default async function SearchList({ searchParams }: { searchParams: Promise<SearchParams> }) {
 	let { search } = searchParamsCache.parse(await searchParams);
@@ -54,13 +55,15 @@ export default async function SearchList({ searchParams }: { searchParams: Promi
 	}
 
 	return (
-		<SentenceListing
-			sentences={sentences}
-			cursor={cursor}
-			initialError={dataError}
-			key={search}
-			countMessage={countMessage}
-			hasCountError={!!countError}
-		/>
+		<InnerWidthWrapper>
+			<SentenceListing
+				sentences={sentences}
+				cursor={cursor}
+				initialError={dataError}
+				key={search}
+				countMessage={countMessage}
+				hasCountError={!!countError}
+			/>
+		</InnerWidthWrapper>
 	);
 }
