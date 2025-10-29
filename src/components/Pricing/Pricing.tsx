@@ -3,65 +3,48 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { QUERIES } from '@/constants';
+import { QUERIES, PRICE_TIER } from '@/constants';
+import { usePaddlePrices } from '@/hooks';
 
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
 
-function Pricing() {
+function Pricing({ isAuthenticated }: { isAuthenticated: boolean }) {
+	let [loading, currencyCode, priceMap] = usePaddlePrices();
 	return (
-		<>
-			<Wrapper>
-				<PricingCard>
-					<PricingNameWrapper>
-						<PricingName>Monthly</PricingName>
-						<PricingDescription>Perfect for beginners. Explore and learn at your own pace.</PricingDescription>
-					</PricingNameWrapper>
-					<PriceTagWrapper>
-						<PriceTag>
-							$3 <CurrencyUnit>USD</CurrencyUnit>
-						</PriceTag>
-						<BillingInfo>/ month</BillingInfo>
-					</PriceTagWrapper>
-					<SubscribeButton variant='fill'>
-						<Icon id='forward' />
-						&nbsp;Get Started
-					</SubscribeButton>
-				</PricingCard>
-				<PricingCard>
-					<PricingNameWrapper>
-						<PricingName>Every 6 months</PricingName>
-						<PricingDescription>Stay consistent. Save time and money while building your vocabulary.</PricingDescription>
-					</PricingNameWrapper>
-					<PriceTagWrapper>
-						<PriceTag>
-							$15 <CurrencyUnit>USD</CurrencyUnit>
-						</PriceTag>
-						<BillingInfo>/ 6 months</BillingInfo>
-					</PriceTagWrapper>
-					<SubscribeButton variant='fill'>
-						<Icon id='forward' />
-						&nbsp;Get Started
-					</SubscribeButton>
-				</PricingCard>
-				<PricingCard>
-					<PricingNameWrapper>
-						<PricingName>Yearly</PricingName>
-						<PricingDescription>Maximize your growth. The ultimate plan for serious learners.</PricingDescription>
-					</PricingNameWrapper>
-					<PriceTagWrapper>
-						<PriceTag>
-							$27 <CurrencyUnit>USD</CurrencyUnit>
-						</PriceTag>
-						<BillingInfo>/ year</BillingInfo>
-					</PriceTagWrapper>
-					<SubscribeButton variant='fill'>
-						<Icon id='forward' />
-						&nbsp;Get Started
-					</SubscribeButton>
-				</PricingCard>
-			</Wrapper>
-		</>
+		<Wrapper>
+			{PRICE_TIER.map((item) => {
+				return (
+					<PricingCard key={item.priceId}>
+						<PricingNameWrapper>
+							<PricingName>{item.name}</PricingName>
+							<PricingDescription>{item.description}</PricingDescription>
+						</PricingNameWrapper>
+						<PriceTagWrapper>
+							{loading ? (
+								<PricePlaceHolder />
+							) : (
+								<PriceTag>
+									{priceMap[item.priceId]} <CurrencyUnit>{currencyCode}</CurrencyUnit>
+								</PriceTag>
+							)}
+							<BillingInfo>{item.billingCycle}</BillingInfo>
+						</PriceTagWrapper>
+						{isAuthenticated ? (
+							<SubscribeButton variant='fill'>
+								<Icon id='forward' />
+								&nbsp;Subscribe
+							</SubscribeButton>
+						) : (
+							<SubscribeButton variant='fill' href='/auth/login?callback=/pricing'>
+								<Icon id='forward' />
+								&nbsp;Get Started
+							</SubscribeButton>
+						)}
+					</PricingCard>
+				);
+			})}
+		</Wrapper>
 	);
 }
 
@@ -123,10 +106,18 @@ var CurrencyUnit = styled.span`
 
 var BillingInfo = styled.span`
 	color: var(--text-secondary);
+	transform: translateX(2px);
 `;
 
 var SubscribeButton = styled(Button)`
 	width: 80%;
 	margin-top: 12px;
 	align-self: center;
+`;
+
+var PricePlaceHolder = styled.span`
+	width: 80px;
+	height: calc(${20 / 16}rem * 1.5);
+	background-color: var(--bg-tertiary);
+	border-radius: 5px;
 `;

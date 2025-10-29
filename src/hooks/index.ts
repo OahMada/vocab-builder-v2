@@ -7,3 +7,5 @@ export * from './usePlayAudio';
 export * from './useSentenceData';
 export * from './useIntersectionObserver';
 export * from './useNuqsSearchParams';
+export * from './usePaddlePrices';
+export * from './useIsHoverable';

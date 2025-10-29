@@ -7,9 +7,9 @@ import Button from '@/components/Button';
 import EditUserInfo from '@/components/EditUserInfo';
 import Icon from '@/components/Icon';
 
-function UserInfo() {
-	let { data: session } = useSession();
+function UserInfo({ name, email }: { name: string; email: string }) {
 	let [isShowing, setIsShowing] = React.useState(false);
+	let { data: session } = useSession();
 
 	function dismissModal() {
 		setIsShowing(false);
@@ -22,8 +22,8 @@ function UserInfo() {
 	return (
 		<>
 			<Wrapper>
-				<Name>{session?.user.name}</Name>
-				<p>{session?.user.email}</p>
+				<Name>{session?.user.name ? session.user.name : name}</Name>
+				<p>{session?.user.email ? session.user.email : email}</p>
 				<Button variant='outline' onClick={showModal}>
 					<EditIcon id='edit' size={15} />
 					&nbsp;Edit Info

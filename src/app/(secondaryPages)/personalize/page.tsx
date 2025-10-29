@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { redirect } from 'next/navigation';
+import { SearchParams } from 'nuqs/server';
 
 import { auth } from '@/auth';
 
@@ -10,7 +11,7 @@ import { Title, Wrapper } from './StyledComponents';
 
 // reference https://stackoverflow.com/questions/68103612/how-to-drop-the-query-parameters-after-a-redirect-with-nextjs?rq=2
 
-export default async function PersonalizePage() {
+export default async function PersonalizePage({ searchParams }: { searchParams: Promise<SearchParams> }) {
 	let session = await auth();
 	if (!session?.user) {
 		redirect('/auth/login');
@@ -18,12 +19,14 @@ export default async function PersonalizePage() {
 		redirect('/');
 	}
 
+	let { callback } = await searchParams;
+
 	return (
 		<MaxWidthWrapper>
 			<Wrapper>
 				<Title>Before you start...</Title>
 				<Spacer size={0} />
-				<PersonalizeUser showSubmitButton={true} hasName={Boolean(session.user.name)} />
+				<PersonalizeUser showSubmitButton={true} hasName={Boolean(session.user.name)} callback={callback as string | undefined} />
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

@@ -206,3 +206,24 @@ export const DARK_COLORS = {
     -0.2px 39.8px 38.8px -3px hsl(var(--shadow-color) / 0.16),
     -0.3px 60px 58.5px -3.5px hsl(var(--shadow-color) / 0.14)`,
 };
+
+export const PRICE_TIER = [
+	{
+		name: 'Monthly',
+		description: 'Perfect for beginners. Explore and learn at your own pace.',
+		billingCycle: '/ month',
+		priceId: 'pri_01k8n99ag49k0tth6fyxce3h0w',
+	},
+	{
+		name: 'Every 6 months',
+		description: 'Stay consistent. Save time and money while building your vocabulary.',
+		billingCycle: '/ 6 months',
+		priceId: 'pri_01k8n9d259wznn49xapdy43h5f',
+	},
+	{
+		name: 'Yearly',
+		description: 'Maximize your growth. The ultimate plan for serious learners.',
+		billingCycle: '/ year',
+		priceId: 'pri_01k8n9m2yztxqcs6qfsbjy00rs',
+	},
+];

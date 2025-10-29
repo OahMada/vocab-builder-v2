@@ -7,6 +7,7 @@ import exportData from '@/app/actions/sentence/exportData';
 
 import { TOAST_ID } from '@/constants';
 import { postMessage } from '@/lib';
+import { useIsHoverable } from '@/hooks';
 
 import Button from '@/components/Button';
 import Icon from '@/components/Icon';
@@ -20,6 +21,7 @@ import NavLink from '@/components/NavLink';
 function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: string | undefined }) {
 	let [isLoading, startTransition] = React.useTransition();
 	let { addToToast } = useGlobalToastContext();
+	let isHoverable = useIsHoverable();
 	async function handleExport() {
 		startTransition(async () => {
 			let result = await exportData();
@@ -73,7 +75,7 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: st
 				</Popover>
 			</InnerWrapper>
 
-			<Button variant='outline' onClick={handleExport} disabled={isLoading}>
+			<Button variant='outline' onClick={handleExport} disabled={isLoading || !isHoverable}>
 				{isLoading ? <Loading description='exporting data' /> : <Icon id='sync' size={15} />}
 				&nbsp; Sync With Anki
 			</Button>

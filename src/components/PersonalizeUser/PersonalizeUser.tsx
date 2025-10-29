@@ -35,11 +35,12 @@ var defaultFormValues = {
 interface PersonalizeUserProps {
 	showSubmitButton: boolean;
 	hasName: boolean;
+	callback?: string;
 }
 
 type RHFOnChange = UseControllerReturn<FieldValues, Path<FieldValues>>['field']['onChange'];
 
-function PersonalizeUser({ showSubmitButton, hasName }: PersonalizeUserProps) {
+function PersonalizeUser({ showSubmitButton, hasName, callback }: PersonalizeUserProps) {
 	let { data: session, update: updateSession } = useSession();
 	let { addToToast } = useGlobalToastContext();
 	let router = useRouter();
@@ -98,7 +99,11 @@ function PersonalizeUser({ showSubmitButton, hasName }: PersonalizeUserProps) {
 				content: 'Account Updated',
 			});
 			if (showSubmitButton) {
-				router.replace('/');
+				if (callback) {
+					router.replace(callback);
+				} else {
+					router.replace('/');
+				}
 			}
 		});
 	}

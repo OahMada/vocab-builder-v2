@@ -1,5 +1,8 @@
 import { Metadata } from 'next';
 import * as React from 'react';
+import { redirect } from 'next/navigation';
+
+import { auth } from '@/auth';
 
 import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
@@ -14,7 +17,12 @@ export var metadata: Metadata = {
 	title: 'Pricing | Vocab Builder',
 };
 
-export default function PricingPage() {
+export default async function PricingPage() {
+	let session = await auth();
+	if (session?.user && (!session.user.learningLanguage || !session.user.nativeLanguage)) {
+		redirect('/personalize?callback=/pricing');
+	}
+
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
@@ -34,7 +42,7 @@ export default function PricingPage() {
 						<Title>Or, Choose a Subscription Plan</Title>
 						<Description>Unlimited API access for the duration of your subscription.</Description>
 					</TitleWrapper>
-					<Pricing />
+					<Pricing isAuthenticated={Boolean(session?.user)} />
 				</PricingWrapper>
 			</Wrapper>
 		</MaxWidthWrapper>

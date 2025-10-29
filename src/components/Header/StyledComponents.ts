@@ -30,6 +30,7 @@ export var LoginButton = styled(Button)`
 	border-radius: 24px;
 	font-size: ${14 / 16}rem;
 	font-weight: 500;
+	width: max-content;
 `;
 
 export var HeaderNav = styled.nav`

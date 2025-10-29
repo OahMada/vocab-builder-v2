@@ -48,7 +48,7 @@ export default async function AccountPage() {
 			<Wrapper $position='flex-start'>
 				<Breadcrumb page='Account' link='/account' />
 				<UserPhoto />
-				<UserInfo />
+				<UserInfo name={session.user.name!} email={session.user.email!} />
 				<GoogleAccountLink />
 				<PersonalizeUser showSubmitButton={false} hasName={Boolean(session.user.name)} />
 				<SyncData errorText={errorText} lastSynced={lastSynced} />
