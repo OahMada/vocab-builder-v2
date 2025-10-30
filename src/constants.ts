@@ -227,3 +227,5 @@ export const PRICE_TIER = [
 		priceId: 'pri_01k8n9m2yztxqcs6qfsbjy00rs',
 	},
 ];
+
+export const ALLOWED_ORIGINS = ['https://vocab-builder.app', 'https://www.vocab-builder.app'];
