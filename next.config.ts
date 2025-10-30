@@ -27,14 +27,6 @@ const nextConfig: NextConfig = {
 			},
 		],
 	},
-	redirects: async () => [
-		{
-			source: '/:path*',
-			has: [{ type: 'host', value: 'www.vocab-builder.app' }],
-			destination: 'https://vocab-builder.app/:path*',
-			permanent: true,
-		},
-	],
 };
 
 export default bundleAnalyzer(nextConfig);
