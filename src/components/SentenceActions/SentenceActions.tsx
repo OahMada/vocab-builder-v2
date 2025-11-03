@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { createId } from '@paralleldrive/cuid2';
-import axios from 'axios';
 
 import createSentence from '@/app/actions/sentence/createSentence';
 import updateSentence from '@/app/actions/sentence/updateSentence';
@@ -100,28 +99,33 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				let updateMetaDataUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?comp=metadata&${sasToken}`;
 
 				try {
-					await axios.put(uploadUrl, audioBlob!, {
+					let uploadRes = await fetch(uploadUrl, {
+						method: 'PUT',
 						headers: {
 							'x-ms-blob-type': 'BlockBlob',
 							'Content-Type': 'audio/mpeg',
 						},
+						body: audioBlob,
 					});
+					if (!uploadRes.ok) {
+						throw new Error(`Upload audio file failed: ${uploadRes.statusText}`);
+					}
 
-					await axios.put(
-						updateMetaDataUrl,
-						null, // no body needed
-						{
-							headers: {
-								'x-ms-meta-userid': session?.user.id,
-							},
-						}
-					);
+					let metaRes = await fetch(updateMetaDataUrl, {
+						method: 'PUT',
+						headers: {
+							'x-ms-meta-userid': session?.user.id as string,
+						},
+					});
+					if (!metaRes.ok) {
+						throw new Error(`Audio file metadata update failed: ${metaRes.statusText}`);
+					}
 				} catch (error) {
 					// clean up. for example metadata update failed
 					try {
-						await axios.delete(uploadUrl);
-					} catch (error) {
-						console.error('trying to delete from blob storage but failed', error);
+						await fetch(uploadUrl, { method: 'DELETE' });
+					} catch (cleanupError) {
+						console.error('Trying to delete audio file from blob storage but failed', cleanupError);
 					}
 					let errMsg = handleError(error);
 					addToToast({

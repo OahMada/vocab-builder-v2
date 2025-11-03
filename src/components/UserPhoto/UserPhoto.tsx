@@ -4,7 +4,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { createId } from '@paralleldrive/cuid2';
 import { useSession } from 'next-auth/react';
-import axios from 'axios';
 import { FallbackProps, withErrorBoundary } from 'react-error-boundary';
 
 import getBlobStorageSASToken from '@/app/actions/lib/getBlobStorageSASToken';
@@ -68,28 +67,35 @@ function UserPhoto() {
 			let uploadUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?${sasToken}`;
 			let metaDataUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?comp=metadata&${sasToken}`;
 			try {
-				await axios.put(uploadUrl, result.data, {
+				let uploadRes = await fetch(uploadUrl, {
+					method: 'PUT',
 					headers: {
 						'x-ms-blob-type': 'BlockBlob',
 						'Content-Type': result.data.type,
 					},
-					maxBodyLength: Infinity, // important for large files
+					body: result.data,
 				});
-				await axios.put(
-					metaDataUrl,
-					null, // no body needed
-					{
-						headers: {
-							'x-ms-meta-userid': session?.user.id,
-						},
-					}
-				);
+
+				if (!uploadRes.ok) {
+					throw new Error(`Upload image file failed: ${uploadRes.statusText}`);
+				}
+
+				let metaRes = await fetch(metaDataUrl, {
+					method: 'PUT',
+					headers: {
+						'x-ms-meta-userid': session?.user.id as string,
+					},
+				});
+
+				if (!metaRes.ok) {
+					throw new Error(`Image file metadata update failed: ${metaRes.statusText}`);
+				}
 			} catch (error) {
 				// clean up. for example metadata update failed
 				try {
-					await axios.delete(uploadUrl);
-				} catch (error) {
-					console.error('trying to delete from blob storage but failed', error);
+					await fetch(uploadUrl, { method: 'DELETE' });
+				} catch (cleanupError) {
+					console.error('Trying to delete image file from blob storage but failed', cleanupError);
 				}
 
 				let errMsg = handleError(error);
