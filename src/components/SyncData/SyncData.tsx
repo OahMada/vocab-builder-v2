@@ -41,7 +41,7 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: st
 				},
 				window.origin
 			);
-			await delay(500); // wait for the response from extension
+			await delay(1000); // wait for the response from extension
 			if (extensionInstalled.current) {
 				return;
 			} else {
