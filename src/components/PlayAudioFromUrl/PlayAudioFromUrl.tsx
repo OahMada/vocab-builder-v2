@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Loading from '@/components/Loading';
 
 function PlayAudioFromUrl({

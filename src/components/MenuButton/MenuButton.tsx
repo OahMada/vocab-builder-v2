@@ -6,7 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import logout from '@/app/actions/auth/logout';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, MobileDropdownMenuItem } from '@/components/DropDownMenu';

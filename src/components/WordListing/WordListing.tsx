@@ -8,7 +8,7 @@ import DescriptionText from '@/components/DescriptionText';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/Popover';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 
 function WordListing({ title, sentence }: { title: React.ReactNode; sentence: string }) {

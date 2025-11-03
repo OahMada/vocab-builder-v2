@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as AlertDialogPrimitives from '@radix-ui/react-alert-dialog';
 import styled, { keyframes } from 'styled-components';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import DescriptionText from '@/components/DescriptionText';
 import Spacer from '@/components/Spacer';

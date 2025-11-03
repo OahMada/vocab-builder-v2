@@ -8,7 +8,7 @@ import { QUERIES } from '@/constants';
 
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 
 interface ModalProps {
 	heading: React.ReactNode;

@@ -10,7 +10,7 @@ import { INPUT_NAME } from '@/constants';
 
 import CardWrapper from '@/components/CardWrapper';
 import TextArea from '@/components/TextArea';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import TextareaActionButtons from '@/components/TextareaActionButtons';
 import { useNoteContext } from '@/components/NoteProvider';

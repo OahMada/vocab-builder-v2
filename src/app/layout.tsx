@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { SessionProvider } from 'next-auth/react';
+import { MotionConfig } from 'motion/react';
 
 import { roboto, inter } from '@/lib/getFont';
 import { LIGHT_COLORS, DARK_COLORS } from '@/constants';
@@ -29,14 +30,16 @@ export default async function RootLayout({
 		<html lang='en' className={`${roboto.className} ${inter.className}`} data-theme={theme} style={themeColors as React.CSSProperties}>
 			<body>
 				<StyledComponentsRegistry>
-					<GlobalStyles />
-					<SessionProvider>
-						<NuqsAdapter>
-							<GlobalToastProvider>
-								<TooltipProvider>{children}</TooltipProvider>
-							</GlobalToastProvider>
-						</NuqsAdapter>
-					</SessionProvider>
+					<MotionConfig reducedMotion='user'>
+						<GlobalStyles />
+						<SessionProvider>
+							<NuqsAdapter>
+								<GlobalToastProvider>
+									<TooltipProvider>{children}</TooltipProvider>
+								</GlobalToastProvider>
+							</NuqsAdapter>
+						</SessionProvider>
+					</MotionConfig>
 				</StyledComponentsRegistry>
 			</body>
 		</html>

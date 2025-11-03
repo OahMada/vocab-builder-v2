@@ -29,7 +29,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	try {
 		let { text } = await generateText({
 			model: openai.responses('gpt-4.1'),
-			system: `Translate the sentence you receive into ${nativeLanguage}. Be careful: Chinese characters can appear in Japanese, but it is still Japanese, not Chinese. Otherwise, if the sentence is already in ${nativeLanguage}, do nothing and simply return it as is. Do not return anything other than the translation text.`,
+			system: `You are a language teacher. In a precise, professional, and detailed manner, translate any sentence you receive into ${nativeLanguage} Be careful: Chinese characters can appear in Japanese, but it is still Japanese, not Chinese. Otherwise, if the sentence is already in ${nativeLanguage}, do nothing and simply return it as is. Do not return anything other than the translation text.`,
 			prompt: result.data.sentence,
 			abortSignal: AbortSignal.timeout(API_ABORT_TIMEOUT),
 		});
@@ -39,6 +39,6 @@ export var POST = auth(async function (request: NextAuthRequest) {
 		if (error instanceof DOMException && error.name === 'TimeoutError') {
 			return NextResponse.json({ error: 'Request timed out. Please try again later' }, { status: 500 });
 		}
-		return NextResponse.json({ error: 'Failed to generate translation text' }, { status: 500 });
+		return NextResponse.json({ error: 'Failed to generate translation text.' }, { status: 500 });
 	}
 });

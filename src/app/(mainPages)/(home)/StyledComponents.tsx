@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { QUERIES } from '@/constants';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 
 export var Title = styled.h1`
 	font-size: ${24 / 16}rem;

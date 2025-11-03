@@ -12,7 +12,7 @@ import deleteUser from '@/app/actions/user/deleteUser';
 import { DeleteUserInputSchema, DeleteUserInput } from '@/lib';
 import { INPUT_NAME, TOAST_ID } from '@/constants';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import AlertDialog from '@/components/AlertDialog';
 import InputBox from '@/components/InputBox';

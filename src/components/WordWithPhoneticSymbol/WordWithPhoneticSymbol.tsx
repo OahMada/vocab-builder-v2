@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { wrapIPAWithSlashes } from '@/helpers';
 
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/Popover';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 
 function WordWithPhoneticSymbol({ children, symbol }: { children: React.ReactNode; symbol: string }) {
 	let IPA = wrapIPAWithSlashes(symbol);

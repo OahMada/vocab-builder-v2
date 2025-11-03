@@ -8,7 +8,7 @@ import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
 import { TOAST_ID } from '@/constants';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import PhoneticSymbol from './PhoneticSymbol';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';

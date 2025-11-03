@@ -9,7 +9,7 @@ import { Theme } from '@/types';
 import { readCookie } from '@/lib';
 
 import VisuallyHidden from '@/components/VisuallyHidden';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 
 function ThemeToggle({ initialTheme }: { initialTheme: Theme }) {

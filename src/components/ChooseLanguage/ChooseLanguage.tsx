@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { Select, SelectItem } from '@/components/Select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/Popover';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import DescriptionText from '@/components/DescriptionText';
 import VisuallyHidden from '@/components/VisuallyHidden';

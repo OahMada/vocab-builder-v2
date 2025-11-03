@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Spacer from '@/components/Spacer';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 
 function ErrorDisplay({ errorMsg, handleReset }: { errorMsg: string; handleReset: () => void }) {

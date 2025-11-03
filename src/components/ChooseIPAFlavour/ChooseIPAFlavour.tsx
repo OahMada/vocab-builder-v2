@@ -4,7 +4,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { RadioGroup, RadioGroupItem } from '@/components/RadioGroup';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/Popover';
 import DescriptionText from '@/components/DescriptionText';

@@ -4,7 +4,7 @@ import * as React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 
@@ -13,9 +13,10 @@ type ToastProps = {
 	content: React.ReactNode;
 	title?: string;
 	removeToast?: () => void;
+	shouldShowActionBtn?: boolean;
 } & React.ComponentProps<typeof ToastPrimitives.Root>;
 
-function Toast({ title, content, contentType, removeToast, ...props }: ToastProps) {
+function Toast({ title, content, contentType, removeToast, shouldShowActionBtn = false, ...props }: ToastProps) {
 	let [open, setIsOpen] = React.useState(true);
 
 	return (
@@ -43,6 +44,14 @@ function Toast({ title, content, contentType, removeToast, ...props }: ToastProp
 					<VisuallyHidden>Close Toast</VisuallyHidden>
 				</CloseButton>
 			</ToastPrimitives.Close>
+			{shouldShowActionBtn && (
+				<ToastPrimitives.Action altText='or manually access the browse page' asChild={true}>
+					<ActionButton variant='icon' href='/browse' style={{ '--icon-size': '16px' } as React.CSSProperties}>
+						<Icon id='forward' size={16} />
+						<VisuallyHidden>Inspect the sentence</VisuallyHidden>
+					</ActionButton>
+				</ToastPrimitives.Action>
+			)}
 		</Root>
 	);
 }
@@ -86,6 +95,7 @@ var Root = styled(ToastPrimitives.Root)`
 	display: flex;
 	flex-direction: column;
 	position: relative;
+	gap: 5px;
 
 	@media (prefers-reduced-motion: no-preference) {
 		&[data-state='open'] {
@@ -144,6 +154,7 @@ var Description = styled(ToastPrimitives.Description)<{ $contentType: 'error' | 
 `;
 
 var CloseButton = styled(Button)`
+	--padding: 3px;
 	--hover-bg-color: var(--bg-tertiary-hover);
 	--button-size: calc(var(--icon-size) + var(--padding) * 2);
 	--button-offset: calc((16px * 1.5 + var(--root-padding) * 2 - var(--button-size)) / 2);
@@ -167,4 +178,14 @@ export var ToastViewport = styled(ToastPrimitives.Viewport)`
 	flex-direction: column;
 	gap: 3px;
 	z-index: 20;
+`;
+
+var ActionButton = styled(Button)`
+	--padding: 3px;
+	--hover-bg-color: var(--bg-tertiary-hover);
+	--button-size: calc(var(--icon-size) + var(--padding) * 2);
+	--button-offset: calc((16px * 1.5 + var(--root-padding) * 2 - var(--button-size)) / 2);
+	position: absolute;
+	bottom: var(--button-offset);
+	right: var(--button-offset);
 `;

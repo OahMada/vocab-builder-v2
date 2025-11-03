@@ -17,7 +17,7 @@ import { handleError } from '@/utils';
 
 import ChooseLanguage from '@/components/ChooseLanguage';
 import ChooseIPAFlavour from '@/components/ChooseIPAFlavour';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import InputBox from '@/components/InputBox';
 import Icon from '@/components/Icon';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';

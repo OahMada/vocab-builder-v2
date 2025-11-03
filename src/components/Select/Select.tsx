@@ -5,7 +5,7 @@ import * as SelectPrimitives from '@radix-ui/react-select';
 import styled from 'styled-components';
 
 import Icon from '@/components/Icon';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 
 export function Select({ id, children, ...props }: { id: string } & React.ComponentProps<typeof SelectPrimitives.Root>) {
 	return (

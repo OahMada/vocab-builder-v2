@@ -17,7 +17,7 @@ import { BLOB_CONTAINER_TYPE, COOKIE_KEY, TOAST_ID } from '@/constants';
 import { handleError, deleteLocalData } from '@/utils';
 import { SentenceDataType } from '@/types';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
 import AskAQuestion from '@/components/AskAQuestion';
@@ -166,6 +166,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 					contentType: 'notice',
 					content: sentence,
 					title: 'Sentence Created',
+					shouldShowActionBtn: true,
 				});
 				router.replace('/');
 			}
@@ -175,7 +176,8 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	// Cmd/Ctrl + Shift + A to trigger Ask Anything Dialog
 	React.useEffect(() => {
 		async function handleKeyDown(e: KeyboardEvent) {
-			if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+			if (e.altKey && e.code === 'KeyA') {
+				e.preventDefault();
 				if (isModalShowing) {
 					dismissModal();
 				} else {
@@ -192,7 +194,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	return (
 		<>
 			<Wrapper>
-				<Tooltip tip={'Ctrl + Shift + A'}>
+				<Tooltip tip={'Alt / Option + A'}>
 					<HelpButton variant='outline' onClick={showModal} disabled={isLoading}>
 						<Icon id='help' />
 						<VisuallyHidden>Ask Any Questions</VisuallyHidden>

@@ -9,7 +9,7 @@ import { handleError } from '@/utils';
 import { TOAST_ID } from '@/constants';
 
 import Icon from '@/components/Icon';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import EditTranslation from '@/components/Translation/EditTranslation';
 import { useTranslationContext } from '@/components/TranslationProvider';
 import Loading from '@/components/Loading';

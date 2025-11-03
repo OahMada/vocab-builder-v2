@@ -28,7 +28,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	try {
 		let { text } = await generateText({
 			model: openai.responses('gpt-4.1'),
-			system: `Provide the precise IPA (phonetic transcription) for each word, enclosing each in slashes (e.g., /ˈwɜːd/). Use the context of the sentence to determine the appropriate transcription: ${sentence}. If a word has multiple possible IPA forms, choose the one that best fits the context.  ${
+			system: `You are a language teacher. In a precise and professional manner, provide the IPA (phonetic transcription) for each word, enclosing each transcription in slashes (e.g., /ˈwɜːd/). Use the context of the sentence to determine the appropriate transcription: ${sentence}. If a word has multiple possible IPA forms, choose the one that best fits the context.  ${
 				EnglishIPAFlavour ? `If the sentence is in English, provide the IPA in ${EnglishIPAFlavour} flavour.` : ''
 			}
 			Make sure you only return IPA and nothing else.

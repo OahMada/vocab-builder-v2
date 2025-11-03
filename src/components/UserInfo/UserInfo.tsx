@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useSession } from 'next-auth/react';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import EditUserInfo from '@/components/EditUserInfo';
 import Icon from '@/components/Icon';
 

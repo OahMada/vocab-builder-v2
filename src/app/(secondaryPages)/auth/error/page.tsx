@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Metadata } from 'next';
-import { SearchParams } from 'nuqs/server';
 import { redirect } from 'next/navigation';
 
 import { auth } from '@/auth';
@@ -15,6 +14,11 @@ import InnerWidthWrapper from '@/components/InnerWidthWrapper';
 export var metadata: Metadata = {
 	title: 'Auth Error | Vocab Builder',
 };
+
+interface SearchParams {
+	error: keyof typeof ErrorCodes;
+	[key: string]: string | string[];
+}
 
 const ErrorCodes = {
 	Configuration: 'Configuration',
@@ -71,8 +75,7 @@ export default async function AuthErrorPage({ searchParams }: { searchParams: Pr
 		redirect('/');
 	}
 
-	let result = await searchParams;
-	let error = result.error as keyof typeof ErrorCodes;
+	let { error } = await searchParams;
 
 	return (
 		<MaxWidthWrapper>

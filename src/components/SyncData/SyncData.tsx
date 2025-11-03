@@ -9,7 +9,7 @@ import { TOAST_ID } from '@/constants';
 import { postMessage } from '@/lib';
 import { useIsHoverable } from '@/hooks';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Loading from '@/components/Loading';

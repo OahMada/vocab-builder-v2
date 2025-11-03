@@ -7,7 +7,7 @@ import googleLogin from '@/app/actions/auth/googleLogin';
 
 import { TOAST_ID } from '@/constants';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';

@@ -10,7 +10,7 @@ import { handleError, base64ToBlob } from '@/utils';
 import { usePlayAudio } from '@/hooks';
 import { TOAST_ID } from '@/constants';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import { useAudioDataContext } from '@/components/AudioDataProvider';
@@ -95,7 +95,7 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 	// Cmd/Ctrl + Shift + P to trigger audio
 	React.useEffect(() => {
 		async function handleKeyDown(e: KeyboardEvent) {
-			if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+			if (e.altKey && e.code === 'KeyP') {
 				if (error) {
 					await handleRetryTTS();
 					return;
@@ -114,7 +114,7 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 	}, [error, handlePlayAudio, handleRetryTTS, handleStopAudio, isPlaying]);
 
 	return (
-		<Tooltip tip={'Ctrl + Shift + P'}>
+		<Tooltip tip={'Alt / Option + P'}>
 			{error ? (
 				<RetryButton variant='outline' onClick={handleRetryTTS}>
 					<Icon id='retry' />

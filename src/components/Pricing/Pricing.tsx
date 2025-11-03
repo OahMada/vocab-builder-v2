@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { QUERIES, PRICE_TIER } from '@/constants';
 import { usePaddlePrices } from '@/hooks';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 
 function Pricing({ isAuthenticated }: { isAuthenticated: boolean }) {

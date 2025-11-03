@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useGetClipboard } from '@/hooks';
 
 import Icon from '@/components/Icon';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Loading from '@/components/Loading';
 
 interface ActionButtonProps {

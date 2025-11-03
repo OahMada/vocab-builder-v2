@@ -5,7 +5,7 @@ import styled, { keyframes } from 'styled-components';
 import * as AccordionPrimitives from '@radix-ui/react-accordion';
 
 import Icon from '@/components/Icon';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import VisuallyHidden from '@/components/VisuallyHidden';
 
 type MultipleAccordionProps = React.ComponentProps<typeof AccordionPrimitives.Root> & AccordionPrimitives.AccordionMultipleProps;
@@ -18,7 +18,11 @@ function AccordionRoot({ children, ...delegated }: Omit<MultipleAccordionProps, 
 	);
 }
 
-function AccordionItem({ id, children, ...delegated }: { id: string; children: React.ReactNode } & React.ComponentProps<'div'>) {
+function AccordionItem({
+	id,
+	children,
+	...delegated
+}: { id: string; children: React.ReactNode } & Omit<React.ComponentProps<typeof AccordionPrimitives.Item>, 'value'>) {
 	return (
 		<Item value={id} {...delegated}>
 			{children}

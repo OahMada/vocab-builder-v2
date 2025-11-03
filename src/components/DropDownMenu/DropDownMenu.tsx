@@ -50,7 +50,7 @@ export var MobileDropdownMenuItem = styled(DropdownMenuItem)`
 var slideDownAndFade = keyframes`
 	from {
 		opacity: 0;
-		transform: translateY(2px);
+		transform: translateY(-2px);
 	}
 	to {
 		opacity: 1;

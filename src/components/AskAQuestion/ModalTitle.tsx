@@ -4,7 +4,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/Popover';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import DescriptionText from '@/components/DescriptionText';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import Icon from '@/components/Icon';
@@ -21,7 +21,10 @@ function ModalTitle({ ...delegated }) {
 					</InfoButton>
 				</PopoverTrigger>
 				<PopoverContent>
-					<DescriptionText>You don&apos;t have to repeat the sentence itself. With a keyboard, you can press Ctrl + Enter to submit.</DescriptionText>
+					<DescriptionText>
+						You don&apos;t have to repeat the sentence itself. With a keyboard, you can press Enter to submit and Shift + Enter to insert a line
+						break.
+					</DescriptionText>
 				</PopoverContent>
 			</Popover>
 		</>

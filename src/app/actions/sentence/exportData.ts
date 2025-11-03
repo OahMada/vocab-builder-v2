@@ -1,8 +1,10 @@
 'use server';
 
 import updateSyncDate from '../user/updateSyncDate';
-import { readAllSentences } from './readAllSentences';
+
+import prisma from '@/lib/prisma';
 import verifySession from '@/lib/dal';
+import { sentenceReadSelect, type SentenceWithPieces } from '@/lib';
 
 export default async function exportData(): Promise<{ error: string } | { data: string }> {
 	let session = await verifySession();
@@ -11,10 +13,16 @@ export default async function exportData(): Promise<{ error: string } | { data: 
 	}
 
 	let userId = session.id;
-	let userData = await readAllSentences({ userId });
-	if ('error' in userData) {
-		console.error('read all sentence data action failed: ', userData.error);
-		return { error: 'Failed to fetch account data' };
+	let userData: SentenceWithPieces[] = [];
+	try {
+		userData = await prisma.sentence.findMany({
+			where: { userId },
+			select: sentenceReadSelect,
+			orderBy: { updatedAt: 'asc' },
+		});
+	} catch (error) {
+		console.error('read all sentences failed', error);
+		return { error: 'Failed to read the sentences' };
 	}
 
 	try {
@@ -26,6 +34,6 @@ export default async function exportData(): Promise<{ error: string } | { data: 
 		};
 	}
 
-	let json = JSON.stringify(userData.data, null, 2);
+	let json = JSON.stringify(userData, null, 2);
 	return { data: json };
 }

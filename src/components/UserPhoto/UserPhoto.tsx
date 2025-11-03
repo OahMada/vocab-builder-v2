@@ -15,7 +15,7 @@ import { ImageFileSchema } from '@/lib';
 import { BLOB_CONTAINER_TYPE, QUERIES, TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
 
 import Avatar from '@/components/Avatar';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';

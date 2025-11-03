@@ -14,7 +14,7 @@ import { SENTENCE_FETCHING_LIMIT } from '@/constants';
 
 import { AccordionRoot } from '@/components/Accordion';
 import SentenceListingEntry from '@/components/SentenceListingEntry';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import Spinner from '@/components/Loading';
 import { useSearchParamsContext } from '@/components/SearchParamsProvider';
@@ -129,7 +129,10 @@ function SentenceListing({
 		<Wrapper>
 			{currentSentences.length !== 0 && <NoticeText $hasError={hasCountError}>{countMessage}</NoticeText>}
 			<SecondaryWrapper style={{ '--height': `${rowVirtualizer.getTotalSize()}px` } as React.CSSProperties}>
-				<AccordionRoot style={{ '--transform': `translateY(${virtualizedItems[0]?.start || 0}px)` } as React.CSSProperties}>
+				<AccordionRoot
+					style={{ '--transform': `translateY(${virtualizedItems[0]?.start || 0}px)` } as React.CSSProperties}
+					defaultValue={[currentSentences[0]?.id]} // might be an empty array
+				>
 					{virtualizedItems.map((virtualItem) => {
 						let index = virtualItem.index;
 						let { id, ...rest } = currentSentences[index];

@@ -8,7 +8,7 @@ import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Icon from '@/components/Icon';
 import Breadcrumb from '@/components/CustomBreadcrumb';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Pricing from '@/components/Pricing';
 import Spacer from '@/components/Spacer';
 import { Title, TitleWrapper, Description, PricingWrapper } from './StyledComponents';

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 
 interface TextAreaProps {
 	clearInput: () => void;
@@ -18,9 +18,12 @@ interface TextAreaProps {
 function TextArea({ value, clearInput, keydownSubmit, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
 	function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
 		if (!keydownSubmit) return;
-		if (e.ctrlKey && e.key === 'Enter') {
-			e.preventDefault(); // stop newline
-			keydownSubmit();
+		// enter to submit, shift + enter to line break
+		if (e.key === 'Enter') {
+			if (!e.shiftKey) {
+				e.preventDefault(); // stop newline
+				keydownSubmit();
+			}
 		}
 	}
 

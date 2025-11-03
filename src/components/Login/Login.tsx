@@ -13,7 +13,7 @@ import { LoginInputSchema, LoginInputType } from '@/lib';
 import { INPUT_NAME, TOAST_ID } from '@/constants';
 
 import InputBox from '@/components/InputBox';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';

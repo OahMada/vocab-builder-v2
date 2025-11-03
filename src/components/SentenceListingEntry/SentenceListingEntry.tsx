@@ -9,7 +9,7 @@ import { constructSentence, constructSentencePiecesData, markSearchMatchesInSent
 import { SentenceWithPieces } from '@/lib';
 
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/Accordion';
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import PlayAudioFromUrl from '@/components/PlayAudioFromUrl';
 import deleteSentence from '@/app/actions/sentence/deleteSentence';
@@ -25,7 +25,7 @@ type SentenceListingEntryProps = {
 	isPlaying: boolean;
 	isLoading: boolean;
 } & SentenceWithPieces &
-	React.ComponentProps<'div'>;
+	Omit<React.ComponentProps<typeof AccordionItem>, 'children'>;
 
 function SentenceListingEntry({
 	id,
@@ -80,13 +80,7 @@ function SentenceListingEntry({
 				<SentenceWrapper>
 					<Index>{`${index + 1}. `}</Index>
 					{finalPieces}
-					<AudioButton
-						style={{ '--icon-size': '16px', '--line-height': '1.6', '--font-size': '1.1rem' } as React.CSSProperties}
-						isPlaying={isPlaying}
-						playAudio={() => playAudio(audioUrl, id)}
-						stopAudio={stopAudio}
-						isLoading={isLoading}
-					/>
+					<AudioButton isPlaying={isPlaying} playAudio={() => playAudio(audioUrl, id)} stopAudio={stopAudio} isLoading={isLoading} />
 				</SentenceWrapper>
 			</AccordionTrigger>
 			<AccordionContent asChild={true}>
@@ -102,27 +96,18 @@ function SentenceListingEntry({
 						</InnerWrapper>
 					)}
 					<ActionWrapper>
-						<React.Suspense
-							fallback={
-								<Button variant='fill' style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties} disabled={true}>
-									<Icon id='delete' />
-									&nbsp;Delete
-								</Button>
-							}
-						>
-							<AlertDialog description='This action cannot be undone.' handleAction={handleDeleteAction}>
-								<Button
-									variant='fill'
-									style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties}
-									onClick={() => {
-										stopAudio();
-									}}
-								>
-									<Icon id='delete' />
-									&nbsp;Delete
-								</Button>
-							</AlertDialog>
-						</React.Suspense>
+						<AlertDialog description='This action cannot be undone.' handleAction={handleDeleteAction}>
+							<Button
+								variant='fill'
+								style={{ '--text-color': 'var(--text-status-warning)' } as React.CSSProperties}
+								onClick={() => {
+									stopAudio();
+								}}
+							>
+								<Icon id='delete' />
+								&nbsp;Delete
+							</Button>
+						</AlertDialog>
 						<Button
 							variant='fill'
 							onClick={() => {
@@ -152,8 +137,6 @@ var AudioButton = styled(PlayAudioFromUrl)`
 	--hover-bg-color: var(--bg-tertiary);
 	margin-left: 8px;
 	vertical-align: -2.5px;
-	/* to make sure the icon has the same height as the text */
-	padding: calc((var(--line-height) * var(--font-size) - var(--icon-size)) / 2);
 	padding: 4px;
 `;
 
