@@ -87,3 +87,9 @@ export async function deleteLocalData(includeSentence: boolean = false) {
 	}
 	await updateLocalDB('delete');
 }
+
+export function getLocalDate() {
+	let now = new Date();
+	let tzOffset = now.getTimezoneOffset(); // in minutes
+	return new Date(now.getTime() - tzOffset * 60_000);
+}

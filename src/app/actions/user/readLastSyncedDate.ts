@@ -34,7 +34,7 @@ var readLastSyncedDate = unstable_cache(
 		}
 	},
 	[],
-	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG.LAST_SYNCED] },
+	{ revalidate: 3600, tags: [UNSTABLE_CACHE_TAG.LAST_SYNCED] }
 );
 
 export default readLastSyncedDate;
