@@ -29,7 +29,7 @@ export function MotionButton({
 
 	return (
 		<LazyMotion features={loadFeatures}>
-			<Component {...delegated} as={href ? NavLink : m.button} href={href}>
+			<Component as={href ? NavLink : m.button} href={href} {...delegated}>
 				{children}
 			</Component>
 		</LazyMotion>

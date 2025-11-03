@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import exportData from '@/app/actions/sentence/exportData';
 
 import { TOAST_ID } from '@/constants';
-import { postMessage } from '@/lib';
 import { useIsHoverable } from '@/hooks';
+import { delay } from '@/utils';
 
 import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
@@ -19,6 +19,7 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import NavLink from '@/components/NavLink';
 
 function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: string | undefined }) {
+	let extensionInstalled = React.useRef(false);
 	let [isLoading, startTransition] = React.useTransition();
 	let { addToToast } = useGlobalToastContext();
 	let isHoverable = useIsHoverable();
@@ -33,15 +34,20 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: st
 				});
 				return;
 			}
-			let resp = await postMessage(result.data);
-			if (resp?.syncing) {
-				addToToast({
-					contentType: 'notice',
-					content: 'A system notification will appear to show the sync result.',
-					id: TOAST_ID.SYNC_DATA,
-					title: 'Syncing started',
-				});
+			window.postMessage(
+				{
+					type: 'sync',
+					payload: result.data,
+				},
+				window.origin
+			);
+			await delay(500); // wait for the response from extension
+			if (extensionInstalled.current) {
+				return;
 			} else {
+				await delay(5000);
+			}
+			if (!extensionInstalled.current) {
 				addToToast({
 					contentType: 'error',
 					content: "Please make sure you've installed the Vocab Builder Sync extension.",
@@ -51,6 +57,26 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: st
 			}
 		});
 	}
+
+	React.useEffect(() => {
+		async function handleMessage(e: MessageEvent) {
+			if (e.origin !== window.origin) return;
+
+			// 2️⃣ Filter by your message type
+			if (e.data.type === 'syncing') {
+				addToToast({
+					contentType: 'notice',
+					content: 'A system notification will appear to show the sync result.',
+					id: TOAST_ID.SYNC_DATA,
+					title: 'Syncing started',
+				});
+				extensionInstalled.current = true;
+			}
+		}
+
+		window.addEventListener('message', handleMessage);
+		return () => window.removeEventListener('message', handleMessage);
+	}, [addToToast]);
 
 	return (
 		<Wrapper>

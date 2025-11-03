@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { Base, ButtonProps, FillButton, IconButton, OutlineButton } from './Shared';
 
 import NavLink from '@/components/NavLink';
+import { Base, ButtonProps, FillButton, IconButton, OutlineButton } from './Shared';
 
 export function Button({ variant, href, children, ...delegated }: ButtonProps & React.ComponentProps<typeof Base>) {
 	let Component;
@@ -17,7 +17,7 @@ export function Button({ variant, href, children, ...delegated }: ButtonProps & 
 		throw new Error(`Unrecognized Button variant: ${variant}`);
 	}
 	return (
-		<Component {...delegated} as={href ? NavLink : 'button'} href={href}>
+		<Component as={href ? NavLink : 'button'} href={href} {...delegated}>
 			{children}
 		</Component>
 	);
