@@ -36,6 +36,7 @@ export default async function AccountPage() {
 	let errorText: string | undefined = undefined;
 	let lastSynced: string | undefined = undefined;
 	let lastSyncedResult = await readLastSyncedDate(session.user.id);
+
 	if ('error' in lastSyncedResult) {
 		errorText = lastSyncedResult.error;
 	} else {

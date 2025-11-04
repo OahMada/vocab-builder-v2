@@ -19,10 +19,12 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import NavLink from '@/components/NavLink';
 
 function SyncData({ lastSynced, errorText }: { lastSynced: string | undefined; errorText: string | undefined }) {
-	let extensionInstalled = React.useRef(false);
 	let [isLoading, startTransition] = React.useTransition();
+	let extensionInstalled = React.useRef(false);
+	let [lastSyncedDateString, setLastSyncedDateString] = React.useState('loading...');
 	let { addToToast } = useGlobalToastContext();
 	let isHoverable = useIsHoverable();
+
 	async function handleExport() {
 		startTransition(async () => {
 			let result = await exportData();
@@ -59,6 +61,10 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string | undefined; e
 	}
 
 	React.useEffect(() => {
+		setLastSyncedDateString(getLocalDateString(lastSynced));
+	}, [lastSynced]);
+
+	React.useEffect(() => {
 		async function handleMessage(e: MessageEvent) {
 			if (e.origin !== window.origin) return;
 
@@ -81,7 +87,7 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string | undefined; e
 	return (
 		<Wrapper>
 			<InnerWrapper>
-				<TimeStamp>Last synced: {getLocalDateString(lastSynced) || errorText}</TimeStamp>
+				<TimeStamp>Last synced: {lastSyncedDateString || errorText}</TimeStamp>
 				<Popover>
 					<PopoverTrigger asChild={true}>
 						<Button variant='icon'>
