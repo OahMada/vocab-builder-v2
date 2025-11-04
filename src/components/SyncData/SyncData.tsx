@@ -7,7 +7,7 @@ import exportData from '@/app/actions/sentence/exportData';
 
 import { TOAST_ID } from '@/constants';
 import { useIsHoverable } from '@/hooks';
-import { delay } from '@/utils';
+import { delay, getLocalDateString } from '@/utils';
 
 import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
@@ -18,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/Popover';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import NavLink from '@/components/NavLink';
 
-function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: string | undefined }) {
+function SyncData({ lastSynced, errorText }: { lastSynced: string | undefined; errorText: string | undefined }) {
 	let extensionInstalled = React.useRef(false);
 	let [isLoading, startTransition] = React.useTransition();
 	let { addToToast } = useGlobalToastContext();
@@ -81,7 +81,7 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string; errorText: st
 	return (
 		<Wrapper>
 			<InnerWrapper>
-				<TimeStamp>Last synced: {lastSynced || errorText}</TimeStamp>
+				<TimeStamp>Last synced: {getLocalDateString(lastSynced) || errorText}</TimeStamp>
 				<Popover>
 					<PopoverTrigger asChild={true}>
 						<Button variant='icon'>

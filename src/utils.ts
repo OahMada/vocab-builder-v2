@@ -88,8 +88,27 @@ export async function deleteLocalData(includeSentence: boolean = false) {
 	await updateLocalDB('delete');
 }
 
-export function getLocalDate() {
-	let now = new Date();
-	let tzOffset = now.getTimezoneOffset(); // in minutes
-	return new Date(now.getTime() - tzOffset * 60_000);
+export function getLocalDateString(dateString: string | undefined) {
+	if (!dateString) {
+		return 'never';
+	}
+
+	let date = new Date(dateString);
+	let formatter = new Intl.DateTimeFormat(undefined, {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
+		hour12: false,
+		timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+	});
+
+	let parts = formatter.formatToParts(date);
+	function get(type: string) {
+		return parts.find((p) => p.type === type)?.value;
+	}
+
+	let formatted = `${get('year')}-${get('month')}-${get('day')} ${get('hour')}:${get('minute')}`;
+	return formatted;
 }

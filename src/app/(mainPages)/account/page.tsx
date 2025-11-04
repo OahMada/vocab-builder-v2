@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import * as React from 'react';
 import { redirect } from 'next/navigation';
-import dayjs from 'dayjs';
 
 import readLastSyncedDate from '@/app/actions/user/readLastSyncedDate';
 
@@ -35,12 +34,12 @@ export default async function AccountPage() {
 	}
 
 	let errorText: string | undefined = undefined;
-	let lastSynced: string = 'never';
+	let lastSynced: string | undefined = undefined;
 	let lastSyncedResult = await readLastSyncedDate(session.user.id);
 	if ('error' in lastSyncedResult) {
 		errorText = lastSyncedResult.error;
-	} else if (lastSyncedResult.data) {
-		lastSynced = dayjs(lastSyncedResult.data).format('YYYY-MM-DD HH:mm');
+	} else {
+		lastSynced = lastSyncedResult.data;
 	}
 
 	return (
