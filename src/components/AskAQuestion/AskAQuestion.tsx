@@ -2,15 +2,19 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { useCompletion } from '@ai-sdk/react';
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport, TextUIPart } from 'ai';
 
 import { QUERIES } from '@/constants';
+import { handleError } from '@/utils';
 
 import Modal from '@/components/Modal';
-import ModalTitle from './ModalTitle';
-import QuestionInput from './QuestionInput';
 import BottomRightSpinner from '@/components/BottomRightSpinner';
 import ClientMarkdown from '@/components/ClientMarkdown';
+import { Button } from '@/components/Button';
+import Icon from '@/components/Icon';
+import VisuallyHidden from '@/components/VisuallyHidden';
+import QuestionInput from './QuestionInput';
 
 interface AskAQuestionProps {
 	isShowing: boolean;
@@ -18,30 +22,84 @@ interface AskAQuestionProps {
 	sentence: string;
 }
 
+var bottomOffsetPadding = 300;
+
 function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
-	let [errorMsg, setErrorMsg] = React.useState('');
-	let { complete, isLoading, setCompletion, completion, stop } = useCompletion({
-		api: '/api/ask-anything',
-		onError: (error) => {
-			setErrorMsg(error.message);
-		},
+	let [copied, setCopied] = React.useState(false);
+	let containerRef = React.useRef<null | HTMLDivElement>(null);
+	let [previousScrollHeight, setPreviousScrollHeight] = React.useState(0);
+	let [shouldAddPadding, setShouldAddPadding] = React.useState(false);
+
+	let { messages, sendMessage, status, stop, error, regenerate } = useChat({
+		transport: new DefaultChatTransport({
+			api: '/api/ask-anything',
+			body: {
+				sentence,
+			},
+		}),
 		experimental_throttle: 5,
 	});
-	function triggerComplete(text: string) {
-		if (errorMsg) {
-			setErrorMsg('');
+
+	let isStreaming = status === 'streaming' || status === 'submitted';
+	function triggerChat(text: string) {
+		if (containerRef.current) {
+			setPreviousScrollHeight(containerRef.current.scrollHeight);
+			setShouldAddPadding(true);
 		}
-		complete('', {
-			body: { question: text, sentence }, // send custom body
+		sendMessage({
+			text,
 		});
 	}
 
-	function onClearInput() {
-		if (isLoading) {
+	function stopStreaming() {
+		if (status === 'submitted' || status === 'streaming') {
 			stop();
 		}
-		setCompletion('');
-		setErrorMsg('');
+	}
+
+	function regenerateResponse() {
+		if (status === 'ready') {
+			regenerate();
+		}
+	}
+
+	async function copyToClipboard(text: string) {
+		await navigator.clipboard.writeText(text);
+		setCopied(true);
+		window.setTimeout(() => {
+			setCopied(false);
+		}, 1000);
+	}
+
+	React.useEffect(() => {
+		if (!containerRef.current) return;
+		let element = containerRef.current;
+
+		if (status === 'ready' && element.scrollHeight - bottomOffsetPadding >= previousScrollHeight + bottomOffsetPadding) {
+			// if the filled in content takes up space bigger than bottomOffsetPadding
+			setShouldAddPadding(false);
+		}
+	}, [previousScrollHeight, status]);
+
+	React.useEffect(() => {
+		// add a bottom padding and scroll to bottom when submitted, and remove the padding when there is enough content to fill the blank space
+		if (!containerRef.current) return;
+		let element = containerRef.current;
+		let padding = 0;
+		if (element.scrollHeight > element.clientHeight) {
+			padding = bottomOffsetPadding;
+		}
+		if (shouldAddPadding) {
+			element.style.paddingBottom = `${padding}px`;
+			// scroll to beyond bottom
+			element.scrollTop = element.scrollHeight - element.clientHeight + padding;
+		} else {
+			element.style.paddingBottom = '0px';
+		}
+	}, [previousScrollHeight, shouldAddPadding]);
+
+	if (!isShowing) {
+		return null;
 	}
 
 	return (
@@ -49,26 +107,57 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 			<Modal
 				isOpen={isShowing}
 				onDismiss={onDismiss}
-				heading={<ModalTitle />}
+				heading={<Title>Ask Anything</Title>}
 				isOverlayTransparent={true}
 				contentPosition='bottom'
-				style={{ '--background-color': 'var(--bg-secondary)' } as React.CSSProperties}
+				style={{ '--gap': '20px' } as React.CSSProperties}
 			>
-				{(completion || errorMsg) && (
-					<>
-						<SmallHeading>Answer:</SmallHeading>
-						<AnswerBoxWrapper>
-							<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties}>
-								<React.Suspense fallback={completion}>
-									<ClientMarkdown>{completion}</ClientMarkdown>
-								</React.Suspense>
-								{errorMsg && <ErrorText>{errorMsg}</ErrorText>}
-							</AnswerBox>
-						</AnswerBoxWrapper>
-					</>
-				)}
-				<SmallHeading>Question:</SmallHeading>
-				<QuestionInput triggerComplete={triggerComplete} onClearInput={onClearInput} isLoading={isLoading} />
+				<Sentence>{sentence}</Sentence>
+				<AnswerBoxWrapper>
+					<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties} ref={containerRef}>
+						<p>What questions do you have about this sentence?</p>
+						{messages.map((message) => {
+							if (message.role === 'user') {
+								return (
+									<UserInput key={message.id}>
+										{message.parts
+											.filter((part) => part.type === 'text')
+											.map((part) => part.text)
+											.join('')}
+									</UserInput>
+								);
+							} else if (message.role === 'assistant') {
+								let answer = message.parts
+									.filter((part) => part.type === 'text')
+									.map((part) => part.text)
+									.join('');
+								return (
+									<React.Fragment key={message.id}>
+										<ResponseWrapper>
+											<React.Suspense fallback={answer}>
+												<ClientMarkdown>{answer}</ClientMarkdown>
+											</React.Suspense>
+										</ResponseWrapper>
+										{(message.parts[1] as TextUIPart).state === 'done' && (
+											<Buttons>
+												<CopyButton variant='icon' onClick={async () => copyToClipboard(answer)}>
+													{copied ? <Icon id='accept' size={16} strokeWidth={2} /> : <Icon id='copy' size={16} strokeWidth={2} />}
+													<VisuallyHidden>copy response</VisuallyHidden>
+												</CopyButton>
+												<RegenerateButton variant='icon' onClick={regenerateResponse}>
+													<Icon id='retry' size={16} strokeWidth={2} />
+													<VisuallyHidden>regenerate response</VisuallyHidden>
+												</RegenerateButton>
+											</Buttons>
+										)}
+									</React.Fragment>
+								);
+							}
+						})}
+						{error && <ErrorText>{handleError(error)}</ErrorText>}
+					</AnswerBox>
+				</AnswerBoxWrapper>
+				<QuestionInput triggerChat={triggerChat} isStreaming={isStreaming} stopStreaming={stopStreaming} />
 			</Modal>
 		</React.Suspense>
 	);
@@ -76,35 +165,79 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 
 export default AskAQuestion;
 
-var SmallHeading = styled.h3`
-	font-size: 1.2rem;
-	font-weight: 300;
+var Title = styled.h2`
+	font-size: 1.5rem;
+	font-weight: 450;
 	line-height: 1;
+	transform: translateX(6px);
 `;
 
-var AnswerBox = styled.div`
-	width: 100%;
-	background-color: var(--bg-tertiary);
-	flex: 1;
-	padding: 12px;
-	overflow: auto;
-	max-height: 45dvh;
-
-	@media ${QUERIES.tabletAndUp} {
-		max-height: 30dvh;
-	}
-
-	@media ${QUERIES.laptopAndUp} {
-		max-height: 50dvh;
-	}
+var Sentence = styled.p`
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	font-style: italic;
+	border-left: 4px solid var(--border);
+	padding-left: 0.75rem;
+	font-size: 0.875rem;
 `;
 
 var AnswerBoxWrapper = styled.div`
-	border-radius: 12px;
-	// to trim off the scroll bar corners
+	flex: 1;
+	background-color: var(--bg-secondary);
+	border-radius: 16px;
+	width: 100%;
+	padding: 16px;
+	padding-right: 6px;
 	overflow: hidden;
+`;
+
+var AnswerBox = styled.div`
+	height: 100%;
+	overflow: auto;
+	scrollbar-gutter: stable;
+	padding-right: 10px;
+
+	@media ${QUERIES.laptopAndUp} {
+		// to compensate for the scroll gutter
+		padding-right: 6px;
+	}
+
+	& > * {
+		margin-bottom: 10px;
+	}
+`;
+
+var ResponseWrapper = styled.div`
+	// for the markdown elements
+	& * {
+		margin-bottom: 10px;
+	}
 `;
 
 var ErrorText = styled.span`
 	color: var(--text-status-warning);
+`;
+
+var UserInput = styled.p`
+	background-color: var(--bg-tertiary);
+	border-radius: 16px;
+	max-width: 60%;
+	padding: 8px 10px;
+	margin-left: auto;
+	width: max-content;
+	white-space: pre-wrap;
+`;
+
+var Buttons = styled.div`
+	display: flex;
+	gap: 3px;
+`;
+var CopyButton = styled(Button)`
+	--hover-bg-color: var(--bg-tertiary);
+	color: var(--text-secondary);
+`;
+var RegenerateButton = styled(Button)`
+	--hover-bg-color: var(--bg-tertiary);
+	color: var(--text-secondary);
 `;

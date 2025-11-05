@@ -19,7 +19,6 @@ import NoteProvider from '@/components/NoteProvider';
 import TranslationProvider from '@/components/TranslationProvider';
 import SentencePiecesProvider from '@/components/SentencePiecesProvider';
 import AudioDataProvider from '@/components/AudioDataProvider';
-import Spacer from '@/components/Spacer';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
 import CardWrapper from '@/components/CardWrapper';
 import Title from './Title';
@@ -79,7 +78,6 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 								<AudioDataProvider audioUrl={sentenceData?.audioUrl}>
 									<SentenceActions sentence={(sentenceData?.sentence || sentence) as string} sentenceId={sentenceData?.id} />
 								</AudioDataProvider>
-								<Spacer size={16} />
 							</Wrapper>
 						</NoteProvider>
 					</TranslationProvider>

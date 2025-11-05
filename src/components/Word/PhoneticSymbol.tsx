@@ -9,7 +9,7 @@ function PhoneticSymbol({ symbol, ...delegated }: Omit<React.ComponentProps<type
 	return (
 		<SymbolButton
 			variant='outline'
-			initial={{ opacity: 0, y: -10 }}
+			initial={{ opacity: 0, y: -2 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{
 				duration: 0.4,

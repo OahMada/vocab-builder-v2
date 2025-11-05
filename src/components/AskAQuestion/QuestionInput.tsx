@@ -12,17 +12,16 @@ import TextArea from '@/components/TextArea';
 import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
-import Loading from '@/components/Loading';
 import FormErrorText from '@/components/FormErrorText';
 
 export default function QuestionInput({
-	triggerComplete,
-	onClearInput,
-	isLoading,
+	triggerChat,
+	isStreaming,
+	stopStreaming,
 }: {
-	triggerComplete: (text: string) => void;
-	onClearInput: () => void;
-	isLoading: boolean;
+	triggerChat: (text: string) => void;
+	isStreaming: boolean;
+	stopStreaming: () => void;
 }) {
 	let {
 		register,
@@ -42,11 +41,11 @@ export default function QuestionInput({
 	function clearInput() {
 		clearErrors(INPUT_NAME.QUESTION);
 		setValue(INPUT_NAME.QUESTION, '');
-		onClearInput();
 	}
 
 	function onSubmit(data: QuestionInputType) {
-		triggerComplete(data.question);
+		triggerChat(data.question);
+		setValue(INPUT_NAME.QUESTION, '');
 	}
 
 	let submitHandler = handleSubmit(onSubmit);
@@ -65,22 +64,24 @@ export default function QuestionInput({
 					})}
 					clearInput={clearInput}
 					keydownSubmit={submitHandler}
+					style={{ '--border-radius': '16px' } as React.CSSProperties}
 				/>
-				<EnterButton
-					variant='fill'
-					onClick={submitHandler}
-					disabled={!!errors.question || isLoading}
-					style={{ '--textarea-padding': '10px' } as React.CSSProperties}
-				>
-					{isLoading ? (
-						<Loading description='answer is loading' />
-					) : (
-						<>
-							<Icon id='enter' />
-							<VisuallyHidden>submit question</VisuallyHidden>
-						</>
-					)}
-				</EnterButton>
+				{isStreaming ? (
+					<StopButton variant='outline' onClick={stopStreaming} style={{ '--textarea-padding': '10px' } as React.CSSProperties}>
+						<Icon id='stop' />
+						<VisuallyHidden>stop streaming</VisuallyHidden>
+					</StopButton>
+				) : (
+					<EnterButton
+						variant='outline'
+						onClick={submitHandler}
+						disabled={!!errors.question}
+						style={{ '--textarea-padding': '10px' } as React.CSSProperties}
+					>
+						<Icon id='upward' />
+						<VisuallyHidden>submit question</VisuallyHidden>
+					</EnterButton>
+				)}
 			</InnerWrapper>
 			{errors.question && <FormErrorText>{errors.question.message}</FormErrorText>}
 		</Wrapper>
@@ -102,7 +103,11 @@ var InnerWrapper = styled.div`
 `;
 
 var EnterButton = styled(Button)`
+	--hover-bg-color: var(--bg-secondary);
 	align-self: end;
 	// essentially make the button the same height as the textarea element
 	height: calc(1rem * 1.5 + var(--textarea-padding) * 2 + 2px);
+	border-radius: 16px;
 `;
+
+var StopButton = styled(EnterButton)``;

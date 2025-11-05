@@ -13,9 +13,10 @@ interface TextAreaProps {
 	clearInput: () => void;
 	value: string;
 	keydownSubmit?: () => void;
+	style?: React.CSSProperties;
 }
 
-function TextArea({ value, clearInput, keydownSubmit, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
+function TextArea({ value, clearInput, keydownSubmit, style, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
 	function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
 		if (!keydownSubmit) return;
 		// enter to submit, shift + enter to line break
@@ -28,7 +29,7 @@ function TextArea({ value, clearInput, keydownSubmit, ...delegated }: TextAreaPr
 	}
 
 	return (
-		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px' } as React.CSSProperties}>
+		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px', ...style } as React.CSSProperties}>
 			<InputArea as='textarea' {...delegated} rows={1} onKeyDown={handleKeyDown} />
 			<Overlay aria-hidden='true'>{value + ' '}</Overlay>
 			{value && (
@@ -47,9 +48,10 @@ var Wrapper = styled.div`
 	--icon-dimension: calc(var(--icon-size) + var(--icon-padding) * 2);
 	--vertical-padding: 10px;
 	--horizontal-padding: 12px;
+	--border-radius: 12px;
 	display: grid;
 	border: 1px solid var(--border);
-	border-radius: 12px;
+	border-radius: var(--border-radius);
 	position: relative;
 `;
 

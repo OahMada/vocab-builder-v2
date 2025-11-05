@@ -31,6 +31,8 @@ import {
 	Sun,
 	Moon,
 	Send,
+	ArrowUp,
+	Copy,
 } from 'react-feather';
 
 var icons = {
@@ -62,6 +64,8 @@ var icons = {
 	dark: Moon,
 	light: Sun,
 	sync: Send,
+	upward: ArrowUp,
+	copy: Copy,
 };
 
 interface IconProps {

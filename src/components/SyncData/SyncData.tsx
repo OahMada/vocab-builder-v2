@@ -21,7 +21,7 @@ import NavLink from '@/components/NavLink';
 function SyncData({ lastSynced, errorText }: { lastSynced: string | undefined; errorText: string | undefined }) {
 	let [isLoading, startTransition] = React.useTransition();
 	let extensionInstalled = React.useRef(false);
-	let [lastSyncedDateString, setLastSyncedDateString] = React.useState('loading...');
+	let [lastSyncedDateString, setLastSyncedDateString] = React.useState('');
 	let { addToToast } = useGlobalToastContext();
 	let isHoverable = useIsHoverable();
 
@@ -43,7 +43,9 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string | undefined; e
 				},
 				window.origin
 			);
-			await delay(500); // wait for the response from extension
+
+			// show error if there isn't a response from extension in 5 seconds
+			await delay(500);
 			if (extensionInstalled.current) {
 				return;
 			} else {
@@ -60,10 +62,12 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string | undefined; e
 		});
 	}
 
+	// to avoid client-server mismatch
 	React.useEffect(() => {
 		setLastSyncedDateString(getLocalDateString(lastSynced));
 	}, [lastSynced]);
 
+	// listen for response from extension
 	React.useEffect(() => {
 		async function handleMessage(e: MessageEvent) {
 			if (e.origin !== window.origin) return;

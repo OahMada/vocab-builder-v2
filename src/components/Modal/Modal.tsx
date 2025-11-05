@@ -76,10 +76,12 @@ var contentShow = keyframes`
 var slideUp = keyframes`
 	from {
 		opacity: 0;
+		scale: 0;
 		transform: translateY(100%);
 	}
 	to {
 		opacity: 1;
+		scale: 1;
 		transform: translateY(0);
 	}
 `;
@@ -107,8 +109,15 @@ var OverLay = styled(ModalPrimitives.Overlay)<{ $isOverlayTransparent: boolean }
 
 var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 	--background-color: var(--bg-modal);
+	--gap: 12px;
 	position: fixed;
-	padding: 16px;
+	padding: 20px 16px;
+	background-color: var(--background-color);
+	display: flex;
+	flex-direction: column;
+	gap: var(--gap);
+	box-shadow: var(--shadow-elevation-high);
+	isolation: isolate;
 	${({ $position }) => {
 		if ($position === 'middle') {
 			return css`
@@ -131,26 +140,23 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 			`;
 		} else if ($position === 'bottom') {
 			return css`
-				bottom: 0;
-				right: 0;
-				width: 100%;
-				border-top-left-radius: 16px;
-				border-top-right-radius: 16px;
-				padding-bottom: 32px;
-				border-top: 1px solid var(--border);
+				inset: 0;
 
 				@media (prefers-reduced-motion: no-preference) {
 					animation: ${slideUp} 150ms cubic-bezier(0.16, 1, 0.3, 1);
 				}
 
 				@media ${QUERIES.tabletAndUp} {
-					border-top: unset;
 					--viewport-offset: 16px;
+					padding: 16px;
+					top: unset;
+					left: unset;
+					height: min(700px, calc(100% - 40px)); // to make sure the top has a 20px gap
 					width: 400px;
 					bottom: 20px;
 					right: 20px;
-					border-bottom-left-radius: var(--viewport-offset);
-					border-bottom-right-radius: var(--viewport-offset);
+					border-radius: 24px;
+					overflow: auto;
 
 					@media (prefers-reduced-motion: no-preference) {
 						animation: ${slideLeft} 150ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -159,12 +165,6 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 			`;
 		}
 	}}
-	background-color: var(--background-color);
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	box-shadow: var(--shadow-elevation-high);
-	isolation: isolate;
 `;
 
 var CloseButton = styled(Button)`

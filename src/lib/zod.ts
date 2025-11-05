@@ -37,10 +37,10 @@ export var SentenceSchema = z.object({
 		.string()
 		.trim()
 		.min(5, {
-			error: 'The sentence should be at least 5 characters long',
+			error: 'The sentence should be at least 5 characters long.',
 		})
 		.max(300, {
-			error: 'The sentence should be no longer than 300 characters',
+			error: 'The sentence should be no longer than 300 characters.',
 		}),
 });
 
@@ -76,8 +76,6 @@ export var QuestionInputSchema = z.object({
 	}),
 });
 export type QuestionInputType = z.infer<typeof QuestionInputSchema>;
-
-export var FetchAnswerInputSchema = QuestionInputSchema.extend({ sentence: SentenceSchema.shape.sentence });
 
 var PieceSchema = z.object({
 	id: z.cuid2(),

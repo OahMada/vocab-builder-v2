@@ -214,7 +214,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 					&nbsp;Done
 				</DoneButton>
 			</Wrapper>
-			{isModalShowing && <AskAQuestion isShowing={isModalShowing} onDismiss={dismissModal} sentence={sentence} />}
+			<AskAQuestion isShowing={isModalShowing} onDismiss={dismissModal} sentence={sentence} />
 		</>
 	);
 }

@@ -2,6 +2,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { QUERIES } from '@/constants';
+
 import Loading from '@/components/Loading';
 
 function BottomRightSpinner({ ...delegated }: Omit<React.ComponentProps<typeof Loading>, 'size' | 'strokeWidth'>) {
@@ -11,8 +13,12 @@ function BottomRightSpinner({ ...delegated }: Omit<React.ComponentProps<typeof L
 export var ModalLoadingFallback = styled(Loading)`
 	position: fixed;
 	right: 16px;
-	/* 4rem is the height of footer */
-	bottom: 16px;
+	bottom: 70px;
+
+	@media ${QUERIES.tabletAndUp} {
+		bottom: 16px;
+	}
+	color: var(--text-tertiary);
 `;
 
 export default BottomRightSpinner;
