@@ -85,7 +85,7 @@ export default function IntroPage() {
 					</Feature>
 					<Feature>
 						<FeatureTitle>Free Trial</FeatureTitle>
-						<FeatureDesc>Every new user automatically receives a 7-day free trial, try out the app and see if it fits your needs.</FeatureDesc>
+						<FeatureDesc>Every new user automatically receives a 3-day free trial, try out the app and see if it fits your needs.</FeatureDesc>
 						<LearnMore>
 							<NavLink href='/pricing' prefetch={true}>
 								Learn more

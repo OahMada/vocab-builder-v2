@@ -30,7 +30,7 @@ export default async function PricingPage() {
 				<Spacer size={30} />
 				<TitleWrapper>
 					<Title>Build your vocabulary naturally, one sentence at a time.</Title>
-					<Description>Every new user automatically receives a 7-day free trial, try out the app and see if it fits your needs.</Description>
+					<Description>Every new user automatically receives a 3-day free trial, try out the app and see if it fits your needs.</Description>
 				</TitleWrapper>
 				<Button variant='outline' href='/auth/login'>
 					<Icon id='forward' />
