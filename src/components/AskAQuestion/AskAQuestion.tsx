@@ -7,6 +7,7 @@ import { DefaultChatTransport, TextUIPart } from 'ai';
 
 import { QUERIES, SCROLL_CONTAINER_BOTTOM_PADDING } from '@/constants';
 import { handleError } from '@/utils';
+import { getPrefersReducedMotion } from '@/helpers';
 
 import Modal from '@/components/Modal';
 import BottomRightSpinner from '@/components/BottomRightSpinner';
@@ -74,10 +75,15 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	React.useEffect(() => {
 		if (!containerRef.current) return;
 		let element = containerRef.current;
+		// set the padding
 		element.style.paddingBottom = `${bottomPadding}px`;
 		// scroll to beyond bottom
 		if (shouldScroll) {
-			element.scrollTop = element.scrollHeight - element.clientHeight + bottomPadding;
+			let prefersReducedMotion = getPrefersReducedMotion();
+			element.scrollTo({
+				top: element.scrollHeight + bottomPadding - element.clientHeight,
+				behavior: prefersReducedMotion ? 'auto' : 'smooth',
+			});
 			setShouldScroll(false);
 		}
 	}, [bottomPadding, shouldScroll]);
@@ -91,6 +97,7 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 				// if the filled in content takes up space bigger than bottomPadding
 				setBottomPadding(0);
 			} else {
+				// trim off the excessive padding
 				let newPadding = SCROLL_CONTAINER_BOTTOM_PADDING - (element.scrollHeight - (element.scrollTop + element.clientHeight));
 				setBottomPadding(newPadding);
 			}
@@ -191,10 +198,10 @@ var AnswerBoxWrapper = styled.div`
 
 var AnswerBox = styled.div`
 	padding: 16px;
+	padding-right: 10px;
 	height: 100%;
 	overflow: auto;
 	scrollbar-gutter: stable;
-	padding-right: 10px;
 
 	@media ${QUERIES.laptopAndUp} {
 		// to compensate for the scroll gutter
