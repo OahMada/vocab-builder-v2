@@ -1,13 +1,8 @@
 import * as React from 'react';
 
-import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_OBJ } from '@/constants';
+import { LOCAL_STORAGE_KEY } from '@/constants';
 
-type LocalStorageKey = (typeof LOCAL_STORAGE_KEY)[keyof typeof LOCAL_STORAGE_KEY];
-
-export function useReadLocalStorage<T>(key: LocalStorageKey, updater: (data: T) => void): boolean {
-	// useful for when the consuming component would fetch new data in absence of the local storage data
-	let [isLoading, setIsLoading] = React.useState(true);
-
+export function useReadLocalStorage(updater: (data: string) => void): void {
 	// so that the passed in updater does't need to be wrapped in useCallback itself
 	let savedUpdater = React.useRef(updater);
 	React.useEffect(() => {
@@ -15,12 +10,8 @@ export function useReadLocalStorage<T>(key: LocalStorageKey, updater: (data: T) 
 	}, [updater]);
 
 	React.useEffect(() => {
-		let raw = window.localStorage.getItem(LOCAL_STORAGE_OBJ);
-		let data = raw ? JSON.parse(raw) : {};
+		let sentence = window.localStorage.getItem(LOCAL_STORAGE_KEY);
 
-		savedUpdater.current(key in data ? data[key] : undefined);
-		setIsLoading(false);
-	}, [key]);
-
-	return isLoading;
+		savedUpdater.current(sentence || '');
+	}, []);
 }

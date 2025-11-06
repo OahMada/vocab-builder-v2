@@ -13,13 +13,13 @@ type SentenceData =
 type UseSentenceDataReturnType = [boolean, SentenceData];
 
 export function useSentenceData(): UseSentenceDataReturnType {
-	let { isLocalDataLoading: translationLoading, translation, isEditing: isTranslationEditing } = useTranslationContext();
-	let translationReady = !translationLoading && translation && !isTranslationEditing;
+	let { translation, isEditing: isTranslationEditing } = useTranslationContext();
+	let translationReady = translation && !isTranslationEditing;
 	let { pieces } = useSentencePiecesContext();
-	let { isLocalDataLoading: noteLoading, note, isEditing: isNoteEditing } = useNoteContext();
-	let noteReady = !noteLoading && !isNoteEditing;
-	let { isLocalDataLoading: audioBlobLoading, audioBlob, audioUrl } = useAudioDataContext();
-	let audioBlobReady = !audioBlobLoading && (audioBlob || audioUrl);
+	let { note, isEditing: isNoteEditing } = useNoteContext();
+	let noteReady = !isNoteEditing;
+	let { audioBlob, audioUrl } = useAudioDataContext();
+	let audioBlobReady = audioBlob || audioUrl;
 	let sentenceDataReady = Boolean(translationReady && pieces && noteReady && audioBlobReady);
 
 	let sentenceData: SentenceData;

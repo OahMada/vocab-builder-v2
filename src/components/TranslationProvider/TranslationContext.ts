@@ -4,7 +4,6 @@ import * as React from 'react';
 
 interface TranslationContextType {
 	translation?: string;
-	isLocalDataLoading: boolean;
 	updateTranslation: (note: string) => void;
 	isEditing: boolean;
 	updateEditingStatus: (status: boolean) => void;

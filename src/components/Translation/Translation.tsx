@@ -29,7 +29,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 	let { addToToast, removeFromToast } = useGlobalToastContext();
 
 	// consume the context provider, get locally saved translation text
-	let { isLocalDataLoading, updateTranslation, translation, isEditing, updateEditingStatus } = useTranslationContext();
+	let { updateTranslation, translation, isEditing, updateEditingStatus } = useTranslationContext();
 
 	// when there is no local translation text or you want to fetch new translation, fetch from api route
 	let { trigger, reset, isMutating, error } = useSWRMutation<TranslationResponse, Error, string, TranslationArg>(url, postFetcher, {
@@ -57,10 +57,10 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 		// - page first loads
 		// - there have been an error, then the user tried to edit translation, but canceled their action, thus, there is still no translation to show
 
-		if (sentence && !translation && !isLocalDataLoading && !isEditing) {
+		if (sentence && !translation && !isEditing) {
 			activateTrigger();
 		}
-	}, [sentence, trigger, updateTranslation, translation, isLocalDataLoading, isEditing]);
+	}, [sentence, trigger, updateTranslation, translation, isEditing]);
 
 	async function retryTranslate() {
 		reset();
@@ -85,7 +85,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 	let translationEle: React.ReactNode;
 	if (translation) {
 		translationEle = translation;
-	} else if (isMutating || isLocalDataLoading) {
+	} else if (isMutating) {
 		translationEle = <LoadingText>Loading...</LoadingText>;
 	} else if (error) {
 		translationEle = <ErrorText>{handleError(error)}</ErrorText>;
@@ -100,11 +100,11 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 				<>
 					<TranslationText $isLoading={isMutating}>{translationEle}</TranslationText>
 					<ButtonWrapper>
-						<Button variant='fill' onClick={startEditing} disabled={isLocalDataLoading || isMutating}>
+						<Button variant='fill' onClick={startEditing} disabled={isMutating}>
 							<EditIcon id='edit' size={16} />
 							&nbsp;Edit
 						</Button>
-						<Button variant='fill' onClick={retryTranslate} disabled={isLocalDataLoading || isMutating}>
+						<Button variant='fill' onClick={retryTranslate} disabled={isMutating}>
 							{translation && isMutating ? <Loading description='retrying translation' /> : <Icon id='retry' size={16} />}
 							&nbsp;Retry
 						</Button>

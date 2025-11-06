@@ -4,7 +4,6 @@ import * as React from 'react';
 
 interface AudioDataContextType {
 	updateBlob: (audioBlob: Blob) => void;
-	isLocalDataLoading: boolean;
 	audioBlob?: Blob;
 	audioUrl?: string;
 }

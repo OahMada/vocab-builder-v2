@@ -5,7 +5,6 @@ import * as React from 'react';
 interface NoteContextType {
 	note?: string;
 	updateNote: (note: string) => void;
-	isLocalDataLoading: boolean;
 	isEditing: boolean;
 	updateEditingStatus: (status: boolean) => void;
 }

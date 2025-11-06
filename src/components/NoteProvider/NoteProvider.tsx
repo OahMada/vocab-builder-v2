@@ -2,9 +2,6 @@
 
 import * as React from 'react';
 
-import { useReadLocalStorage } from '@/hooks';
-import { updateLocalStorage } from '@/utils';
-import { LOCAL_STORAGE_KEY } from '@/constants';
 import NoteContext from './NoteContext';
 
 function NoteProvider({ databaseNote, children }: { databaseNote?: string; children: React.ReactNode }) {
@@ -19,23 +16,14 @@ function NoteProvider({ databaseNote, children }: { databaseNote?: string; child
 		setNote(note);
 	}, []);
 
-	// write changes to local storage
-	React.useEffect(() => {
-		if (note) {
-			updateLocalStorage<string>('save', LOCAL_STORAGE_KEY.NOTE, note);
-		}
-	}, [note]);
-	let isLoading = useReadLocalStorage<string>(LOCAL_STORAGE_KEY.NOTE, updateNote);
-
 	let value = React.useMemo(
 		() => ({
 			isEditing,
 			updateEditingStatus,
-			isLocalDataLoading: isLoading,
 			note,
 			updateNote,
 		}),
-		[isEditing, isLoading, note, updateEditingStatus, updateNote]
+		[isEditing, note, updateEditingStatus, updateNote]
 	);
 
 	return <NoteContext.Provider value={value}>{children}</NoteContext.Provider>;

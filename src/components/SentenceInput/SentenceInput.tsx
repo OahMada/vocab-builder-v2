@@ -10,7 +10,7 @@ import { FallbackProps, withErrorBoundary } from 'react-error-boundary';
 
 import checkSentenceUniqueness from '@/app/actions/sentence/checkSentenceUniqueness';
 
-import { TOAST_ID, INPUT_NAME, LOCAL_STORAGE_KEY, COOKIE_KEY } from '@/constants';
+import { TOAST_ID, INPUT_NAME, COOKIE_KEY } from '@/constants';
 import { UserInputType, UserInputSchema, setCookie } from '@/lib';
 import { handleError, updateLocalStorage } from '@/utils';
 import { useReadLocalStorage } from '@/hooks';
@@ -45,7 +45,7 @@ function SentenceInput() {
 		setValue(INPUT_NAME.SENTENCE, text);
 	}
 
-	useReadLocalStorage<string>(LOCAL_STORAGE_KEY.SENTENCE, updateInput);
+	useReadLocalStorage(updateInput);
 
 	let userInput = watch(INPUT_NAME.SENTENCE);
 	let { ref, ...rest } = register(INPUT_NAME.SENTENCE, {
@@ -59,7 +59,7 @@ function SentenceInput() {
 		removeFromToast(TOAST_ID.SENTENCE);
 		clearErrors(INPUT_NAME.SENTENCE);
 		setValue(INPUT_NAME.SENTENCE, '');
-		updateLocalStorage('delete', LOCAL_STORAGE_KEY.SENTENCE);
+		updateLocalStorage('delete');
 	}
 
 	async function onSubmit(data: UserInputType) {
@@ -87,7 +87,7 @@ function SentenceInput() {
 				return;
 			}
 			setCookie(COOKIE_KEY, data[INPUT_NAME.SENTENCE]);
-			updateLocalStorage('save', LOCAL_STORAGE_KEY.SENTENCE, data[INPUT_NAME.SENTENCE]);
+			updateLocalStorage('save', data[INPUT_NAME.SENTENCE]);
 			router.push('/sentence/new');
 		});
 	}

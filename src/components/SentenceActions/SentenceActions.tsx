@@ -13,7 +13,7 @@ import getBlobStorageSASToken from '@/app/actions/lib/getBlobStorageSASToken';
 import { useSentenceData } from '@/hooks';
 import { SentenceWithPieces, deleteCookie } from '@/lib';
 import { BLOB_CONTAINER_TYPE, COOKIE_KEY, TOAST_ID } from '@/constants';
-import { handleError, deleteLocalData } from '@/utils';
+import { handleError, updateLocalStorage } from '@/utils';
 import { SentenceDataType } from '@/types';
 
 import { Button } from '@/components/Button';
@@ -50,13 +50,6 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 		} else {
 			router.replace('/');
 		}
-
-		if (sentenceId) {
-			deleteLocalData(true);
-		} else {
-			deleteLocalData();
-		}
-
 		deleteCookie(COOKIE_KEY);
 	}
 
@@ -150,7 +143,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				setShouldStopAudio(false);
 				return;
 			}
-			deleteLocalData(true);
+			updateLocalStorage('delete');
 			if (sentenceId) {
 				addToToast({
 					id: TOAST_ID.SENTENCE_ACTIONS,

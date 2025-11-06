@@ -13,7 +13,6 @@ export interface RemoveIPAParams {
 
 export interface SentencePiecesContextType {
 	pieces: PiecesType;
-	isLocalDataLoading: boolean;
 	addIPA: ({ text, IPA, id }: AddIPAParams) => void;
 	removeIPA: ({ word, id }: RemoveIPAParams) => void;
 }

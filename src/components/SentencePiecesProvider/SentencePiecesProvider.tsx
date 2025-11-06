@@ -5,12 +5,9 @@ import { produce } from 'immer';
 
 import { PiecesType } from '@/types';
 import { constructSentencePiecesData, segmentSentence } from '@/helpers';
-import { useReadLocalStorage } from '@/hooks';
-import { LOCAL_STORAGE_KEY } from '@/constants';
+import { SentenceWithPieces } from '@/lib';
 import { Action, RemoveIPAParams, AddIPAParams } from './types';
 import SentencePiecesContext from './SentencePiecesContext';
-import { SentenceWithPieces } from '@/lib';
-import { updateLocalStorage } from '@/utils';
 
 function reducer(state: PiecesType, action: Action) {
 	return produce(state, (draft) => {
@@ -54,16 +51,6 @@ function SentencePiecesProvider({
 	}
 
 	let [pieces, dispatch] = React.useReducer(reducer, state || defaultState);
-	function loadLocalPiecesData(data: PiecesType) {
-		dispatch({ type: 'loadFromStorage', payload: data });
-	}
-
-	let isLoading = useReadLocalStorage<PiecesType>(LOCAL_STORAGE_KEY.PIECES, loadLocalPiecesData);
-
-	// write changes to local storage
-	React.useEffect(() => {
-		updateLocalStorage<PiecesType>('save', LOCAL_STORAGE_KEY.PIECES, pieces);
-	}, [pieces]);
 
 	let addIPA = React.useCallback(function ({ text, id, IPA }: AddIPAParams) {
 		dispatch({
@@ -88,7 +75,7 @@ function SentencePiecesProvider({
 		});
 	}, []);
 
-	let value = React.useMemo(() => ({ isLocalDataLoading: isLoading, addIPA, removeIPA, pieces }), [addIPA, isLoading, removeIPA, pieces]);
+	let value = React.useMemo(() => ({ addIPA, removeIPA, pieces }), [addIPA, removeIPA, pieces]);
 
 	return <SentencePiecesContext.Provider value={value}>{children}</SentencePiecesContext.Provider>;
 }

@@ -30,18 +30,8 @@ export const INPUT_NAME = {
 	ENGLISH_IPA_FLAVOUR: 'EnglishIPAFlavour',
 } as const;
 
-export const LOCAL_STORAGE_KEY = {
-	NOTE: INPUT_NAME.NOTE,
-	SENTENCE: INPUT_NAME.SENTENCE,
-	PIECES: 'pieces',
-	TRANSLATION: INPUT_NAME.TRANSLATION,
-} as const;
-
-export const LOCAL_STORAGE_OBJ = 'vocab_builder';
-
 export const COOKIE_KEY = 'sentence';
-
-export const LOCAL_DB_KEY = 'audio';
+export const LOCAL_STORAGE_KEY = 'sentence';
 
 export const UNSTABLE_CACHE_TAG = {
 	SENTENCES: 'sentences',
@@ -228,5 +218,4 @@ export const PRICE_TIER = [
 	},
 ];
 
-export const ALLOWED_ORIGINS = ['https://vocab-builder.app', 'https://www.vocab-builder.app'];
 export const SCROLL_CONTAINER_BOTTOM_PADDING = 300;

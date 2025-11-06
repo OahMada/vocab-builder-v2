@@ -40,7 +40,7 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 			});
 		},
 	});
-	let { isLocalDataLoading, audioBlob, updateBlob, audioUrl } = useAudioDataContext();
+	let { audioBlob, updateBlob, audioUrl } = useAudioDataContext();
 	let { playingId, playAudio, stopAudio, loadingId } = usePlayAudio();
 	let isPlaying = playingId === sentenceId;
 	let isLoading = loadingId === sentenceId;
@@ -54,10 +54,10 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 				updateBlob(audioBlob);
 			}
 		}
-		if (!isLocalDataLoading && !audioBlob && !audioUrl) {
+		if (!audioBlob && !audioUrl) {
 			activateTrigger();
 		}
-	}, [audioBlob, audioUrl, isLocalDataLoading, sentence, trigger, updateBlob]);
+	}, [audioBlob, audioUrl, sentence, trigger, updateBlob]);
 
 	React.useEffect(() => {
 		if (shouldStopAudio) {

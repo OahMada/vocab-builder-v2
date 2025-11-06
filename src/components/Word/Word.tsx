@@ -37,7 +37,7 @@ function Word({ piece, IPA, id, sentence }: WordComponentProps) {
 			});
 		},
 	});
-	let { addIPA, removeIPA, isLocalDataLoading } = useSentencePiecesContext();
+	let { addIPA, removeIPA } = useSentencePiecesContext();
 
 	if (piece === ' ') {
 		return undefined;
@@ -61,7 +61,7 @@ function Word({ piece, IPA, id, sentence }: WordComponentProps) {
 			{IPA ? (
 				<InactiveWordButton>{piece}</InactiveWordButton>
 			) : (
-				<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating || isLocalDataLoading} $isMutating={isMutating}>
+				<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating} $isMutating={isMutating}>
 					{piece}
 				</WordButton>
 			)}

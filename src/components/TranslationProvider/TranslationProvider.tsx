@@ -3,9 +3,6 @@
 import * as React from 'react';
 
 import TranslationContext from './TranslationContext';
-import { useReadLocalStorage } from '@/hooks';
-import { updateLocalStorage } from '@/utils';
-import { LOCAL_STORAGE_KEY } from '@/constants';
 
 function TranslationProvider({ databaseTranslation, children }: { databaseTranslation?: string; children: React.ReactNode }) {
 	let [translation, setTranslation] = React.useState(databaseTranslation || undefined);
@@ -19,24 +16,14 @@ function TranslationProvider({ databaseTranslation, children }: { databaseTransl
 		setTranslation(translation);
 	}, []);
 
-	// write changes to local storage
-	React.useEffect(() => {
-		if (translation) {
-			updateLocalStorage<string>('save', LOCAL_STORAGE_KEY.TRANSLATION, translation);
-		}
-	}, [translation]);
-
-	let isLoading = useReadLocalStorage<string>(LOCAL_STORAGE_KEY.TRANSLATION, updateTranslation);
-
 	let value = React.useMemo(
 		() => ({
 			isEditing,
 			updateEditingStatus,
-			isLocalDataLoading: isLoading,
 			translation,
 			updateTranslation,
 		}),
-		[isEditing, isLoading, translation, updateEditingStatus, updateTranslation]
+		[isEditing, translation, updateEditingStatus, updateTranslation]
 	);
 
 	return <TranslationContext.Provider value={value}>{children}</TranslationContext.Provider>;
