@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, TextUIPart } from 'ai';
 
-import { QUERIES } from '@/constants';
+import { QUERIES, SCROLL_CONTAINER_BOTTOM_PADDING } from '@/constants';
 import { handleError } from '@/utils';
 
 import Modal from '@/components/Modal';
@@ -22,13 +22,12 @@ interface AskAQuestionProps {
 	sentence: string;
 }
 
-var bottomOffsetPadding = 300;
-
 function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	let [copied, setCopied] = React.useState(false);
 	let containerRef = React.useRef<null | HTMLDivElement>(null);
 	let [previousScrollHeight, setPreviousScrollHeight] = React.useState(0);
-	let [shouldAddPadding, setShouldAddPadding] = React.useState(false);
+	let [bottomPadding, setBottomPadding] = React.useState(SCROLL_CONTAINER_BOTTOM_PADDING);
+	let [shouldScroll, setShouldScroll] = React.useState(false);
 
 	let { messages, sendMessage, status, stop, error, regenerate } = useChat({
 		transport: new DefaultChatTransport({
@@ -44,7 +43,8 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	function triggerChat(text: string) {
 		if (containerRef.current) {
 			setPreviousScrollHeight(containerRef.current.scrollHeight);
-			setShouldAddPadding(true);
+			setBottomPadding(SCROLL_CONTAINER_BOTTOM_PADDING);
+			setShouldScroll(true);
 		}
 		sendMessage({
 			text,
@@ -74,29 +74,28 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	React.useEffect(() => {
 		if (!containerRef.current) return;
 		let element = containerRef.current;
-
-		if (status === 'ready' && element.scrollHeight - bottomOffsetPadding >= previousScrollHeight + bottomOffsetPadding) {
-			// if the filled in content takes up space bigger than bottomOffsetPadding
-			setShouldAddPadding(false);
+		element.style.paddingBottom = `${bottomPadding}px`;
+		// scroll to beyond bottom
+		if (shouldScroll) {
+			element.scrollTop = element.scrollHeight - element.clientHeight + bottomPadding;
+			setShouldScroll(false);
 		}
-	}, [previousScrollHeight, status]);
+	}, [bottomPadding, shouldScroll]);
 
 	React.useEffect(() => {
-		// add a bottom padding and scroll to bottom when submitted, and remove the padding when there is enough content to fill the blank space
 		if (!containerRef.current) return;
 		let element = containerRef.current;
-		let padding = 0;
-		if (element.scrollHeight > element.clientHeight) {
-			padding = bottomOffsetPadding;
+
+		if (status === 'ready' && !shouldScroll) {
+			if (element.scrollHeight - SCROLL_CONTAINER_BOTTOM_PADDING >= previousScrollHeight + SCROLL_CONTAINER_BOTTOM_PADDING) {
+				// if the filled in content takes up space bigger than bottomPadding
+				setBottomPadding(0);
+			} else {
+				let newPadding = SCROLL_CONTAINER_BOTTOM_PADDING - (element.scrollHeight - (element.scrollTop + element.clientHeight));
+				setBottomPadding(newPadding);
+			}
 		}
-		if (shouldAddPadding) {
-			element.style.paddingBottom = `${padding}px`;
-			// scroll to beyond bottom
-			element.scrollTop = element.scrollHeight - element.clientHeight + padding;
-		} else {
-			element.style.paddingBottom = '0px';
-		}
-	}, [previousScrollHeight, shouldAddPadding]);
+	}, [previousScrollHeight, shouldScroll, status]);
 
 	if (!isShowing) {
 		return null;
@@ -187,12 +186,11 @@ var AnswerBoxWrapper = styled.div`
 	background-color: var(--bg-secondary);
 	border-radius: 16px;
 	width: 100%;
-	padding: 16px;
-	padding-right: 6px;
 	overflow: hidden;
 `;
 
 var AnswerBox = styled.div`
+	padding: 16px;
 	height: 100%;
 	overflow: auto;
 	scrollbar-gutter: stable;

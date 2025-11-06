@@ -229,3 +229,4 @@ export const PRICE_TIER = [
 ];
 
 export const ALLOWED_ORIGINS = ['https://vocab-builder.app', 'https://www.vocab-builder.app'];
+export const SCROLL_CONTAINER_BOTTOM_PADDING = 300;
