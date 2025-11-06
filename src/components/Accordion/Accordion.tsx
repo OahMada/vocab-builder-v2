@@ -30,8 +30,12 @@ function AccordionItem({
 	);
 }
 
-function AccordionTrigger({ children, ...delegated }: React.ComponentProps<typeof AccordionPrimitives.Trigger>) {
-	let [isOpen, setIsOpen] = React.useState(false);
+function AccordionTrigger({
+	children,
+	defaultOpen,
+	...delegated
+}: { defaultOpen: boolean } & React.ComponentProps<typeof AccordionPrimitives.Trigger>) {
+	let [isOpen, setIsOpen] = React.useState(defaultOpen);
 
 	function handleOnclick(event: React.MouseEvent<HTMLButtonElement>) {
 		// click on the element causes the state flip

@@ -24,6 +24,7 @@ type SentenceListingEntryProps = {
 	stopAudio: () => void;
 	isPlaying: boolean;
 	isLoading: boolean;
+	defaultOpenId: string;
 } & SentenceWithPieces &
 	Omit<React.ComponentProps<typeof AccordionItem>, 'children'>;
 
@@ -40,6 +41,7 @@ function SentenceListingEntry({
 	stopAudio,
 	isPlaying,
 	isLoading,
+	defaultOpenId,
 	...delegated
 }: SentenceListingEntryProps) {
 	let { search } = useSearchParamsContext();
@@ -76,7 +78,7 @@ function SentenceListingEntry({
 
 	return (
 		<AccordionItem id={id} {...delegated}>
-			<AccordionTrigger>
+			<AccordionTrigger defaultOpen={defaultOpenId === id}>
 				<SentenceWrapper>
 					<Index>{`${index + 1}. `}</Index>
 					{finalPieces}

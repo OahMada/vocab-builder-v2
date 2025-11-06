@@ -42,6 +42,7 @@ function SentenceListing({
 	let [isAuthenticated, setIsAuthenticated] = React.useState(true);
 
 	let [currentSentences, setCurrentSentences] = React.useState(sentences);
+	let defaultOpenId = currentSentences[0]?.id || '';
 	let [nextCursor, setNextCursor] = React.useState<string | undefined>(cursor);
 	let [isLoadingData, startTransition] = React.useTransition();
 	let [error, setError] = React.useState<string | undefined>(initialError);
@@ -131,7 +132,7 @@ function SentenceListing({
 			<SecondaryWrapper style={{ '--height': `${rowVirtualizer.getTotalSize()}px` } as React.CSSProperties}>
 				<AccordionRoot
 					style={{ '--transform': `translateY(${virtualizedItems[0]?.start || 0}px)` } as React.CSSProperties}
-					defaultValue={[currentSentences[0]?.id]} // might be an empty array
+					defaultValue={[defaultOpenId]} // might be an empty array
 				>
 					{virtualizedItems.map((virtualItem) => {
 						let index = virtualItem.index;
@@ -150,6 +151,7 @@ function SentenceListing({
 								stopAudio={stopAudio}
 								isPlaying={playingId === id}
 								isLoading={loadingId === id}
+								defaultOpenId={defaultOpenId}
 							/>
 						);
 					})}
