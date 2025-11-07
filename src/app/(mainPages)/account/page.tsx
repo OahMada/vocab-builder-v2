@@ -16,6 +16,8 @@ import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
 import PersonalizeUser from '@/components/PersonalizeUser';
 import GoogleAccountLink from '@/components/GoogleAccountLink';
 import Breadcrumb from '@/components/CustomBreadcrumb';
+import { TabsContent } from '@/components/Tabs';
+import Tab from './Tab';
 
 export var metadata: Metadata = {
 	title: 'Account | Vocab Builder',
@@ -47,12 +49,17 @@ export default async function AccountPage() {
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
 				<Breadcrumb page='Account' link='/account' />
-				<UserPhoto />
-				<UserInfo name={session.user.name!} email={session.user.email!} />
-				<GoogleAccountLink />
-				<PersonalizeUser showSubmitButton={false} hasName={Boolean(session.user.name)} />
-				<SyncData errorText={errorText} lastSynced={lastSynced} />
-				<DeleteAccount />
+				<Tab>
+					<TabsContent value='settings'>
+						<UserPhoto />
+						<UserInfo name={session.user.name!} email={session.user.email!} />
+						<GoogleAccountLink />
+						<PersonalizeUser showSubmitButton={false} hasName={Boolean(session.user.name)} />
+						<SyncData errorText={errorText} lastSynced={lastSynced} />
+						<DeleteAccount />
+					</TabsContent>
+					<TabsContent value='subscription'>Subscription</TabsContent>
+				</Tab>
 			</Wrapper>
 		</MaxWidthWrapper>
 	);

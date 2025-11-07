@@ -175,10 +175,6 @@ var Wrapper = styled.div`
 	background-color: var(--bg-secondary);
 	margin-bottom: 10px;
 	position: relative;
-
-	@media ${QUERIES.tabletAndUp} {
-		margin-top: 48px;
-	}
 `;
 
 var UploadButton = styled(Button)`
