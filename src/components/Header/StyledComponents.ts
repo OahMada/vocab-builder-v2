@@ -2,8 +2,6 @@
 
 import styled from 'styled-components';
 
-import { QUERIES } from '@/constants';
-
 import { Button } from '@/components/Button';
 
 export var Wrapper = styled.div`
@@ -33,21 +31,8 @@ export var LoginButton = styled(Button)`
 	width: max-content;
 `;
 
-export var HeaderNav = styled.nav`
-	flex: 1;
-	align-items: center;
-	gap: 20px;
-	font-size: ${12 / 16}rem;
-	justify-content: center;
-	display: none;
-
-	@media ${QUERIES.tabletAndUp} {
-		display: flex;
-	}
-`;
-
 export var InnerWrapper = styled.div`
-	flex: 0;
+	flex: 0 1 10%;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;

@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 var NavLink = styled(Link)<{ $underScored?: boolean }>`
 	color: inherit;
+	text-underline-offset: 4px;
 
 	${({ $underScored = false }) =>
 		!$underScored &&
