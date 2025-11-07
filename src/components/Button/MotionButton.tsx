@@ -7,7 +7,7 @@ import { LazyMotion } from 'motion/react';
 import { Base, ButtonProps, FillButton, IconButton, OutlineButton } from './Shared';
 import NavLink from '@/components/NavLink';
 
-var loadFeatures = () => import('@/lib/motionFeatures').then((res) => res.default);
+var loadFeatures = () => import('@/lib/motionDomAnimation').then((res) => res.default);
 
 // split the component up for lazy loading
 export function MotionButton({

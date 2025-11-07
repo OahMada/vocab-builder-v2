@@ -7,9 +7,9 @@ import getCookie from '@/lib/getCookie';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import Logo from '@/components/Logo';
 import MenuButton from '@/components/MenuButton';
-import { Wrapper, StyledHeader, LoginButton, HeaderNav, InnerWrapper } from './StyledComponents';
-import NavLink from '@/components/NavLink';
+import { Wrapper, StyledHeader, LoginButton, InnerWrapper } from './StyledComponents';
 import ThemeToggle from '@/components/ThemeToggle';
+import HeaderNav from './HeaderNav';
 
 async function Header() {
 	let session = await auth();
@@ -22,14 +22,7 @@ async function Header() {
 			<MaxWidthWrapper>
 				<StyledHeader>
 					<Logo />
-					<HeaderNav>
-						<NavLink href='/browse'>Browse</NavLink>
-						<NavLink href='/account'>Account</NavLink>
-						<NavLink href='/pricing'>Pricing</NavLink>
-						<NavLink href='/sync' prefetch={true}>
-							How to Sync
-						</NavLink>
-					</HeaderNav>
+					<HeaderNav />
 					<InnerWrapper>
 						<ThemeToggle initialTheme={theme as Theme} />
 						{!!session?.user ? (

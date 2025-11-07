@@ -26,5 +26,5 @@ var Wrapper = styled(Link)`
 	font-family: var(--font-logo);
 	color: inherit;
 	transform: translateX(6px);
-	flex: 0;
+	flex: 0 1 10%;
 `;
