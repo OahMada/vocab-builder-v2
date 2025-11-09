@@ -8,3 +8,4 @@ export * from './useNuqsSearchParams';
 export * from './usePaddlePrices';
 export * from './useIsHoverable';
 export * from './useReadLocalStorage';
+export * from './usePaste';

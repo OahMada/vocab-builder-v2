@@ -13,7 +13,7 @@ import checkSentenceUniqueness from '@/app/actions/sentence/checkSentenceUniquen
 import { TOAST_ID, INPUT_NAME, COOKIE_KEY } from '@/constants';
 import { UserInputType, UserInputSchema, setCookie } from '@/lib';
 import { handleError, updateLocalStorage } from '@/utils';
-import { useReadLocalStorage } from '@/hooks';
+import { useReadLocalStorage, usePaste } from '@/hooks';
 
 import TextArea from '@/components/TextArea';
 import Spacer from '@/components/Spacer';
@@ -26,6 +26,7 @@ function SentenceInput() {
 	let userId = session?.user?.id;
 	let { addToToast, removeFromToast } = useGlobalToastContext();
 	let [isLoading, startTransition] = React.useTransition();
+	let textareaRef = React.useRef<null | HTMLTextAreaElement>(null);
 
 	let router = useRouter();
 	let {
@@ -41,10 +42,18 @@ function SentenceInput() {
 		shouldFocusError: false,
 	});
 
-	function updateInput(text: string) {
-		setValue(INPUT_NAME.SENTENCE, text);
-	}
+	let updateInput = React.useCallback(
+		function (text: string) {
+			setValue(INPUT_NAME.SENTENCE, text);
+		},
+		[setValue]
+	);
 
+	// paste text directly on home page
+	usePaste((text: string) => {
+		updateInput(text);
+		textareaRef.current?.focus();
+	});
 	useReadLocalStorage(updateInput);
 
 	let userInput = watch(INPUT_NAME.SENTENCE);
@@ -54,6 +63,7 @@ function SentenceInput() {
 			removeFromToast(TOAST_ID.SENTENCE);
 		},
 	});
+	React.useImperativeHandle(ref, () => textareaRef.current);
 
 	function clearInput() {
 		removeFromToast(TOAST_ID.SENTENCE);
@@ -110,7 +120,7 @@ function SentenceInput() {
 				placeholder='Input or paste in a sentence'
 				clearInput={clearInput}
 				{...rest}
-				ref={ref}
+				ref={textareaRef}
 				value={userInput}
 				keydownSubmit={submitHandler}
 			/>
