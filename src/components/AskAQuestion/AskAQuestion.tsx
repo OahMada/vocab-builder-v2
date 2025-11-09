@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, TextUIPart } from 'ai';
 
-import { QUERIES, SCROLL_CONTAINER_BOTTOM_PADDING } from '@/constants';
+import { SCROLL_CONTAINER_BOTTOM_PADDING } from '@/constants';
 import { handleError } from '@/utils';
-import { getPrefersReducedMotion } from '@/helpers';
+import { applyBottomPaddingAndScroll } from '@/helpers';
 
 import Modal from '@/components/Modal';
 import BottomRightSpinner from '@/components/BottomRightSpinner';
@@ -16,6 +16,7 @@ import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import QuestionInput from './QuestionInput';
+import AnswerBox from './AnswerBox';
 
 interface AskAQuestionProps {
 	isShowing: boolean;
@@ -27,8 +28,6 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	let [copied, setCopied] = React.useState(false);
 	let containerRef = React.useRef<null | HTMLDivElement>(null);
 	let [previousScrollHeight, setPreviousScrollHeight] = React.useState(0);
-	let [bottomPadding, setBottomPadding] = React.useState(SCROLL_CONTAINER_BOTTOM_PADDING);
-	let [shouldScroll, setShouldScroll] = React.useState(false);
 
 	let { messages, sendMessage, status, stop, error, regenerate } = useChat({
 		transport: new DefaultChatTransport({
@@ -44,8 +43,7 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	function triggerChat(text: string) {
 		if (containerRef.current) {
 			setPreviousScrollHeight(containerRef.current.scrollHeight);
-			setBottomPadding(SCROLL_CONTAINER_BOTTOM_PADDING);
-			setShouldScroll(true);
+			applyBottomPaddingAndScroll(containerRef.current, SCROLL_CONTAINER_BOTTOM_PADDING);
 		}
 		sendMessage({
 			text,
@@ -59,7 +57,7 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	}
 
 	function regenerateResponse() {
-		if (status === 'ready') {
+		if (status === 'ready' || status === 'error') {
 			regenerate();
 		}
 	}
@@ -75,34 +73,13 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 	React.useEffect(() => {
 		if (!containerRef.current) return;
 		let element = containerRef.current;
-		// set the padding
-		element.style.paddingBottom = `${bottomPadding}px`;
-		// scroll to beyond bottom
-		if (shouldScroll) {
-			let prefersReducedMotion = getPrefersReducedMotion();
-			element.scrollTo({
-				top: element.scrollHeight + bottomPadding - element.clientHeight,
-				behavior: prefersReducedMotion ? 'auto' : 'smooth',
-			});
-			setShouldScroll(false);
-		}
-	}, [bottomPadding, shouldScroll]);
-
-	React.useEffect(() => {
-		if (!containerRef.current) return;
-		let element = containerRef.current;
-
-		if (status === 'ready' && !shouldScroll) {
+		if (status === 'ready') {
 			if (element.scrollHeight - SCROLL_CONTAINER_BOTTOM_PADDING >= previousScrollHeight + SCROLL_CONTAINER_BOTTOM_PADDING) {
 				// if the filled in content takes up space bigger than bottomPadding
-				setBottomPadding(0);
-			} else {
-				// trim off the excessive padding
-				let newPadding = SCROLL_CONTAINER_BOTTOM_PADDING - (element.scrollHeight - (element.scrollTop + element.clientHeight));
-				setBottomPadding(newPadding);
+				applyBottomPaddingAndScroll(containerRef.current, 0, false);
 			}
 		}
-	}, [previousScrollHeight, shouldScroll, status]);
+	}, [previousScrollHeight, status]);
 
 	if (!isShowing) {
 		return null;
@@ -116,12 +93,12 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 				heading={<Title>Ask Anything</Title>}
 				isOverlayTransparent={true}
 				contentPosition='bottom'
-				style={{ '--gap': '20px' } as React.CSSProperties}
+				style={{ '--gap': '16px' } as React.CSSProperties}
 			>
 				<Sentence>{sentence}</Sentence>
+				<Greeting>What questions do you have about this sentence?</Greeting>
 				<AnswerBoxWrapper>
 					<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties} ref={containerRef}>
-						<p>What questions do you have about this sentence?</p>
 						{messages.map((message) => {
 							if (message.role === 'user') {
 								return (
@@ -160,7 +137,15 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 								);
 							}
 						})}
-						{error && <ErrorText>{handleError(error)}</ErrorText>}
+						{error && (
+							<>
+								<ErrorText>{handleError(error)}</ErrorText>
+								<RegenerateButton variant='icon' onClick={regenerateResponse}>
+									<Icon id='retry' size={16} strokeWidth={2} />
+									<VisuallyHidden>regenerate response</VisuallyHidden>
+								</RegenerateButton>
+							</>
+						)}
 					</AnswerBox>
 				</AnswerBoxWrapper>
 				<QuestionInput triggerChat={triggerChat} isStreaming={isStreaming} stopStreaming={stopStreaming} />
@@ -179,13 +164,16 @@ var Title = styled.h2`
 `;
 
 var Sentence = styled.p`
-	display: flex;
-	flex-direction: column;
-	gap: 5px;
 	font-style: italic;
 	border-left: 4px solid var(--border);
 	padding-left: 0.75rem;
 	font-size: 0.875rem;
+	color: var(--text-tertiary);
+`;
+
+var Greeting = styled.p`
+	transform: translateX(6px);
+	font-size: ${18 / 16}rem;
 `;
 
 var AnswerBoxWrapper = styled.div`
@@ -194,23 +182,6 @@ var AnswerBoxWrapper = styled.div`
 	border-radius: 16px;
 	width: 100%;
 	overflow: hidden;
-`;
-
-var AnswerBox = styled.div`
-	padding: 16px;
-	padding-right: 10px;
-	height: 100%;
-	overflow: auto;
-	scrollbar-gutter: stable;
-
-	@media ${QUERIES.laptopAndUp} {
-		// to compensate for the scroll gutter
-		padding-right: 6px;
-	}
-
-	& > * {
-		margin-bottom: 10px;
-	}
 `;
 
 var ResponseWrapper = styled.div`
@@ -227,7 +198,7 @@ var ErrorText = styled.span`
 var UserInput = styled.p`
 	background-color: var(--bg-tertiary);
 	border-radius: 16px;
-	max-width: 60%;
+	max-width: 75%;
 	padding: 8px 10px;
 	margin-left: auto;
 	width: max-content;

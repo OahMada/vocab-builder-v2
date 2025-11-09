@@ -32,7 +32,6 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	let [isLoading, startTransition] = React.useTransition();
 	let { data: session } = useSession();
 	let [shouldStopAudio, setShouldStopAudio] = React.useState(false);
-
 	let [sentenceDataReady, sentenceData] = useSentenceData();
 	function dismissModal() {
 		setIsModalShowing(false);
@@ -42,135 +41,141 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 		setIsModalShowing(true);
 	}
 
-	function handleCancel() {
-		setShouldStopAudio(true);
-		if (window.history.length && window.history.length > 1) {
-			// you can login and land on one of the sentence page, in this case, you can't simply go back
-			router.back();
-		} else {
-			router.replace('/');
-		}
-		deleteCookie(COOKIE_KEY);
-	}
-
-	async function handleSubmit() {
-		setShouldStopAudio(true);
-		startTransition(async () => {
-			let result: { error: string } | { data: SentenceWithPieces };
-			if (sentenceId) {
-				let sentenceUpdateInput = {
-					...(sentenceData as SentenceDataType),
-					id: sentenceId,
-				};
-				result = await updateSentence(sentenceUpdateInput);
+	let handleCancel = React.useCallback(
+		function () {
+			setShouldStopAudio(true);
+			if (window.history.length && window.history.length > 1) {
+				// you can login and land on one of the sentence page, in this case, you can't simply go back
+				router.back();
 			} else {
-				let audioBlob: Blob | undefined;
-				let restSentenceData: SentenceDataType | undefined;
-
-				if ('audioBlob' in sentenceData) {
-					({ audioBlob, ...restSentenceData } = sentenceData);
-				}
-				if (!audioBlob || !restSentenceData) return;
-
-				let sasToken: string, containerName: string, storageAccountName: string;
-				// get sasToken
-				try {
-					({ sasToken, containerName, storageAccountName } = await getBlobStorageSASToken(BLOB_CONTAINER_TYPE.AUDIO));
-				} catch (error) {
-					let errMsg = handleError(error);
-					addToToast({
-						contentType: 'error',
-						content: errMsg,
-						id: TOAST_ID.SAS_TOKEN,
-					});
-					return;
-				}
-
-				// upload
-				let blobName = createId() + '.mp3';
-				let uploadUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?${sasToken}`;
-				let updateMetaDataUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?comp=metadata&${sasToken}`;
-
-				try {
-					let uploadRes = await fetch(uploadUrl, {
-						method: 'PUT',
-						headers: {
-							'x-ms-blob-type': 'BlockBlob',
-							'Content-Type': 'audio/mpeg',
-						},
-						body: audioBlob,
-					});
-					if (!uploadRes.ok) {
-						throw new Error(`Upload audio file failed: ${uploadRes.statusText}`);
-					}
-
-					let metaRes = await fetch(updateMetaDataUrl, {
-						method: 'PUT',
-						headers: {
-							'x-ms-meta-userid': session?.user.id as string,
-						},
-					});
-					if (!metaRes.ok) {
-						throw new Error(`Audio file metadata update failed: ${metaRes.statusText}`);
-					}
-				} catch (error) {
-					// clean up. for example metadata update failed
-					try {
-						await fetch(uploadUrl, { method: 'DELETE' });
-					} catch (cleanupError) {
-						console.error('Trying to delete audio file from blob storage but failed', cleanupError);
-					}
-					let errMsg = handleError(error);
-					addToToast({
-						contentType: 'error',
-						content: errMsg,
-						id: TOAST_ID.AUDIO_UPLOAD,
-					});
-					return;
-				}
-				let audioUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}`;
-				let sentenceCreateInput = {
-					...restSentenceData,
-					sentence,
-					audioUrl,
-				};
-
-				result = await createSentence(sentenceCreateInput);
-			}
-
-			if ('error' in result) {
-				addToToast({ contentType: 'error', id: TOAST_ID.SENTENCE_ACTIONS, content: result.error });
-				setShouldStopAudio(false);
-				return;
-			}
-			updateLocalStorage('delete');
-			if (sentenceId) {
-				addToToast({
-					id: TOAST_ID.SENTENCE_ACTIONS,
-					contentType: 'notice',
-					content: sentence,
-					title: 'Sentence Updated',
-				});
-
-				if (window.history.length && window.history.length > 1) {
-					router.back();
-				} else {
-					router.replace('/');
-				}
-			} else {
-				addToToast({
-					id: TOAST_ID.SENTENCE_ACTIONS,
-					contentType: 'notice',
-					content: sentence,
-					title: 'Sentence Created',
-					shouldShowActionBtn: true,
-				});
 				router.replace('/');
 			}
-		});
-	}
+			deleteCookie(COOKIE_KEY);
+		},
+		[router]
+	);
 
-	// Cmd/Ctrl + Shift + A to trigger Ask Anything Dialog
+	let handleSubmit = React.useCallback(
+		async function () {
+			setShouldStopAudio(true);
+			startTransition(async () => {
+				let result: { error: string } | { data: SentenceWithPieces };
+				if (sentenceId) {
+					let sentenceUpdateInput = {
+						...(sentenceData as SentenceDataType),
+						id: sentenceId,
+					};
+					result = await updateSentence(sentenceUpdateInput);
+				} else {
+					let audioBlob: Blob | undefined;
+					let restSentenceData: SentenceDataType | undefined;
+
+					if ('audioBlob' in sentenceData) {
+						({ audioBlob, ...restSentenceData } = sentenceData);
+					}
+					if (!audioBlob || !restSentenceData) return;
+
+					let sasToken: string, containerName: string, storageAccountName: string;
+					// get sasToken
+					try {
+						({ sasToken, containerName, storageAccountName } = await getBlobStorageSASToken(BLOB_CONTAINER_TYPE.AUDIO));
+					} catch (error) {
+						let errMsg = handleError(error);
+						addToToast({
+							contentType: 'error',
+							content: errMsg,
+							id: TOAST_ID.SAS_TOKEN,
+						});
+						return;
+					}
+
+					// upload
+					let blobName = createId() + '.mp3';
+					let uploadUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?${sasToken}`;
+					let updateMetaDataUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}?comp=metadata&${sasToken}`;
+
+					try {
+						let uploadRes = await fetch(uploadUrl, {
+							method: 'PUT',
+							headers: {
+								'x-ms-blob-type': 'BlockBlob',
+								'Content-Type': 'audio/mpeg',
+							},
+							body: audioBlob,
+						});
+						if (!uploadRes.ok) {
+							throw new Error(`Upload audio file failed: ${uploadRes.statusText}`);
+						}
+
+						let metaRes = await fetch(updateMetaDataUrl, {
+							method: 'PUT',
+							headers: {
+								'x-ms-meta-userid': session?.user.id as string,
+							},
+						});
+						if (!metaRes.ok) {
+							throw new Error(`Audio file metadata update failed: ${metaRes.statusText}`);
+						}
+					} catch (error) {
+						// clean up. for example metadata update failed
+						try {
+							await fetch(uploadUrl, { method: 'DELETE' });
+						} catch (cleanupError) {
+							console.error('Trying to delete audio file from blob storage but failed', cleanupError);
+						}
+						let errMsg = handleError(error);
+						addToToast({
+							contentType: 'error',
+							content: errMsg,
+							id: TOAST_ID.AUDIO_UPLOAD,
+						});
+						return;
+					}
+					let audioUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}/${blobName}`;
+					let sentenceCreateInput = {
+						...restSentenceData,
+						sentence,
+						audioUrl,
+					};
+
+					result = await createSentence(sentenceCreateInput);
+				}
+
+				if ('error' in result) {
+					addToToast({ contentType: 'error', id: TOAST_ID.SENTENCE_ACTIONS, content: result.error });
+					setShouldStopAudio(false);
+					return;
+				}
+				updateLocalStorage('delete');
+				if (sentenceId) {
+					addToToast({
+						id: TOAST_ID.SENTENCE_ACTIONS,
+						contentType: 'notice',
+						content: sentence,
+						title: 'Sentence Updated',
+					});
+
+					if (window.history.length && window.history.length > 1) {
+						router.back();
+					} else {
+						router.replace('/');
+					}
+				} else {
+					addToToast({
+						id: TOAST_ID.SENTENCE_ACTIONS,
+						contentType: 'notice',
+						content: sentence,
+						title: 'Sentence Created',
+						shouldShowActionBtn: true,
+					});
+					router.replace('/');
+				}
+			});
+		},
+		[addToToast, router, sentence, sentenceData, sentenceId, session?.user.id]
+	);
+
+	// Option/Alt + A to trigger Ask Anything Dialog, Option/Alt + Enter to submit
 	React.useEffect(() => {
 		async function handleKeyDown(e: KeyboardEvent) {
 			if (e.altKey && e.code === 'KeyA') {
@@ -181,12 +186,20 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 					showModal();
 				}
 			}
+			if (e.altKey && e.key === 'Enter') {
+				e.preventDefault();
+				handleSubmit();
+			}
+			if (e.altKey && e.code === 'KeyX') {
+				e.preventDefault();
+				handleCancel();
+			}
 		}
 		document.addEventListener('keydown', handleKeyDown);
 		return () => {
 			document.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [isModalShowing]);
+	}, [handleCancel, handleSubmit, isModalShowing]);
 
 	return (
 		<>
@@ -198,14 +211,18 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 					</HelpButton>
 				</Tooltip>
 				<SentenceAudio shouldStopAudio={shouldStopAudio} sentence={sentence} />
-				<CancelButton variant='outline' onClick={handleCancel} disabled={isLoading}>
-					<Icon id='x' />
-					&nbsp;Cancel
-				</CancelButton>
-				<DoneButton variant='outline' disabled={!sentenceDataReady || isLoading} onClick={handleSubmit}>
-					{isLoading ? <Loading description='submitting data' /> : <Icon id='enter' />}
-					&nbsp;Done
-				</DoneButton>
+				<Tooltip tip={'Alt / Option + X'}>
+					<CancelButton variant='outline' onClick={handleCancel} disabled={isLoading}>
+						<Icon id='x' />
+						&nbsp;Cancel
+					</CancelButton>
+				</Tooltip>
+				<Tooltip tip={'Alt / Option + Enter'}>
+					<DoneButton variant='outline' disabled={!sentenceDataReady || isLoading} onClick={handleSubmit}>
+						{isLoading ? <Loading description='submitting data' /> : <Icon id='enter' />}
+						&nbsp;Done
+					</DoneButton>
+				</Tooltip>
 			</Wrapper>
 			<AskAQuestion isShowing={isModalShowing} onDismiss={dismissModal} sentence={sentence} />
 		</>

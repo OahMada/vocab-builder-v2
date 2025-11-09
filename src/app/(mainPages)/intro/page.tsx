@@ -39,7 +39,9 @@ export default function IntroPage() {
 				<FeaturesWrapper>
 					<Feature>
 						<FeatureTitle>Input a Sentence</FeatureTitle>
-						<FeatureDesc>Type or paste in a sentence you want to keep.</FeatureDesc>
+						<FeatureDesc>
+							Type or paste in a sentence you want to keep. You can tap or click the paste button, or use the paste shortcut on a computer.
+						</FeatureDesc>
 						<ImageWrapper>
 							<FeatureImage src={home_page} alt='home page' placeholder='blur' fill={true} />
 						</ImageWrapper>

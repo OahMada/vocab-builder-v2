@@ -22,7 +22,7 @@ function Toast({ title, content, contentType, removeToast, shouldShowActionBtn =
 	return (
 		<Root
 			{...props}
-			duration={3000}
+			duration={5000}
 			open={open}
 			onOpenChange={(open) => {
 				setIsOpen(open);
