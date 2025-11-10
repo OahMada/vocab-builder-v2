@@ -17,7 +17,11 @@ export var TabsList = styled(TabsPrimitives.List)`
 	width: 250px;
 	border: 1px solid var(--border);
 	border-radius: 12px;
-	gap: 4px;
+
+	// only works in chrome
+	&:has(:focus-visible) {
+		outline: 2px solid -webkit-focus-ring-color !important;
+	}
 `;
 export var TabsTrigger = TabsPrimitives.Trigger;
 export var TabsContent = styled(TabsPrimitives.Content)`

@@ -17,7 +17,7 @@ import PersonalizeUser from '@/components/PersonalizeUser';
 import GoogleAccountLink from '@/components/GoogleAccountLink';
 import Breadcrumb from '@/components/CustomBreadcrumb';
 import { TabsContent } from '@/components/Tabs';
-import Tab from './Tab';
+import Tab from '@/components/AccountTab';
 
 export var metadata: Metadata = {
 	title: 'Account | Vocab Builder',

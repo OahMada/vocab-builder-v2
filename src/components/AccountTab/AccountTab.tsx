@@ -34,7 +34,7 @@ export default function Tab({ children }: { children: React.ReactNode }) {
 						return (
 							<TabsTrigger asChild={true} value={tab.value} key={tab.value}>
 								<TabButton variant='icon'>
-									{isActive && <Background layoutId='active-bg' transition={{ duration: 0.15 }} />}
+									{isActive && <Background layoutId='active-bg' transition={{ type: 'spring', duration: 0.15, stiffness: 150, damping: 25 }} />}
 									<LabelText>{tab.label}</LabelText>
 								</TabButton>
 							</TabsTrigger>
@@ -55,6 +55,9 @@ var TabButton = styled(Button)`
 	color: var(--text-secondary);
 	border-radius: inherit;
 	position: relative;
+
+	// elevate the outline to the parent wrapper
+	outline: none;
 `;
 
 var Background = styled(m.span)`
@@ -68,8 +71,11 @@ var Background = styled(m.span)`
 	${TabButton}[data-state='active'] & {
 		background-color: var(--bg-secondary);
 	}
-	${TabButton}[data-state='active']:hover & {
-		background-color: var(--bg-secondary-hover);
+
+	@media (hover: hover) {
+		${TabButton}[data-state='active']:hover & {
+			background-color: var(--bg-secondary-hover);
+		}
 	}
 `;
 
