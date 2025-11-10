@@ -11,10 +11,8 @@ function PhoneticSymbol({ symbol, ...delegated }: Omit<React.ComponentProps<type
 			variant='outline'
 			initial={{ opacity: 0, y: -2 }}
 			animate={{ opacity: 1, y: 0 }}
-			transition={{
-				duration: 0.4,
-				ease: [0.16, 1, 0.3, 1],
-			}}
+			exit={{ opacity: 0, y: -2 }}
+			transition={{ duration: 0.3 }}
 			{...delegated}
 		>
 			{symbol}

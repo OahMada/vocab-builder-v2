@@ -2,12 +2,9 @@
 
 import * as React from 'react';
 import * as m from 'motion/react-m';
-import { LazyMotion } from 'motion/react';
 
 import { Base, ButtonProps, FillButton, IconButton, OutlineButton } from './Shared';
 import NavLink from '@/components/NavLink';
-
-var loadFeatures = () => import('@/lib/motionDomAnimation').then((res) => res.default);
 
 // split the component up for lazy loading
 export function MotionButton({
@@ -28,10 +25,8 @@ export function MotionButton({
 	}
 
 	return (
-		<LazyMotion features={loadFeatures}>
-			<Component as={href ? NavLink : m.button} href={href} {...delegated}>
-				{children}
-			</Component>
-		</LazyMotion>
+		<Component as={href ? NavLink : m.button} href={href} {...delegated}>
+			{children}
+		</Component>
 	);
 }
