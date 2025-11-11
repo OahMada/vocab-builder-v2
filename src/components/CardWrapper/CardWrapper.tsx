@@ -1,8 +1,9 @@
 'use client';
 
+import { m } from 'motion/react';
 import styled from 'styled-components';
 
-var CardWrapper = styled.div`
+var CardWrapper = styled(m.div)`
 	background-color: var(--bg-secondary);
 	width: 100%;
 	padding: 14px;

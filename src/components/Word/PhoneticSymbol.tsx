@@ -3,16 +3,17 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { CUSTOM_SPRING } from '@/constants';
+
 import { MotionButton } from '@/components/Button';
 
 function PhoneticSymbol({ symbol, ...delegated }: Omit<React.ComponentProps<typeof MotionButton>, 'variant'> & { symbol: string }) {
 	return (
 		<SymbolButton
 			variant='outline'
-			initial={{ opacity: 0, y: -2 }}
-			animate={{ opacity: 1, y: 0 }}
-			exit={{ opacity: 0, y: -2 }}
-			transition={{ duration: 0.3 }}
+			initial={{ opacity: 0, y: -2, scale: 0.8 }}
+			animate={{ opacity: 1, y: 0, scale: 1 }}
+			transition={CUSTOM_SPRING}
 			{...delegated}
 		>
 			{symbol}

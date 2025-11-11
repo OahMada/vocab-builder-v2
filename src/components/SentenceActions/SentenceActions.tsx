@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { createId } from '@paralleldrive/cuid2';
+import { m } from 'motion/react';
 
 import createSentence from '@/app/actions/sentence/createSentence';
 import updateSentence from '@/app/actions/sentence/updateSentence';
@@ -12,7 +13,7 @@ import getBlobStorageSASToken from '@/app/actions/lib/getBlobStorageSASToken';
 
 import { useSentenceData } from '@/hooks';
 import { SentenceWithPieces, deleteCookie } from '@/lib';
-import { BLOB_CONTAINER_TYPE, COOKIE_KEY, TOAST_ID } from '@/constants';
+import { BLOB_CONTAINER_TYPE, COOKIE_KEY, CUSTOM_SPRING, TOAST_ID } from '@/constants';
 import { handleError, updateLocalStorage } from '@/utils';
 import { SentenceDataType } from '@/types';
 
@@ -203,7 +204,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 
 	return (
 		<>
-			<Wrapper>
+			<Wrapper layout={true} transition={CUSTOM_SPRING}>
 				<Tooltip tip={'Alt / Option + A'}>
 					<HelpButton variant='outline' onClick={showModal} disabled={isLoading}>
 						<Icon id='help' />
@@ -231,7 +232,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 
 export default SentenceActions;
 
-var Wrapper = styled.div`
+var Wrapper = styled(m.div)`
 	display: flex;
 	gap: 8px;
 	width: 100%;

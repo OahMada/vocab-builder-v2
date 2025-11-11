@@ -20,9 +20,9 @@ import TranslationProvider from '@/components/TranslationProvider';
 import SentencePiecesProvider from '@/components/SentencePiecesProvider';
 import AudioDataProvider from '@/components/AudioDataProvider';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
-import CardWrapper from '@/components/CardWrapper';
 import Title from './Title';
 import InnerWidthWrapper from '@/components/InnerWidthWrapper';
+import MotionLoader from '@/components/MotionLoader';
 
 export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',
@@ -68,14 +68,14 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 					<TranslationProvider databaseTranslation={sentenceData?.translation}>
 						<NoteProvider databaseNote={sentenceData?.note || undefined}>
 							<Wrapper $position='flex-start'>
-								<WordListing title={<Title>The Sentence</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
-								<CardWrapper>
+								<MotionLoader>
+									<WordListing title={<Title>The Sentence</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
 									<Translation title={<Title>Translation</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
-								</CardWrapper>
-								<Note title={<Title>Note</Title>} />
-								<AudioDataProvider audioUrl={sentenceData?.audioUrl}>
-									<SentenceActions sentence={(sentenceData?.sentence || sentence) as string} sentenceId={sentenceData?.id} />
-								</AudioDataProvider>
+									<Note title={<Title>Note</Title>} />
+									<AudioDataProvider audioUrl={sentenceData?.audioUrl}>
+										<SentenceActions sentence={(sentenceData?.sentence || sentence) as string} sentenceId={sentenceData?.id} />
+									</AudioDataProvider>
+								</MotionLoader>
 							</Wrapper>
 						</NoteProvider>
 					</TranslationProvider>
