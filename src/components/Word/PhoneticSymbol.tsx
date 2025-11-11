@@ -11,7 +11,7 @@ function PhoneticSymbol({ symbol, ...delegated }: Omit<React.ComponentProps<type
 	return (
 		<SymbolButton
 			variant='outline'
-			initial={{ opacity: 0, y: -2, scale: 0.8 }}
+			initial={{ opacity: 0, y: -2, scale: 0.5 }}
 			animate={{ opacity: 1, y: 0, scale: 1 }}
 			transition={CUSTOM_SPRING}
 			{...delegated}

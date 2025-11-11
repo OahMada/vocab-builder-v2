@@ -7,5 +7,6 @@ export * from './useIntersectionObserver';
 export * from './useNuqsSearchParams';
 export * from './usePaddlePrices';
 export * from './useIsHoverable';
+export * from './useTheme';
 export * from './useReadLocalStorage';
 export * from './usePaste';

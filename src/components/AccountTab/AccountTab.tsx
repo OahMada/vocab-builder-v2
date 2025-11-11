@@ -6,7 +6,7 @@ import * as m from 'motion/react-m';
 import { LazyMotion } from 'motion/react';
 
 import { TabsList, TabsRoot, TabsTrigger } from '@/components/Tabs';
-import { Button } from '@/components/Button';
+import { MotionButton } from '@/components/Button';
 
 var loadFeatures = () => import('@/lib/motionDomMax').then((res) => res.default);
 
@@ -19,12 +19,14 @@ type TabValue = (typeof tabsMap)[number]['value'];
 
 export default function Tab({ children }: { children: React.ReactNode }) {
 	let [active, setActive] = React.useState<TabValue>('settings');
+	let id = React.useId();
 
 	function handleChange(value: string) {
 		let val = value as TabValue;
 		setActive(val);
 	}
 
+	// switching from tab2 to tab1 snaps a bit, don't know why
 	return (
 		<LazyMotion features={loadFeatures}>
 			<TabsRoot defaultValue='settings' value={active} onValueChange={handleChange}>
@@ -34,7 +36,18 @@ export default function Tab({ children }: { children: React.ReactNode }) {
 						return (
 							<TabsTrigger asChild={true} value={tab.value} key={tab.value}>
 								<TabButton variant='icon'>
-									{isActive && <Background layoutId='active-bg' transition={{ type: 'spring', duration: 0.15, stiffness: 150, damping: 25 }} />}
+									{isActive && (
+										<Background
+											layout={true}
+											layoutId={id}
+											transition={{
+												type: 'spring',
+												duration: 0.15,
+												stiffness: 250,
+												damping: 25,
+											}}
+										/>
+									)}
 									<LabelText>{tab.label}</LabelText>
 								</TabButton>
 							</TabsTrigger>
@@ -47,7 +60,7 @@ export default function Tab({ children }: { children: React.ReactNode }) {
 	);
 }
 
-var TabButton = styled(Button)`
+var TabButton = styled(MotionButton)`
 	--padding: 6px 8px;
 	flex: 1;
 	font-size: ${14 / 16}rem;
@@ -60,8 +73,7 @@ var TabButton = styled(Button)`
 	outline: none;
 `;
 
-var Background = styled(m.span)`
-	display: inline-block;
+var Background = styled(m.div)`
 	width: 100%;
 	height: 100%;
 	position: absolute;

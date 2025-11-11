@@ -4,5 +4,6 @@ export * from './constructSentence';
 export * from './markSearchMatchesInSentencePieces';
 export * from './getNameInitials';
 export * from './wrapIPAWithSlashes';
+export * from './formatBilling';
 export * from './applyBottomPaddingAndScroll';
 export * from './getPrefersReducedMotion';

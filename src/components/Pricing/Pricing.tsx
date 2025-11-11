@@ -8,6 +8,7 @@ import { usePaddlePrices } from '@/hooks';
 
 import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
+import PricePlaceHolder from '@/components/PricePlaceHolder';
 
 function Pricing({ isAuthenticated }: { isAuthenticated: boolean }) {
 	let [loading, currencyCode, priceMap] = usePaddlePrices();
@@ -22,7 +23,7 @@ function Pricing({ isAuthenticated }: { isAuthenticated: boolean }) {
 						</PricingNameWrapper>
 						<PriceTagWrapper>
 							{loading ? (
-								<PricePlaceHolder />
+								<PricePlaceHolder style={{ '--width': '80px', '--height': `calc(${20 / 16}rem * 1.5)` } as React.CSSProperties} />
 							) : (
 								<PriceTag>
 									{priceMap[item.priceId]} <CurrencyUnit>{currencyCode}</CurrencyUnit>
@@ -31,7 +32,7 @@ function Pricing({ isAuthenticated }: { isAuthenticated: boolean }) {
 							<BillingInfo>{item.billingCycle}</BillingInfo>
 						</PriceTagWrapper>
 						{isAuthenticated ? (
-							<SubscribeButton variant='fill'>
+							<SubscribeButton variant='fill' href={`/checkout/${item.priceId}`}>
 								<Icon id='forward' />
 								&nbsp;Subscribe
 							</SubscribeButton>
@@ -113,11 +114,4 @@ var SubscribeButton = styled(Button)`
 	width: 80%;
 	margin-top: 12px;
 	align-self: center;
-`;
-
-var PricePlaceHolder = styled.span`
-	width: 80px;
-	height: calc(${20 / 16}rem * 1.5);
-	background-color: var(--bg-tertiary);
-	border-radius: 5px;
 `;
