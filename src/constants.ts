@@ -219,3 +219,5 @@ export const PRICE_TIER = [
 ];
 
 export const SCROLL_CONTAINER_BOTTOM_PADDING = 300;
+
+export const CUSTOM_SPRING = { type: 'spring', stiffness: 250, damping: 28, duration: 0.3 } as const;

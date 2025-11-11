@@ -4,13 +4,12 @@ import * as React from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import useSWRMutation from 'swr/mutation';
 import * as m from 'motion/react-m';
-import { AnimatePresence } from 'motion/react';
 
 import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
-import { TOAST_ID } from '@/constants';
+import { CUSTOM_SPRING, TOAST_ID } from '@/constants';
 
-import { MotionButton } from '@/components/Button';
+import { Button } from '@/components/Button';
 import PhoneticSymbol from './PhoneticSymbol';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
@@ -59,33 +58,31 @@ function Word({ piece, IPA, id, sentence }: WordComponentProps) {
 	}
 
 	return (
-		<Wrapper>
-			{/* the same layoutId of WordButton and InactiveWordButton animates the position change when IPA is added */}
-			{IPA ? (
-				<InactiveWordButton layout='position' layoutId={`word-${piece}`}>
-					{piece}
-				</InactiveWordButton>
-			) : (
-				<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating} $isMutating={isMutating} layout='position' layoutId={`word-${piece}`}>
-					{piece}
-				</WordButton>
-			)}
-			{/* can't go with popLayout mode, or the exit animation of PhoneticSymbol might teleport to elsewhere */}
-			<AnimatePresence>{IPA && <PhoneticSymbol symbol={IPA} onClick={handleRemoval} layoutId={`ipa-${IPA}`} />}</AnimatePresence>
+		<Wrapper layout={true} transition={CUSTOM_SPRING}>
+			<m.div layout='position' transition={CUSTOM_SPRING}>
+				{IPA ? (
+					<InactiveWordButton>{piece}</InactiveWordButton>
+				) : (
+					<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating} $isMutating={isMutating}>
+						{piece}
+					</WordButton>
+				)}
+			</m.div>
+			{IPA && <PhoneticSymbol symbol={IPA} onClick={handleRemoval} />}
 		</Wrapper>
 	);
 }
 
 export default Word;
 
-var Wrapper = styled.div`
+var Wrapper = styled(m.div)`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 3px;
 `;
 
-var WordButton = styled(MotionButton)<{ $isMutating: boolean }>`
+var WordButton = styled(Button)<{ $isMutating: boolean }>`
 	padding: 3px 6px;
 	border-radius: 8px;
 	font-weight: 500;
@@ -100,7 +97,7 @@ var WordButton = styled(MotionButton)<{ $isMutating: boolean }>`
 		`}
 `;
 
-var InactiveWordButton = styled(m.span)`
+var InactiveWordButton = styled.span`
 	font-weight: 500;
 	display: block;
 	padding: 3px 6px;

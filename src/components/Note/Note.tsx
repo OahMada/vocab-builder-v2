@@ -6,11 +6,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { NoteSchema, NoteType } from '@/lib';
-import { INPUT_NAME } from '@/constants';
+import { CUSTOM_SPRING, INPUT_NAME } from '@/constants';
 
 import CardWrapper from '@/components/CardWrapper';
 import TextArea from '@/components/TextArea';
-import { Button } from '@/components/Button';
+import { Button, MotionButton } from '@/components/Button';
 import Icon from '@/components/Icon';
 import TextareaActionButtons from '@/components/TextareaActionButtons';
 import { useNoteContext } from '@/components/NoteProvider';
@@ -56,9 +56,8 @@ function Note({ title }: { title: React.ReactNode }) {
 
 	return isEditing ? (
 		<>
-			<CardWrapper>
+			<CardWrapper transition={CUSTOM_SPRING} layout={true}>
 				{title}
-
 				<InnerWrapper>
 					<TextArea
 						{...register(INPUT_NAME.NOTE, {
@@ -78,7 +77,7 @@ function Note({ title }: { title: React.ReactNode }) {
 			</CardWrapper>
 		</>
 	) : note ? (
-		<CardWrapper>
+		<CardWrapper transition={CUSTOM_SPRING} layout={true}>
 			{title}
 			<NoteText>{note}</NoteText>
 			<EditButton variant='fill' onClick={startEditing}>
@@ -87,7 +86,7 @@ function Note({ title }: { title: React.ReactNode }) {
 			</EditButton>
 		</CardWrapper>
 	) : (
-		<AddNoteButton variant='fill' onClick={startEditing}>
+		<AddNoteButton variant='fill' onClick={startEditing} transition={CUSTOM_SPRING} layout={true}>
 			<Icon id='note' />
 			&nbsp;Add Note
 		</AddNoteButton>
@@ -96,7 +95,7 @@ function Note({ title }: { title: React.ReactNode }) {
 
 export default Note;
 
-var AddNoteButton = styled(Button)`
+var AddNoteButton = styled(MotionButton)`
 	--bg-color: var(--bg-secondary);
 	--hover-bg-color: var(--bg-secondary-hover);
 `;

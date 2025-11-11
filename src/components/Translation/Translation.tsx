@@ -6,7 +6,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { postFetcher } from '@/lib';
 import { handleError } from '@/utils';
-import { TOAST_ID } from '@/constants';
+import { CUSTOM_SPRING, TOAST_ID } from '@/constants';
 
 import Icon from '@/components/Icon';
 import { Button } from '@/components/Button';
@@ -14,6 +14,7 @@ import EditTranslation from '@/components/Translation/EditTranslation';
 import { useTranslationContext } from '@/components/TranslationProvider';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import CardWrapper from '@/components/CardWrapper';
 
 interface TranslationResponse {
 	data: string;
@@ -92,7 +93,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 	}
 
 	return (
-		<>
+		<CardWrapper layout={true} transition={CUSTOM_SPRING}>
 			{title}
 			{isEditing ? (
 				<EditTranslation translationText={translation ? translation : ''} cancelEditing={cancelEditing} />
@@ -111,7 +112,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 					</ButtonWrapper>
 				</>
 			)}
-		</>
+		</CardWrapper>
 	);
 }
 
