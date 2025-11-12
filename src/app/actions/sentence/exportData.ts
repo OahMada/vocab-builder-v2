@@ -3,7 +3,7 @@
 import updateSyncDate from '../user/updateSyncDate';
 
 import prisma from '@/lib/prisma';
-import verifySession from '@/lib/dal';
+import verifySession from '@/helpers/dal';
 import { sentenceReadSelect, type SentenceWithPieces } from '@/lib';
 
 export default async function exportData(): Promise<{ error: string } | { data: string }> {

@@ -9,7 +9,16 @@ import { Theme } from '@/types';
 import { formatBillingCycle, formatMoney } from '@/helpers';
 import PricePlaceHolder from '@/components/PricePlaceHolder';
 
-function Checkout({ priceId, email, initialTheme }: { priceId: string; email: string; initialTheme: Theme }) {
+function Checkout({
+	priceId,
+	userInfo,
+	initialTheme,
+}: {
+	priceId: string;
+	userInfo: { email: string; userId: string; username: string };
+	initialTheme: Theme;
+}) {
+	let { email, userId, username } = userInfo;
 	let [checkoutData, setCheckoutData] = React.useState<CheckoutEventsData | null>(null);
 
 	let recurringTotal = checkoutData?.recurring_totals?.total;
@@ -48,11 +57,18 @@ function Checkout({ priceId, email, initialTheme }: { priceId: string; email: st
 				},
 			});
 
-			paddle?.Checkout.open({ items: [{ priceId: priceId, quantity: 1 }], customer: { email } });
+			paddle?.Checkout.open({
+				items: [{ priceId: priceId, quantity: 1 }],
+				customer: { email },
+				customData: {
+					userId,
+					username,
+				},
+			});
 		}
 
 		openCheckout();
-	}, [email, priceId, theme]);
+	}, [email, priceId, theme, userId, username]);
 
 	return (
 		<Wrapper>

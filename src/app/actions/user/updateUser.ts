@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import verifySession from '@/lib/dal';
+import verifySession from '@/helpers/dal';
 import { handleZodError } from '@/utils';
 import { UpdateUserInputSchema, User, userSelect } from '@/lib';
 

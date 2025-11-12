@@ -5,7 +5,7 @@ import styled, { keyframes, css } from 'styled-components';
 import useSWRMutation from 'swr/mutation';
 import * as m from 'motion/react-m';
 
-import { postFetcher } from '@/lib';
+import { postFetcher } from '@/helpers';
 import { handleError } from '@/utils';
 import { CUSTOM_SPRING, TOAST_ID } from '@/constants';
 

@@ -3,7 +3,7 @@
 import pLimit from 'p-limit';
 
 import { DeleteUserInputSchema } from '@/lib';
-import verifySession from '@/lib/dal';
+import verifySession from '@/helpers/dal';
 import { handleZodError } from '@/utils';
 import prisma from '@/lib/prisma';
 import getBlockBlobClient from '@/lib/getBlockBlobClient';

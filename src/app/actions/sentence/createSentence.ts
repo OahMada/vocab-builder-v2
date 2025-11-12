@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 
 import { SentenceCreateInputSchema, sentenceReadSelect, SentenceWithPieces } from '@/lib';
 import prisma from '@/lib/prisma';
-import verifySession from '@/lib/dal';
+import verifySession from '@/helpers/dal';
 import { handleZodError } from '@/utils';
 import { COOKIE_KEY, UNSTABLE_CACHE_TAG } from '@/constants';
 import getBlobNameFromUrl from '@/helpers/getBlobNamaFromUrl';

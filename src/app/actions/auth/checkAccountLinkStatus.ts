@@ -1,6 +1,6 @@
 'use server';
 
-import verifySession from '@/lib/dal';
+import verifySession from '@/helpers/dal';
 import prisma from '@/lib/prisma';
 
 async function checkAccountLinkStatus(): Promise<{ error: string } | { data: string | undefined }> {

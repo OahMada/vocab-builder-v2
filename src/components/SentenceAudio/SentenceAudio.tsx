@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import useSWRMutation from 'swr/mutation';
 import { useParams } from 'next/navigation';
 
-import { postFetcher } from '@/lib';
+import { postFetcher } from '@/helpers';
 import { handleError, base64ToBlob } from '@/utils';
 import { usePlayAudio } from '@/hooks';
 import { TOAST_ID } from '@/constants';

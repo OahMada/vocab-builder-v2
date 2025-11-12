@@ -4,7 +4,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import useSWRMutation from 'swr/mutation';
 
-import { postFetcher } from '@/lib';
+import { postFetcher } from '@/helpers';
 import { handleError } from '@/utils';
 import { CUSTOM_SPRING, TOAST_ID } from '@/constants';
 

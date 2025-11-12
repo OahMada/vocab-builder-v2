@@ -3,7 +3,7 @@
 import { Prisma } from '@prisma/client';
 import { revalidateTag } from 'next/cache';
 
-import verifySession from '@/lib/dal';
+import verifySession from '@/helpers/dal';
 import prisma from '@/lib/prisma';
 import { SentenceUpdateInputSchema, SentenceWithPieces } from '@/lib';
 import { handleZodError } from '@/utils';

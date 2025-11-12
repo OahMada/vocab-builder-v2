@@ -1,6 +1,6 @@
 'use server';
 
-import verifySession from '@/lib/dal';
+import verifySession from '@/helpers/dal';
 import prisma from '@/lib/prisma';
 
 export default async function unlinkGoogleAccount(): Promise<{ error: string } | { data: string }> {

@@ -3,7 +3,7 @@
 import { revalidateTag } from 'next/cache';
 
 import prisma from '@/lib/prisma';
-import verifySession from '@/lib/dal';
+import verifySession from '@/helpers/dal';
 import { sentenceReadSelect, SentenceWithPieces, DeleteSentenceInputSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { UNSTABLE_CACHE_TAG } from '@/constants';

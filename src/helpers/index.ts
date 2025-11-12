@@ -7,3 +7,4 @@ export * from './wrapIPAWithSlashes';
 export * from './formatBilling';
 export * from './applyBottomPaddingAndScroll';
 export * from './getPrefersReducedMotion';
+export * from './postFetcher';
