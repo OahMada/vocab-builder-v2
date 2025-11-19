@@ -13,6 +13,7 @@ import { Button } from '@/components/Button';
 import PhoneticSymbol from './PhoneticSymbol';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import { useSentenceSubmittingContext } from '@/components/SentenceSubmittingProvider';
 
 type WordComponentProps = React.ComponentProps<'span'> & { piece: string; IPA: string | undefined; id: string; sentence: string };
 
@@ -27,6 +28,8 @@ interface IPAArg {
 var url = '/api/IPA';
 
 function Word({ piece, IPA, id, sentence }: WordComponentProps) {
+	let { isSubmitting } = useSentenceSubmittingContext();
+
 	let { addToToast, removeFromToast } = useGlobalToastContext();
 
 	let { trigger, reset, isMutating } = useSWRMutation<IPAResponse, Error, string, IPAArg>(url, postFetcher, {
@@ -63,12 +66,12 @@ function Word({ piece, IPA, id, sentence }: WordComponentProps) {
 				{IPA ? (
 					<InactiveWordButton>{piece}</InactiveWordButton>
 				) : (
-					<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating} $isMutating={isMutating}>
+					<WordButton variant='fill' onClick={triggerFetch} disabled={isMutating || isSubmitting} $isMutating={isMutating}>
 						{piece}
 					</WordButton>
 				)}
 			</m.div>
-			{IPA && <PhoneticSymbol symbol={IPA} onClick={handleRemoval} />}
+			{IPA && <PhoneticSymbol symbol={IPA} onClick={handleRemoval} disabled={isSubmitting} />}
 		</Wrapper>
 	);
 }

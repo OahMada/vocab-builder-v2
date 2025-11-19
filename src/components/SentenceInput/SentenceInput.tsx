@@ -41,6 +41,7 @@ function SentenceInput() {
 		reValidateMode: 'onSubmit',
 		shouldFocusError: false,
 	});
+	let userInput = watch(INPUT_NAME.SENTENCE);
 
 	let updateInput = React.useCallback(
 		function (text: string) {
@@ -49,17 +50,20 @@ function SentenceInput() {
 		[setValue]
 	);
 
+	function clearInputError() {
+		clearErrors(INPUT_NAME.SENTENCE);
+	}
+
 	// paste text directly on home page
 	usePaste((text: string) => {
-		updateInput(text);
+		updateInput(userInput + text);
 		textareaRef.current?.focus();
 	});
 	useReadLocalStorage(updateInput);
 
-	let userInput = watch(INPUT_NAME.SENTENCE);
 	let { ref, ...rest } = register(INPUT_NAME.SENTENCE, {
 		onChange: () => {
-			clearErrors(INPUT_NAME.SENTENCE);
+			clearInputError();
 			removeFromToast(TOAST_ID.SENTENCE);
 		},
 	});
@@ -67,7 +71,7 @@ function SentenceInput() {
 
 	function clearInput() {
 		removeFromToast(TOAST_ID.SENTENCE);
-		clearErrors(INPUT_NAME.SENTENCE);
+		clearInputError();
 		setValue(INPUT_NAME.SENTENCE, '');
 		updateLocalStorage('delete');
 	}
@@ -124,7 +128,12 @@ function SentenceInput() {
 				value={userInput}
 				keydownSubmit={submitHandler}
 			/>
-			<ActionButtons handlePaste={updateInput} submitDisabled={!!errors[INPUT_NAME.SENTENCE] || isLoading} isLoading={isLoading} />
+			<ActionButtons
+				handlePaste={updateInput}
+				submitDisabled={!!errors[INPUT_NAME.SENTENCE] || isLoading}
+				isLoading={isLoading}
+				clearInputError={clearInputError}
+			/>
 		</Wrapper>
 	);
 }

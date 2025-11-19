@@ -20,9 +20,9 @@ import TranslationProvider from '@/components/TranslationProvider';
 import SentencePiecesProvider from '@/components/SentencePiecesProvider';
 import AudioDataProvider from '@/components/AudioDataProvider';
 import UnauthorizedDisplay from '@/components/UnauthorizedDisplay';
-import Title from './Title';
 import InnerWidthWrapper from '@/components/InnerWidthWrapper';
 import MotionLoader from '@/components/MotionLoader';
+import SentenceSubmittingProvider from '@/components/SentenceSubmittingProvider';
 
 export var metadata: Metadata = {
 	title: 'Sentence | Vocab Builder',
@@ -67,16 +67,18 @@ export default async function Sentence({ params }: { params: Promise<{ sentenceI
 				<SentencePiecesProvider sentence={(sentence || sentenceData?.sentence) as string} databasePieces={sentenceData?.pieces}>
 					<TranslationProvider databaseTranslation={sentenceData?.translation}>
 						<NoteProvider databaseNote={sentenceData?.note || undefined}>
-							<Wrapper $position='flex-start'>
-								<MotionLoader>
-									<WordListing title={<Title>The Sentence</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
-									<Translation title={<Title>Translation</Title>} sentence={(sentenceData?.sentence || sentence) as string} />
-									<Note title={<Title>Note</Title>} />
-									<AudioDataProvider audioUrl={sentenceData?.audioUrl}>
-										<SentenceActions sentence={(sentenceData?.sentence || sentence) as string} sentenceId={sentenceData?.id} />
-									</AudioDataProvider>
-								</MotionLoader>
-							</Wrapper>
+							<SentenceSubmittingProvider>
+								<Wrapper $position='flex-start'>
+									<MotionLoader>
+										<WordListing sentence={(sentenceData?.sentence || sentence) as string} />
+										<Translation sentence={(sentenceData?.sentence || sentence) as string} />
+										<Note />
+										<AudioDataProvider audioUrl={sentenceData?.audioUrl}>
+											<SentenceActions sentence={(sentenceData?.sentence || sentence) as string} sentenceId={sentenceData?.id} />
+										</AudioDataProvider>
+									</MotionLoader>
+								</Wrapper>
+							</SentenceSubmittingProvider>
 						</NoteProvider>
 					</TranslationProvider>
 				</SentencePiecesProvider>

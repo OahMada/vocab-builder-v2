@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export function useGetClipboard(): [isClipboardDisabled: boolean, getClipboardRef: React.RefObject<(() => Promise<string>) | null>] {
+export function useGetClipboard(): { isClipboardDisabled: boolean; getClipboardRef: React.RefObject<(() => Promise<string>) | null> } {
 	let [isClipboardDisabled, setIsClipboardDisabled] = React.useState(false);
 	let getClipboardRef = React.useRef<null | (() => Promise<string>)>(null);
 
@@ -17,5 +17,5 @@ export function useGetClipboard(): [isClipboardDisabled: boolean, getClipboardRe
 		getClipboardRef.current = getClipboard;
 	}, [getClipboard]);
 
-	return [isClipboardDisabled, getClipboardRef];
+	return { isClipboardDisabled, getClipboardRef };
 }

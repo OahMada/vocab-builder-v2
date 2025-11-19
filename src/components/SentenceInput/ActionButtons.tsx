@@ -13,14 +13,16 @@ interface ActionButtonProps {
 	handlePaste: (clipboard: string) => void;
 	submitDisabled: boolean;
 	isLoading: boolean;
+	clearInputError: () => void;
 }
 
-function ActionButtons({ handlePaste, submitDisabled, isLoading }: ActionButtonProps) {
-	let [isClipboardDisabled, getClipboard] = useGetClipboard();
+function ActionButtons({ handlePaste, submitDisabled, isLoading, clearInputError }: ActionButtonProps) {
+	let { isClipboardDisabled, getClipboardRef: getClipboard } = useGetClipboard();
 	async function handleClickPaste() {
 		if (getClipboard.current) {
 			let text = await getClipboard.current();
 			handlePaste(text);
+			clearInputError();
 		}
 	}
 

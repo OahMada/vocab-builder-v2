@@ -57,8 +57,8 @@ function ManageSubscription({ subscriptionCanceled, subscriptionActive }: { subs
 	}
 	return (
 		<>
-			<Button variant='outline'>
-				<Icon id='refresh' size={16} />
+			<Button variant='outline' disabled={loading}>
+				<Icon id='change' />
 				&nbsp;Change Plan
 			</Button>
 
@@ -67,9 +67,8 @@ function ManageSubscription({ subscriptionCanceled, subscriptionActive }: { subs
 					{subscriptionCanceled ? (
 						<InnerWrapper>
 							<WarningDesc>Subscription is scheduled to cancel.</WarningDesc>
-							<Button variant='outline' onClick={handleUndoCancellation}>
-								{/* TODO choose a better icon */}
-								{loading ? <Loading description='Undo subscription cancellation' /> : <Icon id='play' size={16} />}
+							<Button variant='outline' onClick={handleUndoCancellation} disabled={loading}>
+								{loading ? <Loading description='Undo subscription cancellation' /> : <Icon id='undo' />}
 								&nbsp;Undo cancellation
 							</Button>
 						</InnerWrapper>
@@ -104,5 +103,5 @@ var InnerWrapper = styled.div`
 `;
 
 var WarningDesc = styled(DescriptionText)`
-	color: var(--text-status-warning);
+	color: var(--text-tertiary);
 `;

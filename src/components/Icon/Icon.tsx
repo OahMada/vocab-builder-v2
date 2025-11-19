@@ -30,11 +30,13 @@ import {
 	Play,
 	Sun,
 	Moon,
-	Send,
+	CloudCog,
 	ArrowUp,
 	Copy,
 	ExternalLink,
-} from 'react-feather';
+	Undo2,
+	UserPen,
+} from 'lucide-react';
 
 var icons = {
 	clipboard: Clipboard,
@@ -64,10 +66,12 @@ var icons = {
 	play: Play,
 	dark: Moon,
 	light: Sun,
-	sync: Send,
+	sync: CloudCog,
 	upward: ArrowUp,
 	copy: Copy,
 	'external-link': ExternalLink,
+	undo: Undo2,
+	change: UserPen,
 };
 
 interface IconProps {

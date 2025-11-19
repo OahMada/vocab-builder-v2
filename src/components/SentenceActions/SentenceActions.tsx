@@ -25,12 +25,13 @@ import SentenceAudio from '@/components/SentenceAudio';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Tooltip from '@/components/Tooltip';
+import { useSentenceSubmittingContext } from '@/components/SentenceSubmittingProvider';
 
 function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceId?: string }) {
 	let { addToToast } = useGlobalToastContext();
 	let router = useRouter();
 	let [isModalShowing, setIsModalShowing] = React.useState(false);
-	let [isLoading, startTransition] = React.useTransition();
+	let { isSubmitting, startTransition } = useSentenceSubmittingContext();
 	let { data: session } = useSession();
 	let [shouldStopAudio, setShouldStopAudio] = React.useState(false);
 	let [sentenceDataReady, sentenceData] = useSentenceData();
@@ -173,7 +174,7 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 				}
 			});
 		},
-		[addToToast, router, sentence, sentenceData, sentenceId, session?.user.id]
+		[addToToast, router, sentence, sentenceData, sentenceId, session?.user.id, startTransition]
 	);
 
 	// Option/Alt + A to trigger Ask Anything Dialog, Option/Alt + Enter to submit
@@ -206,21 +207,21 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 		<>
 			<Wrapper layout={true} transition={CUSTOM_SPRING}>
 				<Tooltip tip={'Alt / Option + A'}>
-					<HelpButton variant='outline' onClick={showModal} disabled={isLoading}>
+					<HelpButton variant='outline' onClick={showModal} disabled={isSubmitting}>
 						<Icon id='help' />
 						<VisuallyHidden>Ask Any Questions</VisuallyHidden>
 					</HelpButton>
 				</Tooltip>
 				<SentenceAudio shouldStopAudio={shouldStopAudio} sentence={sentence} />
 				<Tooltip tip={'Alt / Option + X'}>
-					<CancelButton variant='outline' onClick={handleCancel} disabled={isLoading}>
+					<CancelButton variant='outline' onClick={handleCancel} disabled={isSubmitting}>
 						<Icon id='x' />
 						&nbsp;Cancel
 					</CancelButton>
 				</Tooltip>
 				<Tooltip tip={'Alt / Option + Enter'}>
-					<DoneButton variant='outline' disabled={!sentenceDataReady || isLoading} onClick={handleSubmit}>
-						{isLoading ? <Loading description='submitting data' /> : <Icon id='enter' />}
+					<DoneButton variant='outline' disabled={!sentenceDataReady || isSubmitting} onClick={handleSubmit}>
+						{isSubmitting ? <Loading description='submitting data' /> : <Icon id='enter' />}
 						&nbsp;Done
 					</DoneButton>
 				</Tooltip>

@@ -15,14 +15,15 @@ import VisuallyHidden from '@/components/VisuallyHidden';
 import { Button } from '@/components/Button';
 import { useSentencePiecesContext } from '@/components/SentencePiecesProvider';
 import CardWrapper from '@/components/CardWrapper';
+import Title from '@/components/CardTitle';
 
-function WordListing({ title, sentence }: { title: React.ReactNode; sentence: string }) {
+function WordListing({ sentence }: { sentence: string }) {
 	let { pieces } = useSentencePiecesContext();
 
 	return (
 		<CardWrapper layout={true} transition={CUSTOM_SPRING}>
 			<TitleWrapper layout='position'>
-				{title}
+				<Title>The Sentence</Title>
 				<Popover>
 					<PopoverTrigger asChild={true}>
 						<InfoButton variant='icon'>

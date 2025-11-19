@@ -26,9 +26,8 @@ export default function HeaderNav() {
 }
 
 var Wrapper = styled.nav`
-	flex: 1;
 	align-items: center;
-	gap: 5px;
+	gap: 30px;
 	font-size: ${14 / 16}rem;
 	justify-content: center;
 	display: none;
@@ -39,6 +38,7 @@ var Wrapper = styled.nav`
 `;
 
 var HeaderNavLink = styled(NavLink)`
-	flex: 0 1 80px;
 	text-align: center;
+	flex: 1;
+	min-width: max-content;
 `;

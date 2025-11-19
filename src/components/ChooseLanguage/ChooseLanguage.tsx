@@ -26,8 +26,8 @@ function ChooseLanguage({ type, id, ...delegated }: { type: 'learning' | 'transl
 
 	return (
 		<Wrapper>
-			<Label htmlFor={id}>
-				<LabelText>{labelText}</LabelText>
+			<LabelWrapper>
+				<Label htmlFor={id}>{labelText}</Label>
 				<Popover>
 					<PopoverTrigger asChild={true}>
 						<InfoButton variant='icon'>
@@ -39,7 +39,7 @@ function ChooseLanguage({ type, id, ...delegated }: { type: 'learning' | 'transl
 						<DescriptionText>This option corresponds to {desc}.</DescriptionText>
 					</PopoverContent>
 				</Popover>
-			</Label>
+			</LabelWrapper>
 			<Select id={id} {...delegated}>
 				{type === 'translation' && <SelectItem value='Chinese'>Chinese</SelectItem>}
 				<SelectItem value='English'>English</SelectItem>
@@ -61,13 +61,13 @@ var Wrapper = styled.div`
 	align-items: center;
 `;
 
-var Label = styled.label`
+var LabelWrapper = styled.div`
 	display: flex;
 	gap: 5px;
 	align-items: center;
 `;
 
-var LabelText = styled.span`
+var Label = styled.label`
 	font-weight: 500;
 	user-select: none;
 `;

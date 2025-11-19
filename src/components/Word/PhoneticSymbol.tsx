@@ -30,4 +30,8 @@ var SymbolButton = styled(MotionButton)`
 	font-weight: 300;
 
 	--hover-bg-color: var(--bg-tertiary);
+
+	&:disabled {
+		color: var(--text-tertiary);
+	}
 `;

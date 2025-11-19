@@ -88,7 +88,7 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string | undefined; e
 			</InnerWrapper>
 
 			<Button variant='outline' onClick={handleExport} disabled={isLoading || !isHoverable}>
-				{isLoading ? <Loading description='exporting data' /> : <Icon id='sync' size={15} />}
+				{isLoading ? <Loading description='exporting data' /> : <Icon id='sync' />}
 				&nbsp; Sync With Anki
 			</Button>
 		</Wrapper>

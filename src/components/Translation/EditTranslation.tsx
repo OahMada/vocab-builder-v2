@@ -4,6 +4,7 @@ import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import { m } from 'motion/react';
 
 import { TranslationSchema, TranslationType } from '@/lib';
 import { INPUT_NAME } from '@/constants';
@@ -49,7 +50,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 
 	return (
 		<>
-			<InnerWrapper>
+			<InnerWrapper layout='position'>
 				<TextArea
 					value={translation}
 					clearInput={clearInput}
@@ -69,7 +70,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 	);
 }
 
-var InnerWrapper = styled.div`
+var InnerWrapper = styled(m.div)`
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
