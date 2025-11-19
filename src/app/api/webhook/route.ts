@@ -25,10 +25,8 @@ export async function POST(request: NextRequest) {
 
 		if (eventData) {
 			if (eventData.eventType === EventName.SubscriptionCreated || eventData.eventType === EventName.SubscriptionUpdated) {
-				console.log(eventData);
-
-				let item = eventData.data.items?.[0];
 				let customData = eventData.data.customData as PaddleCustomData;
+				let item = eventData.data.items?.[0];
 
 				await prisma.subscription.upsert({
 					where: {
@@ -41,24 +39,36 @@ export async function POST(request: NextRequest) {
 						status: eventData.data.status,
 						collectionMode: eventData.data.collectionMode,
 						occurredAt: eventData.occurredAt,
-						scheduledChange: eventData.data.scheduledChange ? JSON.stringify(eventData.data.scheduledChange) : null,
+						scheduledChange: eventData.data.scheduledChange ? JSON.parse(JSON.stringify(eventData.data.scheduledChange)) : null,
+						nextBillingAt: eventData.data.nextBilledAt ? new Date(eventData.data.nextBilledAt) : null,
 					},
 					create: {
-						userId: customData.userId,
+						userId: customData?.userId,
 						subscriptionId: eventData.data.id,
 						priceId: item.price?.id ?? '',
 						productId: item.price?.productId ?? '',
 						status: eventData.data.status,
 						collectionMode: eventData.data.collectionMode,
 						occurredAt: eventData.occurredAt,
-						scheduledChange: eventData.data.scheduledChange ? JSON.stringify(eventData.data.scheduledChange) : null,
+						scheduledChange: eventData.data.scheduledChange ? JSON.parse(JSON.stringify(eventData.data.scheduledChange)) : null,
+						nextBillingAt: eventData.data.nextBilledAt ? new Date(eventData.data.nextBilledAt) : null,
+					},
+				});
+			} else if (eventData.eventType === EventName.CustomerCreated) {
+				await prisma.user.update({
+					where: {
+						email: eventData.data.email,
+					},
+					data: {
+						paddleCustomerId: eventData.data.id,
 					},
 				});
 			}
 		}
+
 		return NextResponse.json({ status: 200, eventName });
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
 	}
 }

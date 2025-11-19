@@ -26,6 +26,17 @@ export var userSelect = {
 	learningLanguage: true,
 	nativeLanguage: true,
 	lastSynced: true,
+	paddleCustomerId: true,
 } satisfies Prisma.UserSelect;
 
 export type User = Prisma.UserGetPayload<{ select: typeof userSelect }>;
+
+export var subscriptionSelect = {
+	priceId: true,
+	subscriptionId: true,
+	nextBillingAt: true,
+	status: true,
+	scheduledChange: true,
+} satisfies Prisma.SubscriptionSelect;
+
+export type Subscription = Prisma.SubscriptionGetPayload<{ select: typeof subscriptionSelect }>;

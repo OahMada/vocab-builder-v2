@@ -5,7 +5,7 @@ import { PRICE_TIER } from '@/constants';
 
 type PaddlePrices = Record<string, string>;
 
-export function usePaddlePrices(): [boolean, string, PaddlePrices] {
+export function usePaddlePrices(): { loading: boolean; currencyCode: string; priceMap: PaddlePrices } {
 	let [priceMap, setPriceMap] = React.useState<PaddlePrices>({});
 	let [currencyCode, setCurrencyCode] = React.useState('');
 	let [loading, setLoading] = React.useState(false);
@@ -35,5 +35,5 @@ export function usePaddlePrices(): [boolean, string, PaddlePrices] {
 		fetchPaddlePrices();
 	}, []);
 
-	return [loading, currencyCode, priceMap];
+	return { loading, currencyCode, priceMap };
 }

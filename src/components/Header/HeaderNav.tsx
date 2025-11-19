@@ -18,9 +18,6 @@ export default function HeaderNav() {
 			<HeaderNavLink href='/account' $underScored={pathname === '/account'}>
 				Account
 			</HeaderNavLink>
-			<HeaderNavLink href='/pricing' $underScored={pathname === '/pricing'}>
-				Pricing
-			</HeaderNavLink>
 			<HeaderNavLink href='/sync' $underScored={pathname === '/sync'} prefetch={true}>
 				How to Sync
 			</HeaderNavLink>

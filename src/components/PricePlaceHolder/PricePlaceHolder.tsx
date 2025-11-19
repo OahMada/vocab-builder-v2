@@ -11,6 +11,7 @@ var shimmer = keyframes`
 `;
 
 var PricePlaceHolder = styled.span`
+	display: block;
 	width: var(--width);
 	height: var(--height);
 	border-radius: 12px;

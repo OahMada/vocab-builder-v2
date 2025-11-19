@@ -33,6 +33,7 @@ import {
 	Send,
 	ArrowUp,
 	Copy,
+	ExternalLink,
 } from 'react-feather';
 
 var icons = {
@@ -45,7 +46,7 @@ var icons = {
 	x: X,
 	help: HelpCircle,
 	load: Loader,
-	retry: RefreshCw,
+	refresh: RefreshCw,
 	search: Search,
 	plus: Plus,
 	minus: Minus,
@@ -66,6 +67,7 @@ var icons = {
 	sync: Send,
 	upward: ArrowUp,
 	copy: Copy,
+	'external-link': ExternalLink,
 };
 
 interface IconProps {

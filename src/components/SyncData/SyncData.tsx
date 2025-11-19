@@ -57,13 +57,17 @@ function SyncData({ lastSynced, errorText }: { lastSynced: string | undefined; e
 
 	// to avoid client-server mismatch
 	React.useEffect(() => {
-		setLastSyncedDateString(getLocalDateString(lastSynced));
+		if (!lastSynced) {
+			setLastSyncedDateString('never');
+		} else {
+			setLastSyncedDateString(getLocalDateString(lastSynced));
+		}
 	}, [lastSynced]);
 
 	return (
 		<Wrapper>
 			<InnerWrapper>
-				<TimeStamp>Last synced: {lastSyncedDateString || errorText}</TimeStamp>
+				<TimeStamp>Last synced: {lastSyncedDateString || <ErrorText>{errorText}</ErrorText>}</TimeStamp>
 				<Popover>
 					<PopoverTrigger asChild={true}>
 						<Button variant='icon'>
@@ -110,4 +114,8 @@ var InnerWrapper = styled.div`
 	align-items: center;
 	gap: 5px;
 	transform: translateX(5px);
+`;
+
+var ErrorText = styled.span`
+	color: var(--text-status-warning);
 `;

@@ -117,7 +117,7 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 		<Tooltip tip={'Alt / Option + P'}>
 			{error ? (
 				<RetryButton variant='outline' onClick={handleRetryTTS}>
-					<Icon id='retry' />
+					<Icon id='refresh' />
 					<VisuallyHidden>Retry generating speech</VisuallyHidden>
 				</RetryButton>
 			) : isPlaying ? (

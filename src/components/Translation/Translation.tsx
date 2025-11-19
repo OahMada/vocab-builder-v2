@@ -106,7 +106,7 @@ function Translation({ title, sentence }: { title: React.ReactNode; sentence: st
 							&nbsp;Edit
 						</Button>
 						<Button variant='fill' onClick={retryTranslate} disabled={isMutating}>
-							{translation && isMutating ? <Loading description='retrying translation' /> : <Icon id='retry' size={16} />}
+							{translation && isMutating ? <Loading description='retrying translation' /> : <Icon id='refresh' size={16} />}
 							&nbsp;Retry
 						</Button>
 					</ButtonWrapper>

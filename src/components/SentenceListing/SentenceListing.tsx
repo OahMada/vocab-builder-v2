@@ -162,7 +162,7 @@ function SentenceListing({
 				<InnerWrapper>
 					<ErrorMsg>{error}</ErrorMsg>
 					<Button variant='outline' onClick={retryFetchingData}>
-						{isLoadingData ? <Spinner description='retrying fetching data' /> : <Icon id='retry' />}
+						{isLoadingData ? <Spinner description='retrying fetching data' /> : <Icon id='refresh' />}
 						&nbsp;Retry
 					</Button>
 				</InnerWrapper>

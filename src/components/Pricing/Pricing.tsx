@@ -11,7 +11,7 @@ import Icon from '@/components/Icon';
 import PricePlaceHolder from '@/components/PricePlaceHolder';
 
 function Pricing({ isAuthenticated }: { isAuthenticated: boolean }) {
-	let [loading, currencyCode, priceMap] = usePaddlePrices();
+	let { loading, currencyCode, priceMap } = usePaddlePrices();
 	return (
 		<Wrapper>
 			{PRICE_TIER.map((item) => {

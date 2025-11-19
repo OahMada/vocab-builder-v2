@@ -14,6 +14,7 @@ export var TabsList = styled(TabsPrimitives.List)`
 	display: flex;
 	justify-content: center;
 	align-self: center;
+	gap: 3px;
 	width: 250px;
 	border: 1px solid var(--border);
 	border-radius: 12px;

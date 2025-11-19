@@ -17,7 +17,7 @@ function ErrorDisplay({ errorMsg, handleReset }: { errorMsg: string; handleReset
 				<ErrorText>Please contact support if the error persists.</ErrorText>
 				<Spacer size={12} />
 				<Button variant='outline' onClick={handleReset}>
-					<Icon id='retry' />
+					<Icon id='refresh' />
 					&nbsp; Try again
 				</Button>
 			</Wrapper>

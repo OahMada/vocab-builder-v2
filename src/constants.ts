@@ -15,6 +15,8 @@ export const TOAST_ID = {
 	DELETE_USER: 'delete_user',
 	SENTENCE_ACTIONS: 'sentence_actions', // both create and update
 	SENTENCE_AUDIO: 'sentence_audio',
+	CUSTOMER_PORTAL: 'customer_portal',
+	CANCEL_SUBSCRIPTION: 'cancel_subscription',
 } as const;
 
 export const INPUT_NAME = {
@@ -88,7 +90,7 @@ export const LIGHT_COLORS = {
 	'--bg-dropdown': 'hsl(0 0% 97%)',
 	'--bg-dropdown-highlight': 'hsl(0 0% 93%)',
 	'--bg-primary': 'hsl(0 0% 100%)',
-	'--bg-primary-hover': 'hsl(0 0% 98%)',
+	'--bg-primary-hover': 'hsl(0 0% 96%)',
 	'--bg-secondary': 'hsl(0 0% 95%)',
 	'--bg-secondary-hover': 'hsl(0 0% 93%)',
 	'--bg-tertiary': 'hsl(0 0% 91%)',
@@ -97,8 +99,8 @@ export const LIGHT_COLORS = {
 	'--bg-revert-hover': 'hsl(0 0% 13%)',
 	'--border': 'hsl(0 0% 0% / 15%)',
 	'--text-primary': 'hsl(0 0%  5%)',
-	'--text-secondary': 'hsl(0 0% 20%)',
-	'--text-tertiary': 'hsl(0 0% 36%)',
+	'--text-secondary': 'hsl(0 0% 30%)',
+	'--text-tertiary': 'hsl(0 0% 46%)',
 	'--text-revert': 'hsl(0 0% 100%)',
 	'--text-status-warning': 'hsl(20 100% 40%)',
 	'--text-status-mark': 'hsl(54 100% 35%)',
@@ -146,7 +148,7 @@ export const DARK_COLORS = {
 	'--bg-dropdown': 'hsl(0 0% 10%)',
 	'--bg-dropdown-highlight': 'hsl(0 0% 15%)',
 	'--bg-primary': 'hsl(0 0% 0%)',
-	'--bg-primary-hover': 'hsl(0 0% 5%)',
+	'--bg-primary-hover': 'hsl(0 0% 7%)',
 	'--bg-secondary': 'hsl(0 0% 12%)',
 	'--bg-secondary-hover': 'hsl(0 0% 17%)',
 	'--bg-tertiary': 'hsl(0 0% 20%)',
@@ -201,19 +203,19 @@ export const PRICE_TIER = [
 	{
 		name: 'Monthly',
 		description: 'Perfect for beginners. Explore and learn at your own pace.',
-		billingCycle: '/ month',
+		billingCycle: '/month + tax',
 		priceId: 'pri_01k8n99ag49k0tth6fyxce3h0w',
 	},
 	{
 		name: 'Every 6 months',
 		description: 'Stay consistent. Save time and money while building your vocabulary.',
-		billingCycle: '/ 6 months',
+		billingCycle: '/ 6 months + tax',
 		priceId: 'pri_01k8n9d259wznn49xapdy43h5f',
 	},
 	{
 		name: 'Yearly',
 		description: 'Maximize your growth. The ultimate plan for serious learners.',
-		billingCycle: '/ year',
+		billingCycle: '/year + tax',
 		priceId: 'pri_01k8n9m2yztxqcs6qfsbjy00rs',
 	},
 ];

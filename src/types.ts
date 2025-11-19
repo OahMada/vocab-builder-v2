@@ -1,4 +1,5 @@
 import { TOAST_ID } from '@/constants';
+import { Subscription } from '@/lib';
 
 export type Piece =
 	| {
@@ -24,4 +25,20 @@ export interface SentenceDataType {
 	translation: string;
 	pieces: PiecesType;
 	note?: string | undefined;
+}
+
+export interface ScheduledChange {
+	action: 'cancel' | 'pause' | 'resume';
+	effectiveAt: string;
+	resumeAt: string | undefined;
+}
+
+export type SubscriptionDetail = Omit<Subscription, 'nextBillingAt' | 'scheduledChange'> & {
+	nextBillingAt: string | undefined;
+	scheduledChange: ScheduledChange | undefined;
+};
+
+export interface TrialStatus {
+	status: 'expired' | 'active';
+	expireDate: string;
 }

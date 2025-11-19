@@ -53,11 +53,7 @@ export function updateLocalStorage(action: 'save' | 'delete', value?: string) {
 	}
 }
 
-export function getLocalDateString(dateString: string | undefined) {
-	if (!dateString) {
-		return 'never';
-	}
-
+export function getLocalDateString(dateString: string, includeTime: boolean = true) {
 	let date = new Date(dateString);
 	let formatter = new Intl.DateTimeFormat(undefined, {
 		year: 'numeric',
@@ -74,6 +70,12 @@ export function getLocalDateString(dateString: string | undefined) {
 		return parts.find((p) => p.type === type)?.value;
 	}
 
-	let formatted = `${get('year')}-${get('month')}-${get('day')} ${get('hour')}:${get('minute')}`;
+	let formatted = '';
+
+	if (includeTime) {
+		formatted = `${get('year')}-${get('month')}-${get('day')} ${get('hour')}:${get('minute')}`;
+	} else {
+		formatted = `${get('year')}-${get('month')}-${get('day')}`;
+	}
 	return formatted;
 }

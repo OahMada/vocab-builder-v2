@@ -98,7 +98,7 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 				<Sentence>{sentence}</Sentence>
 				<Greeting>What questions do you have about this sentence?</Greeting>
 				<AnswerBoxWrapper>
-					<AnswerBox style={{ '--icon-size': '18px' } as React.CSSProperties} ref={containerRef}>
+					<AnswerBox ref={containerRef}>
 						{messages.map((message) => {
 							if (message.role === 'user') {
 								return (
@@ -128,7 +128,7 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 													<VisuallyHidden>copy response</VisuallyHidden>
 												</CopyButton>
 												<RegenerateButton variant='icon' onClick={regenerateResponse}>
-													<Icon id='retry' size={16} strokeWidth={2} />
+													<Icon id='refresh' size={16} strokeWidth={2} />
 													<VisuallyHidden>regenerate response</VisuallyHidden>
 												</RegenerateButton>
 											</Buttons>
@@ -141,7 +141,7 @@ function AskAQuestion({ isShowing, onDismiss, sentence }: AskAQuestionProps) {
 							<>
 								<ErrorText>{handleError(error)}</ErrorText>
 								<RegenerateButton variant='icon' onClick={regenerateResponse}>
-									<Icon id='retry' size={16} strokeWidth={2} />
+									<Icon id='refresh' size={16} strokeWidth={2} />
 									<VisuallyHidden>regenerate response</VisuallyHidden>
 								</RegenerateButton>
 							</>

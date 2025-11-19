@@ -27,7 +27,12 @@ var readLastSyncedDate = unstable_cache(
 			if (!user) {
 				throw new Error(`No user found with id: ${userId}}`);
 			}
-			return { data: user.lastSynced?.toISOString() };
+
+			if (user.lastSynced) {
+				return { data: user.lastSynced.toISOString() };
+			} else {
+				return { data: undefined };
+			}
 		} catch (error) {
 			console.error('could not read user data', error);
 			return { error: "Failed to check the user's last synced date" };
