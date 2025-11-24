@@ -17,6 +17,7 @@ export const TOAST_ID = {
 	SENTENCE_AUDIO: 'sentence_audio',
 	CUSTOMER_PORTAL: 'customer_portal',
 	CANCEL_SUBSCRIPTION: 'cancel_subscription',
+	REVIVE_PADDLE_CUSTOMER: 'revive_paddle_customer',
 } as const;
 
 export const INPUT_NAME = {
@@ -90,7 +91,7 @@ export const LIGHT_COLORS = {
 	'--bg-dropdown': 'hsl(0 0% 97%)',
 	'--bg-dropdown-highlight': 'hsl(0 0% 93%)',
 	'--bg-primary': 'hsl(0 0% 100%)',
-	'--bg-primary-hover': 'hsl(0 0% 96%)',
+	'--bg-primary-hover': 'hsl(0 0% 97%)',
 	'--bg-secondary': 'hsl(0 0% 95%)',
 	'--bg-secondary-hover': 'hsl(0 0% 93%)',
 	'--bg-tertiary': 'hsl(0 0% 91%)',

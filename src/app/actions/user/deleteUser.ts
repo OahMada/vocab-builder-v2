@@ -2,6 +2,8 @@
 
 import pLimit from 'p-limit';
 
+import readCustomerId from '../subscription/readCustomerIdAndSubscriptionId';
+
 import { DeleteUserInputSchema } from '@/lib';
 import verifySession from '@/helpers/dal';
 import { handleZodError } from '@/utils';
@@ -51,6 +53,12 @@ export default async function deleteUser(data: unknown): Promise<{ error: string
 					userId,
 				},
 			}),
+
+			prisma.subscription.delete({
+				where: {
+					userId,
+				},
+			}),
 		]);
 	} catch (error) {
 		console.error('delete user and user data failed: ', error);
@@ -82,5 +90,38 @@ export default async function deleteUser(data: unknown): Promise<{ error: string
 		await limit.map(audioBlobsToDelete, (name) => audioContainerClient.getBlockBlobClient(name).deleteIfExists());
 	} catch (error) {
 		console.error(`delete user blob data failed. Userid: ${userId}.`, error);
+	}
+
+	// archive Paddle customer
+	let { paddleCustomerId } = await readCustomerId(userId);
+	if (!paddleCustomerId) {
+		return;
+	}
+	try {
+		// TODO update url when go live
+		let updateCustomerInfoUrl = `https://sandbox-api.paddle.com/customers/${paddleCustomerId}`;
+		let response = await fetch(updateCustomerInfoUrl, {
+			method: 'PATCH',
+			headers: {
+				Authorization: `Bearer ${process.env.PADDLE_API_KEY!}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ status: 'archived' }),
+		});
+
+		if (!response.ok) {
+			let data = await response.json();
+			let fieldErrors: string = '';
+			if (data.error.errors) {
+				fieldErrors = data.error.errors.map((err: { field: string; message: string }) => `${err.field} : ${err.message}.`).join(' ');
+			}
+			throw new Error(
+				`${response.statusText}\nError code: ${data.error.code}\nError detail: ${data.error.detail}${
+					fieldErrors ? `\nField Errors: ${fieldErrors}` : ''
+				}`
+			);
+		}
+	} catch (error) {
+		console.error(`Failed to archive Paddle customer. CustomerId: ${paddleCustomerId}}`, error);
 	}
 }

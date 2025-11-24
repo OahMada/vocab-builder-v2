@@ -2,7 +2,10 @@ import { Metadata } from 'next';
 import * as React from 'react';
 import { redirect } from 'next/navigation';
 
+import getSubscription from '@/app/actions/subscription/getSubscription';
+
 import { auth } from '@/auth';
+import { SubscriptionDetail } from '@/types';
 
 import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
@@ -29,16 +32,28 @@ export default async function AccountPage() {
 		redirect('/');
 	}
 
+	// read subscription data
+	let subscriptionDetail: SubscriptionDetail | undefined = undefined;
+	let getSubscriptionResult = await getSubscription();
+	if ('error' in getSubscriptionResult) {
+		throw new Error(getSubscriptionResult.error);
+	} else {
+		subscriptionDetail = getSubscriptionResult.data;
+	}
+
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
 				<Breadcrumb page='Account' link='/account' />
 				<Tab>
 					<TabsContent value='settings'>
-						<UserSetting user={{ name: session.user.name!, email: session.user.email!, id: session.user.id }} />
+						<UserSetting
+							user={{ name: session.user.name!, email: session.user.email!, id: session.user.id }}
+							subScriptionIsActive={subscriptionDetail?.status === 'active'}
+						/>
 					</TabsContent>
 					<TabsContent value='subscription'>
-						<UserSubscription />
+						<UserSubscription subscriptionDetail={subscriptionDetail} />
 					</TabsContent>
 				</Tab>
 			</Wrapper>

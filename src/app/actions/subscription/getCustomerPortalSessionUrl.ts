@@ -25,7 +25,16 @@ export default async function getCustomerPortalSessionUrl(): Promise<{ data: str
 		});
 
 		if (!response.ok) {
-			throw new Error(`Failed to generate Paddle Customer Portal links: ${response.statusText}`);
+			let data = await response.json();
+			let fieldErrors: string = '';
+			if (data.error.errors) {
+				fieldErrors = data.error.errors.map((err: { field: string; message: string }) => `${err.field} : ${err.message}.`).join(' ');
+			}
+			throw new Error(
+				`${response.statusText}\nError code: ${data.error.code}\nError detail: ${data.error.detail}${
+					fieldErrors ? `\nField Errors: ${fieldErrors}` : ''
+				}`
+			);
 		}
 		let { data } = await response.json();
 		let url = data.urls.general.overview as string;

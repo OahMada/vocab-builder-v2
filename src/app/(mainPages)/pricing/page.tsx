@@ -2,7 +2,10 @@ import { Metadata } from 'next';
 import * as React from 'react';
 import { redirect } from 'next/navigation';
 
+import getSubscription from '@/app/actions/subscription/getSubscription';
+
 import { auth } from '@/auth';
+import { SubscriptionDetail } from '@/types';
 
 import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
@@ -23,6 +26,22 @@ export default async function PricingPage() {
 		redirect('/personalize?callback=/pricing');
 	}
 
+	let isAuthenticated = Boolean(session?.user);
+
+	if (isAuthenticated) {
+		let subscriptionDetail: SubscriptionDetail | undefined = undefined;
+		let getSubscriptionResult = await getSubscription();
+		if ('error' in getSubscriptionResult) {
+			throw new Error(getSubscriptionResult.error);
+		} else {
+			subscriptionDetail = getSubscriptionResult.data;
+		}
+
+		if (subscriptionDetail !== undefined) {
+			redirect('/');
+		}
+	}
+
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
@@ -32,17 +51,19 @@ export default async function PricingPage() {
 					<Title>Build your vocabulary naturally, one sentence at a time.</Title>
 					<Description>Every new user automatically receives a 3-day free trial, try out the app and see if it fits your needs.</Description>
 				</TitleWrapper>
-				<Button variant='outline' href='/auth/login'>
-					<Icon id='forward' />
-					&nbsp; Start for Free
-				</Button>
+				{!isAuthenticated && (
+					<Button variant='outline' href='/auth/login'>
+						<Icon id='forward' />
+						&nbsp; Start for Free
+					</Button>
+				)}
 				<Spacer size={20} />
 				<PricingWrapper>
 					<TitleWrapper>
-						<Title>Or, Choose a Subscription Plan</Title>
+						<Title>{isAuthenticated ? 'Choose a Subscription Plan' : 'Or, Choose a Subscription Plan'}</Title>
 						<Description>Unlimited API access for the duration of your subscription.</Description>
 					</TitleWrapper>
-					<Pricing isAuthenticated={Boolean(session?.user)} />
+					<Pricing isAuthenticated={isAuthenticated} />
 				</PricingWrapper>
 			</Wrapper>
 		</MaxWidthWrapper>

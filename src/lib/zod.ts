@@ -148,7 +148,7 @@ export var DeleteSentenceInputSchema = z.object({
 });
 
 export var CallbackSchema = z.string().optional();
-var EmailSchema = z.email({ error: 'Invalid email' });
+export var EmailSchema = z.email({ error: 'Invalid email' });
 
 export var LoginInputSchema = z.object({
 	email: EmailSchema,

@@ -59,27 +59,25 @@ function Note() {
 	let submitHandler = handleSubmit(onSubmit);
 
 	return isEditing ? (
-		<>
-			<CardWrapper transition={CUSTOM_SPRING} layout={true} initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-				<Title layout='position'>Note</Title>
-				<InnerWrapper layout='position'>
-					<TextArea
-						{...register(INPUT_NAME.NOTE, {
-							onChange: () => {
-								clearErrors(INPUT_NAME.NOTE);
-							},
-						})}
-						value={noteValue}
-						clearInput={clearInput}
-						placeholder='Input note text here'
-						autoFocus={true}
-						keydownSubmit={submitHandler}
-					/>
-					{errors.note && <FormErrorText>{errors.note.message}</FormErrorText>}
-				</InnerWrapper>
-				<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={submitHandler} submitDisabled={!!errors.note} />
-			</CardWrapper>
-		</>
+		<CardWrapper transition={CUSTOM_SPRING} layout={true} initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+			<Title layout='position'>Note</Title>
+			<InnerWrapper layout='position'>
+				<TextArea
+					{...register(INPUT_NAME.NOTE, {
+						onChange: () => {
+							clearErrors(INPUT_NAME.NOTE);
+						},
+					})}
+					value={noteValue}
+					clearInput={clearInput}
+					placeholder='Input note text here'
+					autoFocus={true}
+					keydownSubmit={submitHandler}
+				/>
+				{errors.note && <FormErrorText>{errors.note.message}</FormErrorText>}
+			</InnerWrapper>
+			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={submitHandler} submitDisabled={!!errors.note} />
+		</CardWrapper>
 	) : note ? (
 		<CardWrapper transition={CUSTOM_SPRING} layout={true}>
 			<Title layout='position'>Note</Title>

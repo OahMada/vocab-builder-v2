@@ -1,5 +1,7 @@
 'use server';
 
+import updatePaddleCustomerInfo from '../subscription/updatePaddleCustomerInfo';
+
 import prisma from '@/lib/prisma';
 import verifySession from '@/helpers/dal';
 import { handleZodError } from '@/utils';
@@ -40,6 +42,16 @@ export default async function updateUser(data: unknown): Promise<{ error: string
 		case 'user_info':
 			try {
 				let { name, email } = result.data;
+				// keep the info in sync with Paddle customer portal
+				let PaddleUpdateResult = await updatePaddleCustomerInfo({
+					name,
+					email,
+				});
+
+				if ('error' in PaddleUpdateResult) {
+					return { error: PaddleUpdateResult.error };
+				}
+
 				let updatedUser = await prisma.user.update({
 					where: { id: userId },
 					data: {
@@ -48,6 +60,7 @@ export default async function updateUser(data: unknown): Promise<{ error: string
 					},
 					select: userSelect,
 				});
+
 				return { data: updatedUser };
 			} catch (error) {
 				console.error('user update failed', error);

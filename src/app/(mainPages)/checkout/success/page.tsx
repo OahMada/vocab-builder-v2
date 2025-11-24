@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
+import updatePaddleCustomerInfo from '@/app/actions/subscription/updatePaddleCustomerInfo';
+
 import { auth } from '@/auth';
 
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
@@ -21,6 +23,9 @@ export default async function checkoutPage() {
 	if (!session?.user) {
 		redirect('/pricing');
 	}
+
+	// keep user info in sync between app and Paddle customer portal
+	await updatePaddleCustomerInfo({ name: session.user.name, email: session.user.email });
 
 	return (
 		<MaxWidthWrapper>

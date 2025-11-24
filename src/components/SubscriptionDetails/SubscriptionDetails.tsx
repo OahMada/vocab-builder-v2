@@ -2,25 +2,82 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import { FallbackProps, withErrorBoundary } from 'react-error-boundary';
+
+import cancelSubscription from '@/app/actions/subscription/cancelSubscription';
+import reactiveSubscription from '@/app/actions/subscription/reactiveSubscription';
 
 import { SubscriptionDetail } from '@/types';
-import { PRICE_TIER } from '@/constants';
-import { getLocalDateString } from '@/utils';
+import { PRICE_TIER, TOAST_ID } from '@/constants';
+import { getLocalDateString, handleError } from '@/utils';
 import { usePaddlePrices } from '@/hooks';
 
 import PricePlaceHolder from '@/components/PricePlaceHolder';
+import { Button } from '@/components/Button';
+import Loading from '@/components/Loading';
+import AlertDialog from '@/components/AlertDialog';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+import Icon from '@/components/Icon';
+import { ErrorTitle, ErrorText } from '@/components/ErrorDisplay';
 
-// TODO error boundary
+function SubscriptionDetails({
+	subscriptionDetail,
+	subscriptionCanceled,
+}: {
+	subscriptionDetail: SubscriptionDetail;
+	subscriptionCanceled: boolean;
+}) {
+	let [canceled, setCanceled] = React.useState(subscriptionCanceled);
 
-function SubscriptionDetails({ subscriptionDetail, errorText }: { subscriptionDetail: SubscriptionDetail; errorText?: string }) {
 	let [nextBillingDateString, setNextBillingBateString] = React.useState<undefined | string>(undefined);
 	let [scheduledChangeDateString, setScheduledChangeDateString] = React.useState<undefined | string>(undefined);
-	let { loading, priceMap } = usePaddlePrices();
+	let { loading: priceLoading, priceMap } = usePaddlePrices();
 
 	let { nextBillingAt, priceId, status, scheduledChange } = subscriptionDetail;
 	let priceDetail = PRICE_TIER.find((item) => item.priceId === priceId);
 	if (!priceDetail) {
 		throw new Error('No matching priceId provided');
+	}
+
+	let { addToToast } = useGlobalToastContext();
+	let [manageSubscriptionLoading, startTransition] = React.useTransition();
+
+	async function handleCancelSubscription() {
+		let result = await cancelSubscription();
+		if ('error' in result) {
+			addToToast({
+				id: TOAST_ID.CANCEL_SUBSCRIPTION,
+				contentType: 'error',
+				content: result.error,
+			});
+			return;
+		}
+		setCanceled(true);
+		addToToast({
+			id: TOAST_ID.CANCEL_SUBSCRIPTION,
+			contentType: 'notice',
+			content: result.data,
+		});
+	}
+
+	function handleUndoCancellation() {
+		startTransition(async () => {
+			let result = await reactiveSubscription();
+			if ('error' in result) {
+				addToToast({
+					id: TOAST_ID.CANCEL_SUBSCRIPTION,
+					contentType: 'error',
+					content: result.error,
+				});
+				return;
+			}
+			setCanceled(false);
+			addToToast({
+				id: TOAST_ID.CANCEL_SUBSCRIPTION,
+				contentType: 'notice',
+				content: result.data,
+			});
+		});
 	}
 
 	// to avoid client-server mismatch
@@ -40,36 +97,63 @@ function SubscriptionDetails({ subscriptionDetail, errorText }: { subscriptionDe
 		}
 	}, [scheduledChange]);
 
-	if (errorText) return <ErrorText>errorText</ErrorText>;
-	if (!subscriptionDetail) return <p>No active subscription</p>;
-
 	return (
 		<Wrapper>
 			<DataLabel>Your Plan:</DataLabel>
 			<DataValue>{priceDetail.name}</DataValue>
 			<DataLabel>Price:</DataLabel>
 			<DataValue>
-				{loading ? <PricePlaceHolder style={{ '--width': '48px', '--height': '20px' } as React.CSSProperties} /> : priceMap[priceId]}&nbsp;
+				{priceLoading ? <PricePlaceHolder style={{ '--width': '48px', '--height': '20px' } as React.CSSProperties} /> : priceMap[priceId]}&nbsp;
 				{priceDetail.billingCycle}
 			</DataValue>
 			<DataLabel>Subscription status:</DataLabel>
 			<CappedDataValue>{status}</CappedDataValue>
-			{nextBillingAt ? (
+			{canceled ? (
 				<>
-					<DataLabel>Next billing date:</DataLabel>
-					<DataValue>{nextBillingDateString}</DataValue>
+					<WarningDataLabel>Expires at:</WarningDataLabel>
+					<WarningDataValue>{scheduledChangeDateString || nextBillingDateString}</WarningDataValue>
 				</>
 			) : (
 				<>
-					<WarningDataLabel>Expires at:</WarningDataLabel>
-					<WarningDataValue>{scheduledChangeDateString}</WarningDataValue>
+					<DataLabel>Next billing date:</DataLabel>
+					<DataValue>{nextBillingDateString || scheduledChangeDateString}</DataValue>
 				</>
+			)}
+			{canceled ? (
+				<UndoCancellationButton variant='outline' onClick={handleUndoCancellation} disabled={manageSubscriptionLoading}>
+					{manageSubscriptionLoading ? <Loading description='Undo subscription cancellation' /> : <Icon id='undo' />}
+					&nbsp;Undo Cancellation
+				</UndoCancellationButton>
+			) : (
+				<AlertDialog
+					description='Are you sure you want to cancel your subscription? You can keep using Vocab Builder until the end of your current billing period.'
+					handleAction={handleCancelSubscription}
+				>
+					<CancelButton variant='outline' disabled={canceled}>
+						<Icon id='x' />
+						&nbsp;Cancel Subscription
+					</CancelButton>
+				</AlertDialog>
 			)}
 		</Wrapper>
 	);
 }
 
-export default SubscriptionDetails;
+var SubscriptionDetailsWithErrorBoundary = withErrorBoundary(SubscriptionDetails, {
+	FallbackComponent: Fallback,
+});
+
+function Fallback({ error }: FallbackProps) {
+	let errorMsg = handleError(error);
+	return (
+		<ErrorWrapper>
+			<ErrorTitle>An Error Occurred</ErrorTitle>
+			<ErrorText>{errorMsg}</ErrorText>
+		</ErrorWrapper>
+	);
+}
+
+export default SubscriptionDetailsWithErrorBoundary;
 
 var Wrapper = styled.div`
 	display: grid;
@@ -92,9 +176,6 @@ var DataValue = styled.div`
 var CappedDataValue = styled(DataValue)`
 	text-transform: capitalize;
 `;
-var ErrorText = styled.p`
-	color: var(--text-status-warning);
-`;
 
 var WarningDataLabel = styled(DataLabel)`
 	color: var(--text-status-warning);
@@ -102,4 +183,17 @@ var WarningDataLabel = styled(DataLabel)`
 
 var WarningDataValue = styled(DataValue)`
 	color: var(--text-status-warning);
+`;
+
+var UndoCancellationButton = styled(Button)`
+	grid-column: 1 / -1;
+	justify-self: center;
+`;
+
+var CancelButton = styled(UndoCancellationButton)`
+	--text-color: var(--text-status-warning);
+`;
+
+var ErrorWrapper = styled.div`
+	text-align: center;
 `;

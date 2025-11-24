@@ -79,3 +79,7 @@ export function getLocalDateString(dateString: string, includeTime: boolean = tr
 	}
 	return formatted;
 }
+
+export function convertPrice(priceString: string) {
+	return Number(priceString.match(/\d/g)?.join(''));
+}

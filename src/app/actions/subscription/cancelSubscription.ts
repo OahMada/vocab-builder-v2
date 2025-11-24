@@ -27,7 +27,16 @@ export default async function cancelSubscription(): Promise<{ data: string } | {
 		});
 
 		if (!response.ok) {
-			throw new Error(`Failed to cancel subscription: ${response.statusText}`);
+			let data = await response.json();
+			let fieldErrors: string = '';
+			if (data.error.errors) {
+				fieldErrors = data.error.errors.map((err: { field: string; message: string }) => `${err.field} : ${err.message}.`).join(' ');
+			}
+			throw new Error(
+				`${response.statusText}\nError code: ${data.error.code}\nError detail: ${data.error.detail}${
+					fieldErrors ? `\nField Errors: ${fieldErrors}` : ''
+				}`
+			);
 		}
 
 		return { data: 'Subscription canceled successfully.' };

@@ -13,7 +13,8 @@ const nextConfig: NextConfig = {
 	experimental: {
 		typedEnv: true,
 	},
-	transpilePackages: ['next-mdx-remote'],
+	// https://github.com/resend/react-email/issues/2426#issuecomment-3568568145
+	transpilePackages: ['next-mdx-remote', 'prettier'],
 	images: {
 		remotePatterns: [
 			{

@@ -4,22 +4,22 @@ import { type CheckoutEventsData, type Environments, initializePaddle } from '@p
 import * as React from 'react';
 import styled from 'styled-components';
 
+import getCustomerAuthToken from '@/app/actions/subscription/getCustomerAuthToken';
+import revivePaddleCustomer from '@/app/actions/subscription/revivePaddleCustomer';
+
 import { useTheme } from '@/hooks';
 import { Theme } from '@/types';
 import { formatBillingCycle, formatMoney } from '@/helpers';
-import PricePlaceHolder from '@/components/PricePlaceHolder';
+import { TOAST_ID } from '@/constants';
 
-function Checkout({
-	priceId,
-	userInfo,
-	initialTheme,
-}: {
-	priceId: string;
-	userInfo: { email: string; userId: string; username: string };
-	initialTheme: Theme;
-}) {
-	let { email, userId, username } = userInfo;
+import PricePlaceHolder from '@/components/PricePlaceHolder';
+import NavLink from '@/components/NavLink';
+import { useGlobalToastContext } from '@/components/GlobalToastProvider';
+
+function Checkout({ priceId, userInfo, initialTheme }: { priceId: string; userInfo: { email: string; userId: string }; initialTheme: Theme }) {
+	let { email, userId } = userInfo;
 	let [checkoutData, setCheckoutData] = React.useState<CheckoutEventsData | null>(null);
+	let { addToToast } = useGlobalToastContext();
 
 	let recurringTotal = checkoutData?.recurring_totals?.total;
 	let billingCycle = checkoutData?.items[0].billing_cycle;
@@ -35,6 +35,25 @@ function Checkout({
 
 	React.useEffect(() => {
 		async function openCheckout() {
+			let authToken: string | undefined = undefined;
+
+			// existing customer for example subscription expired, needs to re-subscribe
+			let fetchAuthTokenResult = await getCustomerAuthToken();
+			if (!('error' in fetchAuthTokenResult)) {
+				authToken = fetchAuthTokenResult.data;
+			}
+
+			// for the edge case where user have once deleted their account and recrate a account using same email address
+			let reviveResult = await revivePaddleCustomer(email);
+			if ('error' in reviveResult) {
+				addToToast({
+					content: reviveResult.error,
+					contentType: 'error',
+					id: TOAST_ID.REVIVE_PADDLE_CUSTOMER,
+				});
+				return;
+			}
+
 			let paddle = await initializePaddle({
 				token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN!,
 				environment: process.env.NEXT_PUBLIC_PADDLE_ENV as Environments,
@@ -57,18 +76,28 @@ function Checkout({
 				},
 			});
 
-			paddle?.Checkout.open({
-				items: [{ priceId: priceId, quantity: 1 }],
-				customer: { email },
-				customData: {
-					userId,
-					username,
-				},
-			});
+			// to show the saved payment method when an existing customer pays again
+			if (authToken) {
+				paddle?.Checkout.open({
+					customerAuthToken: authToken,
+					items: [{ priceId: priceId, quantity: 1 }],
+					customData: {
+						userId,
+					},
+				});
+			} else {
+				paddle?.Checkout.open({
+					items: [{ priceId: priceId, quantity: 1 }],
+					customer: { email },
+					customData: {
+						userId,
+					},
+				});
+			}
 		}
 
 		openCheckout();
-	}, [email, priceId, theme, userId, username]);
+	}, [addToToast, email, priceId, theme, userId]);
 
 	return (
 		<Wrapper>
@@ -123,6 +152,7 @@ function Checkout({
 						)}
 					</PriceDetailListing>
 				</PriceDetailWrapper>
+				<RefoundPolicyLink href='#'>Refund Policy</RefoundPolicyLink>
 			</OrderWrapper>
 			<PaymentWrapper>
 				<Title>Payment Details</Title>
@@ -200,4 +230,11 @@ var PriceDetailListing = styled.div`
 
 var Value = styled.span`
 	color: var(--text-primary);
+`;
+
+var RefoundPolicyLink = styled(NavLink)`
+	color: var(--text-secondary);
+	font-size: ${14 / 16}rem;
+	align-self: flex-end;
+	font-weight: 600;
 `;

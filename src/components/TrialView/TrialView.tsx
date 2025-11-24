@@ -20,7 +20,7 @@ function TrialView({ trialStatus }: { trialStatus: TrialStatus }) {
 	return (
 		<Wrapper>
 			<p>You don&apos;t have an active Subscription yet.</p>
-			{status === 'active' && <WarningText>Free trial ends at: {trialEndsDateString}</WarningText>}
+			{status === 'active' && <p>Free trial ends at: {trialEndsDateString}</p>}
 			{status === 'expired' && <WarningText>Free trial ended at: {trialEndsDateString}</WarningText>}
 			<ChoosePlanButton variant='outline' href='/pricing'>
 				<Icon id='forward' />

@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 import updateUser from '@/app/actions/user/updateUser';
 
 import { UserInfoInputSchema, UserInfoInput } from '@/lib';
-import { TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
+import { QUERIES, TOAST_ID, USER_UPDATE_ACTION } from '@/constants';
 
 import Modal from '@/components/Modal';
 import InputBox from '@/components/InputBox';
@@ -56,6 +56,7 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 					contentType: 'error',
 					content: result.error,
 					id: TOAST_ID.USER_UPDATE,
+					title: 'Failed to update user',
 				});
 				return;
 			}
@@ -119,9 +120,13 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 export default EditUserInfo;
 
 var Title = styled.h2`
-	font-size: 1.5rem;
+	font-size: 1.2rem;
 	font-weight: 450;
 	line-height: 1;
+
+	@media ${QUERIES.tabletAndUp} {
+		font-size: 1.5rem;
+	}
 `;
 
 var Label = styled.label`

@@ -35,5 +35,5 @@ export function usePaddlePrices(): { loading: boolean; currencyCode: string; pri
 		fetchPaddlePrices();
 	}, []);
 
-	return { loading, currencyCode, priceMap };
+	return React.useMemo(() => ({ loading, currencyCode, priceMap }), [currencyCode, loading, priceMap]);
 }

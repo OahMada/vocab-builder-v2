@@ -15,7 +15,9 @@ export var MessageTitle = styled.h1`
 	font-weight: 500;
 `;
 
-export var Message = styled.p``;
+export var Message = styled.p`
+	text-align: center;
+`;
 
 export var InnerWrapper = styled.div`
 	display: flex;

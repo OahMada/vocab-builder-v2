@@ -9,7 +9,7 @@ import PersonalizeUser from '@/components/PersonalizeUser';
 import SyncData from '@/components/SyncData';
 import DeleteAccount from '@/components/DeleteAccount';
 
-async function UserSetting({ user }: { user: { name: string; email: string; id: string } }) {
+async function UserSetting({ user, subScriptionIsActive }: { user: { name: string; email: string; id: string }; subScriptionIsActive: boolean }) {
 	// read sync data
 	let syncErrorText: string | undefined = undefined;
 	let lastSynced: string | undefined = undefined;
@@ -28,7 +28,7 @@ async function UserSetting({ user }: { user: { name: string; email: string; id: 
 			<GoogleAccountLink />
 			<PersonalizeUser showSubmitButton={false} hasName={Boolean(user.name)} />
 			<SyncData errorText={syncErrorText} lastSynced={lastSynced} />
-			<DeleteAccount />
+			<DeleteAccount subScriptionIsActive={subScriptionIsActive} />
 		</>
 	);
 }

@@ -111,7 +111,7 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 	--background-color: var(--bg-modal);
 	--gap: 12px;
 	position: fixed;
-	padding: 20px 16px;
+	padding: 20px;
 	background-color: var(--background-color);
 	display: flex;
 	flex-direction: column;
@@ -132,7 +132,7 @@ var Content = styled(ModalPrimitives.Content)<{ $position: string }>`
 				left: 50%;
 				transform: translate(-50%, -50%);
 				width: min(90vw, 500px);
-				border-radius: 16px;
+				border-radius: 32px;
 
 				@media (prefers-reduced-motion: no-preference) {
 					animation: ${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);

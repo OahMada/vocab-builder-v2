@@ -19,7 +19,7 @@ import InputBox from '@/components/InputBox';
 import FormErrorText from '@/components/FormErrorText';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 
-function DeleteAccount() {
+function DeleteAccount({ subScriptionIsActive }: { subScriptionIsActive: boolean }) {
 	let { data: session } = useSession();
 	let { addToToast } = useGlobalToastContext();
 	let {
@@ -74,8 +74,10 @@ function DeleteAccount() {
 				})}
 				id='email'
 				style={{ '--bg-color': 'transparent' } as React.CSSProperties}
+				disabled={subScriptionIsActive}
 			/>
 			{errors.email && <FormErrorText>{errors.email.message}</FormErrorText>}
+			{subScriptionIsActive && <FormErrorText>Account deletion is unavailable during an active subscription.</FormErrorText>}
 		</Wrapper>
 	);
 
@@ -86,7 +88,7 @@ function DeleteAccount() {
 			handleAction={handleSubmit(onSubmit)}
 			openState={alertOpen}
 			onOpenChange={onAlertOpenChange}
-			actionDisabled={Boolean(errors.email)}
+			actionDisabled={Boolean(errors.email) || subScriptionIsActive}
 		>
 			<DeleteAccountButton variant='outline'>
 				<Icon id='delete' />

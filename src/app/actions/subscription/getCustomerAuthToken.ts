@@ -3,7 +3,9 @@
 import readCustomerId from './readCustomerIdAndSubscriptionId';
 import verifySession from '@/helpers/dal';
 
-export default async function reactiveSubscription(): Promise<{ data: string } | { error: string }> {
+// TODO what if a new customer is doing it? what data is returned?
+
+export default async function getCustomerAuthToken(): Promise<{ data: string } | { error: string }> {
 	let session = await verifySession();
 	if (!session) {
 		return { error: 'Unauthorized' };
@@ -11,19 +13,16 @@ export default async function reactiveSubscription(): Promise<{ data: string } |
 	let userId = session.id;
 
 	try {
-		let { subscriptionId } = await readCustomerId(userId);
+		let { paddleCustomerId: customerId } = await readCustomerId(userId);
 		// TODO change to api.paddle.com when go live
-		let reactiveSubscriptionUrl = `https://sandbox-api.paddle.com/subscriptions/${subscriptionId}`;
+		let authTokenUrl = `https://sandbox-api.paddle.com/customers/${customerId}/auth-token`;
 
-		let response = await fetch(reactiveSubscriptionUrl, {
-			method: 'PATCH',
+		let response = await fetch(authTokenUrl, {
+			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${process.env.PADDLE_API_KEY!}`,
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({
-				scheduled_change: null,
-			}),
 		});
 
 		if (!response.ok) {
@@ -38,10 +37,11 @@ export default async function reactiveSubscription(): Promise<{ data: string } |
 				}`
 			);
 		}
-
-		return { data: 'Successfully reactivated subscription.' };
+		let { data } = await response.json();
+		let authToken = data.customer_auth_token as string;
+		return { data: authToken };
 	} catch (error) {
-		console.error('Failed to cancel subscription', error);
-		return { error: 'Failed to reactivate subscription, please try again later.' };
+		console.error('Failed to generate Paddle Customer auth token', error);
+		return { error: 'Failed to generate Paddle Customer auth token.' };
 	}
 }

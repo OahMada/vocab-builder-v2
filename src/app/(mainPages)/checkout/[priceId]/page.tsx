@@ -27,13 +27,12 @@ export default async function checkoutPage({ params }: { params: Promise<{ price
 
 	let email = session.user.email as string;
 	let userId = session.user.id;
-	let username = session.user.name as string;
 
 	return (
 		<MaxWidthWrapper>
 			<Wrapper $position='flex-start'>
 				<Breadcrumb page='Pricing' link='/pricing' />
-				<Checkout priceId={priceId} userInfo={{ email, userId, username }} initialTheme={theme} />
+				<Checkout priceId={priceId} userInfo={{ email, userId }} initialTheme={theme} />
 			</Wrapper>
 		</MaxWidthWrapper>
 	);
