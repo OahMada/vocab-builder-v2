@@ -10,7 +10,7 @@ import getBlobNameFromUrl from '@/helpers/getBlobNamaFromUrl';
 export default async function updateUserImage(data: unknown): Promise<{ error: string } | { data: string }> {
 	let session = await verifySession();
 	if (!session) {
-		return { error: 'Unauthorized' };
+		return { error: 'Unauthorized.' };
 	}
 	let userId = session.id;
 

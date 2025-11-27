@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
+import readCustomerIdAndSubscriptionId from '@/app/actions/user/readCustomerIdAndSubscriptionId';
+
 import { auth } from '@/auth';
 import getCookie from '@/lib/getCookie';
 import { Theme } from '@/types';
@@ -20,6 +22,11 @@ export default async function checkoutPage({ params }: { params: Promise<{ price
 	let session = await auth();
 	if (!session?.user) {
 		redirect('/pricing');
+	}
+
+	let { paddleCustomerId } = await readCustomerIdAndSubscriptionId(session.user.id);
+	if (paddleCustomerId) {
+		redirect('/');
 	}
 
 	let savedTheme = await getCookie('color-theme');

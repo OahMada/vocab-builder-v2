@@ -10,7 +10,7 @@ import { UpdateUserInputSchema, User, userSelect } from '@/lib';
 export default async function updateUser(data: unknown): Promise<{ error: string } | { data: User }> {
 	let session = await verifySession();
 	if (!session) {
-		return { error: 'Unauthorized' };
+		return { error: 'Unauthorized.' };
 	}
 	let userId = session.id;
 

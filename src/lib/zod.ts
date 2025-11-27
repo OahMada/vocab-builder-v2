@@ -9,6 +9,7 @@ import {
 	NATIVE_LANGUAGE,
 	LEARNING_LANGUAGE,
 	ENGLISH_IPA_FLAVOUR,
+	CustomerPortalSessionUrlType,
 } from '@/constants';
 
 export var UserInputSchema = z.object({
@@ -223,3 +224,5 @@ export var DeleteUserInputSchema = z.object({
 });
 
 export type DeleteUserInput = z.infer<typeof DeleteUserInputSchema>;
+
+export var GetCustomerPortalSessionUrlInputSchema = z.nativeEnum(CustomerPortalSessionUrlType);

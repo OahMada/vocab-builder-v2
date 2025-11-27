@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import * as React from 'react';
 import { redirect } from 'next/navigation';
 
-import getSubscription from '@/app/actions/subscription/getSubscription';
+import getSubscriptionDetails from '@/app/actions/user/getSubscriptionDetails';
 
 import { auth } from '@/auth';
 import { SubscriptionDetail } from '@/types';
@@ -34,7 +34,7 @@ export default async function AccountPage() {
 
 	// read subscription data
 	let subscriptionDetail: SubscriptionDetail | undefined = undefined;
-	let getSubscriptionResult = await getSubscription();
+	let getSubscriptionResult = await getSubscriptionDetails();
 	if ('error' in getSubscriptionResult) {
 		throw new Error(getSubscriptionResult.error);
 	} else {

@@ -3,6 +3,8 @@ import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { NextAuthRequest } from 'next-auth';
 
+import checkSubscriptionStatus from '@/app/actions/user/checkSubscriptionStatus';
+
 import { FetchIPAInputSchema } from '@/lib';
 import { handleZodError } from '@/utils';
 import { API_ABORT_TIMEOUT } from '@/constants';
@@ -11,6 +13,16 @@ import { auth } from '@/auth';
 export var POST = auth(async function (request: NextAuthRequest) {
 	if (!request.auth) {
 		return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+	}
+
+	try {
+		let subscriptionActive = await checkSubscriptionStatus(request.auth.user.id);
+		if (!subscriptionActive) {
+			return NextResponse.json({ error: "You need an active subscription to generate the word's IPA." }, { status: 403 });
+		}
+	} catch (error) {
+		console.error('Failed to check subscription status:', error);
+		return NextResponse.json({ error: 'Failed to check subscription status.' }, { status: 500 });
 	}
 
 	let EnglishIPAFlavour = request.auth.user.EnglishIPAFlavour;

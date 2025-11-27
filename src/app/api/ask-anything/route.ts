@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 import { streamText, convertToModelMessages, UIMessage } from 'ai';
 import { NextAuthRequest } from 'next-auth';
 
+import checkSubscriptionStatus from '@/app/actions/user/checkSubscriptionStatus';
+
 import { auth } from '@/auth';
 import { SentenceSchema } from '@/lib';
 import { handleError, handleZodError } from '@/utils';
@@ -22,6 +24,16 @@ function toErrorStream(errorText: string) {
 export var POST = auth(async function (request: NextAuthRequest) {
 	if (!request.auth) {
 		return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+	}
+
+	try {
+		let subscriptionActive = await checkSubscriptionStatus(request.auth.user.id);
+		if (!subscriptionActive) {
+			return NextResponse.json({ error: 'You need an active subscription to use this feature.' }, { status: 403 });
+		}
+	} catch (error) {
+		console.error('Failed to check subscription status:', error);
+		return NextResponse.json({ error: 'Failed to check subscription status.' }, { status: 500 });
 	}
 
 	let { sentence, messages }: { sentence: unknown; messages: UIMessage[] } = await request.json();

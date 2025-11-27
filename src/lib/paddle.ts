@@ -1,4 +1,5 @@
 import 'server-only';
+import { ApiError } from '@paddle/paddle-node-sdk';
 
 import { Environment, LogLevel, Paddle, PaddleOptions } from '@paddle/paddle-node-sdk';
 
@@ -13,4 +14,12 @@ export function getPaddleInstance() {
 	}
 
 	return new Paddle(process.env.PADDLE_API_KEY!, paddleOptions);
+}
+
+export function handlePaddleSDKError(error: ApiError) {
+	let fieldErrors: string = '';
+	if (error.errors) {
+		fieldErrors = error.errors.map((err: { field: string; message: string }) => `${err.field} : ${err.message}.`).join(' ');
+	}
+	console.error(`Error code: ${error.code}\nError detail: ${error.detail} ${fieldErrors ? `\nField Errors: ${fieldErrors}` : ''}`);
 }

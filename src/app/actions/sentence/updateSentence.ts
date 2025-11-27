@@ -13,7 +13,7 @@ import { UNSTABLE_CACHE_TAG } from '@/constants';
 export default async function updateSentence(data: unknown): Promise<{ error: string } | { data: SentenceWithPieces }> {
 	let session = await verifySession();
 	if (!session) {
-		return { error: 'Unauthorized' };
+		return { error: 'Unauthorized.' };
 	}
 
 	let userId = session.id;

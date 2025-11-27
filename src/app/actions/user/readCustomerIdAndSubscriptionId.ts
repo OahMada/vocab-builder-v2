@@ -7,19 +7,20 @@ export default async function readCustomerIdAndSubscriptionId(userId: string) {
 		where: {
 			id: userId,
 		},
-		include: {
-			subscription: true,
+		select: {
+			paddleCustomerId: true,
+			activeSubscriptionId: true,
 		},
 	});
 
 	if (!user) {
-		throw new Error('Could not find the user.');
+		throw new Error(`Could not find the user by id: ${userId}`);
 	}
-	let { paddleCustomerId, subscription } = user;
 
-	if (!subscription) {
+	let { paddleCustomerId, activeSubscriptionId: subscriptionId } = user;
+
+	if (!subscriptionId) {
 		throw new Error('The user has no subscription records.');
 	}
-	let { subscriptionId } = subscription;
 	return { paddleCustomerId, subscriptionId };
 }

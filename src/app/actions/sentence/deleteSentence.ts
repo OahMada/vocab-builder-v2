@@ -22,7 +22,7 @@ async function deleteDatabaseEntry(sentenceId: string, userId: string) {
 export default async function deleteSentence(data: unknown): Promise<{ error: string } | { data: SentenceWithPieces }> {
 	let session = await verifySession();
 	if (!session) {
-		return { error: 'Unauthorized' };
+		return { error: 'Unauthorized.' };
 	}
 
 	let userId = session.id;

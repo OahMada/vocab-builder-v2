@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma';
 
 interface PaddleCustomData extends CustomData {
 	userId: string;
+	email: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -28,32 +29,52 @@ export async function POST(request: NextRequest) {
 				let customData = eventData.data.customData as PaddleCustomData;
 				let item = eventData.data.items?.[0];
 
-				await prisma.subscription.upsert({
+				let subscription = await prisma.subscription.upsert({
 					where: {
 						subscriptionId: eventData.data.id,
 					},
 					update: {
-						subscriptionId: eventData.data.id,
-						priceId: item.price?.id ?? '',
-						productId: item.price?.productId ?? '',
 						status: eventData.data.status,
 						collectionMode: eventData.data.collectionMode,
-						occurredAt: eventData.occurredAt,
+						occurredAt: new Date(eventData.occurredAt),
 						scheduledChange: eventData.data.scheduledChange ? JSON.parse(JSON.stringify(eventData.data.scheduledChange)) : null,
 						nextBillingAt: eventData.data.nextBilledAt ? new Date(eventData.data.nextBilledAt) : null,
 					},
 					create: {
+						email: customData?.email,
 						userId: customData?.userId,
 						subscriptionId: eventData.data.id,
 						priceId: item.price?.id ?? '',
 						productId: item.price?.productId ?? '',
 						status: eventData.data.status,
 						collectionMode: eventData.data.collectionMode,
-						occurredAt: eventData.occurredAt,
+						occurredAt: new Date(eventData.occurredAt),
 						scheduledChange: eventData.data.scheduledChange ? JSON.parse(JSON.stringify(eventData.data.scheduledChange)) : null,
 						nextBillingAt: eventData.data.nextBilledAt ? new Date(eventData.data.nextBilledAt) : null,
 					},
 				});
+
+				// keep track of the id for the active subscription
+				if (eventData.data.status === 'active') {
+					await prisma.user.update({
+						where: {
+							id: subscription.userId,
+						},
+						data: {
+							activeSubscriptionId: subscription.subscriptionId,
+						},
+					});
+				}
+				if (eventData.data.status === 'canceled' || eventData.data.status === 'past_due') {
+					await prisma.user.update({
+						where: {
+							id: subscription.userId,
+						},
+						data: {
+							activeSubscriptionId: null,
+						},
+					});
+				}
 			} else if (eventData.eventType === EventName.CustomerCreated) {
 				await prisma.user.update({
 					where: {

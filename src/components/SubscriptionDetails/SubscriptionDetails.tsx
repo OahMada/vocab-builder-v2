@@ -20,14 +20,10 @@ import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Icon from '@/components/Icon';
 import { ErrorTitle, ErrorText } from '@/components/ErrorDisplay';
 
-function SubscriptionDetails({
-	subscriptionDetail,
-	subscriptionCanceled,
-}: {
-	subscriptionDetail: SubscriptionDetail;
-	subscriptionCanceled: boolean;
-}) {
-	let [canceled, setCanceled] = React.useState(subscriptionCanceled);
+function SubscriptionDetails({ subscriptionDetail }: { subscriptionDetail: SubscriptionDetail }) {
+	let [scheduledToCanceled, setScheduledToCanceled] = React.useState(subscriptionDetail.scheduledChange?.action === 'cancel');
+	let subscriptionCanceled = subscriptionDetail.status === 'canceled';
+	let subscriptionPastDue = subscriptionDetail.status === 'past_due';
 
 	let [nextBillingDateString, setNextBillingBateString] = React.useState<undefined | string>(undefined);
 	let [scheduledChangeDateString, setScheduledChangeDateString] = React.useState<undefined | string>(undefined);
@@ -52,7 +48,7 @@ function SubscriptionDetails({
 			});
 			return;
 		}
-		setCanceled(true);
+		setScheduledToCanceled(true);
 		addToToast({
 			id: TOAST_ID.CANCEL_SUBSCRIPTION,
 			contentType: 'notice',
@@ -71,7 +67,7 @@ function SubscriptionDetails({
 				});
 				return;
 			}
-			setCanceled(false);
+			setScheduledToCanceled(false);
 			addToToast({
 				id: TOAST_ID.CANCEL_SUBSCRIPTION,
 				contentType: 'notice',
@@ -108,32 +104,42 @@ function SubscriptionDetails({
 			</DataValue>
 			<DataLabel>Subscription status:</DataLabel>
 			<CappedDataValue>{status}</CappedDataValue>
-			{canceled ? (
-				<>
-					<WarningDataLabel>Expires at:</WarningDataLabel>
-					<WarningDataValue>{scheduledChangeDateString || nextBillingDateString}</WarningDataValue>
-				</>
-			) : (
+			{!scheduledToCanceled && (
 				<>
 					<DataLabel>Next billing date:</DataLabel>
-					<DataValue>{nextBillingDateString || scheduledChangeDateString}</DataValue>
+					<DataValue>{nextBillingDateString}</DataValue>
+					<AlertDialog
+						description='Are you sure you want to cancel your subscription? You can keep using Vocab Builder until the end of your current billing period.'
+						handleAction={handleCancelSubscription}
+					>
+						<CancelButton variant='outline'>
+							<Icon id='x' />
+							&nbsp;Cancel Subscription
+						</CancelButton>
+					</AlertDialog>
 				</>
 			)}
-			{canceled ? (
-				<UndoCancellationButton variant='outline' onClick={handleUndoCancellation} disabled={manageSubscriptionLoading}>
-					{manageSubscriptionLoading ? <Loading description='Undo subscription cancellation' /> : <Icon id='undo' />}
-					&nbsp;Undo Cancellation
-				</UndoCancellationButton>
-			) : (
-				<AlertDialog
-					description='Are you sure you want to cancel your subscription? You can keep using Vocab Builder until the end of your current billing period.'
-					handleAction={handleCancelSubscription}
-				>
-					<CancelButton variant='outline' disabled={canceled}>
-						<Icon id='x' />
-						&nbsp;Cancel Subscription
-					</CancelButton>
-				</AlertDialog>
+			{subscriptionPastDue && (
+				<>
+					<DataLabel>Expired at:</DataLabel>
+					<DataValue>{nextBillingDateString}</DataValue>
+				</>
+			)}
+			{scheduledToCanceled && (
+				<>
+					<WarningDataLabel>Expires at:</WarningDataLabel>
+					<WarningDataValue>{scheduledChangeDateString}</WarningDataValue>
+					<UndoCancellationButton variant='outline' onClick={handleUndoCancellation} disabled={manageSubscriptionLoading}>
+						{manageSubscriptionLoading ? <Loading description='Undo subscription cancellation' /> : <Icon id='undo' />}
+						&nbsp;Undo Cancellation
+					</UndoCancellationButton>
+				</>
+			)}
+			{subscriptionCanceled && (
+				<>
+					<WarningDataLabel>Expired at:</WarningDataLabel>
+					<WarningDataValue>{scheduledChangeDateString}</WarningDataValue>
+				</>
 			)}
 		</Wrapper>
 	);

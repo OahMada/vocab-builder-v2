@@ -1,46 +1,53 @@
 'use server';
 
-import readCustomerId from './readCustomerIdAndSubscriptionId';
-import verifySession from '@/helpers/dal';
+import { ApiError } from '@paddle/paddle-node-sdk';
 
-export default async function getCustomerPortalSessionUrl(): Promise<{ data: string } | { error: string }> {
+import readCustomerId from '../user/readCustomerIdAndSubscriptionId';
+import verifySession from '@/helpers/dal';
+import { getPaddleInstance, handlePaddleSDKError } from '@/lib/paddle';
+import { GetCustomerPortalSessionUrlInputSchema } from '@/lib';
+import { handleZodError } from '@/utils';
+
+export default async function getCustomerPortalSessionUrl(data: unknown): Promise<{ data: string } | { error: string }> {
 	let session = await verifySession();
 	if (!session) {
-		return { error: 'Unauthorized' };
+		return { error: 'Unauthorized.' };
 	}
 	let userId = session.id;
 
+	let parseResult = GetCustomerPortalSessionUrlInputSchema.safeParse(data);
+	if (!parseResult.success) {
+		let error = handleZodError(parseResult.error);
+		return { error: error.formErrors[0] };
+	}
+
+	let type = parseResult.data;
+
 	try {
 		let { paddleCustomerId: customerId, subscriptionId } = await readCustomerId(userId);
-		// TODO change to api.paddle.com when go live
-		let portalSessionUrl = `https://sandbox-api.paddle.com/customers/${customerId}/portal-sessions`;
 
-		let response = await fetch(portalSessionUrl, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${process.env.PADDLE_API_KEY!}`,
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ subscription_ids: [subscriptionId] }),
-		});
+		let paddle = getPaddleInstance();
 
-		if (!response.ok) {
-			let data = await response.json();
-			let fieldErrors: string = '';
-			if (data.error.errors) {
-				fieldErrors = data.error.errors.map((err: { field: string; message: string }) => `${err.field} : ${err.message}.`).join(' ');
-			}
-			throw new Error(
-				`${response.statusText}\nError code: ${data.error.code}\nError detail: ${data.error.detail}${
-					fieldErrors ? `\nField Errors: ${fieldErrors}` : ''
-				}`
-			);
+		if (!customerId) {
+			throw new Error('Failed to access Paddle customer ID.');
 		}
-		let { data } = await response.json();
-		let url = data.urls.general.overview as string;
-		return { data: url };
+		let { urls } = await paddle.customerPortalSessions.create(customerId, [subscriptionId]);
+
+		if (type === 'general') {
+			let url = urls.general.overview;
+			return { data: url };
+		} else if (type === 'payment_method') {
+			let url = urls.subscriptions[0].updateSubscriptionPaymentMethod;
+			return { data: url };
+		} else {
+			return { error: `Type ${type}} is not supported.` };
+		}
 	} catch (error) {
-		console.error('Failed to generate Paddle Customer Portal links.', error);
+		if (error instanceof ApiError) {
+			handlePaddleSDKError(error);
+		} else {
+			console.error('Failed to generate Paddle Customer Portal links.', error);
+		}
 		return { error: 'Failed to generate Paddle Customer Portal links.' };
 	}
 }

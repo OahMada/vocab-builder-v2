@@ -83,6 +83,7 @@ function Checkout({ priceId, userInfo, initialTheme }: { priceId: string; userIn
 					items: [{ priceId: priceId, quantity: 1 }],
 					customData: {
 						userId,
+						email,
 					},
 				});
 			} else {
@@ -91,6 +92,7 @@ function Checkout({ priceId, userInfo, initialTheme }: { priceId: string; userIn
 					customer: { email },
 					customData: {
 						userId,
+						email,
 					},
 				});
 			}

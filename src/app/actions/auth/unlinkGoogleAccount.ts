@@ -6,7 +6,7 @@ import prisma from '@/lib/prisma';
 export default async function unlinkGoogleAccount(): Promise<{ error: string } | { data: string }> {
 	let session = await verifySession();
 	if (!session) {
-		return { error: 'Unauthorized' };
+		return { error: 'Unauthorized.' };
 	}
 	let userId = session.id;
 

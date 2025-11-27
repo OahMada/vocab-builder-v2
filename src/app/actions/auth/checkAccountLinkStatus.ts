@@ -6,7 +6,7 @@ import prisma from '@/lib/prisma';
 async function checkAccountLinkStatus(): Promise<{ error: string } | { data: string | undefined }> {
 	let session = await verifySession();
 	if (!session) {
-		return { error: 'Unauthorized' };
+		return { error: 'Unauthorized.' };
 	}
 	let userId = session.id;
 

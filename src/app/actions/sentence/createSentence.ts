@@ -16,7 +16,7 @@ export default async function createSentence(data: unknown): Promise<{ error: st
 	let session = await verifySession();
 
 	if (!session) {
-		return { error: 'Unauthorized' };
+		return { error: 'Unauthorized.' };
 	}
 
 	let userId = session.id;

@@ -9,7 +9,7 @@ import { sentenceReadSelect, type SentenceWithPieces } from '@/lib';
 export default async function exportData(): Promise<{ error: string } | { data: string }> {
 	let session = await verifySession();
 	if (!session) {
-		return { error: 'Unauthorized' };
+		return { error: 'Unauthorized.' };
 	}
 
 	let userId = session.id;

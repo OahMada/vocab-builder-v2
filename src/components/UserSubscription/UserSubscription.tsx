@@ -1,12 +1,13 @@
 import * as React from 'react';
 
-import readUserTrialStatus from '@/app/actions/subscription/readUserTrialStatus';
+import readUserTrialStatus from '@/app/actions/user/readUserTrialStatus';
+import { SubscriptionStatus } from '@paddle/paddle-node-sdk';
 
 import { SubscriptionDetail } from '@/types';
 
 import SubscriptionDetails from '@/components/SubscriptionDetails';
 import SubscriptionSection from '@/components/SubscriptionSection';
-import ViewPaymentDetails from '@/components/ViewPaymentDetails';
+import VisitPaddleCustomerPortal from '@/components/VisitPaddleCustomerPortal';
 import TrialView from '@/components/TrialView';
 
 async function UserSubscription({ subscriptionDetail }: { subscriptionDetail: SubscriptionDetail | undefined }) {
@@ -28,13 +29,13 @@ async function UserSubscription({ subscriptionDetail }: { subscriptionDetail: Su
 	return (
 		<>
 			<SubscriptionSection title='Subscription Details' description='Tax may apply, depending on your country of residence.'>
-				<SubscriptionDetails subscriptionDetail={subscriptionDetail} subscriptionCanceled={subscriptionDetail.scheduledChange?.action === 'cancel'} />
+				<SubscriptionDetails subscriptionDetail={subscriptionDetail} />
 			</SubscriptionSection>
 			<SubscriptionSection
 				title='Customer Portal'
 				description='You can visit the Paddle Customer Portal to update payment methods, download invoices, view payment history, et cetera.'
 			>
-				<ViewPaymentDetails />
+				<VisitPaddleCustomerPortal subscriptionStatus={subscriptionDetail.status as SubscriptionStatus} />
 			</SubscriptionSection>
 		</>
 	);
