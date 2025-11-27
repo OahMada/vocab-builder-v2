@@ -2,10 +2,9 @@ import { Metadata } from 'next';
 import * as React from 'react';
 import { redirect } from 'next/navigation';
 
-import getSubscriptionDetails from '@/app/actions/user/getSubscriptionDetails';
+import checkSubscriptionStatus from '@/app/actions/user/checkSubscriptionStatus';
 
 import { auth } from '@/auth';
-import { SubscriptionDetail } from '@/types';
 
 import Wrapper from '@/components/PageWrapper';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
@@ -28,16 +27,9 @@ export default async function PricingPage() {
 
 	let isAuthenticated = Boolean(session?.user);
 
-	if (isAuthenticated) {
-		let subscriptionDetail: SubscriptionDetail | undefined = undefined;
-		let getSubscriptionResult = await getSubscriptionDetails();
-		if ('error' in getSubscriptionResult) {
-			throw new Error(getSubscriptionResult.error);
-		} else {
-			subscriptionDetail = getSubscriptionResult.data;
-		}
-
-		if (subscriptionDetail !== undefined) {
+	if (session?.user.id) {
+		let checkResult = await checkSubscriptionStatus(session?.user.id);
+		if (checkResult) {
 			redirect('/');
 		}
 	}

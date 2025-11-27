@@ -7,8 +7,6 @@ import { getPaddleInstance, handlePaddleSDKError } from '@/lib/paddle';
 import prisma from '@/lib/prisma';
 import { handleZodError } from '@/utils';
 
-// TODO remove console logs
-
 export default async function revivePaddleCustomer(data: unknown): Promise<{ data: string } | { error: string }> {
 	let result = EmailSchema.safeParse(data);
 	if (!result.success) {
@@ -20,7 +18,7 @@ export default async function revivePaddleCustomer(data: unknown): Promise<{ dat
 
 	try {
 		let paddle = getPaddleInstance();
-		let customerCollection = paddle.customers.list({ email: [email] });
+		let customerCollection = paddle.customers.list({ email: [email], status: ['archived'] });
 		let customers = await customerCollection.next();
 
 		let existingCustomerId: string | undefined = undefined;

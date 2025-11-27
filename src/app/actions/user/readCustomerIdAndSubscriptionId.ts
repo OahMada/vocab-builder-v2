@@ -18,9 +18,5 @@ export default async function readCustomerIdAndSubscriptionId(userId: string) {
 	}
 
 	let { paddleCustomerId, activeSubscriptionId: subscriptionId } = user;
-
-	if (!subscriptionId) {
-		throw new Error('The user has no subscription records.');
-	}
 	return { paddleCustomerId, subscriptionId };
 }

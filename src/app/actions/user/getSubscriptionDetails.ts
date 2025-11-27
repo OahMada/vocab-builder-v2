@@ -26,6 +26,7 @@ export default async function getSubscriptionDetails(): Promise<
 			},
 			select: {
 				activeSubscriptionId: true,
+				previousSubscriptionId: true,
 			},
 		});
 
@@ -33,13 +34,15 @@ export default async function getSubscriptionDetails(): Promise<
 			throw new Error(`Could not find user by ID: ${userId}}`);
 		}
 
-		if (!user.activeSubscriptionId) {
+		if (!user.activeSubscriptionId && !user.previousSubscriptionId) {
 			return { data: undefined };
 		}
 
+		let querySubscriptionId = (user.activeSubscriptionId || user.previousSubscriptionId) as string;
+
 		let subscriptionDetail = await prisma.subscription.findUnique({
 			where: {
-				subscriptionId: user.activeSubscriptionId,
+				subscriptionId: querySubscriptionId,
 			},
 			select: subscriptionSelect,
 		});
@@ -50,7 +53,8 @@ export default async function getSubscriptionDetails(): Promise<
 
 		let nextBillingAtString: string | undefined = undefined;
 		let scheduledChangeDetail: ScheduledChange | undefined = undefined;
-		let { nextBillingAt, scheduledChange } = subscriptionDetail;
+		let { nextBillingAt, scheduledChange, occurredAt } = subscriptionDetail;
+		let occurredAtString: string = occurredAt.toISOString();
 
 		nextBillingAtString = nextBillingAt ? nextBillingAt.toISOString() : undefined;
 
@@ -59,7 +63,12 @@ export default async function getSubscriptionDetails(): Promise<
 			scheduledChangeDetail = { action, effectiveAt: effectiveAt, resumeAt: resumeAt || undefined };
 		}
 		return {
-			data: { ...subscriptionDetail, nextBillingAt: nextBillingAtString, scheduledChange: scheduledChange ? scheduledChangeDetail : undefined },
+			data: {
+				...subscriptionDetail,
+				nextBillingAt: nextBillingAtString,
+				scheduledChange: scheduledChange ? scheduledChangeDetail : undefined,
+				occurredAt: occurredAtString,
+			},
 		};
 	} catch (error) {
 		console.error('failed to read the subscription detail', error);

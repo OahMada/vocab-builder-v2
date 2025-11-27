@@ -25,6 +25,9 @@ export default async function getCustomerPortalSessionUrl(data: unknown): Promis
 
 	try {
 		let { paddleCustomerId: customerId, subscriptionId } = await readCustomerId(userId);
+		if (!subscriptionId) {
+			throw new Error('The user has no subscription records.');
+		}
 
 		let paddle = getPaddleInstance();
 

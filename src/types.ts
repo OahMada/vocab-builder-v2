@@ -33,9 +33,10 @@ export interface ScheduledChange {
 	resumeAt: string | undefined;
 }
 
-export type SubscriptionDetail = Omit<Subscription, 'nextBillingAt' | 'scheduledChange'> & {
+export type SubscriptionDetail = Omit<Subscription, 'nextBillingAt' | 'scheduledChange' | 'occurredAt'> & {
 	nextBillingAt: string | undefined;
 	scheduledChange: ScheduledChange | undefined;
+	occurredAt: string;
 };
 
 export interface TrialStatus {

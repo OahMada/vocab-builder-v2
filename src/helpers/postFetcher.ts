@@ -8,10 +8,11 @@ export async function postFetcher<T, ArgT>(url: string, { arg }: { arg: ArgT }):
 			body: JSON.stringify(arg),
 		});
 
+		let data = await res.json();
 		if (!res.ok) {
-			throw new Error(`Request failed: ${res.status} ${res.statusText}`);
+			throw new Error(`${data.error}`);
 		}
-		return (await res.json()) as T;
+		return data as T;
 	} catch (err) {
 		throw err;
 	}

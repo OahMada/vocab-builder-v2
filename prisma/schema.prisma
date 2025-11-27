@@ -36,19 +36,19 @@ model Piece {
 }
 
 model User {
-  id                   String         @id @default(auto()) @map("_id") @db.ObjectId
-  name                 String?
-  email                String?        @unique
-  emailVerified        DateTime?
-  password             String?
-  image                String?
-  accounts             Account[]
-  learningLanguage     String?
-  nativeLanguage       String?
-  EnglishIPAFlavour    String? // only when learning language is English
-  subscription         Subscription[]
-  paddleCustomerId     String?
-  activeSubscriptionId String?
+  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                   String?
+  email                  String?   @unique
+  emailVerified          DateTime?
+  password               String?
+  image                  String?
+  accounts               Account[]
+  learningLanguage       String?
+  nativeLanguage         String?
+  EnglishIPAFlavour      String? // only when learning language is English
+  paddleCustomerId       String?
+  activeSubscriptionId   String?
+  previousSubscriptionId String?
 
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -72,8 +72,6 @@ model Subscription {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  user User? @relation(fields: [userId], references: [id])
 }
 
 model Account {

@@ -22,14 +22,13 @@ import { ErrorTitle, ErrorText } from '@/components/ErrorDisplay';
 
 function SubscriptionDetails({ subscriptionDetail }: { subscriptionDetail: SubscriptionDetail }) {
 	let [scheduledToCanceled, setScheduledToCanceled] = React.useState(subscriptionDetail.scheduledChange?.action === 'cancel');
-	let subscriptionCanceled = subscriptionDetail.status === 'canceled';
-	let subscriptionPastDue = subscriptionDetail.status === 'past_due';
 
 	let [nextBillingDateString, setNextBillingBateString] = React.useState<undefined | string>(undefined);
 	let [scheduledChangeDateString, setScheduledChangeDateString] = React.useState<undefined | string>(undefined);
+	let [cancelledOrPastDueDateString, setCancelledOrPastDueDateString] = React.useState<undefined | string>(undefined);
 	let { loading: priceLoading, priceMap } = usePaddlePrices();
 
-	let { nextBillingAt, priceId, status, scheduledChange } = subscriptionDetail;
+	let { nextBillingAt, priceId, status, scheduledChange, occurredAt } = subscriptionDetail;
 	let priceDetail = PRICE_TIER.find((item) => item.priceId === priceId);
 	if (!priceDetail) {
 		throw new Error('No matching priceId provided');
@@ -93,6 +92,10 @@ function SubscriptionDetails({ subscriptionDetail }: { subscriptionDetail: Subsc
 		}
 	}, [scheduledChange]);
 
+	React.useEffect(() => {
+		setCancelledOrPastDueDateString(getLocalDateString(occurredAt, false));
+	}, [occurredAt]);
+
 	return (
 		<Wrapper>
 			<DataLabel>Your Plan:</DataLabel>
@@ -104,10 +107,10 @@ function SubscriptionDetails({ subscriptionDetail }: { subscriptionDetail: Subsc
 			</DataValue>
 			<DataLabel>Subscription status:</DataLabel>
 			<CappedDataValue>{status}</CappedDataValue>
-			{!scheduledToCanceled && (
+			{!scheduledToCanceled && subscriptionDetail.status === 'active' && (
 				<>
 					<DataLabel>Next billing date:</DataLabel>
-					<DataValue>{nextBillingDateString}</DataValue>
+					<DataValue>{nextBillingDateString || scheduledChangeDateString}</DataValue>
 					<AlertDialog
 						description='Are you sure you want to cancel your subscription? You can keep using Vocab Builder until the end of your current billing period.'
 						handleAction={handleCancelSubscription}
@@ -119,26 +122,31 @@ function SubscriptionDetails({ subscriptionDetail }: { subscriptionDetail: Subsc
 					</AlertDialog>
 				</>
 			)}
-			{subscriptionPastDue && (
+			{subscriptionDetail.status === 'past_due' && (
 				<>
 					<DataLabel>Expired at:</DataLabel>
-					<DataValue>{nextBillingDateString}</DataValue>
+					<DataValue>{cancelledOrPastDueDateString}</DataValue>
 				</>
 			)}
-			{scheduledToCanceled && (
+			{subscriptionDetail.status === 'active' && scheduledToCanceled && (
 				<>
 					<WarningDataLabel>Expires at:</WarningDataLabel>
-					<WarningDataValue>{scheduledChangeDateString}</WarningDataValue>
+					{/* show nextBillingDateString before server data arrive */}
+					<WarningDataValue>{scheduledChangeDateString || nextBillingDateString}</WarningDataValue>
 					<UndoCancellationButton variant='outline' onClick={handleUndoCancellation} disabled={manageSubscriptionLoading}>
 						{manageSubscriptionLoading ? <Loading description='Undo subscription cancellation' /> : <Icon id='undo' />}
 						&nbsp;Undo Cancellation
 					</UndoCancellationButton>
 				</>
 			)}
-			{subscriptionCanceled && (
+			{subscriptionDetail.status === 'canceled' && (
 				<>
 					<WarningDataLabel>Expired at:</WarningDataLabel>
-					<WarningDataValue>{scheduledChangeDateString}</WarningDataValue>
+					<WarningDataValue>{cancelledOrPastDueDateString}</WarningDataValue>
+					<ChoosePlanButton variant='outline' href='/pricing'>
+						<Icon id='forward' />
+						&nbsp;Choose a plan
+					</ChoosePlanButton>
 				</>
 			)}
 		</Wrapper>
@@ -199,6 +207,8 @@ var UndoCancellationButton = styled(Button)`
 var CancelButton = styled(UndoCancellationButton)`
 	--text-color: var(--text-status-warning);
 `;
+
+var ChoosePlanButton = styled(UndoCancellationButton)``;
 
 var ErrorWrapper = styled.div`
 	text-align: center;

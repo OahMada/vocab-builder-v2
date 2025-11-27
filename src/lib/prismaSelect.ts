@@ -37,6 +37,7 @@ export var subscriptionSelect = {
 	nextBillingAt: true,
 	status: true,
 	scheduledChange: true,
+	occurredAt: true,
 } satisfies Prisma.SubscriptionSelect;
 
 export type Subscription = Prisma.SubscriptionGetPayload<{ select: typeof subscriptionSelect }>;

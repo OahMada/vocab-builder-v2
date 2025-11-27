@@ -16,6 +16,9 @@ export default async function reactiveSubscription(): Promise<{ data: string } |
 
 	try {
 		let { subscriptionId } = await readCustomerId(userId);
+		if (!subscriptionId) {
+			throw new Error('The user has no subscription records.');
+		}
 		let paddle = getPaddleInstance();
 
 		await paddle.subscriptions.update(subscriptionId, { scheduledChange: null });

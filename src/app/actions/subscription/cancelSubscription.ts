@@ -18,6 +18,10 @@ export default async function cancelSubscription(): Promise<{ data: string } | {
 		let { subscriptionId } = await readCustomerId(userId);
 		let paddle = getPaddleInstance();
 
+		if (!subscriptionId) {
+			throw new Error('The user has no subscription records.');
+		}
+
 		await paddle.subscriptions.cancel(subscriptionId, {
 			effectiveFrom: 'next_billing_period',
 		});

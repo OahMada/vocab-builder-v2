@@ -14,7 +14,7 @@ function TrialView({ trialStatus }: { trialStatus: TrialStatus }) {
 	let [trialEndsDateString, setTrialEndsDateString] = React.useState('');
 
 	React.useEffect(() => {
-		setTrialEndsDateString(getLocalDateString(expireDate));
+		setTrialEndsDateString(getLocalDateString(expireDate, false));
 	}, [expireDate]);
 
 	return (

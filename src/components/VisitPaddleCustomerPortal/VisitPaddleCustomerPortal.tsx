@@ -62,12 +62,6 @@ function VisitPaddleCustomerPortal({ subscriptionStatus }: { subscriptionStatus:
 					&nbsp;Update Payment Method
 				</Button>
 			)}
-			{subscriptionStatus === 'canceled' && (
-				<Button variant='outline' href='/pricing'>
-					<Icon id='forward' />
-					&nbsp;Choose a plan
-				</Button>
-			)}
 		</>
 	);
 }

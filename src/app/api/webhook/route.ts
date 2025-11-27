@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
 					},
 					update: {
 						status: eventData.data.status,
-						collectionMode: eventData.data.collectionMode,
+						priceId: item.price?.id ?? '',
 						occurredAt: new Date(eventData.occurredAt),
 						scheduledChange: eventData.data.scheduledChange ? JSON.parse(JSON.stringify(eventData.data.scheduledChange)) : null,
 						nextBillingAt: eventData.data.nextBilledAt ? new Date(eventData.data.nextBilledAt) : null,
@@ -62,19 +62,35 @@ export async function POST(request: NextRequest) {
 						},
 						data: {
 							activeSubscriptionId: subscription.subscriptionId,
+							previousSubscriptionId: null,
 						},
 					});
 				}
-				if (eventData.data.status === 'canceled' || eventData.data.status === 'past_due') {
-					await prisma.user.update({
-						where: {
-							id: subscription.userId,
-						},
-						data: {
-							activeSubscriptionId: null,
-						},
-					});
+			} else if (eventData.eventType === EventName.SubscriptionCanceled || eventData.eventType === EventName.SubscriptionPastDue) {
+				let subscriptionId = eventData.data.id;
+
+				let foundSubscription = await prisma.subscription.findUnique({
+					where: {
+						subscriptionId,
+					},
+					select: {
+						userId: true,
+					},
+				});
+
+				if (!foundSubscription) {
+					throw new Error(`Could not found subscription by id ${subscriptionId}`);
 				}
+
+				await prisma.user.update({
+					where: {
+						id: foundSubscription.userId,
+					},
+					data: {
+						activeSubscriptionId: null,
+						previousSubscriptionId: subscriptionId,
+					},
+				});
 			} else if (eventData.eventType === EventName.CustomerCreated) {
 				await prisma.user.update({
 					where: {

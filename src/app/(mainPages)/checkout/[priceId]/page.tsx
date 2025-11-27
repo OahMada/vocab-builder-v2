@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
-import readCustomerIdAndSubscriptionId from '@/app/actions/user/readCustomerIdAndSubscriptionId';
+import checkSubscriptionStatus from '@/app/actions/user/checkSubscriptionStatus';
 
 import { auth } from '@/auth';
 import getCookie from '@/lib/getCookie';
@@ -24,9 +24,11 @@ export default async function checkoutPage({ params }: { params: Promise<{ price
 		redirect('/pricing');
 	}
 
-	let { paddleCustomerId } = await readCustomerIdAndSubscriptionId(session.user.id);
-	if (paddleCustomerId) {
-		redirect('/');
+	if (session?.user.id) {
+		let checkResult = await checkSubscriptionStatus(session?.user.id);
+		if (checkResult) {
+			redirect('/');
+		}
 	}
 
 	let savedTheme = await getCookie('color-theme');
