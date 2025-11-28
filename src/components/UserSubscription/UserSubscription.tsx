@@ -31,14 +31,12 @@ async function UserSubscription({ subscriptionDetail }: { subscriptionDetail: Su
 			<SubscriptionSection title='Subscription Details' description='Tax may apply, depending on your country of residence.'>
 				<SubscriptionDetails subscriptionDetail={subscriptionDetail} />
 			</SubscriptionSection>
-			{(subscriptionDetail.status === 'active' || subscriptionDetail.status === 'past_due') && (
-				<SubscriptionSection
-					title='Customer Portal'
-					description='You can visit the Paddle Customer Portal to update payment methods, download invoices, view payment history, et cetera.'
-				>
-					<VisitPaddleCustomerPortal subscriptionStatus={subscriptionDetail.status as SubscriptionStatus} />
-				</SubscriptionSection>
-			)}
+			<SubscriptionSection
+				title='Customer Portal'
+				description='You can visit the Paddle Customer Portal to update payment methods, download invoices, view payment history, et cetera.'
+			>
+				<VisitPaddleCustomerPortal subscriptionStatus={subscriptionDetail.status as SubscriptionStatus} />
+			</SubscriptionSection>
 		</>
 	);
 }

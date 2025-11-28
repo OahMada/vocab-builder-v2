@@ -54,6 +54,6 @@ export default async function revivePaddleCustomer(data: unknown): Promise<{ dat
 		} else {
 			console.error('Failed to revive Paddle customer', error);
 		}
-		return { error: 'Failed to revive Paddle customer.' };
+		return { error: 'Internal server error, please try again later.' };
 	}
 }

@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
 					},
 					create: {
 						email: customData?.email,
-						userId: customData?.userId,
 						subscriptionId: eventData.data.id,
 						priceId: item.price?.id ?? '',
 						productId: item.price?.productId ?? '',
@@ -58,7 +57,7 @@ export async function POST(request: NextRequest) {
 				if (eventData.data.status === 'active') {
 					await prisma.user.update({
 						where: {
-							id: subscription.userId,
+							email: subscription.email,
 						},
 						data: {
 							activeSubscriptionId: subscription.subscriptionId,
@@ -74,7 +73,7 @@ export async function POST(request: NextRequest) {
 						subscriptionId,
 					},
 					select: {
-						userId: true,
+						email: true,
 					},
 				});
 
@@ -84,7 +83,7 @@ export async function POST(request: NextRequest) {
 
 				await prisma.user.update({
 					where: {
-						id: foundSubscription.userId,
+						email: foundSubscription.email,
 					},
 					data: {
 						activeSubscriptionId: null,

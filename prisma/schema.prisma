@@ -58,7 +58,6 @@ model User {
 
 model Subscription {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String    @db.ObjectId
   email           String
   subscriptionId  String    @unique
   priceId         String

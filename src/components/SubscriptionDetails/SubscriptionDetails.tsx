@@ -124,7 +124,7 @@ function SubscriptionDetails({ subscriptionDetail }: { subscriptionDetail: Subsc
 			)}
 			{subscriptionDetail.status === 'past_due' && (
 				<>
-					<DataLabel>Expired at:</DataLabel>
+					<WarningDataLabel>Expired at:</WarningDataLabel>
 					<DataValue>{cancelledOrPastDueDateString}</DataValue>
 				</>
 			)}
@@ -145,7 +145,7 @@ function SubscriptionDetails({ subscriptionDetail }: { subscriptionDetail: Subsc
 					<WarningDataValue>{cancelledOrPastDueDateString}</WarningDataValue>
 					<ChoosePlanButton variant='outline' href='/pricing'>
 						<Icon id='forward' />
-						&nbsp;Choose a plan
+						&nbsp;Choose a Plan
 					</ChoosePlanButton>
 				</>
 			)}

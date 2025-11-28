@@ -50,7 +50,7 @@ function VisitPaddleCustomerPortal({ subscriptionStatus }: { subscriptionStatus:
 
 	return (
 		<>
-			{subscriptionStatus === 'active' && (
+			{(subscriptionStatus === 'active' || subscriptionStatus === 'canceled') && (
 				<Button variant='outline' onClick={visitCustomerPortal}>
 					{loading ? <Loading description='generating paddle customer portal url' /> : <Icon id='external-link' />}
 					&nbsp;Visit Customer Portal

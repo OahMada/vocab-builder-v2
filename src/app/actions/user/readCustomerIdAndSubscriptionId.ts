@@ -10,6 +10,7 @@ export default async function readCustomerIdAndSubscriptionId(userId: string) {
 		select: {
 			paddleCustomerId: true,
 			activeSubscriptionId: true,
+			previousSubscriptionId: true,
 		},
 	});
 
@@ -17,6 +18,6 @@ export default async function readCustomerIdAndSubscriptionId(userId: string) {
 		throw new Error(`Could not find the user by id: ${userId}`);
 	}
 
-	let { paddleCustomerId, activeSubscriptionId: subscriptionId } = user;
-	return { paddleCustomerId, subscriptionId };
+	let { paddleCustomerId, activeSubscriptionId, previousSubscriptionId } = user;
+	return { paddleCustomerId, subscriptionId: activeSubscriptionId || previousSubscriptionId };
 }

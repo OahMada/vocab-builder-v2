@@ -26,7 +26,7 @@ export default async function updatePaddleCustomerInfo(data: unknown): Promise<{
 		let { paddleCustomerId } = await readCustomerId(userId);
 		if (!paddleCustomerId) {
 			return {
-				error: "User has't subscribed yet",
+				error: 'For security reasons, updating user info before subscribing is not allowed.',
 			};
 		}
 
