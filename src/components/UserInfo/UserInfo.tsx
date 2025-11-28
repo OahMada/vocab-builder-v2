@@ -2,10 +2,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useSession } from 'next-auth/react';
+import { FallbackProps, withErrorBoundary } from 'react-error-boundary';
 
 import { Button } from '@/components/Button';
 import EditUserInfo from '@/components/EditUserInfo';
 import Icon from '@/components/Icon';
+import { handleError } from '@/utils';
+import { ErrorText, ErrorTitle } from '@/components/ErrorDisplay';
 
 function UserInfo({ name, email }: { name: string; email: string }) {
 	let [isShowing, setIsShowing] = React.useState(false);
@@ -34,7 +37,21 @@ function UserInfo({ name, email }: { name: string; email: string }) {
 	);
 }
 
-export default UserInfo;
+var UserInfoWithErrorBoundary = withErrorBoundary(UserInfo, {
+	FallbackComponent: Fallback,
+});
+
+export default UserInfoWithErrorBoundary;
+
+function Fallback({ error }: FallbackProps) {
+	let errorMsg = handleError(error);
+	return (
+		<ErrorWrapper>
+			<ErrorTitle>An Error Occurred</ErrorTitle>
+			<ErrorText>{errorMsg}</ErrorText>
+		</ErrorWrapper>
+	);
+}
 
 var Wrapper = styled.div`
 	display: flex;
@@ -53,4 +70,8 @@ var EditIcon = styled(Icon)`
 	/* optical alignment */
 	position: relative;
 	top: -1px;
+`;
+
+var ErrorWrapper = styled.div`
+	text-align: center;
 `;

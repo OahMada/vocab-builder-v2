@@ -4,7 +4,7 @@
 
 import prisma from '@/lib/prisma';
 
-export default async function checkSubscriptionStatus(userId: string): Promise<boolean> {
+export default async function checkSubscriptionStatus(userId: string, includeTrial: boolean = true): Promise<boolean> {
 	let user = await prisma.user.findUnique({
 		where: {
 			id: userId,
@@ -19,10 +19,16 @@ export default async function checkSubscriptionStatus(userId: string): Promise<b
 		throw new Error(`Could not find the user by id: ${userId}`);
 	}
 
-	let trialExpireDate = new Date(user.createdAt.getTime() + 3 * 24 * 60 * 60 * 1000);
+	if (includeTrial) {
+		let trialExpireDate = new Date(user.createdAt.getTime() + 3 * 24 * 60 * 60 * 1000);
 
-	if (trialExpireDate > new Date() || user.activeSubscriptionId) {
-		return true;
+		if (trialExpireDate > new Date() || user.activeSubscriptionId) {
+			return true;
+		}
+	} else {
+		if (user.activeSubscriptionId) {
+			return true;
+		}
 	}
 
 	return false;

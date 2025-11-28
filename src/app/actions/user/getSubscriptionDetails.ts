@@ -6,6 +6,7 @@ import { subscriptionSelect } from '@/lib';
 import prisma from '@/lib/prisma';
 import { ScheduledChange, SubscriptionDetail } from '@/types';
 import verifySession from '@/helpers/dal';
+import readCustomerIdAndSubscriptionId from '@/app/actions/user/readCustomerIdAndSubscriptionId';
 
 export default async function getSubscriptionDetails(): Promise<
 	| {
@@ -20,35 +21,20 @@ export default async function getSubscriptionDetails(): Promise<
 	let userId = session.id;
 
 	try {
-		let user = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-			select: {
-				activeSubscriptionId: true,
-				previousSubscriptionId: true,
-			},
-		});
-
-		if (!user) {
-			throw new Error(`Could not find user by ID: ${userId}}`);
-		}
-
-		if (!user.activeSubscriptionId && !user.previousSubscriptionId) {
+		let { subscriptionId } = await readCustomerIdAndSubscriptionId(userId);
+		if (!subscriptionId) {
 			return { data: undefined };
 		}
 
-		let querySubscriptionId = (user.activeSubscriptionId || user.previousSubscriptionId) as string;
-
 		let subscriptionDetail = await prisma.subscription.findUnique({
 			where: {
-				subscriptionId: querySubscriptionId,
+				subscriptionId: subscriptionId,
 			},
 			select: subscriptionSelect,
 		});
 
 		if (!subscriptionDetail) {
-			throw new Error(`Could not find subscription by ID: ${user.activeSubscriptionId}}`);
+			throw new Error(`Could not find subscription by ID: ${subscriptionId}}`);
 		}
 
 		let nextBillingAtString: string | undefined = undefined;

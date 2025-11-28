@@ -19,6 +19,7 @@ import FormErrorText from '@/components/FormErrorText';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Loading from '@/components/Loading';
 import BottomRightSpinner from '@/components/BottomRightSpinner';
+import readCustomerIdAndSubscriptionId from '@/app/actions/user/readCustomerIdAndSubscriptionId';
 
 interface EditUserInfoProps {
 	isShowing: boolean;
@@ -26,6 +27,7 @@ interface EditUserInfoProps {
 }
 
 function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
+	let [userHasNoSubscription, setUserHasNoSubscription] = React.useState(false);
 	let { data: session, update: updateSession } = useSession();
 	let [isLoading, startTransition] = React.useTransition();
 	let { addToToast } = useGlobalToastContext();
@@ -70,6 +72,21 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 		});
 	}
 
+	React.useEffect(() => {
+		async function checkUserSubscription() {
+			try {
+				let { paddleCustomerId } = await readCustomerIdAndSubscriptionId(session?.user.id as string);
+				if (!paddleCustomerId) {
+					setUserHasNoSubscription(true);
+				}
+			} catch (error) {
+				throw error;
+			}
+		}
+
+		checkUserSubscription();
+	}, [session?.user.id]);
+
 	return (
 		<React.Suspense fallback={<BottomRightSpinner description='loading modal component' />}>
 			<Modal isOpen={isShowing} onDismiss={onDismiss} heading={<Title>Edit User Info</Title>}>
@@ -84,6 +101,7 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 							},
 						})}
 						placeholder='John Doe'
+						disabled={userHasNoSubscription}
 					/>
 					{errors.name && <FormErrorText>{errors.name.message}</FormErrorText>}
 				</Wrapper>
@@ -98,8 +116,10 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 							},
 						})}
 						placeholder='example@email.com'
+						disabled={userHasNoSubscription}
 					/>
 					{errors.email && <FormErrorText>{errors.email.message}</FormErrorText>}
+					{userHasNoSubscription && <FormErrorText>For security reasons, updating user info before subscribing is not allowed.</FormErrorText>}
 				</Wrapper>
 				<Spacer size={1} />
 				<Actions>
@@ -107,7 +127,7 @@ function EditUserInfo({ isShowing, onDismiss }: EditUserInfoProps) {
 						<Icon id='x' />
 						&nbsp;Cancel
 					</CancelButton>
-					<SaveButton variant='fill' onClick={handleSubmit(onSubmit)} disabled={isLoading}>
+					<SaveButton variant='fill' onClick={handleSubmit(onSubmit)} disabled={isLoading || userHasNoSubscription}>
 						{isLoading ? <Loading description='updating user' /> : <Icon id='save' />}
 						&nbsp;Save
 					</SaveButton>

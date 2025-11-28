@@ -28,7 +28,7 @@ export default async function PricingPage() {
 	let isAuthenticated = Boolean(session?.user);
 
 	if (session?.user.id) {
-		let checkResult = await checkSubscriptionStatus(session?.user.id);
+		let checkResult = await checkSubscriptionStatus(session?.user.id, false);
 		if (checkResult) {
 			redirect('/');
 		}
