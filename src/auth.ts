@@ -4,6 +4,9 @@ import Google from 'next-auth/providers/google';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { createId } from '@paralleldrive/cuid2';
 
+// https://github.com/nextauthjs/next-auth/issues/9493#issuecomment-1871601543
+import type { Adapter } from 'next-auth/adapters';
+
 import prisma from '@/lib/prisma';
 import { UpdataSessionSchema } from '@/lib';
 import sendVerificationRequest from '@/lib/sendVerificationRequest';
@@ -13,7 +16,7 @@ import { handleZodError } from '@/utils';
 
 export var { handlers, signIn, signOut, auth } = NextAuth({
 	...authConfig,
-	adapter: PrismaAdapter(prisma),
+	adapter: PrismaAdapter(prisma) as Adapter,
 	providers: [
 		Google({
 			authorization: {
