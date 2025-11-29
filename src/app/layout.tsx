@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { SessionProvider } from 'next-auth/react';
 import { MotionConfig } from 'motion/react';
+import { Analytics } from '@vercel/analytics/next';
 
 import { roboto, inter } from '@/lib/getFont';
 import { LIGHT_COLORS, DARK_COLORS } from '@/constants';
@@ -41,6 +42,7 @@ export default async function RootLayout({
 						</SessionProvider>
 					</MotionConfig>
 				</StyledComponentsRegistry>
+				<Analytics />
 			</body>
 		</html>
 	);
