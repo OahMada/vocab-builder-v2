@@ -25,7 +25,7 @@ export default async function checkoutPage({ params }: { params: Promise<{ price
 	}
 
 	if (session?.user.id) {
-		let checkResult = await checkSubscriptionStatus(session?.user.id);
+		let checkResult = await checkSubscriptionStatus(session?.user.id, false);
 		if (checkResult) {
 			redirect('/');
 		}
