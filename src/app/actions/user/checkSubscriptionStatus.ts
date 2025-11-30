@@ -3,6 +3,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import getTrialExpirationDate from '@/helpers/getTrialExpirationDate';
 
 export default async function checkSubscriptionStatus(userId: string, includeTrial: boolean = true): Promise<boolean> {
 	let user = await prisma.user.findUnique({
@@ -20,7 +21,7 @@ export default async function checkSubscriptionStatus(userId: string, includeTri
 	}
 
 	if (includeTrial) {
-		let trialExpireDate = new Date(user.createdAt.getTime() + 3 * 24 * 60 * 60 * 1000);
+		let trialExpireDate = getTrialExpirationDate(user.createdAt);
 
 		if (trialExpireDate > new Date() || user.activeSubscriptionId) {
 			return true;

@@ -61,6 +61,10 @@ var Base = styled.div`
 	width: 100%;
 	grid-area: 1 / 1 / 2 / 2;
 	margin: 0;
+
+	// deal with long overflowing text
+	overflow-wrap: break-word;
+	hyphens: auto;
 `;
 
 var InputArea = styled(Base)`
@@ -72,6 +76,7 @@ var InputArea = styled(Base)`
 `;
 var Overlay = styled(Base)`
 	visibility: hidden;
+	// to make sure the overlay expands with textarea properly
 	white-space: pre-wrap;
 `;
 
