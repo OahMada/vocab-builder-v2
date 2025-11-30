@@ -42,7 +42,7 @@ function WordListing({ sentence }: { sentence: string }) {
 					{pieces.map((item, index) => {
 						if (typeof item === 'string') {
 							return (
-								<m.span key={index} layout='position'>
+								<m.span key={index} layout='position' transition={CUSTOM_SPRING}>
 									{item}
 								</m.span>
 							);

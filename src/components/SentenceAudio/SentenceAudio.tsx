@@ -96,6 +96,7 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 	React.useEffect(() => {
 		async function handleKeyDown(e: KeyboardEvent) {
 			if (e.altKey && e.code === 'KeyP') {
+				e.preventDefault();
 				if (error) {
 					await handleRetryTTS();
 					return;

@@ -18,6 +18,9 @@ import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import CardWrapper from '@/components/CardWrapper';
 import Title from '@/components/CardTitle';
 import { useSentenceSubmittingContext } from '@/components/SentenceSubmittingProvider';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/Popover';
+import VisuallyHidden from '@/components/VisuallyHidden';
+import DescriptionText from '@/components/DescriptionText';
 
 interface TranslationResponse {
 	data: string;
@@ -98,7 +101,22 @@ function Translation({ sentence }: { sentence: string }) {
 
 	return (
 		<CardWrapper layout={true} transition={CUSTOM_SPRING}>
-			<Title layout='position'>Translation</Title>
+			<TitleWrapper layout='position'>
+				<Title>Translation</Title>
+				<Popover>
+					<PopoverTrigger asChild={true}>
+						<InfoButton variant='icon'>
+							<Icon id='info' size={14} />
+							<VisuallyHidden>Notice</VisuallyHidden>
+						</InfoButton>
+					</PopoverTrigger>
+					<PopoverContent>
+						<DescriptionText>
+							You can tap or click the Try Again button to regenerate the translation if you&apos;re not satisfied with the result.
+						</DescriptionText>
+					</PopoverContent>
+				</Popover>
+			</TitleWrapper>
 			{isEditing ? (
 				<EditTranslation translationText={translation ? translation : ''} cancelEditing={cancelEditing} />
 			) : (
@@ -150,4 +168,14 @@ var ErrorText = styled(Text)`
 var EditIcon = styled(Icon)`
 	/* optical alignment */
 	transform: translateY(-0.5px);
+`;
+
+var TitleWrapper = styled(m.div)`
+	display: flex;
+	gap: 5px;
+	align-items: baseline;
+`;
+
+var InfoButton = styled(Button)`
+	--hover-bg-color: var(--bg-tertiary);
 `;

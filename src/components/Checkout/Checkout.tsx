@@ -70,7 +70,7 @@ function Checkout({ priceId, userInfo, initialTheme }: { priceId: string; userIn
 						allowLogout: false,
 						frameTarget: 'checkout-container',
 						frameInitialHeight: 450,
-						frameStyle: 'width: 100%; background-color: transparent; border: none;',
+						frameStyle: 'width: 100%; background-color: transparent; border: none; min-width: 286px;',
 						successUrl: '/checkout/success',
 					},
 				},
