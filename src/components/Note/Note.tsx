@@ -103,7 +103,7 @@ var AddNoteButton = styled(MotionButton)`
 `;
 
 var NoteText = styled(m.p)`
-	white-space: pre-wrap;
+	white-space: pre-line;
 `;
 
 var EditButton = styled(MotionButton)`

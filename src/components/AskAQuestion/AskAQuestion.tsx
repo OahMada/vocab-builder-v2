@@ -188,6 +188,7 @@ var ResponseWrapper = styled.div`
 	// for the markdown elements
 	& * {
 		margin-bottom: 10px;
+		text-wrap: unset;
 	}
 `;
 
