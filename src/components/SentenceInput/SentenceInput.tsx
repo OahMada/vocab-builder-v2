@@ -56,8 +56,13 @@ function SentenceInput() {
 
 	// paste text directly on home page
 	usePaste((text: string) => {
-		updateInput(userInput + text);
-		textareaRef.current?.focus();
+		if (document.activeElement === textareaRef.current) {
+			// only concatenate existing text when the element is focused
+			updateInput(userInput + text);
+		} else {
+			updateInput(text);
+			textareaRef.current?.focus();
+		}
 	});
 	useReadLocalStorage(updateInput);
 

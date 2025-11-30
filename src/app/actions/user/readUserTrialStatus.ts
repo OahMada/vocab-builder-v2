@@ -3,6 +3,7 @@
 import prisma from '@/lib/prisma';
 import verifySession from '@/helpers/dal';
 import { TrialStatus } from '@/types';
+import getTrialExpirationDate from '@/helpers/getTrialExpirationDate';
 
 export default async function readUserTrialStatus(): Promise<
 	| {
@@ -29,7 +30,7 @@ export default async function readUserTrialStatus(): Promise<
 		if (!user) {
 			throw new Error(`Could not find user with id: ${userId}}`);
 		}
-		let trialExpireDate = new Date(user.createdAt.getTime() + 3 * 24 * 60 * 60 * 1000);
+		let trialExpireDate = getTrialExpirationDate(user.createdAt);
 		return {
 			data: {
 				status: trialExpireDate.getTime() >= Date.now() ? 'active' : 'expired',
