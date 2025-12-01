@@ -9,6 +9,29 @@ export var BlogP = styled.p`
 	font-size: 1rem;
 	margin-bottom: 1.5rem;
 `;
+
+export var BlogH2 = styled.h2`
+	margin-top: 2.5rem;
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+	font-weight: 600;
+`;
+
+export var BlogH3 = styled.h3`
+	font-size: 1.2rem;
+	margin-bottom: 1rem;
+	font-weight: 550;
+`;
+
+export var RefundsH3 = styled(BlogH3)`
+	scroll-margin-top: 4rem;
+`;
+
+export var BlogH4 = styled.h4`
+	margin-bottom: 1rem;
+	font-weight: 450;
+`;
+
 export var InlineCode = styled.code`
 	background-color: var(--bg-secondary);
 	font-size: 0.95em;
@@ -35,6 +58,16 @@ export var UnorderedList = styled.ul`
 	margin-bottom: 1.5rem;
 	padding-left: 1.5rem;
 `;
+
+export var BlogList = styled.li`
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+
+	& > p {
+		margin-bottom: 0.5rem;
+	}
+`;
+
 export var Aside = styled.aside`
 	border-left: 4px solid var(--border);
 	padding-left: 1rem;
