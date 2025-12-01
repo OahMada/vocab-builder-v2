@@ -154,7 +154,7 @@ function Checkout({ priceId, userInfo, initialTheme }: { priceId: string; userIn
 						)}
 					</PriceDetailListing>
 				</PriceDetailWrapper>
-				<RefoundPolicyLink href='#'>Refund Policy</RefoundPolicyLink>
+				<RefoundPolicyLink href='/legal/terms#refunds'>Refund Policy</RefoundPolicyLink>
 			</OrderWrapper>
 			<PaymentWrapper>
 				<Title>Payment Details</Title>
