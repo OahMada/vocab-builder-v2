@@ -13,7 +13,7 @@ import Breadcrumb from '@/components/CustomBreadcrumb';
 import { Button } from '@/components/Button';
 import Pricing from '@/components/Pricing';
 import Spacer from '@/components/Spacer';
-import { Title, TitleWrapper, Description, PricingWrapper } from './StyledComponents';
+import { Title, TitleWrapper, Description, PricingWrapper, RefundPolicyLink } from './StyledComponents';
 
 export var metadata: Metadata = {
 	title: 'Pricing | Vocab Builder',
@@ -54,6 +54,9 @@ export default async function PricingPage() {
 					<TitleWrapper>
 						<Title>{isAuthenticated ? 'Choose a Subscription Plan' : 'Or, Choose a Subscription Plan'}</Title>
 						<Description>Unlimited API access for the duration of your subscription.</Description>
+						<RefundPolicyLink href='/legal/terms#refunds' $underScored={true}>
+							Refund Policy
+						</RefundPolicyLink>
 					</TitleWrapper>
 					<Pricing isAuthenticated={isAuthenticated} />
 				</PricingWrapper>

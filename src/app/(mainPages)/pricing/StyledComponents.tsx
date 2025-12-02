@@ -2,6 +2,8 @@
 
 import styled from 'styled-components';
 
+import NavLink from '@/components/NavLink';
+
 export var Title = styled.h2`
 	font-size: ${24 / 16}rem;
 	font-weight: 500;
@@ -30,4 +32,9 @@ export var PricingWrapper = styled.div`
 	align-items: center;
 	padding: 24px;
 	padding-top: 0;
+`;
+
+export var RefundPolicyLink = styled(NavLink)`
+	font-size: ${14 / 16}rem;
+	color: var(--text-secondary);
 `;
