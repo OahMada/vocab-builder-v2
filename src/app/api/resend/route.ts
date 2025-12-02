@@ -57,8 +57,14 @@ export async function POST(request: NextRequest) {
 						</a>
 						<br />
 						<br />`
-							: `Sender: ${email.from}`,
-						text: email.text ? `${email.text}\r\nSender: ${email.from}` : `Sender: ${email.from}`,
+							: email.text
+								? `<pre>${email.text}</pre>
+						<br />
+						<br />
+						<a href="mailto:${email.from}?subject=Re:%20${encodeURIComponent(email.subject)}&body=${encodeURIComponent('\n\n---- Original Message ----\n' + (email.text || ''))}">
+							Reply
+						</a>`
+								: `Sender: ${email.from}`,
 						attachments: attachmentData,
 					});
 
