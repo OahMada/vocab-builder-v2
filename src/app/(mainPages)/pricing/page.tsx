@@ -26,12 +26,10 @@ export default async function PricingPage() {
 	}
 
 	let isAuthenticated = Boolean(session?.user);
+	let userSubscribed = false;
 
 	if (session?.user.id) {
-		let checkResult = await checkSubscriptionStatus(session?.user.id, false);
-		if (checkResult) {
-			redirect('/');
-		}
+		userSubscribed = await checkSubscriptionStatus(session?.user.id, false);
 	}
 
 	return (
@@ -58,7 +56,7 @@ export default async function PricingPage() {
 							Refund Policy
 						</RefundPolicyLink>
 					</TitleWrapper>
-					<Pricing isAuthenticated={isAuthenticated} />
+					<Pricing isAuthenticated={isAuthenticated} userSubscribed={userSubscribed} />
 				</PricingWrapper>
 			</Wrapper>
 		</MaxWidthWrapper>

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import type { Attachment } from 'resend';
@@ -16,6 +15,7 @@ export async function POST(request: NextRequest) {
 				signature: request.headers.get('svix-signature') || '',
 			},
 			webhookSecret: process.env.RESEND_SIGNING_SECRET!,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		}) as { type: string; data: any };
 
 		if (result.type === 'email.received') {

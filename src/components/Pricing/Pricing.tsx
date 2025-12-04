@@ -10,7 +10,7 @@ import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import PricePlaceHolder from '@/components/PricePlaceHolder';
 
-function Pricing({ isAuthenticated }: { isAuthenticated: boolean }) {
+function Pricing({ isAuthenticated, userSubscribed }: { isAuthenticated: boolean; userSubscribed: boolean }) {
 	let { loading, currencyCode, priceMap } = usePaddlePrices();
 	return (
 		<Wrapper>
@@ -32,10 +32,12 @@ function Pricing({ isAuthenticated }: { isAuthenticated: boolean }) {
 							<BillingInfo>{item.billingCycle}</BillingInfo>
 						</PriceTagWrapper>
 						{isAuthenticated ? (
-							<SubscribeButton variant='fill' href={`/checkout/${item.priceId}`}>
-								<Icon id='forward' />
-								&nbsp;Subscribe
-							</SubscribeButton>
+							!userSubscribed && (
+								<SubscribeButton variant='fill' href={`/checkout/${item.priceId}`}>
+									<Icon id='forward' />
+									&nbsp;Subscribe
+								</SubscribeButton>
+							)
 						) : (
 							<SubscribeButton variant='fill' href='/auth/login?callback=/pricing'>
 								<Icon id='forward' />
