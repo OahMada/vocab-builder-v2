@@ -77,9 +77,13 @@ function SentenceListing({
 					let result: Awaited<ReturnType<typeof searchSentences>> | Awaited<ReturnType<typeof readAllSentences>> | undefined;
 
 					if (search) {
-						result = await searchSentences({ search, cursor: nextCursor, userId });
+						result = await searchSentences({ ...(nextCursor && { cursor: nextCursor }), userId, search });
 					} else {
-						result = await readAllSentences({ cursor: nextCursor, userId, limit: SENTENCE_FETCHING_LIMIT });
+						result = await readAllSentences({
+							...(nextCursor && { cursor: nextCursor }), // so that when the initial fetch erred, retry button actually work
+							userId,
+							limit: SENTENCE_FETCHING_LIMIT,
+						});
 					}
 					if ('error' in result) {
 						setError(result.error);
