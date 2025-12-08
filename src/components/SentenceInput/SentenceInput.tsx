@@ -56,6 +56,7 @@ function SentenceInput() {
 
 	// paste text directly on home page
 	usePaste((text: string) => {
+		clearInputError(); // reset
 		if (document.activeElement === textareaRef.current) {
 			// only concatenate existing text when the element is focused
 			updateInput(userInput + text);

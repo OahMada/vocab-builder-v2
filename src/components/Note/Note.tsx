@@ -8,6 +8,7 @@ import { m } from 'motion/react';
 
 import { NoteSchema, NoteType } from '@/lib';
 import { CUSTOM_SPRING, INPUT_NAME } from '@/constants';
+import { useKeyboardShortcut } from '@/hooks';
 
 import CardWrapper from '@/components/CardWrapper';
 import TextArea from '@/components/TextArea';
@@ -18,6 +19,7 @@ import { useNoteContext } from '@/components/NoteProvider';
 import FormErrorText from '@/components/FormErrorText';
 import Title from '@/components/CardTitle';
 import { useSentenceSubmittingContext } from '@/components/SentenceSubmittingProvider';
+import Tooltip from '@/components/Tooltip';
 
 function Note() {
 	let { isSubmitting } = useSentenceSubmittingContext();
@@ -58,6 +60,11 @@ function Note() {
 
 	let submitHandler = handleSubmit(onSubmit);
 
+	// Option/Alt + N to add Note
+	useKeyboardShortcut(['Alt', 'KeyN'], async () => {
+		updateEditingStatus(true);
+	});
+
 	return isEditing ? (
 		<CardWrapper transition={CUSTOM_SPRING} layout={true} initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
 			<Title layout='position'>Note</Title>
@@ -88,19 +95,16 @@ function Note() {
 			</EditButton>
 		</CardWrapper>
 	) : (
-		<AddNoteButton variant='fill' onClick={startEditing} layout={true} disabled={isSubmitting}>
-			<Icon id='note' />
-			&nbsp;Add Note
-		</AddNoteButton>
+		<Tooltip tip={'Alt / Option + N'}>
+			<MotionButton variant='outline' onClick={startEditing} layout={true} disabled={isSubmitting}>
+				<Icon id='note' />
+				&nbsp;Add Note
+			</MotionButton>
+		</Tooltip>
 	);
 }
 
 export default Note;
-
-var AddNoteButton = styled(MotionButton)`
-	--bg-color: var(--bg-secondary);
-	--hover-bg-color: var(--bg-secondary-hover);
-`;
 
 var NoteText = styled(m.p)`
 	white-space: pre-line;

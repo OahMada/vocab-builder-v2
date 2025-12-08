@@ -44,6 +44,8 @@ export default function QuestionInput({
 	}
 
 	function onSubmit(data: QuestionInputType) {
+		// stops sending new question while the previous one is still ongoing
+		if (isStreaming) return;
 		triggerChat(data.question);
 		setValue(INPUT_NAME.QUESTION, '');
 	}
@@ -65,6 +67,7 @@ export default function QuestionInput({
 					clearInput={clearInput}
 					keydownSubmit={submitHandler}
 					style={{ '--border-radius': '16px' } as React.CSSProperties}
+					shouldPreventDefault={!isStreaming} // when loading reply, allowing creating new lines on enter
 				/>
 				{isStreaming ? (
 					<StopButton variant='outline' onClick={stopStreaming} style={{ '--textarea-padding': '10px' } as React.CSSProperties}>

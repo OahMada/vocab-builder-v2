@@ -14,15 +14,25 @@ interface TextAreaProps {
 	value: string;
 	keydownSubmit?: () => void;
 	style?: React.CSSProperties;
+	shouldPreventDefault?: boolean;
 }
 
-function TextArea({ value, clearInput, keydownSubmit, style, ...delegated }: TextAreaProps & React.ComponentProps<'textarea'>) {
+function TextArea({
+	value,
+	clearInput,
+	keydownSubmit,
+	style,
+	shouldPreventDefault = true,
+	...delegated
+}: TextAreaProps & React.ComponentProps<'textarea'>) {
 	function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
 		if (!keydownSubmit) return;
 		// enter to submit, shift + enter to line break
 		if (e.key === 'Enter') {
 			if (!e.shiftKey) {
-				e.preventDefault(); // stop newline
+				if (shouldPreventDefault) {
+					e.preventDefault(); // stop newline
+				}
 				keydownSubmit();
 			}
 		}
@@ -61,10 +71,6 @@ var Base = styled.div`
 	width: 100%;
 	grid-area: 1 / 1 / 2 / 2;
 	margin: 0;
-
-	// deal with long overflowing text
-	overflow-wrap: break-word;
-	hyphens: auto;
 `;
 
 var InputArea = styled(Base)`

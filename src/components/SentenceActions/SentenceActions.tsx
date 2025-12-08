@@ -11,7 +11,7 @@ import createSentence from '@/app/actions/sentence/createSentence';
 import updateSentence from '@/app/actions/sentence/updateSentence';
 import getBlobStorageSASToken from '@/app/actions/lib/getBlobStorageSASToken';
 
-import { useSentenceData } from '@/hooks';
+import { useKeyboardShortcut, useSentenceData } from '@/hooks';
 import { SentenceWithPieces, deleteCookie } from '@/lib';
 import { BLOB_CONTAINER_TYPE, COOKIE_KEY, CUSTOM_SPRING, TOAST_ID } from '@/constants';
 import { handleError, updateLocalStorage } from '@/utils';
@@ -125,10 +125,10 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 						} catch (cleanupError) {
 							console.error('Trying to delete audio file from blob storage but failed', cleanupError);
 						}
-						let errMsg = handleError(error);
+						console.error('Failed to upload audio', error);
 						addToToast({
 							contentType: 'error',
-							content: errMsg,
+							content: 'Failed to upload audio.',
 							id: TOAST_ID.AUDIO_UPLOAD,
 						});
 						return;
@@ -178,30 +178,15 @@ function SentenceActions({ sentence, sentenceId }: { sentence: string; sentenceI
 	);
 
 	// Option/Alt + A to trigger Ask Anything Dialog, Option/Alt + Enter to submit
-	React.useEffect(() => {
-		async function handleKeyDown(e: KeyboardEvent) {
-			if (e.altKey && e.code === 'KeyA') {
-				e.preventDefault();
-				if (isModalShowing) {
-					dismissModal();
-				} else {
-					showModal();
-				}
-			}
-			if (e.altKey && e.key === 'Enter') {
-				e.preventDefault();
-				handleSubmit();
-			}
-			if (e.altKey && e.code === 'KeyX') {
-				e.preventDefault();
-				handleCancel();
-			}
+	useKeyboardShortcut(['Alt', 'KeyA'], () => {
+		if (isModalShowing) {
+			dismissModal();
+		} else {
+			showModal();
 		}
-		document.addEventListener('keydown', handleKeyDown);
-		return () => {
-			document.removeEventListener('keydown', handleKeyDown);
-		};
-	}, [handleCancel, handleSubmit, isModalShowing]);
+	});
+	useKeyboardShortcut(['Alt', 'Enter'], handleSubmit);
+	useKeyboardShortcut(['Alt', 'KeyX'], handleCancel);
 
 	return (
 		<>

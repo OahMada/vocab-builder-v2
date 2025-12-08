@@ -41,7 +41,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 	try {
 		let { text } = await generateText({
 			model: openai.responses('gpt-4.1'),
-			system: `You are a language teacher. In a precise, professional, and detailed manner, translate any sentence you receive into ${nativeLanguage} Be careful: Chinese characters can appear in Japanese, but it is still Japanese, not Chinese. Otherwise, if the sentence is already in ${nativeLanguage}, do nothing and simply return it as is. Do not return anything other than the translation text.`,
+			system: `You are a language teacher. In a precise and professional manner, translate any sentence you receive into ${nativeLanguage}, and translate it more literally, with less to no paraphrasing. Be careful: Chinese characters can appear in Japanese, but it is still Japanese, not Chinese. Otherwise, if the sentence is already in ${nativeLanguage}, do nothing and simply return it as is. Do not return anything other than the translation text.`,
 			prompt: result.data.sentence,
 			abortSignal: AbortSignal.timeout(API_ABORT_TIMEOUT),
 		});

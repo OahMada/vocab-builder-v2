@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 
 import { postFetcher } from '@/helpers';
 import { handleError, base64ToBlob } from '@/utils';
-import { usePlayAudio } from '@/hooks';
+import { useKeyboardShortcut, usePlayAudio } from '@/hooks';
 import { TOAST_ID } from '@/constants';
 
 import { Button } from '@/components/Button';
@@ -17,6 +17,7 @@ import { useAudioDataContext } from '@/components/AudioDataProvider';
 import Loading from '@/components/Loading';
 import { useGlobalToastContext } from '@/components/GlobalToastProvider';
 import Tooltip from '@/components/Tooltip';
+import { useSentenceSubmittingContext } from '@/components/SentenceSubmittingProvider';
 
 interface TTSResponse {
 	data: string;
@@ -29,6 +30,7 @@ interface TTSArg {
 var url = '/api/tts';
 
 function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean; sentence: string }) {
+	let { isSubmitting } = useSentenceSubmittingContext();
 	let { sentenceId } = useParams<{ sentenceId: string }>();
 	let { addToToast } = useGlobalToastContext();
 	let { error, trigger, reset } = useSWRMutation<TTSResponse, Error, string, TTSArg>(url, postFetcher, {
@@ -93,26 +95,17 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 	);
 
 	// Cmd/Ctrl + Shift + P to trigger audio
-	React.useEffect(() => {
-		async function handleKeyDown(e: KeyboardEvent) {
-			if (e.altKey && e.code === 'KeyP') {
-				e.preventDefault();
-				if (error) {
-					await handleRetryTTS();
-					return;
-				}
-				if (isPlaying) {
-					handleStopAudio();
-					return;
-				}
-				handlePlayAudio();
-			}
+	useKeyboardShortcut(['Alt', 'KeyP'], async () => {
+		if (error) {
+			await handleRetryTTS();
+			return;
 		}
-		document.addEventListener('keydown', handleKeyDown);
-		return () => {
-			document.removeEventListener('keydown', handleKeyDown);
-		};
-	}, [error, handlePlayAudio, handleRetryTTS, handleStopAudio, isPlaying]);
+		if (isPlaying) {
+			handleStopAudio();
+			return;
+		}
+		handlePlayAudio();
+	});
 
 	return (
 		<Tooltip tip={'Alt / Option + P'}>
@@ -127,7 +120,7 @@ function SentenceAudio({ shouldStopAudio, sentence }: { shouldStopAudio: boolean
 					<VisuallyHidden>stop play audio </VisuallyHidden>
 				</StopPlayButton>
 			) : (
-				<AudioButton variant='outline' onClick={handlePlayAudio} disabled={(!audioBlob && !audioUrl) || shouldStopAudio || isLoading}>
+				<AudioButton variant='outline' onClick={handlePlayAudio} disabled={(!audioBlob && !audioUrl) || isLoading || isSubmitting}>
 					{isLoading ? (
 						<Loading description='loading audio data' />
 					) : (
