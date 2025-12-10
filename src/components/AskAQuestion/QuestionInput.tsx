@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import styled from 'styled-components';
 
 import { QuestionInputSchema, QuestionInputType } from '@/lib';
@@ -25,7 +25,7 @@ export default function QuestionInput({
 }) {
 	let {
 		register,
-		watch,
+		control,
 		clearErrors,
 		formState: { errors },
 		setValue,
@@ -36,7 +36,7 @@ export default function QuestionInput({
 		shouldFocusError: false,
 	});
 
-	let questionText = watch(INPUT_NAME.QUESTION);
+	let questionText = useWatch({ control, name: INPUT_NAME.QUESTION });
 
 	function clearInput() {
 		clearErrors(INPUT_NAME.QUESTION);

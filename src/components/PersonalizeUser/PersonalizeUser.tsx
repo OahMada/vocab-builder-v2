@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { useForm, Controller, FieldValues, Path, UseControllerReturn } from 'react-hook-form';
+import { useForm, Controller, FieldValues, Path, UseControllerReturn, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -47,7 +47,6 @@ function PersonalizeUser({ showSubmitButton, hasName, callback }: PersonalizeUse
 	let [isLoading, startTransition] = React.useTransition();
 	let {
 		setValue,
-		watch,
 		control,
 		register,
 		clearErrors,
@@ -59,7 +58,7 @@ function PersonalizeUser({ showSubmitButton, hasName, callback }: PersonalizeUse
 		defaultValues: defaultFormValues,
 		shouldUnregister: true,
 	});
-	let learningLanguage = watch('learningLanguage');
+	let learningLanguage = useWatch({ name: 'learningLanguage', control });
 
 	// robustly display the session data
 	React.useEffect(() => {

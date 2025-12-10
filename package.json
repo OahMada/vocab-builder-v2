@@ -25,7 +25,7 @@
 		"@azure/storage-blob": "^12.29.1",
 		"@faker-js/faker": "^10.1.0",
 		"@hookform/resolvers": "^5.2.2",
-		"@next/bundle-analyzer": "^16.0.7",
+		"@next/bundle-analyzer": "^15.3.6",
 		"@paddle/paddle-js": "^1.5.1",
 		"@paddle/paddle-node-sdk": "^3.4.0",
 		"@paralleldrive/cuid2": "^3.0.4",

@@ -15,7 +15,7 @@ function Avatar({ fallbackStyle, ...delegated }: { fallbackStyle: 'fill' | 'outl
 		alt = session?.user.name as string;
 
 	// https://github.com/radix-ui/primitives/issues/2230#issuecomment-2568587173
-	let { props } = getImageProps({ src, alt, fill: true });
+	let { props } = getImageProps({ src, alt, fill: true, loading: 'eager' });
 	React.useEffect(() => {
 		if (session?.user.name) {
 			let initials = getNameInitials(session.user.name);

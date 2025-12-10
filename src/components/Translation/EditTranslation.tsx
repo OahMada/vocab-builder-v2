@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { m } from 'motion/react';
 
 import { TranslationSchema, TranslationType } from '@/lib';
@@ -18,7 +18,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 	let { updateTranslation } = useTranslationContext();
 
 	let {
-		watch,
+		control,
 		setValue,
 		register,
 		handleSubmit,
@@ -30,7 +30,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 		values: { translation: translationText },
 	});
 
-	let translation = watch(INPUT_NAME.TRANSLATION);
+	let translation = useWatch({ control, name: INPUT_NAME.TRANSLATION });
 
 	function clearInput() {
 		clearErrors(INPUT_NAME.TRANSLATION);

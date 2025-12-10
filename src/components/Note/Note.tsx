@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { m } from 'motion/react';
 
@@ -27,7 +27,7 @@ function Note() {
 
 	let {
 		register,
-		watch,
+		control,
 		clearErrors,
 		formState: { errors },
 		setValue,
@@ -38,7 +38,7 @@ function Note() {
 		values: { note: note || '' },
 	});
 
-	let noteValue = watch(INPUT_NAME.NOTE);
+	let noteValue = useWatch({ name: INPUT_NAME.NOTE, control });
 
 	function clearInput() {
 		clearErrors(INPUT_NAME.NOTE);

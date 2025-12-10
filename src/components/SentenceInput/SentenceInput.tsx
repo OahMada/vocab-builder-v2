@@ -3,7 +3,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
-import { FieldErrors, useForm } from 'react-hook-form';
+import { FieldErrors, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { FallbackProps, withErrorBoundary } from 'react-error-boundary';
@@ -30,7 +30,7 @@ function SentenceInput() {
 
 	let router = useRouter();
 	let {
-		watch,
+		control,
 		setValue,
 		register,
 		handleSubmit,
@@ -41,7 +41,7 @@ function SentenceInput() {
 		reValidateMode: 'onSubmit',
 		shouldFocusError: false,
 	});
-	let userInput = watch(INPUT_NAME.SENTENCE);
+	let userInput = useWatch({ control, name: INPUT_NAME.SENTENCE });
 
 	let updateInput = React.useCallback(
 		function (text: string) {
