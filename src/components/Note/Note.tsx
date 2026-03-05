@@ -78,7 +78,6 @@ function Note() {
 					value={noteValue}
 					clearInput={clearInput}
 					placeholder='Input note text here'
-					autoFocus={true}
 					keydownSubmit={submitHandler}
 				/>
 				{errors.note && <FormErrorText>{errors.note.message}</FormErrorText>}

@@ -4,6 +4,9 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
+import mergeRefs from 'merge-refs';
+
+import { useAutoFocus, useIsHoverable } from '@/hooks';
 
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
@@ -23,10 +26,15 @@ function TextArea({
 	keydownSubmit,
 	style,
 	shouldPreventDefault = true,
+	ref,
 	...delegated
-}: TextAreaProps & React.ComponentProps<'textarea'>) {
+}: TextAreaProps & React.ComponentPropsWithRef<'textarea'>) {
+	let textAreaRef = React.useRef<null | HTMLTextAreaElement>(null);
+	let isHoverable = useIsHoverable();
+	useAutoFocus(textAreaRef);
+
 	function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-		if (!keydownSubmit) return;
+		if (!keydownSubmit || isHoverable) return;
 		// enter to submit, shift + enter to line break
 		if (e.key === 'Enter') {
 			if (!e.shiftKey) {
@@ -40,7 +48,7 @@ function TextArea({
 
 	return (
 		<Wrapper style={{ '--icon-size': '18px', '--icon-padding': '6px', ...style } as React.CSSProperties}>
-			<InputArea as='textarea' {...delegated} rows={1} onKeyDown={handleKeyDown} />
+			<InputArea as='textarea' {...delegated} rows={1} onKeyDown={handleKeyDown} ref={mergeRefs(ref, textAreaRef)} />
 			<Overlay aria-hidden='true'>{value + ' '}</Overlay>
 			{value && (
 				<ClearButton variant='icon' onClick={clearInput}>

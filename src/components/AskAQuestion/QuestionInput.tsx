@@ -56,7 +56,6 @@ export default function QuestionInput({
 		<Wrapper>
 			<InnerWrapper>
 				<TextArea
-					autoFocus={true}
 					placeholder='Input your question'
 					value={questionText}
 					{...register(INPUT_NAME.QUESTION, {

@@ -54,6 +54,7 @@
 		"immer": "^11.0.1",
 		"js-cookie": "^3.0.5",
 		"lucide-react": "^0.556.0",
+		"merge-refs": "^2.0.0",
 		"microsoft-cognitiveservices-speech-sdk": "^1.47.0",
 		"mongodb": "^7.0.0",
 		"motion": "^12.23.25",

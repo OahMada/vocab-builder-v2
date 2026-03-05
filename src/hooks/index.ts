@@ -11,3 +11,4 @@ export * from './useTheme';
 export * from './useReadLocalStorage';
 export * from './usePaste';
 export * from './useKeyboardShortcut';
+export * from './useAutoFocus';

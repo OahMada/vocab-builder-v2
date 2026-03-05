@@ -60,7 +60,6 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 						},
 					})}
 					placeholder='Input translation text here'
-					autoFocus={true}
 					keydownSubmit={submitHandler}
 				/>
 				{errors.translation && <FormErrorText>{errors.translation.message}</FormErrorText>}
