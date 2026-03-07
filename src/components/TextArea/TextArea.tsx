@@ -34,7 +34,7 @@ function TextArea({
 	useAutoFocus(textAreaRef);
 
 	function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-		if (!keydownSubmit || isHoverable) return;
+		if (!keydownSubmit || !isHoverable) return;
 		// enter to submit, shift + enter to line break
 		if (e.key === 'Enter') {
 			if (!e.shiftKey) {

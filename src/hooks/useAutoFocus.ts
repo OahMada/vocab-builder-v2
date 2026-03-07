@@ -11,12 +11,12 @@ export function useAutoFocus(ref: React.RefObject<HTMLTextAreaElement | null>) {
 		let focusInput = () => {
 			input.focus();
 
-			if (isHoverable) {
+			if (!isHoverable) {
 				setTimeout(() => {
 					input.scrollIntoView({
 						block: 'center',
 					});
-				}, 300);
+				}, 500);
 			}
 		};
 
