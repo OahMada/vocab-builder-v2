@@ -24,6 +24,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 		handleSubmit,
 		clearErrors,
 		formState: { errors },
+		resetField,
 	} = useForm<TranslationType>({
 		resolver: zodResolver(TranslationSchema),
 		reValidateMode: 'onSubmit',
@@ -34,7 +35,7 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 
 	function clearInput() {
 		clearErrors(INPUT_NAME.TRANSLATION);
-		setValue(INPUT_NAME.TRANSLATION, translationText);
+		setValue(INPUT_NAME.TRANSLATION, '');
 	}
 
 	function onSubmit(data: TranslationType) {
@@ -64,7 +65,14 @@ export default function EditTranslation({ translationText, cancelEditing }: { tr
 				/>
 				{errors.translation && <FormErrorText>{errors.translation.message}</FormErrorText>}
 			</InnerWrapper>
-			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={submitHandler} submitDisabled={!!errors.translation} />
+			<TextareaActionButtons
+				handleCancel={() => {
+					cancelEditing();
+					resetField('translation');
+				}}
+				handleSubmit={submitHandler}
+				submitDisabled={!!errors.translation}
+			/>
 		</>
 	);
 }

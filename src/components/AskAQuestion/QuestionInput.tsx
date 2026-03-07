@@ -13,6 +13,7 @@ import { Button } from '@/components/Button';
 import Icon from '@/components/Icon';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import FormErrorText from '@/components/FormErrorText';
+import { useIsHoverable } from '@/hooks';
 
 export default function QuestionInput({
 	triggerChat,
@@ -37,6 +38,7 @@ export default function QuestionInput({
 	});
 
 	let questionText = useWatch({ control, name: INPUT_NAME.QUESTION });
+	let isHoverable = useIsHoverable();
 
 	function clearInput() {
 		clearErrors(INPUT_NAME.QUESTION);
@@ -67,6 +69,7 @@ export default function QuestionInput({
 					keydownSubmit={submitHandler}
 					style={{ '--border-radius': '16px' } as React.CSSProperties}
 					shouldPreventDefault={!isStreaming} // when loading reply, allowing creating new lines on enter
+					shouldAutoFocus={isHoverable}
 				/>
 				{isStreaming ? (
 					<StopButton variant='outline' onClick={stopStreaming} style={{ '--textarea-padding': '10px' } as React.CSSProperties}>

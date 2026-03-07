@@ -1,25 +1,25 @@
 import * as React from 'react';
 import { useIsHoverable } from './useIsHoverable';
 
-export function useAutoFocus(ref: React.RefObject<HTMLTextAreaElement | null>) {
+export function useAutoFocus(enabled: boolean = true, ref?: React.RefObject<HTMLTextAreaElement | null>) {
 	let isHoverable = useIsHoverable();
 	React.useEffect(() => {
-		let input = ref.current;
-
+		let input = ref?.current;
 		if (!input) return;
 
 		let focusInput = () => {
-			input.focus();
-
-			if (!isHoverable) {
-				setTimeout(() => {
-					input.scrollIntoView({
-						block: 'center',
-					});
-				}, 500);
+			if (enabled) {
+				input.focus();
+				if (!isHoverable) {
+					setTimeout(() => {
+						input.scrollIntoView({
+							block: 'center',
+						});
+					}, 1000);
+				}
 			}
 		};
 
 		focusInput();
-	}, [isHoverable, ref]);
+	}, [enabled, isHoverable, ref]);
 }

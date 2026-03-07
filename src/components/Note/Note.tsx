@@ -32,6 +32,7 @@ function Note() {
 		formState: { errors },
 		setValue,
 		handleSubmit,
+		resetField,
 	} = useForm<NoteType>({
 		resolver: zodResolver(NoteSchema),
 		reValidateMode: 'onSubmit',
@@ -82,7 +83,14 @@ function Note() {
 				/>
 				{errors.note && <FormErrorText>{errors.note.message}</FormErrorText>}
 			</InnerWrapper>
-			<TextareaActionButtons handleCancel={cancelEditing} handleSubmit={submitHandler} submitDisabled={!!errors.note} />
+			<TextareaActionButtons
+				handleCancel={() => {
+					cancelEditing();
+					resetField('note');
+				}}
+				handleSubmit={submitHandler}
+				submitDisabled={!!errors.note}
+			/>
 		</CardWrapper>
 	) : note ? (
 		<CardWrapper transition={CUSTOM_SPRING} layout={true}>

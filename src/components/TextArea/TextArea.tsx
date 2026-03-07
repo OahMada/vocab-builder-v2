@@ -18,6 +18,7 @@ interface TextAreaProps {
 	keydownSubmit?: () => void;
 	style?: React.CSSProperties;
 	shouldPreventDefault?: boolean;
+	shouldAutoFocus?: boolean;
 }
 
 function TextArea({
@@ -27,11 +28,12 @@ function TextArea({
 	style,
 	shouldPreventDefault = true,
 	ref,
+	shouldAutoFocus = true,
 	...delegated
-}: TextAreaProps & React.ComponentPropsWithRef<'textarea'>) {
+}: TextAreaProps & React.ComponentPropsWithRef<'textarea'>) {	
 	let textAreaRef = React.useRef<null | HTMLTextAreaElement>(null);
 	let isHoverable = useIsHoverable();
-	useAutoFocus(textAreaRef);
+	useAutoFocus(shouldAutoFocus, textAreaRef);
 
 	function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
 		if (!keydownSubmit || !isHoverable) return;
@@ -51,7 +53,13 @@ function TextArea({
 			<InputArea as='textarea' {...delegated} rows={1} onKeyDown={handleKeyDown} ref={mergeRefs(ref, textAreaRef)} />
 			<Overlay aria-hidden='true'>{value + ' '}</Overlay>
 			{value && (
-				<ClearButton variant='icon' onClick={clearInput}>
+				<ClearButton
+					variant='icon'
+					onClick={() => {
+						clearInput();
+						textAreaRef.current?.focus();
+					}}
+				>
 					<Icon id='x' />
 					<VisuallyHidden>Clear Textarea</VisuallyHidden>
 				</ClearButton>
