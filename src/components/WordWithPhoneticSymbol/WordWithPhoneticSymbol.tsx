@@ -10,13 +10,14 @@ import { Button } from '@/components/Button';
 
 function WordWithPhoneticSymbol({ children, symbol }: { children: React.ReactNode; symbol: string }) {
 	let IPA = wrapIPAWithSlashes(symbol);
+	let containerRef = React.useRef<null | HTMLSpanElement>(null);
 	return (
-		<Wrapper>
+		<Wrapper ref={containerRef}>
 			<Popover>
 				<PopoverTrigger asChild={true}>
 					<WordButton variant='icon'>{children}</WordButton>
 				</PopoverTrigger>
-				<PopoverContent>
+				<PopoverContent containerRef={containerRef}>
 					<SymbolWrapper>{IPA}</SymbolWrapper>
 				</PopoverContent>
 			</Popover>

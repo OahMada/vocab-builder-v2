@@ -7,9 +7,13 @@ import styled, { keyframes } from 'styled-components';
 export var Popover = PopoverPrimitive.Root;
 export var PopoverTrigger = PopoverPrimitive.Trigger;
 
-export function PopoverContent({ children, ...delegated }: React.ComponentProps<typeof PopoverPrimitive.Content>) {
+export function PopoverContent({
+	containerRef,
+	children,
+	...delegated
+}: { containerRef?: React.RefObject<null | HTMLSpanElement> } & React.ComponentProps<typeof PopoverPrimitive.Content>) {
 	return (
-		<PopoverPrimitive.Portal>
+		<PopoverPrimitive.Portal container={containerRef?.current}>
 			<Content sideOffset={5} {...delegated} side='top' collisionPadding={12}>
 				{children}
 			</Content>
@@ -35,6 +39,8 @@ var Content = styled(PopoverPrimitive.Content)`
 	max-width: 250px;
 	text-align: center;
 	box-shadow: var(--shadow-elevation-medium);
+	font-size: 1rem;
+	line-height: 1.5;
 
 	@media (prefers-reduced-motion: no-preference) {
 		animation-duration: 400ms;
