@@ -15,7 +15,7 @@ export function useAutoFocus(enabled: boolean = true, ref?: React.RefObject<HTML
 						input.scrollIntoView({
 							block: 'center',
 						});
-					}, 1000);
+					}, 300);
 				}
 			}
 		};
