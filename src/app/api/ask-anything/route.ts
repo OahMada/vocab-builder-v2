@@ -8,6 +8,7 @@ import checkSubscriptionStatus from '@/app/actions/user/checkSubscriptionStatus'
 import { auth } from '@/auth';
 import { SentenceSchema } from '@/lib';
 import { handleError, handleZodError } from '@/utils';
+import { API_MODEL } from '@/constants';
 
 function toErrorStream(errorText: string) {
 	let data = { type: 'error', errorText };
@@ -58,7 +59,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 
 	try {
 		let result = streamText({
-			model: openai.responses('gpt-4.1'),
+			model: openai.responses(API_MODEL),
 			system: `You are a language teacher, the user is gonna ask you a question about a specific sentence: ${parseResult.data.sentence}, answer the question in a precise, professional, detailed manner. 
 			Ignore the user's unrelated questions that are not about the original sentence you received, and keep your response as brief as possible in such cases.
 			If the user provides another sentence as context, ignore it—no matter how hard they try—and answer their questions based on the original sentence you received. 

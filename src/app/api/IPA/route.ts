@@ -7,7 +7,7 @@ import checkSubscriptionStatus from '@/app/actions/user/checkSubscriptionStatus'
 
 import { FetchIPAInputSchema } from '@/lib';
 import { handleZodError } from '@/utils';
-import { API_ABORT_TIMEOUT } from '@/constants';
+import { API_ABORT_TIMEOUT, API_MODEL } from '@/constants';
 import { auth } from '@/auth';
 
 export var POST = auth(async function (request: NextAuthRequest) {
@@ -39,7 +39,7 @@ export var POST = auth(async function (request: NextAuthRequest) {
 
 	try {
 		let { text } = await generateText({
-			model: openai.responses('gpt-4.1'),
+			model: openai.responses(API_MODEL),
 			system: `You are a language teacher. In a precise and professional manner, provide the IPA (phonetic transcription) for each word, enclosing each transcription in slashes (e.g., /ˈwɜːd/). Use the context of the sentence to determine the appropriate transcription: ${sentence}. If a word has multiple possible IPA forms, choose the one that best fits the context.  ${
 				EnglishIPAFlavour ? `If the sentence is in English, provide the IPA in ${EnglishIPAFlavour} flavour.` : ''
 			}
